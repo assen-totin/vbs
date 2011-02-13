@@ -1,0 +1,19 @@
+This program is a quick-n-dirty hack, there may well be lots of bugs. 
+
+Also, the coding style is far from ideal - be warned. 
+
+Should you find any, send an email. See AUTHOR for details. 
+
+
+
+KNOWN ISSUES (and solutions):
+
+1. With many AVI files, seek is not precise (5 seconds or more). This is due to the 
+reduced number of key frames. Re-encode your with with one key frame at least each 
+12-15 frames.
+
+2. When you double-click and move to the previous subtitle and then start the playback, 
+the subtitle is not shown by mplayer. This seems to be an mplayer issue; the subtitles are
+actually reloaded. If you double-click 3-4 subtitles before current, you'll see them 
+displayed properly.
+

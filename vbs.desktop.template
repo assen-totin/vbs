@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Voody Blue Subtitler
+GenericName=Voody Blue Subtitler
+Comment=Subtitler Tool
+Exec=vbs
+Terminal=false
+Categories=GTK;Application;AudioVideo;Audio;Video;Player;TV;

@@ -1,0 +1,10 @@
+PENDING:
+
+1. Disable mplayer keyboard controls (needs checking if this is possible at all).
+
+
+
+UNRESOLVED:
+
+1. Non-clickable TreeView while status is RUNNING (requires a deeper dig in GTK+; might not be possible at all).
+
