@@ -19,7 +19,7 @@ LIBS = -lcrypto
 
 TARGET = vbss 
 
-OBJS = gui.o network.o ../common/error.o ../common/config.o
+OBJS = gui.o ../common/network.o ../common/error.o ../common/config.o
 
 all: $(TARGET)
 
@@ -39,8 +39,7 @@ uninstall:
 	rm -f $(IMGDIR)/vbs.png
 	rm -f /usr/share/applications/vbs.desktop
 
-$(TARGET): gui.c network.c
-	$(CC) $(CFLAGS) network.c
+$(TARGET): gui.c 
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c
 	$(CC) -o $@ $(ADD_FLAGS) $(LIBS) $(OBJS)
 

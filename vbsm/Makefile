@@ -17,7 +17,7 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 TARGET = vbs 
 
-OBJS = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o 
+OBJS = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o ../common/error.o 
 
 all: $(TARGET)
 

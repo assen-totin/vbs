@@ -35,45 +35,45 @@
 
 
 enum {
-  COL_LINE = 0,
-  COL_FROM,
-  COL_TO,
-  NUM_COLS
+	COL_LINE = 0,
+	COL_FROM,
+	COL_TO,
+	NUM_COLS
 };
 
 
 enum {
- VBS_IMPORT_FILTER_TEXT = 0,
- VBS_IMPORT_FILTER_SRT
+	VBS_IMPORT_FILTER_TEXT = 0,
+	VBS_IMPORT_FILTER_SRT
 };
 
 
 struct counters {
- time_t timestamp;
- bool running;
- bool inside_sub;
- GtkWidget *status;
- guint status_context_id;
- GtkWidget *progress;
- short unsigned progress_seconds;
- char globalExportFile[1024];
- GtkWidget *combo_export;
- GtkWidget *combo_import;
- GtkWidget *combo_cr;
- FILE *pipeWrite;
- FILE *pipeRead;
- FILE *tmpFile;
- char tmpFileName[255];
- bool have_loaded_text;
- pid_t mplayer_pid;
- char configFileName[255];
- bool config_export_cr;
- char config_export_encoding[255];
- char config_import_encoding[255];
+	time_t timestamp;
+	bool running;
+	bool inside_sub;
+	bool have_loaded_text;
+	guint status_context_id;
+	pid_t mplayer_pid;
+	short unsigned progress_seconds;
+	GtkWidget *combo_export;
+	GtkWidget *combo_import;
+	GtkWidget *combo_cr;
+	GtkWidget *status;
+	GtkWidget *progress;
+	FILE *pipeWrite;
+	FILE *pipeRead;
+	FILE *tmpFile;
+	char tmpFileName[255];
+	char configFileName[255];
+	char globalExportFile[1024];
+	bool config_export_cr;
+	char config_export_encoding[255];
+	char config_import_encoding[255];
 };
 
 
-void errorHandler(char function[128], char error[128]);
+void error_handler(char function[128], char error[128]);
 
 #define VBS_ICON "/usr/local/share/vbs/vbs.png"
 

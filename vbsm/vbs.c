@@ -10,13 +10,6 @@
 
 #include "main.h"
 
-
-void errorHandler(char function[128], char error[128]) {
-	printf("*** VBS Critical Error: %s in function %s\n", error, function);
-	exit(1);
-}
-
-
 bool mplayerAlive() {
 	if (counter.mplayer_pid == 0) {return false;}
 	int status;
@@ -60,7 +53,7 @@ void writeConfig(bool createDefault) {
 		}
 	}
 	FILE *fpConfig = fopen(counter.configFileName, "w");
-	if (!fpConfig) {errorHandler("writeConfig","could not open config file");}
+	if (!fpConfig) {error_handler("writeConfig","could not open config file");}
 	fprintf(fpConfig, "%s", VBS_CONFIG_HEADER);
 	if (counter.config_export_cr) {fprintf(fpConfig, "EXPORT_CR=1\n");}
 	else {fprintf(fpConfig, "EXPORT_CR=0\n");}
@@ -143,7 +136,7 @@ int main (int argc, char **argv){
 	// Create temporary file (GTK is buggy ot GCC?)
 	sprintf(counter.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(counter.tmpFileName);
-	if (mkstempRes == -1) {errorHandler("main","failed to create temporary file name");}
+	if (mkstempRes == -1) {error_handler("main","failed to create temporary file name");}
 	counter.tmpFile = fopen(counter.tmpFileName,"w");
 
 	// Check for "~/.vbs", if not, create one
@@ -161,15 +154,15 @@ int main (int argc, char **argv){
 	errsv = errno;
 	if (statRes == 0) {
 		// Is it a dir?
-		if (!S_ISDIR(statBuf.st_mode)) {errorHandler("main",".vbs exists in home dir, but is not a directory");}
+		if (!S_ISDIR(statBuf.st_mode)) {error_handler("main",".vbs exists in home dir, but is not a directory");}
 	}
 	else if (statRes == -1) {
 		// Create if missing
 		if (errsv == ENOENT) {
 			mkdirRes = mkdir(vbsDir,0755);
-			if (mkdirRes == 1) {errorHandler("main",".vbs creation failed");}
+			if (mkdirRes == 1) {error_handler("main",".vbs creation failed");}
 		}
-		else {errorHandler("main","stat of .vbs failed");}
+		else {error_handler("main","stat of .vbs failed");}
 	}
 
 	// Check for config, if not, create one
@@ -179,12 +172,12 @@ int main (int argc, char **argv){
 
 	if (statRes == 0) {
 		// Is it a file?
-		if (!S_ISREG(statBuf.st_mode)) {errorHandler("main","config file exists in .vbs, but is not a regular file");}
+		if (!S_ISREG(statBuf.st_mode)) {error_handler("main","config file exists in .vbs, but is not a regular file");}
 		else {fpConfig = fopen(counter.configFileName, "r");}
 		// Read from config file
 		char *line;
 		line = malloc(256);
-		if (!line) {errorHandler("main","malloc failed");}
+		if (!line) {error_handler("main","malloc failed");}
 
 		while (fgets(line, 255, fpConfig)) {
 			if (!(line[0]=='#')) {
@@ -199,7 +192,7 @@ int main (int argc, char **argv){
 	else if (statRes == -1) {
 		// Create if missing
 		if (errsv == ENOENT) {writeConfig(TRUE);}
-		else {errorHandler("main","stat of config file failed");}
+		else {error_handler("main","stat of config file failed");}
 	}
 
 	// GTK Init

@@ -109,11 +109,11 @@ void *loadVideo(char fileName[1024]) {
 		pid_t cpid;
 
 		// Pipes
-		if (pipe(readPipeFD) == -1) { errorHandler("loadVideo","read pipe creation failed");}
-		if (pipe(writePipeFD) == -1) { errorHandler("loadVideo","write pipe creation failed");}
+		if (pipe(readPipeFD) == -1) { error_handler("loadVideo","read pipe creation failed");}
+		if (pipe(writePipeFD) == -1) { error_handler("loadVideo","write pipe creation failed");}
 
 		cpid = fork();
-		if (cpid == -1) {errorHandler("loadVideo","fork failed");}
+		if (cpid == -1) {error_handler("loadVideo","fork failed");}
 
 		// Child
 		if (cpid == 0) { 
