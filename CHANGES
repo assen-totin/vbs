@@ -1,3 +1,15 @@
+Mar 1, 2011 - Version 2.0
+=========================
+
+1. Renamed vbs to vbsm ("master" client). 
+Added networking for sending current subtitle to vbsd daemon.
+
+2. Added vbsd daemon - simple daemon to store the last subtitle, 
+from where it can be retrieved by the vbss ("slave" client).
+
+3. Added vbss - client for showing same subtitles in multiple locations.
+
+
 Aug 27, 2006 - Version 1.0
 ==========================
 

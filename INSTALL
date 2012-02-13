@@ -1,4 +1,5 @@
 REQUIREMENTS
+============
 
 1. GTK+ 2.2 or above (including header files; for users of RPM, check that *-devel* packages
    are installed. 
@@ -14,9 +15,9 @@ REQUIREMENTS
 
    You can tweak the Makefile to make it work without the pkg-config.
 
-3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5). 
+3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5, 4.5.1 on Fedora 14). 
 
-4. make. This programme does not use autoconf - everything is ready in the Makefile. 
+4. make. This programme does not use autoconf - everything is ready in the Makefiles. 
    Feel free to modify it according to your own taste. 
 
 5. mplayer. The binary of the non-gui version should be installed in your path and should be 
@@ -25,15 +26,18 @@ REQUIREMENTS
 
 
 INSTALLATION
+============
 
-Just run "make", then "make install". 
+1. Go to the "common" directory and run "make".
 
-The binary is called "vbs". If you are using Gnome, a menu entry will be installed for you.
+2. Depending on what you need, go to "vbsm", "vbss" or "vbsd" directory. Run "make", then "make install". 
+The binaries are called "vbsm", "vbss" and "vbsd". If you are using Gnome, a menu entry will be installed for you.
 
 
 
 UNINSTALL
+========
 
-Run "make uninstall" to remove all files.
+Run "make uninstall" from either "vbsm", "vbsd" or "vbss" to remove all files for this part of the suit.
 
 

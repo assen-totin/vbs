@@ -12,7 +12,7 @@ KNOWN ISSUES (and solutions):
 reduced number of key frames. Re-encode your with with one key frame at least each 
 12-15 frames.
 
-2. When you double-click and move to the previous subtitle and then start the playback, 
+2. When you double-click and move to the last subtitle before current and then start the playback, 
 the subtitle is not shown by mplayer. This seems to be an mplayer issue; the subtitles are
 actually reloaded. If you double-click 3-4 subtitles before current, you'll see them 
 displayed properly.
