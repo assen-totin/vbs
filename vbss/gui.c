@@ -31,7 +31,7 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	get_host_by_name(&config.host_entry);
+	get_host_by_name(&config.server_name);
 
 	/*** Initialize GTK+ ***/
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);

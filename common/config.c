@@ -10,6 +10,7 @@ void default_config() {
 	config.line_size = VBS_DEFAULT_LINE_SIZE;
 	strcpy(&config.server_name[0], VBS_DEFAULT_SERVER);
 	config.test_mode = 1;
+	config.use_network = 1;
 	config.magic_key = VBS_DEFAULT_MAGIC;
 	config.colour_bg_r = VBS_DEFAULT_COLOUR_BG_RED;
 	config.colour_bg_g = VBS_DEFAULT_COLOUR_BG_GREEN;
@@ -62,6 +63,7 @@ void write_config() {
         fprintf(fp_config, "SERVER_NAME=%s\n", &config.server_name[0]);
         fprintf(fp_config, "MAGIC=%u\n", config.magic_key);
 	fprintf(fp_config, "TEST_MODE=%u\n", config.test_mode);
+	fprintf(fp_config, "USE_NETWORK=%u\n", config.use_network);
         fprintf(fp_config, "COLOUR_BG_R=%u\n", config.colour_bg_r);
         fprintf(fp_config, "COLOUR_BG_G=%u\n", config.colour_bg_g);
         fprintf(fp_config, "COLOUR_BG_B=%u\n", config.colour_bg_b);
@@ -97,6 +99,8 @@ void read_config() {
 				config.line_size = config_int(line);
 			else if (strstr(line, "MAGIC")) 
 				config.magic_key = config_int(line);
+			else if (strstr(line, "USE_NETWORK"))
+				config.use_network = config_int(line);
                         else if (strstr(line, "COLOUR_BG_R"))
                                 config.colour_bg_r = config_int(line);
                         else if (strstr(line, "COLOUR_BG_G"))

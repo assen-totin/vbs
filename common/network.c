@@ -1,12 +1,17 @@
 #include "common.h"
 #include "network.h"
 
-int get_host_by_name(struct hostent *host_entry) {
-        host_entry = gethostbyname(config.server_name);
+int get_host_by_name(char *server_name) {
+        struct hostent host_entry = gethostbyname(server_name);
         if (host_entry == NULL) {
                 error_handler("get_host_by_name", "No such host", 1);
                 return 0;
         }
+	else {
+		strcpy(&config.server_name[0], server_name);
+		config.host_entry = host_entry;
+		return 1;
+	}
 }
 
 int get_socket() {

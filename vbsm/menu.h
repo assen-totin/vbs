@@ -61,6 +61,12 @@ static GtkItemFactoryEntry menuEntries[] = {
 	{ "/Export/Set Encoding...", "", setEncodingExport,  42, "<Item>" },
 	{ "/Export/Set Newline Char...", "", setNewline,  43, "<Item>" },
 
+        { "/_Network",        "<ALT>N",      NULL,         0, "<Branch>" },
+	{ "/Network/Enable Network...", "", useNetwork,  71, "<Item>" },
+	{ "/Network/", "", NULL,  0, "<Separator>" },
+        { "/Network/Server...", "", setNetworkServer,  72, "<Item>" },
+        { "/Network/Port...", "", setNetworkPort,  73, "<Item>" },
+
 	{ "/_Help",        "<ALT>H",      NULL,         0, "<Branch>" },
 	{ "/Help/Contents", "", helpContents,  51, "<Item>" },
 	{ "/Help/About", "", helpAbout,  52, "<Item>" }
@@ -78,7 +84,8 @@ static struct encEntry encEntries[] = {
 	{"WINDOWS-1250", false},
 	{"WINDOWS-1251", true},
 	{"KOI8R", false},
-	{"KOI8U", false}
+	{"KOI8U", false},
+	{"UTF8", false}
 };
 
 
@@ -101,6 +108,15 @@ GtkWidget *makeMenu(GtkWidget *window);
 
 #define VBS_SET_NEWLINE "Select Newline Delimiter"
 #define VBS_AVAILABLE_NEWLINES "Available Delimiters:"
+
+#define VBS_NETWORK_SERVER "Server Name"
+#define VBS_NETWORK_SERVER_NAME "Current server:"
+#define VBS_NETWORK_SERVER_WARNING "Warning!"
+#define VBS_NETWORK_SERVER_WARNING_TEXT "DNS resolving failed. The server name was not accepted."
+#define VBS_NETWORK_PORT "TCP Port"
+#define VBS_NETWORK_PORT_NAME "Current Port:"
+#define VBS_ENABLE_NETWORK "Enable/Disable Network"
+#define VBS_ENABLE_NETWORK_NAME "Select network mode:"
 
 #define VBS_QUIT_CONFIRM "Really quit?"
 #define VBS_QUIT_MSG "Your subtitles are exported to:"

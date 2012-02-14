@@ -19,16 +19,17 @@
 #define VBS_TEST_MODE 1
 
 struct configuration {
-	bool test_mode;
+	int test_mode;
 	int magic_key;
+	int export_cr;
 	char file_name[255];
-	bool export_cr;
 	char export_encoding[255];
 	char import_encoding[255];
 	int line_size;
 	int tcp_port;
 	char server_name[255];
 	struct hostent host_entry;
+	int use_network;
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;

@@ -307,6 +307,121 @@ void setNewline (GtkWidget *window) {
 	gtk_widget_show_all (quitDialog);
 }
 
+void setNetworkPortOK(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+        counter.tcp_port = atoi(gtk_entry_get_text(GTK_ENTRY(counter.combo_export)));
+        writeConfig(false);
+        gtk_widget_destroy(quitDialog);
+}
+
+void setNetworkPort (GtkWidget *window) {
+        GtkWidget *quitDialog, *quitLabel;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_NETWORK_PORT, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (setNetworkPortOK), (gpointer) quitDialog);
+
+        char quitMessage[1024];
+        sprintf(quitMessage, "%s\n", VBS_NETWORK_PORT_NAME);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+	counter.combo_export = gtk_entry_new();
+	gtk_entry_set_text(counter.combo_export, counter.tcp_port);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), counter.combo_export);
+
+        gtk_widget_show_all (quitDialog);
+}
+
+void setNetworkServerOK(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+
+	if (!get_host_by_name(gtk_entry_get_text(GTK_ENTRY(counter.combo_export)))) {
+		// Pop-up a message that the resolving failed
+	        GtkWidget *quitDialog2, *quitLabel2, *quitFrame2;
+
+	        quitDialog2 = gtk_dialog_new_with_buttons (VBS_NETWORK_SERVER_WARNING, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+	        GtkWidget *buttonCancel2 = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
+	        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog2), GTK_RESPONSE_CANCEL) ;
+	        g_signal_connect (G_OBJECT(buttonCancel2), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog2);
+
+	        quitFrame2 = gtk_frame_new("");
+	        quitLabel2 = gtk_label_new(VBS_NETWORK_SERVER_WARNING_TEXT);
+	        gtk_container_add (GTK_CONTAINER (quitFrame2), quitLabel2);
+	        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame2);
+
+	        gtk_widget_show_all (quitDialog2);
+        }
+	else {
+	        writeConfig(false);
+	        gtk_widget_destroy(quitDialog);
+	}
+}
+
+void setNetworkServer (GtkWidget *window) {
+        GtkWidget *quitDialog, *quitLabel;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_NETWORK_SERVER, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (setNetworkServerOK), (gpointer) quitDialog);
+
+        char quitMessage[1024];
+        sprintf(quitMessage, "%s\n", VBS_NETWORK_SERVER_NAME);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+	counter.combo_export = gtk_entry_new();
+	gtk_entry_set_text(counter.combo_export, counter.server_name);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), counter.combo_export);
+
+        gtk_widget_show_all (quitDialog);
+}
+
+void useNetworkOK(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+        if( strstr( gtk_combo_box_get_active_text(GTK_COMBO_BOX(counter.combo_cr)),"OFF")) {counter.use_network = 1}
+        else {counter.use_network = 0;}
+        writeConfig(false);
+        gtk_widget_destroy(quitDialog);
+}
+
+
+void useNetwork (GtkWidget *window) {
+        GtkWidget *quitDialog, *quitLabel;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_ENABLE_NETWORK, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (useNetworkOK), (gpointer) quitDialog);
+
+        char quitMessage[1024];
+        sprintf(quitMessage, "%s\n", VBS_ENABLE_NETWORK_NAME);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+        counter.combo_cr = gtk_combo_box_new_text();
+        gtk_combo_box_append_text (GTK_COMBO_BOX(counter.combo_cr), "OFF");
+        gtk_combo_box_append_text (GTK_COMBO_BOX(counter.combo_cr), "ON");
+        int index;
+        if(counter.use_network == 0) {index = 0;}
+        else {index = 1;}
+        gtk_combo_box_set_active(GTK_COMBO_BOX(counter.combo_cr), index);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), counter.combo_cr);
+
+        gtk_widget_show_all (quitDialog);
+}
 
 void quitDialog(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel;

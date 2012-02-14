@@ -15,7 +15,7 @@ IMGDIR = /usr/local/share/vbs
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
-TARGET = vbs 
+TARGET = vbsm 
 
 OBJS = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o ../common/error.o 
 
