@@ -1,6 +1,6 @@
-// This file is a part of Voody Blue Subtitler.
+// This file is a part of Voody Blue Subtitler suit.
 // 
-// Author: Assen Totin <assen@online.bg>
+// Author: Assen Totin <assen.totin@gmail.com>
 //
 // Home page: http://bilbo.online.bg/~assen/vbs
 //

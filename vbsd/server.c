@@ -1,9 +1,12 @@
-/*
- * This code is licensed under the terms of GNU General Public License version 3.
- * You can find the license at http://www.gnu.org
- *
- * Author: Assen Totin, assen dot totin at gmail dot com
- */
+// This file is a part of Voody Blue Subtitler suit.
+// 
+// Author: Assen Totin <assen.totin@gmail.com>
+//
+// Home page: http://bilbo.online.bg/~assen/vbs
+//
+// This software is released under GNU General Public License.
+// See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
+// for details.
 
 #include "../common/common.h"
 #include "server.h" 
