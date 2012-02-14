@@ -73,8 +73,6 @@ struct counters {
 };
 
 
-void error_handler(char function[128], char error[128]);
-
 #define VBS_ICON "/usr/local/share/vbs/vbs.png"
 
 #define VBS_TMP_DIR "/tmp"

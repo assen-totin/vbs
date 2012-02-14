@@ -52,19 +52,19 @@ unsigned int convertTime(char *inTime) {
 
 
 void importFilterSrt(char *importTextFile) {
-	if (!importTextFile) {error_handler("importFilterSrt","failed to open subtitles");}
+	if (!importTextFile) {error_handler("importFilterSrt","failed to open subtitles", 1);}
 	FILE *fpIn = fopen (importTextFile, "r");
 
 	char tmpName[32];
 	sprintf(tmpName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(tmpName);
-	if (mkstempRes == -1) {error_handler("importFilterSrt","failed to create temporary file");}
+	if (mkstempRes == -1) {error_handler("importFilterSrt","failed to create temporary file", 1);}
 
 	FILE *fpOut = fopen (tmpName, "w");
 
 	char *line;
 	line = malloc(256);
-	if (!line) {error_handler("importFilterSrt","malloc failed");}
+	if (!line) {error_handler("importFilterSrt","malloc failed", 1);}
 
 	bool isNextLineSubt = false;
 	bool wasPrevLineSubt = false;
@@ -119,11 +119,11 @@ void importText(char *importTextFile, int importFlag) {
 
 	char *line;
 	line = malloc(256);
-	if (!line) {error_handler("create_and_fill_model","malloc failed");}
+	if (!line) {error_handler("create_and_fill_model","malloc failed",1);}
 
 	FILE *fp;
 	fp = fopen (importTextFile, "r");
-	if (!fp) {error_handler("importText","failed to open subtitles");}
+	if (!fp) {error_handler("importText","failed to open subtitles", 1);}
 
 	int unsigned timeFrom = 0, timeTo = 0; 
 	char *timeFromStr, *timeToStr, *lineRest, lineCopy[256];

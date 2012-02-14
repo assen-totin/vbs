@@ -19,13 +19,12 @@ void view_onBPressed () {
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((counter.running == TRUE) && (counter.inside_sub == FALSE)) {
 			gint new_from = getTimePos(2);
-			gtk_list_store_set (GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
+			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
 			counter.timestamp = time(NULL);
 			counter.inside_sub = TRUE;
 
 			gchar *line;
-
 			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
 
 			div_t q = div(strlen(line),20);
@@ -36,7 +35,12 @@ void view_onBPressed () {
 
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(counter.progress), line2);
 
+			// If networking is enabled, send the line to server
+			if (counter.use_network == 1)
+				put_subtitle(line);
+
 			g_free(line);
+
 			fprintf(counter.tmpFile, "Processed B key.\n");
 		}
 	}
@@ -51,9 +55,8 @@ void view_onMPressed () {
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((counter.running == TRUE) && (counter.inside_sub == TRUE)){
-
 			gint new_to = getTimePos(2);
-			gtk_list_store_set (GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
+			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
 			// Move to next line
 			gtk_tree_selection_unselect_iter(selection, &iter);
@@ -62,7 +65,7 @@ void view_onMPressed () {
 
 			// Scroll down
 			GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-			gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
 
 			counter.inside_sub = FALSE;
 
@@ -70,6 +73,10 @@ void view_onMPressed () {
 			sprintf(line," ");
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(counter.progress), line);
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(counter.progress), 0);
+
+			// If networking is enabled, drop the line from server
+			if (counter.use_network == 1)
+				put_subtitle("");
 
 			// Export subtitles
 			exportSubtitles();

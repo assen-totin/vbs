@@ -85,7 +85,7 @@ static struct encEntry encEntries[] = {
 	{"WINDOWS-1251", true},
 	{"KOI8R", false},
 	{"KOI8U", false},
-	{"UTF8", false}
+	{"UTF-8", false}
 };
 
 

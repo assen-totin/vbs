@@ -69,7 +69,7 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 
 void fileDialogOK21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	char importTextFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK21","Filename too long.");}
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK21","Filename too long.", 1);}
 	sprintf(importTextFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 	clearStore();
 	importText(&importTextFile[0], VBS_IMPORT_FILTER_TEXT);
@@ -78,7 +78,7 @@ void fileDialogOK21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 
 void fileDialogOK22( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	char importTextFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK22","Filename too long.");}
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK22","Filename too long.",1);}
 	sprintf(importTextFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 	clearStore();
 	importText(&importTextFile[0], VBS_IMPORT_FILTER_SRT);
@@ -87,7 +87,7 @@ void fileDialogOK22( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 
 void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	char videoFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.");}
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.", 1);}
 	sprintf(videoFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 	loadVideo(videoFile);
 }
@@ -95,7 +95,7 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 
 void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.");}
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
 	sprintf(counter.globalExportFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
