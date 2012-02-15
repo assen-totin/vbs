@@ -12,7 +12,7 @@
 
 
 bool haveLoadedText(GtkWidget *window){
-	if (counter.have_loaded_text) {return true;}
+	if (config.vbsm.have_loaded_text) {return true;}
 	else {
 		warnDialog(window, "No text loaded!");
 		return false;
@@ -150,7 +150,7 @@ void importText(char *importTextFile, int importFlag) {
 			lineRest = line;
 		}
 
-		if (lineRest) {lineUTF8 = g_convert(lineRest, strlen(lineRest), "UTF-8", counter.config_import_encoding, NULL, &bytes_written, NULL);}
+		if (lineRest) {lineUTF8 = g_convert(lineRest, strlen(lineRest), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);}
 
 		// Append row
 		gtk_list_store_append (store, &iter);
@@ -170,7 +170,7 @@ void importText(char *importTextFile, int importFlag) {
 	gtk_tree_model_get_iter_first(model, &iter);
 	gtk_tree_selection_select_iter(selection, &iter);
 
-	counter.have_loaded_text = true;
+	config.vbsm.have_loaded_text = true;
 	exportSubtitles();
 }
 

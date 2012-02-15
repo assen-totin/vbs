@@ -62,7 +62,7 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 
 	char CrLf[3];
 	sprintf(CrLf, "\n");
-	if (counter.config_export_cr) {sprintf(CrLf, "\r\n");}
+	if (config.common.export_cr == 1) {sprintf(CrLf, "\r\n");}
 
 	// Get all fields
 	gtk_tree_model_get(model, iter, COL_LINE, &line, COL_FROM, &from, COL_TO, &to, -1);
@@ -83,7 +83,7 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 	gchar *lineCP1251;
 	gsize bytes_written;
 	if (strlen(line) == 0){sprintf(line," ");}
-	lineCP1251 = g_convert(line, strlen(line), counter.config_export_encoding, "UTF-8", NULL, &bytes_written, NULL);
+	lineCP1251 = g_convert(line, strlen(line), config.common.export_encoding, "UTF-8", NULL, &bytes_written, NULL);
 
 	// Replace | with \n
 	lineStr = lineCP1251;
@@ -106,7 +106,7 @@ void exportSubtitles() {
 	FILE *fp;
 	GtkTreeModel *model;
 
-	fp = fopen (counter.globalExportFile, "w");
+	fp = fopen (config.vbsm.globalExportFile, "w");
 	if (!fp) {error_handler("exportSubtitles", "failed to export subtitles", 1);}
 
 	export_sub_val.fp = fp;
@@ -120,7 +120,7 @@ void exportSubtitles() {
 	int retval = fclose(fp);
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-	fprintf(counter.tmpFile, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
+	fprintf(config.vbsm.tmpFile, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
 }
 
 

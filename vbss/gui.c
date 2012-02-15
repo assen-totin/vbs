@@ -13,7 +13,7 @@
 
 // Fetch a subtitle and process it
 int proc_subtitle(GtkWidget *subtitle) {
-	char buffer_new[config.line_size], md5_old[17], md5_new[17];
+	char buffer_new[config.common.line_size], md5_old[17], md5_new[17];
 	const char *buffer_old_p;
 
 	bzero((char *) &md5_new[0], sizeof(md5_new));
@@ -41,7 +41,7 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	get_host_by_name(&config.server_name);
+	get_host_by_name(&config.common.server_name);
 
 	/*** Initialize GTK+ ***/
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
@@ -53,7 +53,7 @@ int main (int argc, char *argv[]) {
 	colour.green = 0x0;
 	colour.blue = 0x0;
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	if (config.test_mode)
+	if (config.common.test_mode)
 		gtk_widget_set_size_request (window, 600, 200);
 	else {
 		gtk_window_set_decorated (GTK_WINDOW(window), 0);
@@ -64,17 +64,17 @@ int main (int argc, char *argv[]) {
 
 	/* MAIN TEXT COMES HERE */
 	attr_list = pango_attr_list_new();
-	attr_size = pango_attr_size_new(config.font_size * PANGO_SCALE);
+	attr_size = pango_attr_size_new(config.vbss.font_size * PANGO_SCALE);
 	attr_size->start_index = 0;
 	attr_size->end_index = G_MAXUINT;
 	pango_attr_list_insert(attr_list, attr_size);
 
-	attr_colour_bg = pango_attr_foreground_new(config.colour_fg_r, config.colour_fg_g, config.colour_fg_b);
+	attr_colour_bg = pango_attr_foreground_new(config.vbss.colour_fg_r, config.vbss.colour_fg_g, config.vbss.colour_fg_b);
 	attr_colour_bg->start_index = 0;
 	attr_colour_bg->end_index = G_MAXUINT;
 	pango_attr_list_insert(attr_list, attr_colour_bg);
 
-        attr_colour_bg = pango_attr_background_new(config.colour_bg_r, config.colour_bg_g, config.colour_bg_b);
+        attr_colour_bg = pango_attr_background_new(config.vbss.colour_bg_r, config.vbss.colour_bg_g, config.vbss.colour_bg_b);
         attr_colour_bg->start_index = 0;
         attr_colour_bg->end_index = G_MAXUINT;
         pango_attr_list_insert(attr_list, attr_colour_bg);

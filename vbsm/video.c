@@ -12,7 +12,7 @@
 
 
 bool haveLoadedVideo(GtkWidget *window){
-	if (counter.pipeWrite) {
+	if (config.vbsm.pipeWrite) {
 			// Check if mplayer has exited?
 		int status;
 		int res = waitpid(-1, &status, WNOHANG);
@@ -28,8 +28,8 @@ bool haveLoadedVideo(GtkWidget *window){
 
 
 void writeMPlayer(char *command) {
-	fprintf(counter.pipeWrite, "%s\n", command);
-	fflush(counter.pipeWrite);
+	fprintf(config.vbsm.pipeWrite, "%s\n", command);
+	fflush(config.vbsm.pipeWrite);
 }
 
 
@@ -44,7 +44,7 @@ int getTimePos(int flag) {
 	bool goOn = true;
 	int res;
 
-	while (goOn && (fgets(&line[0], 255, counter.pipeRead))) {
+	while (goOn && (fgets(&line[0], 255, config.vbsm.pipeRead))) {
 		if (strstr(&line[0],"ANS_TIME_POSITION")) {
 			// This is our line!
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
@@ -71,7 +71,7 @@ int getSubNum() {
 	bool goOn = true;
 	int res;
 
-	while (goOn && (fgets(&line[0], 255, counter.pipeRead))) {
+	while (goOn && (fgets(&line[0], 255, config.vbsm.pipeRead))) {
 		if (strstr(&line[0],"Added subtitle file")) {
 			// This is our line! Split by the ")" sign
 			partOne = strtok(&line[0], ")");
@@ -91,20 +91,20 @@ void *loadVideo(char fileName[1024]) {
 	char popenCmd[2048];
 	memset(&popenCmd[0],'\0', sizeof(popenCmd));
 
-	if (counter.mplayer_pid > 0) {
+	if (config.vbsm.mplayer_pid > 0) {
 		if (mplayerAlive()) {
 			sprintf(popenCmd, "load %s", &fileName[0]); 
 			writeMPlayer(popenCmd);
 		}
 
 		else {
-			counter.mplayer_pid = 0;
-			fclose(counter.pipeRead);
-			fclose(counter.pipeWrite);
+			config.vbsm.mplayer_pid = 0;
+			fclose(config.vbsm.pipeRead);
+			fclose(config.vbsm.pipeWrite);
 		}
 	}
 	
-	if (counter.mplayer_pid == 0) {
+	if (config.vbsm.mplayer_pid == 0) {
 		int readPipeFD[2], writePipeFD[2];
 		pid_t cpid;
 
@@ -133,9 +133,9 @@ void *loadVideo(char fileName[1024]) {
 		close(readPipeFD[1]);          /* Close unused write end */
 		close(writePipeFD[0]);         /* Close unused read end */
 
-		counter.pipeRead = fdopen(readPipeFD[0], "r");
-		counter.pipeWrite = fdopen(writePipeFD[1], "w");
-		counter.mplayer_pid = cpid;
+		config.vbsm.pipeRead = fdopen(readPipeFD[0], "r");
+		config.vbsm.pipeWrite = fdopen(writePipeFD[1], "w");
+		config.vbsm.mplayer_pid = cpid;
 	}
 
 	writeMPlayer("pause");

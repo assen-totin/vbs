@@ -12,7 +12,7 @@
 #include "server.h" 
 
 // Check magic key
-unsigned long magic_key(int byte_first, int byte_last, unsigned char buffer[config.line_size]) {
+unsigned long magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]) {
 	unsigned int cnt = 0;
 	int i = 0;
 	unsigned long res = 0;
@@ -22,7 +22,7 @@ unsigned long magic_key(int byte_first, int byte_last, unsigned char buffer[conf
                 cnt++;
         }
 
-	if (res == config.magic_key)
+	if (res == config.common.magic_key)
 		return 1;
 
 	return 0;
@@ -66,7 +66,7 @@ int main() {
 
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-	serv_addr.sin_port = htons(config.tcp_port);
+	serv_addr.sin_port = htons(config.common.tcp_port);
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 		syslog(LOG_CRIT, "Failed to bind to TCP port!");
 		exit(1);
@@ -76,7 +76,7 @@ int main() {
 
 	// Shared memory
 	unix_time = time(NULL);
-	shm_id = shmget(unix_time, config.line_size, IPC_CREAT|IPC_EXCL); 
+	shm_id = shmget(unix_time, config.common.line_size, IPC_CREAT|IPC_EXCL); 
 	shm_at = (char *)shmat(shm_id, 0, 0);
 	strcpy(shm_at, "Initial test message");
 
@@ -88,10 +88,10 @@ int main() {
 			pid = fork();
 			if (pid == 0) {
 				// FORKED ACTION HERE
-				char buffer[config.line_size];
+				char buffer[config.common.line_size];
 				int n;
 
-				shm_id = shmget(unix_time, config.line_size, IPC_CREAT);
+				shm_id = shmget(unix_time, config.common.line_size, IPC_CREAT);
 				shm_at = (char *)shmat(shm_id, 0, 0);
 
 				bzero(buffer, sizeof(buffer));
@@ -109,7 +109,7 @@ int main() {
 					}
 
 					// WRITE BACK
-					n = write(newsockfd, shm_at, config.line_size);
+					n = write(newsockfd, shm_at, config.common.line_size);
 					if (n < 0) {
 						syslog(LOG_CRIT, "Error writing to socket!");
 					}

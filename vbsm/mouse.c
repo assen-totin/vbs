@@ -16,7 +16,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 	GtkWidget *window = userdata;
 	int subNum;
 
-	if ((counter.running == FALSE) && (haveLoadedText(window)) && (haveLoadedVideo(window))) {
+	if ((config.vbsm.running == FALSE) && (haveLoadedText(window)) && (haveLoadedVideo(window))) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
@@ -32,7 +32,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 			 // Tell mplayer to load subtitles as they exist now
 			 writeMPlayer("pausing_keep sub_remove");
 			 char fileNameEscaped[1024];
-			 escapeFileName(&counter.globalExportFile[0],&fileNameEscaped[0]);
+			 escapeFileName(&config.vbsm.globalExportFile[0],&fileNameEscaped[0]);
 			 sprintf(command, "pausing_keep sub_load %s", &fileNameEscaped[0]);
 			 writeMPlayer(command);
 

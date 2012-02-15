@@ -28,18 +28,28 @@
 #define VBS_DEFAULT_CR 1
 #define VBS_TEST_MODE 1
 
-struct configuration {
-	int test_mode;
-	int magic_key;
-	int export_cr;
-	char file_name[255];
-	char export_encoding[255];
-	char import_encoding[255];
-	int line_size;
-	int tcp_port;
-	char server_name[255];
-	struct hostent host_entry;
-	int use_network;
+struct vbsm {
+        time_t timestamp;
+        bool running;
+        bool inside_sub;
+        bool have_loaded_text;
+        guint status_context_id;
+        pid_t mplayer_pid;
+        short unsigned progress_seconds;
+        GtkWidget *combo_export;
+        GtkWidget *combo_import;
+        GtkWidget *combo_cr;
+        GtkWidget *status;
+        GtkWidget *progress;
+        FILE *pipeWrite;
+        FILE *pipeRead;
+        FILE *tmpFile;
+        char tmpFileName[255];
+        char globalExportFile[1024];
+};
+
+
+struct vbss {
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;
@@ -47,6 +57,26 @@ struct configuration {
 	int colour_fg_g;
 	int colour_fg_b;
 	int font_size;
+};
+
+struct common {
+        int test_mode;
+        int magic_key;
+        int export_cr;
+        char config_file_name[255];
+        char export_encoding[255];
+        char import_encoding[255];
+        int line_size;
+        int tcp_port;
+        char server_name[255];
+        struct hostent host_entry;
+        int use_network;
+};
+
+struct configuration {
+	struct common;
+	struct vbsm;
+	struct vbss;
 };
 
 struct configuration config;

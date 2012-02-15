@@ -13,22 +13,22 @@
 int progressBarUpdate() {
 
 	// Update progress bar
-	if (counter.inside_sub == TRUE) {
+	if (config.vbsm.inside_sub == TRUE) {
 		time_t curr_time = time(NULL);
-		gdouble frac = (gdouble) (curr_time - counter.timestamp) / (gdouble) (counter.progress_seconds - 1);
+		gdouble frac = (gdouble) (curr_time - config.vbsm.timestamp) / (gdouble) (config.vbsm.progress_seconds - 1);
 		if (frac <= 1) {
-			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(counter.progress), frac);
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), frac);
 		}
 		else {
 			char line2[255];
-			sprintf(line2,"Suggested Duration: %u seconds (So far: %u seconds)", counter.progress_seconds - 1, curr_time - counter.timestamp);
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(counter.progress), line2);
+			sprintf(line2,"Suggested Duration: %u seconds (So far: %u seconds)", config.vbsm.progress_seconds - 1, curr_time - config.vbsm.timestamp);
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 		}
 	}
 
 
 	// If only playing the movie, move to next subtitles as it gets displayed - until a 'b' is pressed
-	if ((counter.running == TRUE) && (counter.inside_sub == FALSE)){
+	if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)){
 		GtkTreeSelection *selection;
 		GtkTreeModel     *model;
 		GtkTreeIter       iter;

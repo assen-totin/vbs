@@ -17,31 +17,31 @@ void view_onBPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((counter.running == TRUE) && (counter.inside_sub == FALSE)) {
+		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
 			gint new_from = getTimePos(2);
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
-			counter.timestamp = time(NULL);
-			counter.inside_sub = TRUE;
+			config.vbsm.timestamp = time(NULL);
+			config.vbsm.inside_sub = TRUE;
 
 			gchar *line;
 			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
 
 			div_t q = div(strlen(line),20);
-			counter.progress_seconds = q.quot + 2;
+			config.vbsm.progress_seconds = q.quot + 2;
 
 			char line2[255];
 			sprintf(line2,"Suggested Duration: %u seconds", q.quot + 1);
 
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(counter.progress), line2);
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 
 			// If networking is enabled, send the line to server
-			if (counter.use_network == 1)
+			if (config.vbsm.use_network == 1)
 				put_subtitle(line);
 
 			g_free(line);
 
-			fprintf(counter.tmpFile, "Processed B key.\n");
+			fprintf(config.vbsm.tmpFile, "Processed B key.\n");
 		}
 	}
 }
@@ -54,7 +54,7 @@ void view_onMPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((counter.running == TRUE) && (counter.inside_sub == TRUE)){
+		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == TRUE)){
 			gint new_to = getTimePos(2);
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
@@ -67,15 +67,15 @@ void view_onMPressed () {
 			GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
 			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
 
-			counter.inside_sub = FALSE;
+			config.vbsm.inside_sub = FALSE;
 
 			char line[16];
 			sprintf(line," ");
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(counter.progress), line);
-			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(counter.progress), 0);
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line);
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
 
 			// If networking is enabled, drop the line from server
-			if (counter.use_network == 1)
+			if (config.vbsm.use_network == 1)
 				put_subtitle("");
 
 			// Export subtitles
@@ -94,24 +94,24 @@ void view_onSpacePressed (GtkWidget *window) {
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
 
-	if ((counter.running == TRUE) && (counter.inside_sub == FALSE)) {
+	if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
 		// Pause the player
 		if (mplayerAlive()) {writeMPlayer("pause");}
 
-		counter.running = FALSE;
+		config.vbsm.running = FALSE;
 
 		// Set status
-		gtk_statusbar_push(GTK_STATUSBAR(counter.status), counter.status_context_id, "Status: PAUSED");
+		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 	}
-	else if (counter.running == FALSE) {
+	else if (config.vbsm.running == FALSE) {
 		if (haveLoadedText(window) && haveLoadedVideo(window)) {
 			// Start the player
 			if (mplayerAlive()) {writeMPlayer("pause");}
 
-			counter.running = TRUE;
+			config.vbsm.running = TRUE;
 
 			// Set status
-			gtk_statusbar_push(GTK_STATUSBAR(counter.status), counter.status_context_id, "Status: RUNNING");
+			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 		}
 	}
 }

@@ -11,10 +11,10 @@
 #include "main.h"
 
 bool mplayerAlive() {
-	if (counter.mplayer_pid == 0) {return false;}
+	if (config.vbsm.mplayer_pid == 0) {return false;}
 	int status;
 	pid_t cpid = waitpid(-1, &status, WNOHANG);
-	if (cpid == counter.mplayer_pid) {return false;}
+	if (cpid == config.vbsm.mplayer_pid) {return false;}
 	return true;
 }
 
@@ -29,6 +29,13 @@ bool configBool(char *line) {
 	return true;
 }
 
+int configInt(char *line) {
+        char *lineRest;
+        int res;
+        strtok(line, "=");
+        lineRest = strtok(NULL, "$$$");
+        return atoi(lineRest);
+}
 
 void configChar(char *line, char *param) {
 	char *lineRest;
@@ -40,25 +47,25 @@ void configChar(char *line, char *param) {
 
 void writeConfig(bool createDefault) {
 	if (createDefault) {
-		if (VBS_CONFIG_DEFAULT_CR == 0) {counter.config_export_cr = FALSE;}
-		else {counter.config_export_cr = TRUE;}
+		if (VBS_CONFIG_DEFAULT_CR == 0) {config.common.export_cr = 0;}
+		else {config.common.export_cr = 1;}
 
 		int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
 		int i;
 		for (i=0; i<nencEntries; i++) {
 			if (encEntries[i].dflt) {
-				sprintf(counter.config_export_encoding, "%s", encEntries[i].name);
-				sprintf(counter.config_import_encoding, "%s", encEntries[i].name);
+				sprintf(config.common.export_encoding, "%s", encEntries[i].name);
+				sprintf(config.common.import_encoding, "%s", encEntries[i].name);
 			}
 		}
 	}
-	FILE *fpConfig = fopen(counter.configFileName, "w");
+	FILE *fpConfig = fopen(config.common.config_file_name, "w");
 	if (!fpConfig) {error_handler("writeConfig","could not open config file", 1);}
 	fprintf(fpConfig, "%s", VBS_CONFIG_HEADER);
-	if (counter.config_export_cr) {fprintf(fpConfig, "EXPORT_CR=1\n");}
+	if (config.common.export_cr == 1) {fprintf(fpConfig, "EXPORT_CR=1\n");}
 	else {fprintf(fpConfig, "EXPORT_CR=0\n");}
-	fprintf(fpConfig, "EXPORT_ENCODING=%s\n", &counter.config_export_encoding[0]);
-	fprintf(fpConfig, "IMPORT_ENCODING=%s\n", &counter.config_import_encoding[0]);
+	fprintf(fpConfig, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
+	fprintf(fpConfig, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
 	fclose(fpConfig);
 }
 
@@ -129,15 +136,15 @@ int main (int argc, char **argv){
 	GtkWidget *status, *vbox, *progress;
 
 	// Initalize time-ticks counter, set it to zero
-	counter.running = FALSE;
-	counter.have_loaded_text = FALSE;
-	counter.mplayer_pid = 0;
+	config.vbsm.running = FALSE;
+	config.vbsm.have_loaded_text = FALSE;
+	config.vbsm.mplayer_pid = 0;
 
 	// Create temporary file (GTK is buggy ot GCC?)
-	sprintf(counter.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(counter.tmpFileName);
+	sprintf(config.vbsm.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
+	int mkstempRes = mkstemp(config.vbsm.tmpFileName);
 	if (mkstempRes == -1) {error_handler("main","failed to create temporary file name",1 );}
-	counter.tmpFile = fopen(counter.tmpFileName,"w");
+	config.vbsm.tmpFile = fopen(config.vbsm.tmpFileName,"w");
 
 	// Check for "~/.vbs", if not, create one
 	struct passwd *passwdEntry;
@@ -166,14 +173,14 @@ int main (int argc, char **argv){
 	}
 
 	// Check for config, if not, create one
-	sprintf(&counter.configFileName[0], "%s/%s", vbsDir, VBS_CONFIG_FILENAME);
-	statRes = stat(counter.configFileName, &statBuf);
+	sprintf(&config.common.config_file_name[0], "%s/%s", vbsDir, VBS_CONFIG_FILENAME);
+	statRes = stat(config.common.config_file_name, &statBuf);
 	errsv = errno;
 
 	if (statRes == 0) {
 		// Is it a file?
 		if (!S_ISREG(statBuf.st_mode)) {error_handler("main","config file exists in .vbs, but is not a regular file",1 );}
-		else {fpConfig = fopen(counter.configFileName, "r");}
+		else {fpConfig = fopen(config.common.config_file_name, "r");}
 		// Read from config file
 		char *line;
 		line = malloc(256);
@@ -182,9 +189,9 @@ int main (int argc, char **argv){
 		while (fgets(line, 255, fpConfig)) {
 			if (!(line[0]=='#')) {
 				line[strlen(line) - 1] = 0;     /* kill '\n' */
-				if (strstr(line, "EXPORT_CR")) {counter.config_export_cr = configBool(line);}
-				if (strstr(line, "EXPORT_ENCODING")) {configChar(line, &counter.config_export_encoding[0]);}
-				if (strstr(line, "IMPORT_ENCODING")) {configChar(line, &counter.config_import_encoding[0]);}
+				if (strstr(line, "EXPORT_CR")) {config.common.export_cr = configInt(line);}
+				if (strstr(line, "EXPORT_ENCODING")) {configChar(line, &config.common.export_encoding[0]);}
+				if (strstr(line, "IMPORT_ENCODING")) {configChar(line, &config.common.import_encoding[0]);}
 			}
 		}
 		fclose(fpConfig);
@@ -215,15 +222,15 @@ int main (int argc, char **argv){
 	guint status_context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(status), "Current status: ");
 	gtk_statusbar_push(GTK_STATUSBAR(status), status_context_id, "Status: PAUSED");
 
-	counter.status = status;
-	counter.status_context_id = status_context_id;
-	counter.inside_sub = FALSE;
-	sprintf(counter.globalExportFile, "%s", VBS_DEFAULT_EXPORT_FILE);
+	config.vbsm.status = status;
+	config.vbsm.status_context_id = status_context_id;
+	config.vbsm.inside_sub = FALSE;
+	sprintf(config.vbsm.globalExportFile, "%s", VBS_DEFAULT_EXPORT_FILE);
 
 	// Progress, will be packed in the middle of the vbox
 	progress = gtk_progress_bar_new();
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress),GTK_PROGRESS_LEFT_TO_RIGHT);
-	counter.progress = progress;
+	config.vbsm.progress = progress;
 
 	// Root window
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
