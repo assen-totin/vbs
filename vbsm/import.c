@@ -150,7 +150,12 @@ void importText(char *importTextFile, int importFlag) {
 			lineRest = line;
 		}
 
-		if (lineRest) {lineUTF8 = g_convert(lineRest, strlen(lineRest), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);}
+		if (lineRest) {
+			if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0) 
+				lineUTF8 = g_convert(lineRest, strlen(lineRest), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
+			else
+				lineUTF8 = lineRest;
+		}
 
 		// Append row
 		gtk_list_store_append (store, &iter);

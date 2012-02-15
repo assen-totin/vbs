@@ -79,11 +79,15 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 	sprintf(timeLine, "%s --> %s", timeFrom, timeTo);
 	fprintf(export_sub->fp, "%s%s", timeLine, &CrLf[0]);
 
-	// Convert back to CP-1251
+	// Convert back to non-UTF-8 encoding
 	gchar *lineCP1251;
 	gsize bytes_written;
-	if (strlen(line) == 0){sprintf(line," ");}
-	lineCP1251 = g_convert(line, strlen(line), config.common.export_encoding, "UTF-8", NULL, &bytes_written, NULL);
+	if (strlen(line) == 0)
+		sprintf(line," ");
+	if (strcmp(&config.common.export_encoding[0], "UTF-8") != 0)
+		lineCP1251 = g_convert(line, strlen(line), config.common.export_encoding, "UTF-8", NULL, &bytes_written, NULL);
+	else
+		lineCP1251 = line;
 
 	// Replace | with \n
 	lineStr = lineCP1251;
