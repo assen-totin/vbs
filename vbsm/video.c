@@ -13,7 +13,7 @@
 
 bool haveLoadedVideo(GtkWidget *window){
 	if (config.vbsm.pipeWrite) {
-			// Check if mplayer has exited?
+		// Check if mplayer has exited?
 		int status;
 		int res = waitpid(-1, &status, WNOHANG);
 		if (res == 0) {return true;}

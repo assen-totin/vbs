@@ -22,28 +22,27 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
 			if (from > 0) {
+				// Move the player -  seeking actually needs some time to complete, 
+				// that's why we seek a second earlier and leave 1 second timeout, then pause
+				char command[255];
+				sprintf(command, "pausing_keep seek %u 2", from/1000-2);
+				writeMPlayer(command);
 
-			 // Move the player -  seeking actually needs some time to complete, 
-			 // that's why we seek a second earlier and leave 1 second timeout, then pause
-			 char command[255];
-			 sprintf(command, "pausing_keep seek %u 2", from/1000-2);
-			 writeMPlayer(command);
-
-			 // Tell mplayer to load subtitles as they exist now
-			 writeMPlayer("pausing_keep sub_remove");
-			 char fileNameEscaped[1024];
-			 escapeFileName(&config.vbsm.globalExportFile[0],&fileNameEscaped[0]);
-			 sprintf(command, "pausing_keep sub_load %s", &fileNameEscaped[0]);
-			 writeMPlayer(command);
+				// Tell mplayer to load subtitles as they exist now
+				writeMPlayer("pausing_keep sub_remove");
+				char fileNameEscaped[1024];
+				escapeFileName(&config.vbsm.globalExportFile[0],&fileNameEscaped[0]);
+				sprintf(command, "pausing_keep sub_load %s", &fileNameEscaped[0]);
+				writeMPlayer(command);
 
 // This *should* normally work; 
 // However, my mplayer crashes with "signal 11 in sub_find" when executing "sub_select"
 // after getSubNum(). 
 // Since we clear all subs before reloading, the new level should always be 1. 
 //    subNum = getSubNum();
-			 subNum = 1;
-			 sprintf(command, "pausing_keep sub_select %u", subNum);
-			 writeMPlayer(command);
+				subNum = 1;
+				sprintf(command, "pausing_keep sub_select %u", subNum);
+				writeMPlayer(command);
 			}
 		}
 	}

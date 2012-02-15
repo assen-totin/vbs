@@ -11,10 +11,12 @@
 #include "main.h"
 
 bool mplayerAlive() {
-	if (config.vbsm.mplayer_pid == 0) {return false;}
+	if (config.vbsm.mplayer_pid == 0) {
+		return false;
 	int status;
 	pid_t cpid = waitpid(-1, &status, WNOHANG);
-	if (cpid == config.vbsm.mplayer_pid) {return false;}
+	if (cpid == config.vbsm.mplayer_pid) 
+		return false;
 	return true;
 }
 

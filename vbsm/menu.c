@@ -178,6 +178,24 @@ void helpAbout(GtkWidget *window) {
 	gtk_widget_show_all (quitDialog);
 }
 
+void setTimer(GtkWidget *window) {
+	config.vbsm.init_timestamp = time(NULL);
+
+        GtkWidget *quitDialog, *quitLabel, *quitFrame;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_TIMER_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+
+        quitFrame = gtk_frame_new("");
+        quitLabel = gtk_label_new(VBS_TIMER_OK);
+        gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame);
+
+        gtk_widget_show_all (quitDialog);
+}
 
 static void quitDialogOK( GtkWidget *widget, gpointer data ){
 	GtkWidget *quitDialog = data;

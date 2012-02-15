@@ -12,13 +12,20 @@
 
 void view_onBPressed () {
 	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
-	GtkTreeIter       iter;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gint new_from;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
-			gint new_from = getTimePos(2);
+			if (mplayerAlive())
+				new_from = getTimePos(2);
+			else {
+				time_t curr_time = time(NULL);
+				new_from = config.vbsm.init_timestamp - curr_time;
+			}
+
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
 			config.vbsm.timestamp = time(NULL);
@@ -55,7 +62,13 @@ void view_onMPressed () {
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == TRUE)){
-			gint new_to = getTimePos(2);
+			if (mplayerAlive())
+				gint new_to = getTimePos(2);
+			else {
+				time_t curr_time = time(NULL);
+				new_from = config.vbsm.init_timestamp - curr_time;
+			}
+
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
 			// Move to next line
@@ -96,7 +109,8 @@ void view_onSpacePressed (GtkWidget *window) {
 
 	if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
 		// Pause the player
-		if (mplayerAlive()) {writeMPlayer("pause");}
+		if (mplayerAlive()) 
+			writeMPlayer("pause");
 
 		config.vbsm.running = FALSE;
 
@@ -106,7 +120,8 @@ void view_onSpacePressed (GtkWidget *window) {
 	else if (config.vbsm.running == FALSE) {
 		if (haveLoadedText(window) && haveLoadedVideo(window)) {
 			// Start the player
-			if (mplayerAlive()) {writeMPlayer("pause");}
+			if (mplayerAlive()) 
+				writeMPlayer("pause");
 
 			config.vbsm.running = TRUE;
 
