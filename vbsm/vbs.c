@@ -140,67 +140,15 @@ int main (int argc, char **argv){
 	config.vbsm.have_loaded_text = FALSE;
 	config.vbsm.mplayer_pid = 0;
 
-	// Create temporary file (GTK is buggy ot GCC?)
+	// Create temporary file (GTK is buggy or GCC?)
 	sprintf(config.vbsm.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(config.vbsm.tmpFileName);
 	if (mkstempRes == -1) {error_handler("main","failed to create temporary file name",1 );}
 	config.vbsm.tmpFile = fopen(config.vbsm.tmpFileName,"w");
 
-	// Check for "~/.vbs", if not, create one
-	struct passwd *passwdEntry;
-	struct stat statBuf; 
-	char vbsDir[1024];
-	bool flagConfig = FALSE;
-	int mkdirRes, statRes, errsv;
-	FILE *fpConfig;
-
-	passwdEntry = getpwuid(getuid());
-
-	sprintf(&vbsDir[0], "%s/%s", passwdEntry->pw_dir, VBS_CONFIG_DIR);
-	statRes = stat(vbsDir, &statBuf);
-	errsv = errno;
-	if (statRes == 0) {
-		// Is it a dir?
-		if (!S_ISDIR(statBuf.st_mode)) {error_handler("main",".vbs exists in home dir, but is not a directory", 1);}
-	}
-	else if (statRes == -1) {
-		// Create if missing
-		if (errsv == ENOENT) {
-			mkdirRes = mkdir(vbsDir,0755);
-			if (mkdirRes == 1) {error_handler("main",".vbs creation failed", 1);}
-		}
-		else {error_handler("main","stat of .vbs failed", 1);}
-	}
-
-	// Check for config, if not, create one
-	sprintf(&config.common.config_file_name[0], "%s/%s", vbsDir, VBS_CONFIG_FILENAME);
-	statRes = stat(config.common.config_file_name, &statBuf);
-	errsv = errno;
-
-	if (statRes == 0) {
-		// Is it a file?
-		if (!S_ISREG(statBuf.st_mode)) {error_handler("main","config file exists in .vbs, but is not a regular file",1 );}
-		else {fpConfig = fopen(config.common.config_file_name, "r");}
-		// Read from config file
-		char *line;
-		line = malloc(256);
-		if (!line) {error_handler("main","malloc failed", 1);}
-
-		while (fgets(line, 255, fpConfig)) {
-			if (!(line[0]=='#')) {
-				line[strlen(line) - 1] = 0;     /* kill '\n' */
-				if (strstr(line, "EXPORT_CR")) {config.common.export_cr = configInt(line);}
-				if (strstr(line, "EXPORT_ENCODING")) {configChar(line, &config.common.export_encoding[0]);}
-				if (strstr(line, "IMPORT_ENCODING")) {configChar(line, &config.common.import_encoding[0]);}
-			}
-		}
-		fclose(fpConfig);
-	}
-	else if (statRes == -1) {
-		// Create if missing
-		if (errsv == ENOENT) {writeConfig(TRUE);}
-		else {error_handler("main","stat of config file failed", 1);}
-	}
+        // Set up config from defaults
+        check_config();
+        get_host_by_name(&config.common.server_name);
 
 	// GTK Init
 	gtk_init (&argc, &argv);
@@ -259,14 +207,14 @@ int main (int argc, char **argv){
 	gtk_box_pack_start(GTK_BOX(vbox), scroll, TRUE, TRUE, 0);
 
 	// Add vbox to window
-	gtk_container_add (GTK_CONTAINER (window), vbox);
+	gtk_container_add(GTK_CONTAINER (window), vbox);
 
-	gtk_widget_show_all (window);
+	gtk_widget_show_all(window);
 
 	// Progress bar check & update function
-	g_timeout_add (1000, (GtkFunction) progressBarUpdate, NULL);
+	g_timeout_add(1000, (GtkFunction) progressBarUpdate, NULL);
 
-	gtk_main ();
+	gtk_main();
 
 	return 0;
 }

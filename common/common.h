@@ -18,17 +18,19 @@
 #define VBS_DEFAULT_LINE_SIZE 1024
 #define VBS_DEFAULT_TCP_PORT 42
 #define VBS_DEFAULT_SERVER "vbs42.online.bg"
-#define VBS_DEFAULT_MAGIC 1973
+#define VBS_DEFAULT_MAGIC_KEY 1973
 #define VBS_DEFAULT_COLOUR_BG_RED 17476
 #define VBS_DEFAULT_COLOUR_BG_GREEN 17476
 #define VBS_DEFAULT_COLOUR_BG_BLUE 17476
 #define VBS_DEFAULT_COLOUR_FG_RED 65535
 #define VBS_DEFAULT_COLOUR_FG_GREEN 65535
 #define VBS_DEFAULT_COLOUR_FG_BLUE 65535
-#define VBS_DEFAULT_CR 1
+#define VBS_DEFAULT_FONT_SIZE 32
+#define VBS_DEFAULT_CR 0 
 #define VBS_TEST_MODE 1
 
 struct vbsm {
+	time_t init_timestamp;
         time_t timestamp;
         bool running;
         bool inside_sub;
@@ -36,9 +38,7 @@ struct vbsm {
         guint status_context_id;
         pid_t mplayer_pid;
         short unsigned progress_seconds;
-        GtkWidget *combo_export;
-        GtkWidget *combo_import;
-        GtkWidget *combo_cr;
+        GtkWidget *menu_widget;
         GtkWidget *status;
         GtkWidget *progress;
         FILE *pipeWrite;
@@ -62,15 +62,15 @@ struct vbss {
 struct common {
         int test_mode;
         int magic_key;
+	char config_file_name[255];
         int export_cr;
-        char config_file_name[255];
         char export_encoding[255];
         char import_encoding[255];
         int line_size;
+	int use_network;
+	char server_name[255];
         int tcp_port;
-        char server_name[255];
         struct hostent host_entry;
-        int use_network;
 };
 
 struct configuration {

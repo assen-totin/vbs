@@ -47,32 +47,6 @@ enum {
 	VBS_IMPORT_FILTER_SRT
 };
 
-
-struct counters {
-	time_t timestamp;
-	bool running;
-	bool inside_sub;
-	bool have_loaded_text;
-	guint status_context_id;
-	pid_t mplayer_pid;
-	short unsigned progress_seconds;
-	GtkWidget *combo_export;
-	GtkWidget *combo_import;
-	GtkWidget *combo_cr;
-	GtkWidget *status;
-	GtkWidget *progress;
-	FILE *pipeWrite;
-	FILE *pipeRead;
-	FILE *tmpFile;
-	char tmpFileName[255];
-	char configFileName[255];
-	char globalExportFile[1024];
-	bool config_export_cr;
-	char config_export_encoding[255];
-	char config_import_encoding[255];
-};
-
-
 #define VBS_ICON "/usr/local/share/vbs/vbs.png"
 
 #define VBS_TMP_DIR "/tmp"

@@ -12,28 +12,24 @@
 #include "config.vbss.h"
 
 void default_config() {
+	config.common.test_mode = VBS_TEST_MODE;
+	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
 	strcpy(&config.common.config_file_name[0], VBS_CONFIG_FILENAME);
-	config.common.export_cr = 1;
+	config.common.export_cr = VBS_DEFAULT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
-	config.common.tcp_port = VBS_DEFAULT_TCP_PORT;
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
-	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
-	config.common.test_mode = 1;
 	config.common.use_network = 1;
-	config.common.magic_key = VBS_DEFAULT_MAGIC;
+	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
+	config.common.tcp_port = VBS_DEFAULT_TCP_PORT;
+
 	config.vbss.colour_bg_r = VBS_DEFAULT_COLOUR_BG_RED;
 	config.vbss.colour_bg_g = VBS_DEFAULT_COLOUR_BG_GREEN;
 	config.vbss.colour_bg_b = VBS_DEFAULT_COLOUR_BG_BLUE;
         config.vbss.colour_fg_r = VBS_DEFAULT_COLOUR_FG_RED;
         config.vbss.colour_fg_g = VBS_DEFAULT_COLOUR_FG_GREEN;
         config.vbss.colour_fg_b = VBS_DEFAULT_COLOUR_FG_BLUE;
-
-	#ifdef VBS_TEST_MODE
-		config.common.test_mode = 1;
-	#else
-		config.common.test_mode = 0;
-	#endif
+	config.vbss.font_size = VBS_DEFAULT_FONT_SIZE;
 }
 
 void config_char(char *line, char *param) {
@@ -50,36 +46,30 @@ int config_int(char *line) {
 	return atoi(line_rest);
 }
 
-bool config_bool(char *line) {
-	char *line_rest;
-	int res;
-	strtok(line, "=");
-	line_rest = strtok(NULL, "$$$");
-	res = atoi(line_rest);
-	if (res == 0) {return false;}
-	return true;
-}
-
 void write_config() {
         FILE *fp_config = fopen(config.common.config_file_name, "w");
         if (!fp_config)
                 error_handler("write_config", "could not open config file", 1);
         fprintf(fp_config, "%s", VBS_CONFIG_HEADER);
+
+	fprintf(fp_config, "TEST_MODE=%u\n", config.common.test_mode);
+	fprintf(fp_config, "MAGIC_KEY=%u\n", config.common.magic_key);
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
         fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
         fprintf(fp_config, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
-        fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
-        fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
-        fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
-        fprintf(fp_config, "MAGIC=%u\n", config.common.magic_key);
-	fprintf(fp_config, "TEST_MODE=%u\n", config.common.test_mode);
+	fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
 	fprintf(fp_config, "USE_NETWORK=%u\n", config.common.use_network);
+	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
+        fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
+
         fprintf(fp_config, "COLOUR_BG_R=%u\n", config.vbss.colour_bg_r);
         fprintf(fp_config, "COLOUR_BG_G=%u\n", config.vbss.colour_bg_g);
         fprintf(fp_config, "COLOUR_BG_B=%u\n", config.vbss.colour_bg_b);
         fprintf(fp_config, "COLOUR_FG_R=%u\n", config.vbss.colour_fg_r);
         fprintf(fp_config, "COLOUR_FG_G=%u\n", config.vbss.colour_fg_g);
         fprintf(fp_config, "COLOUR_FG_B=%u\n", config.vbss.colour_fg_b);
+	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
+
         fclose(fp_config);
 }
 
@@ -93,24 +83,26 @@ void read_config() {
 	while (fgets(line, 1024, fp_config)) {
 		if (!(line[0]=='#')) {
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
-			if (strstr(line, "EXPORT_CR")) 
-				config.common.export_cr = config_bool(line);
-			else if (strstr(line, "TEST_MODE")) 
-				config.common.test_mode = config_bool(line);
+
+			if (strstr(line, "TEST_MODE"))
+				config.common.test_mode = config_int(line);
+                        else if (strstr(line, "MAGIC_KEY"))
+                                config.common.magic_key = config_int(line);
+			else if (strstr(line, "EXPORT_CR")) 
+				config.common.export_cr = config_int(line);
 			else if (strstr(line, "EXPORT_ENCODING")) 
 				config_char(line, &config.common.export_encoding[0]);
 			else if (strstr(line, "IMPORT_ENCODING")) 
 				config_char(line, &config.common.import_encoding[0]);
+                        else if (strstr(line, "LINE_SIZE"))
+                                config.common.line_size = config_int(line);
+                        else if (strstr(line, "USE_NETWORK"))
+                                config.common.use_network = config_int(line);
 			else if (strstr(line, "SERVER_NAME")) 
 				config_char(line, &config.common.server_name[0]);
 			else if (strstr(line, "TCP_PORT")) 
 				config.common.tcp_port = config_int(line);
-			else if (strstr(line, "LINE_SIZE")) 
-				config.common.line_size = config_int(line);
-			else if (strstr(line, "MAGIC")) 
-				config.common.magic_key = config_int(line);
-			else if (strstr(line, "USE_NETWORK"))
-				config.common.use_network = config_int(line);
+
                         else if (strstr(line, "COLOUR_BG_R"))
                                 config.vbss.colour_bg_r = config_int(line);
                         else if (strstr(line, "COLOUR_BG_G"))
@@ -123,6 +115,8 @@ void read_config() {
                                 config.vbss.colour_fg_g = config_int(line);
                         else if (strstr(line, "COLOUR_FG_B"))
                                 config.vbss.colour_fg_b = config_int(line);
+			else if (strstr(line, "FONT_SIZE"))
+				config.vbss.font_size = config_int(line);
 		}
 	}
 	fclose(fp_config);
