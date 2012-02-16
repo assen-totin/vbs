@@ -40,7 +40,7 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	get_host_by_name(&config.common.server_name);
+	get_host_by_name(&config.common.server_name[0]);
 
 	/*** Initialize GTK+ ***/
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
