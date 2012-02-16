@@ -23,12 +23,13 @@ LIBS = -lcrypto
 
 TARGET = vbss 
 
-OBJS = gui.o ../common/network.o ../common/error.o ../common/config.o
+OBJS_LCOAL = gui.o 
+OBJS_REMOTE = ../common/network.o ../common/error.o ../common/config.o
 
 all: $(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS_LOCAL) $(TARGET)
 
 install:
 	cp -f $(TARGET) $(BINDIR)
@@ -45,5 +46,5 @@ uninstall:
 
 $(TARGET): gui.c 
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c
-	$(CC) -o $@ $(ADD_FLAGS) $(LIBS) $(OBJS)
+	$(CC) -o $@ $(ADD_FLAGS) $(LIBS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

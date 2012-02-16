@@ -325,7 +325,7 @@ void setNewline (GtkWidget *window) {
 
 void setNetworkPortOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        config.vbsm.tcp_port = atoi(gtk_entry_get_text(GTK_ENTRY(config.common.menu_widget)));
+        config.common.tcp_port = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
         write_config();
         gtk_widget_destroy(quitDialog);
 }
@@ -342,12 +342,14 @@ void setNetworkPort (GtkWidget *window) {
         g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (setNetworkPortOK), (gpointer) quitDialog);
 
         char quitMessage[1024];
-        sprintf(quitMessage, "%s\n", VBS_NETWORK_PORT_NAME);
+        sprintf(&quitMessage[0], "%s\n", VBS_NETWORK_PORT_NAME);
         quitLabel = gtk_label_new(quitMessage);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
 
 	config.vbsm.menu_widget = gtk_entry_new();
-	gtk_entry_set_text(config.vbsm.menu_widget, config.vbsm.tcp_port);
+	char tmp1[16];
+	sprintf(&tmp1[0], "%u", config.common.tcp_port);
+	gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
@@ -356,7 +358,8 @@ void setNetworkPort (GtkWidget *window) {
 void setNetworkServerOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
 
-	if (!get_host_by_name(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)))) {
+	if (get_host_by_name((char *) gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget))) == 0) {
+/*
 		// Pop-up a message that the resolving failed
 	        GtkWidget *quitDialog2, *quitLabel2, *quitFrame2;
 
@@ -372,6 +375,8 @@ void setNetworkServerOK(GtkWidget *widget, gpointer data) {
 	        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame2);
 
 	        gtk_widget_show_all (quitDialog2);
+*/
+		gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), VBS_NETWORK_SERVER_WARNING_TEXT);
         }
 	else {
 	        write_config();
@@ -387,8 +392,8 @@ void setNetworkServer (GtkWidget *window) {
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
         gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (setNetworkServerOK), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK(quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK(setNetworkServerOK), (gpointer) quitDialog);
 
         char quitMessage[1024];
         sprintf(quitMessage, "%s\n", VBS_NETWORK_SERVER_NAME);
@@ -396,16 +401,23 @@ void setNetworkServer (GtkWidget *window) {
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
 
 	config.vbsm.menu_widget = gtk_entry_new();
-	gtk_entry_set_text(config.vbsm.menu_widget, config.common.server_name);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+	gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &config.common.server_name[0]);
+        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
-        gtk_widget_show_all (quitDialog);
+	// Second edntry for response after resolving
+        config.vbsm.menu_widget = gtk_entry_new();
+        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), "");
+        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+
+        gtk_widget_show_all(quitDialog);
 }
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if( strstr( gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"OFF")) {config.common.use_network = 1}
-        else {config.vbsm.use_network = 0;}
+        if( strstr( gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"OFF"))
+		config.common.use_network = 1;
+        else 
+		config.common.use_network = 0;
         write_config();
         gtk_widget_destroy(quitDialog);
 }
@@ -431,7 +443,7 @@ void useNetwork (GtkWidget *window) {
         gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
         gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
         int index;
-        if(config.vbsm.use_network == 0) {index = 0;}
+        if(config.common.use_network == 0) {index = 0;}
         else {index = 1;}
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), index);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);

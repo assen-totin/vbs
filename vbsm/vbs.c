@@ -11,7 +11,7 @@
 #include "../common/common.h"
 
 bool mplayerAlive() {
-	if (config.vbsm.mplayer_pid == 0) {
+	if (config.vbsm.mplayer_pid == 0) 
 		return false;
 	int status;
 	pid_t cpid = waitpid(-1, &status, WNOHANG);
@@ -98,7 +98,7 @@ int main (int argc, char **argv){
 
         // Set up config from defaults
         check_config();
-        get_host_by_name(&config.common.server_name);
+        get_host_by_name(&config.common.server_name[0]);
 
 	// GTK Init
 	gtk_init (&argc, &argv);

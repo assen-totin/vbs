@@ -21,7 +21,7 @@ LIBS = -lm
 TARGET = vbsd 
 
 OBJS_LOCAL = server.o 
-OBJS_REMOTE = ../common/config.o ../common/error.o
+OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`

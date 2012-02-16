@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "..common/common.h"
+#include "../common/common.h"
 
 void view_cellEdit(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer notUsed) {
 	GtkTreeIter iter;

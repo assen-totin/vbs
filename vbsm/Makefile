@@ -21,12 +21,13 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 TARGET = vbsm 
 
-OBJS = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o ../common/error.o 
+OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o 
+OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o
 
 all: $(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET) vbs.desktop
+	rm -f $(OBJS_LOCAL) $(TARGET) vbs.desktop
 
 install:
 	cp -f $(TARGET) $(BINDIR)
@@ -51,5 +52,5 @@ $(TARGET): gui.c keyboard.c mouse.c export.c import.c video.c edit.c menu.c vbs.
 	$(CC) $(CFLAGS) $(INCLUDES) edit.c
 	$(CC) $(CFLAGS) $(INCLUDES) menu.c
 	$(CC) $(CFLAGS) $(INCLUDES) vbs.c
-	$(CC) -o $@ $(ADD_FLAGS) $(OBJS)
+	$(CC) -o $@ $(ADD_FLAGS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

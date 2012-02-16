@@ -43,7 +43,7 @@ void view_onBPressed () {
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 
 			// If networking is enabled, send the line to server
-			if (config.vbsm.use_network == 1)
+			if (config.common.use_network == 1)
 				put_subtitle(line);
 
 			g_free(line);
@@ -58,15 +58,16 @@ void view_onMPressed () {
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
+	gint new_to;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == TRUE)){
 			if (mplayerAlive())
-				gint new_to = getTimePos(2);
+				new_to = getTimePos(2);
 			else {
 				time_t curr_time = time(NULL);
-				new_from = config.vbsm.init_timestamp - curr_time;
+				new_to = config.vbsm.init_timestamp - curr_time;
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
@@ -88,7 +89,7 @@ void view_onMPressed () {
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
 
 			// If networking is enabled, drop the line from server
-			if (config.vbsm.use_network == 1)
+			if (config.common.use_network == 1)
 				put_subtitle("");
 
 			// Export subtitles
