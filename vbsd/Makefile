@@ -20,12 +20,16 @@ LIBS = -lm
 
 TARGET = vbsd 
 
-OBJS = server.o ../common/config.o ../common/error.o
+OBJS_LOCAL = server.o 
+OBJS_REMOTE = ../common/config.o ../common/error.o
+
+INCLUDES=`pkg-config --cflags gtk+-2.0`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 all: $(TARGET)
 
 clean:
-	rm -f $(OBJS_CLIENT) $(OBJS_SERVER) $(TARGET_SERVER) $(TARGET_CLIENT) 
+	rm -f $(OBJS_LOCAL) $(TARGET) 
 
 install:
 	#cp -f $(TARGET) $(BINDIR)
@@ -42,5 +46,5 @@ uninstall:
 
 $(TARGET): server.c
 	$(CC) $(CFLAGS) $(INCLUDES) server.c
-	$(CC) -o $@ $(LIBS) $(OBJS)
+	$(CC) -o $@ $(LIBS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 
