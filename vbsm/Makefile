@@ -32,7 +32,7 @@ clean:
 install:
 	cp -f $(TARGET) $(BINDIR)
 	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
-	cp -f vbs.png  $(IMGDIR)
+	cp -f ../common/vbs.png  $(IMGDIR)
 	cp vbsm.desktop.template vbsm.desktop
 	echo "Icon=$(IMGDIR)/vbs.png"  >> vbsm.desktop
 	cp -f vbsm.desktop /usr/share/applications
@@ -40,7 +40,7 @@ install:
 uninstall:
 	rm -f $(TARGET) $(BINDIR)/$(TARGET)
 	rm -f $(IMGDIR)/vbs.png
-	rm -f /usr/share/applications/vbs.desktop
+	rm -f /usr/share/applications/vbsm.desktop
 
 $(TARGET): gui.c keyboard.c mouse.c export.c import.c video.c edit.c menu.c vbs.c
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c

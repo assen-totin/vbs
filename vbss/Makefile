@@ -34,7 +34,7 @@ clean:
 install:
 	cp -f $(TARGET) $(BINDIR)
 	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
-	cp -f vbs.png  $(IMGDIR)
+	cp -f ../common/vbs.png  $(IMGDIR)
 	cp vbss.desktop.template vbss.desktop
 	echo "Icon=$(IMGDIR)/vbs.png"  >> vbss.desktop
 	cp -f vbss.desktop /usr/share/applications
