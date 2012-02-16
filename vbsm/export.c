@@ -56,7 +56,7 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 	struct exportSub *export_sub = userdata;
 	
 	gchar *line;
-	char *lineStr, *partOne, linePrint[255];
+	char *partOne, linePrint[config.common.line_size];
 	guint from, to;
 
 	char CrLf[3];
@@ -89,15 +89,11 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 		lineCP1251 = line;
 
 	// Replace | with \n
-	lineStr = lineCP1251;
-	partOne = strtok(lineStr,"|");
-	sprintf(&linePrint[0], "%s", partOne);
+	char line_fixed[config.common.line_size];
+	strcpy(&line_fixed[0], lineCP1251);
+	fixNewline(&line_fixed[0]);
 
-	while(partOne = strtok(NULL,"|")) {
-		sprintf(&linePrint[0], "%s%s%s", &linePrint[0],&CrLf[0],partOne);
-	}
-
-	fprintf(export_sub->fp, "%s%s%s", &linePrint[0], &CrLf[0], &CrLf[0]);
+	fprintf(export_sub->fp, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
 
 	g_free(line);
 	return FALSE;

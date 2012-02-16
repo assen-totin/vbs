@@ -77,7 +77,7 @@ int main() {
 	unix_time = time(NULL);
 	shm_id = shmget(unix_time, config.common.line_size, IPC_CREAT|IPC_EXCL); 
 	shm_at = (char *)shmat(shm_id, 0, 0);
-	strcpy(shm_at, "Initial test message");
+	strcpy(shm_at, "Initial server message");
 
 	syslog(LOG_CRIT, "Started OK");
 
@@ -102,7 +102,7 @@ int main() {
 				else {
 					// DO SOMETHING WITH 'buffer'
 					syslog(LOG_CRIT, buffer);
-					if (magic_key(0, 3, buffer) == 1) {
+					if (check_magic_key(0, 3, buffer) == 1) {
 						syslog(LOG_CRIT, "Got magic!");
 						strcpy(shm_at, buffer + 4);
 					}

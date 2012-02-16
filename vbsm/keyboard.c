@@ -90,7 +90,7 @@ void view_onMPressed () {
 
 			// If networking is enabled, drop the line from server
 			if (config.common.use_network == 1)
-				put_subtitle("");
+				put_subtitle("\n");
 
 			// Export subtitles
 			exportSubtitles();

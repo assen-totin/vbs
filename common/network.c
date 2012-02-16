@@ -78,12 +78,16 @@ int put_subtitle(char *buffer) {
         char request[config.common.line_size];
 	char buffer2[config.common.line_size + 4];
 
-        get_socket(&sockfd);
+        sockfd = get_socket();
 
+	strcpy(&request[0], buffer);
+	fixNewline(&request[0]);
+
+	bzero(buffer2, config.common.line_size + 4);
         memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));
-        memcpy(&buffer2[4], buffer, sizeof(*buffer));
+        memcpy(&buffer2[4], &request[0], config.common.line_size);
 
-        n = write(sockfd, buffer2, sizeof(buffer2));
+        n = write(sockfd, buffer2, config.common.line_size + 4);
 
         if (n < 0) {
                 error_handler("put_subtitle", "Could not write to socket", 0);
@@ -91,9 +95,9 @@ int put_subtitle(char *buffer) {
                 return 0;
         }
 
-        bzero(buffer, config.common.line_size);
+        bzero(buffer2, config.common.line_size + 4);
 
-        n = read(sockfd, buffer, config.common.line_size - 1);
+        n = read(sockfd, buffer2, config.common.line_size);
         if (n < 0) {
                 error_handler("put_subtitle", "Could not read from socket", 0);
                 close(sockfd);
@@ -101,7 +105,6 @@ int put_subtitle(char *buffer) {
         }
 
         close(sockfd);
-
         return 1;
 }
 

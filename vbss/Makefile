@@ -23,8 +23,8 @@ LIBS = -lcrypto
 
 TARGET = vbss 
 
-OBJS_LCOAL = gui.o 
-OBJS_REMOTE = ../common/network.o ../common/error.o ../common/config.o
+OBJS_LOCAL = gui.o 
+OBJS_REMOTE = ../common/network.o ../common/error.o ../common/config.o ../common/util.o
 
 all: $(TARGET)
 

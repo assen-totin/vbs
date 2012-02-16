@@ -137,4 +137,5 @@ struct configuration config;
 #include "config.h"
 #include "error.h"
 #include "network.h"
+#include "util.h"
 

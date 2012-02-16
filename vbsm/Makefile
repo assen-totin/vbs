@@ -22,7 +22,7 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 TARGET = vbsm 
 
 OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o video.o menu.o vbs.o 
-OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o
+OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o ../common/util.o
 
 all: $(TARGET)
 
