@@ -10,8 +10,8 @@
 
 #include "common.h"
 
-void error_handler(char function[256], char error_text[256], bool exit_flag) {
-        printf("*** VBS Error: %s in function %s\n", error_text, function);
+void error_handler(char func[256], char error_text[256], bool exit_flag) {
+        printf("*** VBS Error: %s in function %s\n", error_text, func);
         if (exit_flag)
                 exit(1);
 }

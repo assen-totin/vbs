@@ -212,7 +212,6 @@ static void quitDialogOK( GtkWidget *widget, gpointer data ){
 	gtk_main_quit();
 }
 
-
 void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
 	sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));

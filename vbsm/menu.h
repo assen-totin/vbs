@@ -34,6 +34,14 @@ void setNewlineOK(GtkWidget *widget, gpointer data);
 
 void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window);
 
+void useNetworkOK(GtkWidget *widget, gpointer data);
+void useNetwork (GtkWidget *window);
+void setNetworkServerOK(GtkWidget *widget, gpointer data);
+void setNetworkServer (GtkWidget *window);
+void setNetworkPortOK(GtkWidget *widget, gpointer data);
+void setNetworkPort (GtkWidget *window);
+void setTimer(GtkWidget *window);
+
 static GtkItemFactoryEntry menuEntries[] = {
 	{ "/_File",         "<ALT>F",      NULL,         0, "<Branch>" },
 	{ "/File/_Quit", "<CTRL>Q", quitDialog,  11, "<Item>" },
@@ -73,22 +81,6 @@ static GtkItemFactoryEntry menuEntries[] = {
 	{ "/_Help",        "<ALT>H",      NULL,         0, "<Branch>" },
 	{ "/Help/Contents", "", helpContents,  51, "<Item>" },
 	{ "/Help/About", "", helpAbout,  52, "<Item>" }
-};
-
-
-struct encEntry {
-	char name[255];
-	bool dflt;
-};
-
-
-static struct encEntry encEntries[] = {
-	{"ISO8859-1", false},
-	{"WINDOWS-1250", false},
-	{"WINDOWS-1251", true},
-	{"KOI8R", false},
-	{"KOI8U", false},
-	{"UTF-8", false}
 };
 
 

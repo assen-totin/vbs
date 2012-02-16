@@ -8,5 +8,5 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void error_handler(char function[256], char error_text[256], bool exit_flag)
+void error_handler(char func[256], char error_text[256], bool exit_flag);
 

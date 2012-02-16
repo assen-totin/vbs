@@ -15,15 +15,18 @@ CFLAGS = -c -O2
 
 TARGET = config 
 
-OBJS = config.vbss.o error.o network.o
+OBJS = config.o error.o network.o
+
+INCLUDES=`pkg-config --cflags gtk+-2.0`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 all: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-$(TARGET): config.vbss.c error.c network.c
-	$(CC) $(CFLAGS) error.c
-	$(CC) $(CFLAGS) config.vbss.c
-	$(CC) $(CFLAGS) network.c
+$(TARGET): config.c error.c network.c
+	$(CC) $(CFLAGS) $(INCLUDES) error.c
+	$(CC) $(CFLAGS) $(INCLUDES) config.c
+	$(CC) $(CFLAGS) $(INCLUDES) network.c
 

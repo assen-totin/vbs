@@ -35,22 +35,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "../vbsd/server.h"
-#include "../vbss/gui.h"
-
-#include "../vbsm/vbs.h"
-#include "../vbsm/export.h"
-#include "../vbsm/keyboard.h"
-#include "../vbsm/mouse.h"
-#include "../vbsm/gui.h"
-#include "../vbsm/edit.h"
-#include "../vbsm/menu.h"
-#include "../vbsm/video.h"
-
-#include "config.h"
-#include "error.h"
-#include "network.h"
-
 #define VBS_TMP_DIR "/tmp"
 
 enum {
@@ -65,7 +49,7 @@ enum {
         VBS_IMPORT_FILTER_SRT
 };
 
-struct vbsm {
+struct struct_vbsm {
 	time_t init_timestamp;
         time_t timestamp;
         bool running;
@@ -85,7 +69,7 @@ struct vbsm {
 };
 
 
-struct vbss {
+struct struct_vbss {
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;
@@ -95,7 +79,7 @@ struct vbss {
 	int font_size;
 };
 
-struct common {
+struct struct_common {
         int test_mode;
         int magic_key;
 	char config_file_name[255];
@@ -106,13 +90,13 @@ struct common {
 	int use_network;
 	char server_name[255];
         int tcp_port;
-        struct hostent host_entry;
+        struct hostent *host_entry;
 };
 
 struct configuration {
-	struct common;
-	struct vbsm;
-	struct vbss;
+	struct struct_common common;
+	struct struct_vbsm vbsm;
+	struct struct_vbss vbss;
 };
 
 struct configuration config;
@@ -135,5 +119,21 @@ static struct encEntry encEntries[] = {
 // Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
 GtkListStore *store;
 GtkWidget *view;
-struct common config;
+struct configuration config;
+
+#include "../vbsd/server.h"
+#include "../vbss/gui.h"
+
+#include "../vbsm/vbs.h"
+#include "../vbsm/export.h"
+#include "../vbsm/keyboard.h"
+#include "../vbsm/mouse.h"
+#include "../vbsm/gui.h"
+#include "../vbsm/edit.h"
+#include "../vbsm/menu.h"
+#include "../vbsm/video.h"
+
+#include "config.h"
+#include "error.h"
+#include "network.h"
 
