@@ -18,7 +18,7 @@ void default_config() {
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
-	config.common.use_network = 1;
+	config.common.use_network = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
 	config.common.tcp_port = VBS_DEFAULT_TCP_PORT;
 

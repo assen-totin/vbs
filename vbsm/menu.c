@@ -359,24 +359,7 @@ void setNetworkServerOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
 
 	if (get_host_by_name((char *) gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget))) == 0) {
-/*
-		// Pop-up a message that the resolving failed
-	        GtkWidget *quitDialog2, *quitLabel2, *quitFrame2;
-
-	        quitDialog2 = gtk_dialog_new_with_buttons (VBS_NETWORK_SERVER_WARNING, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
-
-	        GtkWidget *buttonCancel2 = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
-	        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog2), GTK_RESPONSE_CANCEL) ;
-	        g_signal_connect (G_OBJECT(buttonCancel2), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog2);
-
-	        quitFrame2 = gtk_frame_new("");
-	        quitLabel2 = gtk_label_new(VBS_NETWORK_SERVER_WARNING_TEXT);
-	        gtk_container_add (GTK_CONTAINER (quitFrame2), quitLabel2);
-	        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame2);
-
-	        gtk_widget_show_all (quitDialog2);
-*/
-		gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), VBS_NETWORK_SERVER_WARNING_TEXT);
+		gtk_label_set_text(GTK_LABEL(config.vbsm.menu_widget2), VBS_NETWORK_SERVER_WARNING_TEXT);
         }
 	else {
 	        write_config();
@@ -404,10 +387,8 @@ void setNetworkServer (GtkWidget *window) {
 	gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &config.common.server_name[0]);
         gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
-	// Second edntry for response after resolving
-        config.vbsm.menu_widget = gtk_entry_new();
-        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), "");
-        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        config.vbsm.menu_widget2 = gtk_label_new(VBS_NETWORK_SERVER_WARNING);
+        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget2);
 
         gtk_widget_show_all(quitDialog);
 }

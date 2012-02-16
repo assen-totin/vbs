@@ -59,6 +59,7 @@ struct struct_vbsm {
         pid_t mplayer_pid;
         short unsigned progress_seconds;
         GtkWidget *menu_widget;
+	GtkWidget *menu_widget2;
         GtkWidget *status;
         GtkWidget *progress;
         FILE *pipeWrite;

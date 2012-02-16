@@ -13,7 +13,7 @@
 int get_host_by_name(char *server_name) {
         struct hostent *host_entry = gethostbyname(server_name);
         if (host_entry == NULL) {
-                error_handler("get_host_by_name", "No such host", 1);
+                error_handler("get_host_by_name", "No such host", 0);
                 return 0;
         }
 	else {

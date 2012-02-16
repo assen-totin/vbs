@@ -98,7 +98,8 @@ int main (int argc, char **argv){
 
         // Set up config from defaults
         check_config();
-        get_host_by_name(&config.common.server_name[0]);
+	if (config.common.use_network == 1)
+	        get_host_by_name(&config.common.server_name[0]);
 
 	// GTK Init
 	gtk_init (&argc, &argv);
