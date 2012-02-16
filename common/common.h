@@ -8,26 +8,62 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include <stdbool.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <gdk/gdk.h>
+#include <gdk/gdkkeysyms.h>
+#include <glib.h>
+#include <gtk/gtk.h>
+#include <math.h>
 #include <netdb.h>
+#include <netinet/in.h>
+#include <openssl/md5.h>
+#include <pwd.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/ipc.h>
+#include <syslog.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/timeb.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
 
-//#define VBS_GLOBAL_CONFIG_DIR "vbs"
-#define VBS_LOCAL_CONFIG_DIR ".vbs"
-#define VBS_CONFIG_FILENAME "config"
-#define VBS_CONFIG_HEADER "# VBS Config File\n#\n# Do not edit by hand!\n#\n\n"
-#define VBS_DEFAULT_LINE_SIZE 1024
-#define VBS_DEFAULT_TCP_PORT 42
-#define VBS_DEFAULT_SERVER "vbs42.online.bg"
-#define VBS_DEFAULT_MAGIC_KEY 1973
-#define VBS_DEFAULT_COLOUR_BG_RED 17476
-#define VBS_DEFAULT_COLOUR_BG_GREEN 17476
-#define VBS_DEFAULT_COLOUR_BG_BLUE 17476
-#define VBS_DEFAULT_COLOUR_FG_RED 65535
-#define VBS_DEFAULT_COLOUR_FG_GREEN 65535
-#define VBS_DEFAULT_COLOUR_FG_BLUE 65535
-#define VBS_DEFAULT_FONT_SIZE 32
-#define VBS_DEFAULT_CR 0 
-#define VBS_TEST_MODE 1
+#include "../vbsd/server.h"
+#include "../vbss/gui.h"
+
+#include "../vbsm/vbs.h"
+#include "../vbsm/export.h"
+#include "../vbsm/keyboard.h"
+#include "../vbsm/mouse.h"
+#include "../vbsm/gui.h"
+#include "../vbsm/edit.h"
+#include "../vbsm/menu.h"
+#include "../vbsm/video.h"
+
+#include "config.h"
+#include "error.h"
+#include "network.h"
+
+#define VBS_TMP_DIR "/tmp"
+
+enum {
+        COL_LINE = 0,
+        COL_FROM,
+        COL_TO,
+        NUM_COLS
+};
+
+enum {
+        VBS_IMPORT_FILTER_TEXT = 0,
+        VBS_IMPORT_FILTER_SRT
+};
 
 struct vbsm {
 	time_t init_timestamp;
@@ -96,7 +132,8 @@ static struct encEntry encEntries[] = {
   {"KOI8U", false}
 };
 
-void error_handler(char function[256], char error[256], bool exit_flag);
-void check_config();
-int get_subtitle(char *buffer);
+// Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
+GtkListStore *store;
+GtkWidget *view;
+struct common config;
 

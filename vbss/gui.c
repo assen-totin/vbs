@@ -9,7 +9,6 @@
 // for details.
 
 #include "../common/common.h"
-#include "gui.h"
 
 // Fetch a subtitle and process it
 int proc_subtitle(GtkWidget *subtitle) {

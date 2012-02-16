@@ -9,7 +9,6 @@
 // for details.
 
 #include "common.h"
-#include "network.h"
 
 int get_host_by_name(char *server_name) {
         struct hostent host_entry = gethostbyname(server_name);

@@ -8,8 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "main.h"
-
+#include "../common/common.h"
 
 GtkWidget *makeMenu(GtkWidget *window) {
 	GtkAccelGroup *accel_group;

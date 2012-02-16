@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "main.h"
+#include "../common/common.h"
 
 void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata) {
 	GtkTreeModel *model;

@@ -8,12 +8,8 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
+int get_host_by_name(char *server_name);
+int get_socket();
+int get_subtitle(char *buffer);
+int put_subtitle(char *buffer);
 

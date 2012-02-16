@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "main.h"
+#include "../common/common.h"
 
 bool mplayerAlive() {
 	if (config.vbsm.mplayer_pid == 0) {
@@ -19,58 +19,6 @@ bool mplayerAlive() {
 		return false;
 	return true;
 }
-
-
-bool configBool(char *line) {
-	char *lineRest;
-	int res;
-	strtok(line, "=");
-	lineRest = strtok(NULL, "$$$");
-	res = atoi(lineRest);
-	if (res == 0) {return false;}
-	return true;
-}
-
-int configInt(char *line) {
-        char *lineRest;
-        int res;
-        strtok(line, "=");
-        lineRest = strtok(NULL, "$$$");
-        return atoi(lineRest);
-}
-
-void configChar(char *line, char *param) {
-	char *lineRest;
-	strtok(line, "=");
-	lineRest = strtok(NULL, "$$$");
-	sprintf(param,lineRest);
-}
-
-
-void writeConfig(bool createDefault) {
-	if (createDefault) {
-		if (VBS_CONFIG_DEFAULT_CR == 0) {config.common.export_cr = 0;}
-		else {config.common.export_cr = 1;}
-
-		int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
-		int i;
-		for (i=0; i<nencEntries; i++) {
-			if (encEntries[i].dflt) {
-				sprintf(config.common.export_encoding, "%s", encEntries[i].name);
-				sprintf(config.common.import_encoding, "%s", encEntries[i].name);
-			}
-		}
-	}
-	FILE *fpConfig = fopen(config.common.config_file_name, "w");
-	if (!fpConfig) {error_handler("writeConfig","could not open config file", 1);}
-	fprintf(fpConfig, "%s", VBS_CONFIG_HEADER);
-	if (config.common.export_cr == 1) {fprintf(fpConfig, "EXPORT_CR=1\n");}
-	else {fprintf(fpConfig, "EXPORT_CR=0\n");}
-	fprintf(fpConfig, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
-	fprintf(fpConfig, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
-	fclose(fpConfig);
-}
-
 
 void formatCellFrom(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
 	gint from;

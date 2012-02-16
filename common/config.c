@@ -9,7 +9,6 @@
 // for details.
 
 #include "common.h"
-#include "config.vbss.h"
 
 void default_config() {
 	config.common.test_mode = VBS_TEST_MODE;

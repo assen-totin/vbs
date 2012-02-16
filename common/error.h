@@ -8,6 +8,5 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include <stdio.h>
-#include <stdlib.h>
+void error_handler(char function[256], char error_text[256], bool exit_flag)
 

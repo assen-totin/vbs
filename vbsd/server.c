@@ -9,10 +9,9 @@
 // for details.
 
 #include "../common/common.h"
-#include "server.h" 
 
 // Check magic key
-unsigned long magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]) {
+int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]) {
 	unsigned int cnt = 0;
 	int i = 0;
 	unsigned long res = 0;
@@ -103,7 +102,7 @@ int main() {
 				else {
 					// DO SOMETHING WITH 'buffer'
 					syslog(LOG_CRIT, buffer);
-					if (magic_key(0, 3, buffer)) {
+					if (magic_key(0, 3, buffer) == 1) {
 						syslog(LOG_CRIT, "Got magic!");
 						strcpy(shm_at, buffer + 4);
 					}
