@@ -35,14 +35,14 @@ install:
 	cp -f $(TARGET) $(BINDIR)
 	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
 	cp -f vbs.png  $(IMGDIR)
-	cp vbs.desktop.template vbs.desktop
-	echo "Icon=$(IMGDIR)/vbs.png"  >> vbs.desktop
-	cp -f vbs.desktop /usr/share/applications
+	cp vbss.desktop.template vbss.desktop
+	echo "Icon=$(IMGDIR)/vbs.png"  >> vbss.desktop
+	cp -f vbss.desktop /usr/share/applications
 
 uninstall:
 	rm -f $(TARGET) $(BINDIR)/$(TARGET)
 	rm -f $(IMGDIR)/vbs.png
-	rm -f /usr/share/applications/vbs.desktop
+	rm -f /usr/share/applications/vbss.desktop
 
 $(TARGET): gui.c 
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c

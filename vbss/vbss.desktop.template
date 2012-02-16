@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Voody Blue Subtitler (Slave)
+GenericName=Voody Blue Subtitler (Slave)
+Comment=Subtitler Tool
+Exec=vbss
+Terminal=false
+Categories=GTK;Application;AudioVideo;Audio;Video;Player;TV;
