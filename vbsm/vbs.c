@@ -123,7 +123,7 @@ int main (int argc, char **argv){
 
 	config.vbsm.status = status;
 	config.vbsm.status_context_id = status_context_id;
-	config.vbsm.inside_sub = FALSE;
+	config.common.inside_sub = FALSE;
 	sprintf(config.common.export_filename, "%s", VBS_DEFAULT_EXPORT_FILE);
 
 	// Progress, will be packed in the middle of the vbox

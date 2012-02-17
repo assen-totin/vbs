@@ -65,7 +65,8 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 	if (!line_out) 
 		error_handler("proc_subtitle_local","malloc failed", 1);
 
-	bool game_over = false;
+	struct vbss_sub subs[1000];
+	int a = 0, i;
 	bool sub_is_ready = false;
 	bool isNextLineSubt = false;
 	bool wasPrevLineSubt = false;
@@ -73,8 +74,8 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 	char *timeBegin, *timeEnd;
 	unsigned int timeBeginVal, timeEndVal;
 
+	// LOAD SUBS FROM FILE
 	while (fgets(line_in, config.common.line_size, config.common.import_fp)) {
-
 		line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
 
 		// An empty line closes subtitle
@@ -102,35 +103,44 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 			sub_is_ready = false;
 		}
 
-		// RENDER THE SUBTITLE IN line_out
 		if ($sub_is_ready) {
-			game_over = false;
-			while (!game_over) {
+			subs[a].time_from = timeBeginVal;
+			subs[a].time_to = timeEndVal;
+			strcpy(&subs[a].sub[0], line_out);
+			a++;
+		}
+	}
+
+	free(line_in);
+	free(line_out);
+
+	// RENDER SUBS
+	while (1) {
+		if (!config.vbss.paused) {
+			for (i=0; i<a; i++) {
 				time_t curr_timestamp = time(NULL);
-				if (curr_timestamp < (timeBeginVal + config.common.init_timestamp))
-					sleep(1);
-				else
-					game_over = true;
+				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_from) {
+					config.common.inside_sub = true;
+					gtk_label_set_text(GTK_LABEL(subtitle), &subs[i].sub[0]);
+					break;
+				}
 			}
+		
+			if (i == a)
+				sleep(1);
 
-			gtk_label_set_text(GTK_LABEL(subtitle), line_out);
-
-			game_over = false;
-			while (!game_over) {
+			while (1) {
 				time_t curr_timestamp = time(NULL);
-				if (curr_timestamp < (timeEndVal + config.common.init_timestamp))
-					sleep(1);
+				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to)
+					gtk_label_set_text(GTK_LABEL(subtitle), "\n");
+					config.common.inside_sub = false;
+					break;
 				else 
-					game_over = true;
+					sleep(1);
 			}
-
-			gtk_label_set_text(GTK_LABEL(subtitle), "\n");
-		}		
-	}	
-
-        free(line_in);
-        free(line_out);
-
+		}
+		sleep(1);
+	}
 	return 1;
 }
 
@@ -144,10 +154,17 @@ void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 }
 
 void on_space_pressed (GtkWidget *window) {
-	if (config.common.init_timestamp == 0) {
-		config.common.init_timestamp = time(NULL);
-	else
-		config.common.init_timestamp = 0;
+	if (!config.common.inside_sub) {
+		if (!config.vbss.paused) {
+			config.vbss.paused = true;
+			config.common.timestamp = time(NULL);
+		}
+		else {
+			config.vbss.paused = false;
+			time_t curr_timestamp = time(NULL);
+			config.common.init_timestamp += (curr_timestamp - config.common.timestamp);
+		}
+	}
 }
 
 
@@ -161,8 +178,10 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	config.common.init_timestamp = 0;
-	get_host_by_name(&config.common.server_name[0]);
+	config.common.inside_sub = false;
+	config.vbss.paused = false;
+	if (config.common.use_network == 1) 
+		get_host_by_name(&config.common.server_name[0]);
 
 	/*** Initialize GTK+ ***/
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);

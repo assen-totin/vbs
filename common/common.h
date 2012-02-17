@@ -50,9 +50,7 @@ enum {
 };
 
 struct struct_vbsm {
-        time_t timestamp;
-        bool running;
-        bool inside_sub;
+	bool running;
         bool have_loaded_text;
         guint status_context_id;
         pid_t mplayer_pid;
@@ -69,6 +67,7 @@ struct struct_vbsm {
 
 
 struct struct_vbss {
+	bool paused;
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;
@@ -79,7 +78,9 @@ struct struct_vbss {
 };
 
 struct struct_common {
+	bool inside_sub;
 	time_t init_timestamp;
+	time_t timestamp;
         int test_mode;
         int magic_key;
 	char config_file_name[255];

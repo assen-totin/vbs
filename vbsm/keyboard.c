@@ -18,7 +18,7 @@ void view_onBPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
+		if ((config.vbsm.running == TRUE) && (config.common.inside_sub == FALSE)) {
 			if (mplayerAlive())
 				new_from = getTimePos(2);
 			else {
@@ -28,8 +28,8 @@ void view_onBPressed () {
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
-			config.vbsm.timestamp = time(NULL);
-			config.vbsm.inside_sub = TRUE;
+			config.common.timestamp = time(NULL);
+			config.common.inside_sub = TRUE;
 
 			gchar *line;
 			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
@@ -62,7 +62,7 @@ void view_onMPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == TRUE)){
+		if ((config.vbsm.running == TRUE) && (config.common.inside_sub == TRUE)){
 			if (mplayerAlive())
 				new_to = getTimePos(2);
 			else {
@@ -81,7 +81,7 @@ void view_onMPressed () {
 			GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
 			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
 
-			config.vbsm.inside_sub = FALSE;
+			config.common.inside_sub = FALSE;
 
 			char line[16];
 			sprintf(line," ");
@@ -108,7 +108,7 @@ void view_onSpacePressed (GtkWidget *window) {
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
 
-	if ((config.vbsm.running == TRUE) && (config.vbsm.inside_sub == FALSE)) {
+	if ((config.vbsm.running == TRUE) && (config.common.inside_sub == FALSE)) {
 		// Pause the player
 		if (mplayerAlive()) 
 			writeMPlayer("pause");

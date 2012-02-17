@@ -15,3 +15,10 @@ unsigned int convert_time_from_srt(char *in_time);
 #define VBSS_EXPECTING_CONNECTION "Expecting network connection..."
 #define VBSS_NETWORK_OFF "Press <space> to start local subtitles..."
 
+struct vbss_sub {
+	time_t time_from;
+	time_t time_to;
+	char sub[config.common.line_size];
+};
+
+
