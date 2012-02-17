@@ -50,7 +50,6 @@ enum {
 };
 
 struct struct_vbsm {
-	bool running;
         bool have_loaded_text;
         guint status_context_id;
         pid_t mplayer_pid;
@@ -78,19 +77,20 @@ struct struct_vbss {
 };
 
 struct struct_common {
+	bool running;
 	bool inside_sub;
 	time_t init_timestamp;
 	time_t timestamp;
         int test_mode;
         int magic_key;
-	char config_file_name[255];
+	char config_file_name[1024];
         int export_cr;
         char export_encoding[255];
         char import_encoding[255];
         char import_filename[1024];
-        FILE import_fp;
+        FILE *import_fp;
         char export_filename[1024];
-        FILE export_fp;
+        FILE *export_fp;
         int line_size;
 	int use_network;
 	char server_name[255];

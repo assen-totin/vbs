@@ -16,7 +16,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 	GtkWidget *window = userdata;
 	int subNum;
 
-	if ((config.vbsm.running == FALSE) && (haveLoadedText(window)) && (haveLoadedVideo(window))) {
+	if ((config.common.running == FALSE) && (haveLoadedText(window)) && (haveLoadedVideo(window))) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;

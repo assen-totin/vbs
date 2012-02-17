@@ -15,13 +15,13 @@ unsigned int convert_time_from_srt(char *in_time) {
         str_h = strtok(in_time, ":");
         str_m = strtok(NULL, ":");
         str_tmp = strtok(NULL, ":");
-        str_sec = strtok(str_tmp, ",");
+        str_s = strtok(str_tmp, ",");
 
         int res_h = atoi(str_h);
-        int res_min = atoi(str_min);
-        int res_s = atoi(str_sec);
+        int res_m = atoi(str_m);
+        int res_s = atoi(str_s);
 
-        int res = res_h*3600 + res_min*60 + res_s;
+        int res = res_h*3600 + res_m*60 + res_s;
 
         return res;
 }
@@ -50,12 +50,14 @@ int proc_subtitle_net(GtkWidget *subtitle) {
 
 int proc_subtitle_local(GtkWidget *subtitle) {
 	// Exit, unless this is the first call to this function
-	if (config.common.import_fp)
+	if (config.common.running)
 		return 1;
 
 	config.common.import_fp = fopen(config.common.import_filename, "r");
         if (!config.common.import_fp)
 		error_handler("vbss_main","failed to open subtitles", 1);
+
+	config.common.running = true;
 
 	char *line_in = malloc(config.common.line_size);
 	if (!line_in) 
@@ -103,7 +105,7 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 			sub_is_ready = false;
 		}
 
-		if ($sub_is_ready) {
+		if (sub_is_ready) {
 			subs[a].time_from = timeBeginVal;
 			subs[a].time_to = timeEndVal;
 			strcpy(&subs[a].sub[0], line_out);
@@ -131,10 +133,11 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 
 			while (1) {
 				time_t curr_timestamp = time(NULL);
-				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to)
+				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to) {
 					gtk_label_set_text(GTK_LABEL(subtitle), "\n");
 					config.common.inside_sub = false;
 					break;
+				}
 				else 
 					sleep(1);
 			}

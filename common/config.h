@@ -18,8 +18,8 @@ void check_config();
 #define VBS_LOCAL_CONFIG_DIR ".vbs"
 #define VBS_CONFIG_FILENAME "config"
 #define VBS_CONFIG_HEADER "# VBS Config File\n#\n# Do not edit by hand!\n#\n\n"
-#define VBS_EXPORT_FILENAME "/tmp/vbs-out.txt";
-#define VBS_IMPORT_FILENAME "/tmp/vbs-in.txt";
+#define VBS_EXPORT_FILENAME "/tmp/vbs-out.txt"
+#define VBS_IMPORT_FILENAME "/tmp/vbs-in.txt"
 #define VBS_DEFAULT_LINE_SIZE 1024
 #define VBS_DEFAULT_TCP_PORT 42
 #define VBS_DEFAULT_SERVER "vbs42.online.bg"

@@ -18,7 +18,7 @@ void view_onBPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((config.vbsm.running == TRUE) && (config.common.inside_sub == FALSE)) {
+		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 			if (mplayerAlive())
 				new_from = getTimePos(2);
 			else {
@@ -62,7 +62,7 @@ void view_onMPressed () {
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((config.vbsm.running == TRUE) && (config.common.inside_sub == TRUE)){
+		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)){
 			if (mplayerAlive())
 				new_to = getTimePos(2);
 			else {
@@ -108,23 +108,23 @@ void view_onSpacePressed (GtkWidget *window) {
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
 
-	if ((config.vbsm.running == TRUE) && (config.common.inside_sub == FALSE)) {
+	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 		// Pause the player
 		if (mplayerAlive()) 
 			writeMPlayer("pause");
 
-		config.vbsm.running = FALSE;
+		config.common.running = FALSE;
 
 		// Set status
 		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 	}
-	else if (config.vbsm.running == FALSE) {
+	else if (config.common.running == FALSE) {
 		if (haveLoadedText(window) && haveLoadedVideo(window)) {
 			// Start the player
 			if (mplayerAlive()) 
 				writeMPlayer("pause");
 
-			config.vbsm.running = TRUE;
+			config.common.running = TRUE;
 
 			// Set status
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");

@@ -86,7 +86,7 @@ int main (int argc, char **argv){
 	GtkWidget *status, *vbox, *progress;
 
 	// Initalize time-ticks counter, set it to zero
-	config.vbsm.running = FALSE;
+	config.common.running = FALSE;
 	config.vbsm.have_loaded_text = FALSE;
 	config.vbsm.mplayer_pid = 0;
 

@@ -28,7 +28,7 @@ int progressBarUpdate() {
 
 
 	// If only playing the movie, move to next subtitles as it gets displayed - until a 'b' is pressed
-	if ((config.vbsm.running == TRUE) && (config.common.inside_sub == FALSE)){
+	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)){
 		GtkTreeSelection *selection;
 		GtkTreeModel     *model;
 		GtkTreeIter       iter;
