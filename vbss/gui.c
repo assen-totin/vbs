@@ -50,11 +50,11 @@ int proc_subtitle_net(GtkWidget *subtitle) {
 
 int proc_subtitle_local(GtkWidget *subtitle) {
 	// Exit, unless this is the first call to this function
-	if (config.common.import_export_fp)
+	if (config.common.import_fp)
 		return 1;
 
-	config.common.import_export_fp = fopen(config.common.import_export_filename, "r");
-        if (!config.common.import_export_fp)
+	config.common.import_fp = fopen(config.common.import_filename, "r");
+        if (!config.common.import_fp)
 		error_handler("vbss_main","failed to open subtitles", 1);
 
 	char *line_in = malloc(config.common.line_size);
@@ -73,7 +73,7 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 	char *timeBegin, *timeEnd;
 	unsigned int timeBeginVal, timeEndVal;
 
-	while (fgets(line_in, config.common.line_size, config.common.import_export_fp)) {
+	while (fgets(line_in, config.common.line_size, config.common.import_fp)) {
 
 		line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
 

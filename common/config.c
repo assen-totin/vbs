@@ -18,6 +18,8 @@ void default_config() {
 	config.common.export_cr = VBS_DEFAULT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
+        strcpy(&config.common.import_filename[0], VBS_IMPORT_FILENAME);
+        strcpy(&config.common.export_filename[0], VBS_EXPORT_FILENAME);
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
 	config.common.use_network = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
@@ -57,6 +59,8 @@ void write_config() {
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
         fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
         fprintf(fp_config, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
+        fprintf(fp_config, "IMPORT_FILENAME=%s\n", &config.common.import_filename[0]);
+        fprintf(fp_config, "EXPORT_FILENAME=%s\n", &config.common.export_filename[0]);
 	fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
 	fprintf(fp_config, "USE_NETWORK=%u\n", config.common.use_network);
 	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
@@ -94,6 +98,10 @@ void read_config() {
 				config_char(line, &config.common.export_encoding[0]);
 			else if (strstr(line, "IMPORT_ENCODING")) 
 				config_char(line, &config.common.import_encoding[0]);
+                        else if (strstr(line, "EXPORT_FILENAME"))
+                                config_char(line, &config.common.export_filename[0]);
+                        else if (strstr(line, "IMPORT_FILENAME"))
+                                config_char(line, &config.common.import_filename[0]);
                         else if (strstr(line, "LINE_SIZE"))
                                 config.common.line_size = config_int(line);
                         else if (strstr(line, "USE_NETWORK"))

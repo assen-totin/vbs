@@ -95,7 +95,7 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
-	sprintf(config.common.import_export_filename, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	sprintf(config.common.export_filename, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
 
@@ -428,8 +428,10 @@ void useNetwork (GtkWidget *window) {
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
         int index;
-        if(config.common.use_network == 0) {index = 0;}
-        else {index = 1;}
+        if(config.common.use_network == 0)
+		index = 0;
+        else 
+		index = 1;
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), index);
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
@@ -440,7 +442,7 @@ void quitDialog(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel;
 	char quitMessage[1024];
 
-	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, config.common.import_export_filename); 
+	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, config.common.export_filename); 
 
 	quitDialog = gtk_dialog_new_with_buttons (VBS_QUIT_CONFIRM, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
 

@@ -124,7 +124,7 @@ int main (int argc, char **argv){
 	config.vbsm.status = status;
 	config.vbsm.status_context_id = status_context_id;
 	config.vbsm.inside_sub = FALSE;
-	sprintf(config.common.import_export_filename, "%s", VBS_DEFAULT_EXPORT_FILE);
+	sprintf(config.common.export_filename, "%s", VBS_DEFAULT_EXPORT_FILE);
 
 	// Progress, will be packed in the middle of the vbox
 	progress = gtk_progress_bar_new();

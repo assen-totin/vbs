@@ -86,13 +86,15 @@ struct struct_common {
         int export_cr;
         char export_encoding[255];
         char import_encoding[255];
+        char import_filename[1024];
+        FILE import_fp;
+        char export_filename[1024];
+        FILE export_fp;
         int line_size;
 	int use_network;
 	char server_name[255];
         int tcp_port;
         struct hostent *host_entry;
-	char import_export_filename[1024];
-	FILE import_export_fp;
 };
 
 struct configuration {
