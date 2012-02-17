@@ -102,6 +102,7 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 		}
 
 		if (sub_is_ready) {
+			sub_is_ready = false;
 			isNextLineSubt = false;
 			subs[a].time_from = timeBeginVal;
 			subs[a].time_to = timeEndVal;
@@ -116,20 +117,22 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 
 	config.common.init_timestamp = time(NULL);
 
-
-for (i=0; i<a; i++) {
-char a[100], b[100];
-//sprintf(&a[0], "%u", subs[i].time_from);
-//sprintf(&b[0], "%u", subs[i].time_to);
-error_handler("1", &subs[i].sub[0], 0);
-}
-
+/*
+char b[100], c[100];
+sprintf(&b[0], "%u", a);
+error_handler("1", b, 0);
+*/
 	// RENDER SUBS
 	while (1) {
 		if (!config.vbss.paused) {
 			for (i=0; i<a; i++) {
 				time_t curr_timestamp = time(NULL);
-				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_from) {
+//char d[100], e[100];
+//sprintf(&d[0], "%u %u", subs[i].time_from, subs[i].time_to);
+//sprintf(&e[0], "%u", (curr_timestamp - config.common.init_timestamp));
+//error_handler(d, e, 0);
+
+				if ((curr_timestamp - config.common.init_timestamp) == subs[i].time_from) {
 					config.common.inside_sub = true;
 					gtk_label_set_text(GTK_LABEL(subtitle), &subs[i].sub[0]);
 					break;
@@ -139,7 +142,7 @@ error_handler("1", &subs[i].sub[0], 0);
 			if (config.common.inside_sub) {
 				while (1) {
 					time_t curr_timestamp = time(NULL);
-					if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to) {
+					if ((curr_timestamp - config.common.init_timestamp) == subs[i].time_to) {
 						gtk_label_set_text(GTK_LABEL(subtitle), "\n");
 						config.common.inside_sub = false;
 						break;
