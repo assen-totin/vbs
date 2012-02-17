@@ -153,7 +153,7 @@ void check_config() {
 	if (stat_res == 0) {
 		// Is it a dir?
 		if (!S_ISDIR(stat_buf.st_mode))
-			error_handler("main","config dir exists, but is not a directory", 1);
+			error_handler("check_config","config dir exists, but is not a directory", 1);
  	}
 	else if (stat_res == -1) {
 		// Create if missing
@@ -163,7 +163,7 @@ void check_config() {
 				error_handler("main","config dir creation failed", 1);
 		}
 		else
-			error_handler("main","stat of config dir failed", 1);
+			error_handler("check_config","stat of config dir failed", 1);
 	}
 
 	// Next, check config file
@@ -179,7 +179,7 @@ void check_config() {
 	if (stat_res == 0) {
 		// Is it a file?
 		if (!S_ISREG(stat_buf.st_mode)) 
-			error_handler("main","config file exists but is not a regular file", 1);
+			error_handler("check_config","config file exists but is not a regular file", 1);
 
 		read_config();
 	}
@@ -188,7 +188,7 @@ void check_config() {
 		if (errsv == ENOENT) 
 			write_config();
 		else 
-			error_handler("main","stat of config file failed", 1);
+			error_handler("check_config","stat of config file failed", 1);
 	}
 }
 

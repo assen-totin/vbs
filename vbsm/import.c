@@ -184,5 +184,6 @@ void importText(char *importTextFile, int importFlag) {
 
 	config.vbsm.have_loaded_text = true;
 	exportSubtitles();
+
 }
 

@@ -21,5 +21,4 @@ void convertTimeSrt(unsigned int theTime, char *res, int flag);
 
 void escapeFileName(char *fileName, char *fileNameEscaped);
 
-#define VBS_DEFAULT_EXPORT_FILE "/tmp/vbs_export.srt"
 

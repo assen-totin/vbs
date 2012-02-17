@@ -17,7 +17,7 @@ void on_space_pressed (GtkWidget *window);
 void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata);
 
 #define VBSS_EXPECTING_CONNECTION "Expecting network connection..."
-#define VBSS_NETWORK_OFF "Press <space> to start local subtitles..."
+#define VBSS_NETWORK_OFF "Loaded local subtitles..."
 
 struct vbss_sub {
 	time_t time_from;

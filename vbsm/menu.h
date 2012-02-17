@@ -94,7 +94,6 @@ GtkWidget *makeMenu(GtkWidget *window);
 
 #define VBS_IMPORT_VIDEO_TITLE "Select Video File"
 
-#define VBS_EXPORT_FILE "export.srt"
 #define VBS_EXPORT_TITLE "Select Export Destination"
 
 #define VBS_AVAILABLE_ENCODINGS "Available Encodings:"

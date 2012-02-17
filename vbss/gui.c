@@ -55,7 +55,7 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 
 	config.common.import_fp = fopen(config.common.import_filename, "r");
         if (!config.common.import_fp)
-		error_handler("vbss_main","failed to open subtitles", 1);
+		error_handler("proc_subtitle_local","failed to open subtitles", 1);
 
 	config.common.running = true;
 
@@ -77,11 +77,13 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 	unsigned int timeBeginVal, timeEndVal;
 
 	// LOAD SUBS FROM FILE
+	bzero(line_out, config.common.line_size);
 	while (fgets(line_in, config.common.line_size, config.common.import_fp)) {
-		line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
+		//line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
 
 		// An empty line closes subtitle
-		if ((strlen(line_in) < 3) && (wasPrevLineSubt)) {
+		if ((strlen(line_in) < 3) && (isNextLineSubt)) {
+			isNextLineSubt = false;
 			sub_is_ready = true;
 		}
 		// Next Line will be a subtitle line only if current line includes timing
@@ -92,29 +94,35 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 			timeEndVal = convert_time_from_srt(timeEnd);
 
 			isNextLineSubt = true;
-			wasPrevLineSubt = false;
-			sub_is_ready = false;
-		}
-		else if (wasPrevLineSubt) {
-			sprintf(line_out, "\n%s%s", line_out, line_in);
 			sub_is_ready = false;
 		}
 		else if (isNextLineSubt) {
-			sprintf(line_out, "%s", line_in);
-			wasPrevLineSubt = true;
+			sprintf(line_out, "%s%s", line_out, line_in);
 			sub_is_ready = false;
 		}
 
 		if (sub_is_ready) {
+			isNextLineSubt = false;
 			subs[a].time_from = timeBeginVal;
 			subs[a].time_to = timeEndVal;
 			strcpy(&subs[a].sub[0], line_out);
 			a++;
+			bzero(line_out, config.common.line_size);
 		}
 	}
 
 	free(line_in);
 	free(line_out);
+
+	config.common.init_timestamp = time(NULL);
+
+
+for (i=0; i<a; i++) {
+char a[100], b[100];
+//sprintf(&a[0], "%u", subs[i].time_from);
+//sprintf(&b[0], "%u", subs[i].time_to);
+error_handler("1", &subs[i].sub[0], 0);
+}
 
 	// RENDER SUBS
 	while (1) {
@@ -128,18 +136,17 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 				}
 			}
 		
-			if (i == a)
-				sleep(1);
-
-			while (1) {
-				time_t curr_timestamp = time(NULL);
-				if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to) {
-					gtk_label_set_text(GTK_LABEL(subtitle), "\n");
-					config.common.inside_sub = false;
-					break;
+			if (config.common.inside_sub) {
+				while (1) {
+					time_t curr_timestamp = time(NULL);
+					if ((curr_timestamp - config.common.init_timestamp) > subs[i].time_to) {
+						gtk_label_set_text(GTK_LABEL(subtitle), "\n");
+						config.common.inside_sub = false;
+						break;
+					}
+					else 
+						sleep(1);
 				}
-				else 
-					sleep(1);
 			}
 		}
 		sleep(1);
@@ -240,7 +247,7 @@ int main (int argc, char *argv[]) {
 	if (config.common.use_network == 1)
 		g_timeout_add(1000, (GtkFunction) proc_subtitle_net, subtitle);
 	else 
-		g_timeout_add(1000, (GtkFunction) proc_subtitle_local, subtitle);
+		g_timeout_add(5000, (GtkFunction) proc_subtitle_local, subtitle);
 
 	/*** Enter the main loop ***/
 	gtk_widget_show_all(window);

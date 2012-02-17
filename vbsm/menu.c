@@ -95,7 +95,7 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
-	sprintf(config.common.export_filename, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	sprintf(&config.common.export_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
 
@@ -442,7 +442,7 @@ void quitDialog(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel;
 	char quitMessage[1024];
 
-	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, config.common.export_filename); 
+	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, &config.common.export_filename[0]); 
 
 	quitDialog = gtk_dialog_new_with_buttons (VBS_QUIT_CONFIRM, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
 
@@ -486,7 +486,7 @@ void fileDialog(gpointer callback_data, guint callback_action, GtkWidget *window
 		case 41:
 			// Export Dialog
 			sprintf(fileDialogTitle, "%s", VBS_EXPORT_TITLE);
-			sprintf(fileDialogFile, "%s/%s", VBS_DEFAULT_PATH, VBS_EXPORT_FILE);
+			sprintf(fileDialogFile, "%s/", VBS_DEFAULT_PATH);
 			break;
 	}
 

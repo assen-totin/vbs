@@ -105,8 +105,9 @@ void exportSubtitles() {
 	FILE *fp;
 	GtkTreeModel *model;
 
-	fp = fopen (config.common.export_filename, "w");
-	if (!fp) {error_handler("exportSubtitles", "failed to export subtitles", 1);}
+	fp = fopen(config.common.export_filename, "w");
+	if (!fp) 
+		error_handler("exportSubtitles", "failed to export subtitles", 1);
 
 	export_sub_val.fp = fp;
 	export_sub_val.count = 0;
