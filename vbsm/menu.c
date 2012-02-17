@@ -95,7 +95,7 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
-	sprintf(config.vbsm.globalExportFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	sprintf(config.common.import_export_filename, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
 
@@ -178,7 +178,7 @@ void helpAbout(GtkWidget *window) {
 }
 
 void setTimer(GtkWidget *window) {
-	config.vbsm.init_timestamp = time(NULL);
+	config.common.init_timestamp = time(NULL);
 
         GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
@@ -249,7 +249,8 @@ void setEncodingImport (GtkWidget *window) {
 	int i;
 	for (i=0; i<nencEntries; i++) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
-		if (strstr(encEntries[i].name, config.common.import_encoding)) {gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);}
+		if (strstr(encEntries[i].name, config.common.import_encoding)) 
+			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
@@ -278,7 +279,8 @@ void setEncodingExport (GtkWidget *window) {
 	int i;
 	for (i=0; i<nencEntries; i++) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
-		if (strstr(encEntries[i].name, config.common.export_encoding)) {gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);}
+		if (strstr(encEntries[i].name, config.common.export_encoding)) 
+			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
 
@@ -288,8 +290,10 @@ void setEncodingExport (GtkWidget *window) {
 
 void setNewlineOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	if( strstr( gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"CR/LF")) {config.common.export_cr = 1;}
-	else {config.common.export_cr = 0;}
+	if( strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"CR/LF")) 
+		config.common.export_cr = 1;
+	else 
+		config.common.export_cr = 0;
 	write_config();
 	gtk_widget_destroy(quitDialog);
 }
@@ -395,10 +399,10 @@ void setNetworkServer (GtkWidget *window) {
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"OFF") == 0)
-		config.common.use_network = 0;
-        else 
+        if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"ON"))
 		config.common.use_network = 1;
+        else 
+		config.common.use_network = 0;
         write_config();
         gtk_widget_destroy(quitDialog);
 }
@@ -436,7 +440,7 @@ void quitDialog(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel;
 	char quitMessage[1024];
 
-	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, config.vbsm.globalExportFile); 
+	sprintf(quitMessage, "%s %s\n", VBS_QUIT_MSG, config.common.import_export_filename); 
 
 	quitDialog = gtk_dialog_new_with_buttons (VBS_QUIT_CONFIRM, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
 

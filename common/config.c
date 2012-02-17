@@ -11,6 +11,7 @@
 #include "common.h"
 
 void default_config() {
+	config.common.init_timestamp = time(NULL);
 	config.common.test_mode = VBS_TEST_MODE;
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
 	strcpy(&config.common.config_file_name[0], VBS_CONFIG_FILENAME);

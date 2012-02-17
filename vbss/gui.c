@@ -10,13 +10,31 @@
 
 #include "../common/common.h"
 
+unsigned int convert_time_from_srt(char *in_time) {
+        char *str_h, *str_m, *str_tmp, *str_s;
+        str_h = strtok(in_time, ":");
+        str_m = strtok(NULL, ":");
+        str_tmp = strtok(NULL, ":");
+        str_sec = strtok(str_tmp, ",");
+
+        int res_h = atoi(str_h);
+        int res_min = atoi(str_min);
+        int res_s = atoi(str_sec);
+
+        int res = res_h*3600 + res_min*60 + res_s;
+
+        return res;
+}
+
+
 // Fetch a subtitle and process it
-int proc_subtitle(GtkWidget *subtitle) {
+int proc_subtitle_net(GtkWidget *subtitle) {
 	char buffer_new[config.common.line_size], md5_old[17], md5_new[17];
 	const char *buffer_old_p;
 
 	bzero((char *) &md5_new[0], sizeof(md5_new));
 
+	// Network subtitles
 	if (get_subtitle(&buffer_new[0])) {
 		buffer_old_p = gtk_label_get_text(GTK_LABEL(subtitle));
 
@@ -30,6 +48,109 @@ int proc_subtitle(GtkWidget *subtitle) {
 	return 1;
 }
 
+int proc_subtitle_local(GtkWidget *subtitle) {
+	// Exit, unless this is the first call to this function
+	if (config.common.import_export_fp)
+		return 1;
+
+	config.common.import_export_fp = fopen(config.common.import_export_filename, "r");
+        if (!config.common.import_export_fp)
+		error_handler("vbss_main","failed to open subtitles", 1);
+
+	char *line_in = malloc(config.common.line_size);
+	if (!line_in) 
+		error_handler("proc_subtitle_local","malloc failed", 1);
+
+	char *line_out = malloc(config.common.line_size);
+	if (!line_out) 
+		error_handler("proc_subtitle_local","malloc failed", 1);
+
+	bool game_over = false;
+	bool sub_is_ready = false;
+	bool isNextLineSubt = false;
+	bool wasPrevLineSubt = false;
+	char *isLineTiming;
+	char *timeBegin, *timeEnd;
+	unsigned int timeBeginVal, timeEndVal;
+
+	while (fgets(line_in, config.common.line_size, config.common.import_export_fp)) {
+
+		line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
+
+		// An empty line closes subtitle
+		if ((strlen(line_in) < 3) && (wasPrevLineSubt)) {
+			sub_is_ready = true;
+		}
+		// Next Line will be a subtitle line only if current line includes timing
+		else if (isLineTiming = strstr(line_in,"-->")) {
+			timeBegin = strtok(line_in, "-->");
+			timeEnd = strtok(NULL,"-->");
+			timeBeginVal = convert_time_from_srt(timeBegin);
+			timeEndVal = convert_time_from_srt(timeEnd);
+
+			isNextLineSubt = true;
+			wasPrevLineSubt = false;
+			sub_is_ready = false;
+		}
+		else if (wasPrevLineSubt) {
+			sprintf(line_out, "\n%s%s", line_out, line_in);
+			sub_is_ready = false;
+		}
+		else if (isNextLineSubt) {
+			sprintf(line_out, "%s", line_in);
+			wasPrevLineSubt = true;
+			sub_is_ready = false;
+		}
+
+		// RENDER THE SUBTITLE IN line_out
+		if ($sub_is_ready) {
+			game_over = false;
+			while (!game_over) {
+				time_t curr_timestamp = time(NULL);
+				if (curr_timestamp < (timeBeginVal + config.common.init_timestamp))
+					sleep(1);
+				else
+					game_over = true;
+			}
+
+			gtk_label_set_text(GTK_LABEL(subtitle), line_out);
+
+			game_over = false;
+			while (!game_over) {
+				time_t curr_timestamp = time(NULL);
+				if (curr_timestamp < (timeEndVal + config.common.init_timestamp))
+					sleep(1);
+				else 
+					game_over = true;
+			}
+
+			gtk_label_set_text(GTK_LABEL(subtitle), "\n");
+		}		
+	}	
+
+        free(line_in);
+        free(line_out);
+
+	return 1;
+}
+
+void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
+        GtkWidget *window = userdata;
+        switch ( event->keyval ) {
+                case GDK_space:
+                        on_space_pressed(window);
+                        break;
+        }
+}
+
+void on_space_pressed (GtkWidget *window) {
+	if (config.common.init_timestamp == 0) {
+		config.common.init_timestamp = time(NULL);
+	else
+		config.common.init_timestamp = 0;
+}
+
+
 // Main
 int main (int argc, char *argv[]) {
 	GdkColor colour;
@@ -40,6 +161,7 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
+	config.common.init_timestamp = 0;
 	get_host_by_name(&config.common.server_name[0]);
 
 	/*** Initialize GTK+ ***/
@@ -78,7 +200,10 @@ int main (int argc, char *argv[]) {
         attr_colour_bg->end_index = G_MAXUINT;
         pango_attr_list_insert(attr_list, attr_colour_bg);
 
-        subtitle = gtk_label_new("Expecting connection...");
+	if (config.common.use_network == 1)
+	        subtitle = gtk_label_new(VBSS_EXPECTING_CONNECTION);
+	else
+		subtitle = gtk_label_new(VBSS_NETWORK_OFF);
 
 	gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
 
@@ -86,7 +211,14 @@ int main (int argc, char *argv[]) {
 
 	/*** Callbacks ***/
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
-	g_timeout_add (1000, (GtkFunction) proc_subtitle, subtitle);
+
+        // Key events
+        g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
+
+	if (config.common.use_network == 1)
+		g_timeout_add(1000, (GtkFunction) proc_subtitle_net, subtitle);
+	else 
+		g_timeout_add(1000, (GtkFunction) proc_subtitle_local, subtitle);
 
 	/*** Enter the main loop ***/
 	gtk_widget_show_all(window);

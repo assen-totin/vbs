@@ -23,7 +23,7 @@ void view_onBPressed () {
 				new_from = getTimePos(2);
 			else {
 				time_t curr_time = time(NULL);
-				new_from = config.vbsm.init_timestamp - curr_time;
+				new_from = config.common.init_timestamp - curr_time;
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
@@ -67,7 +67,7 @@ void view_onMPressed () {
 				new_to = getTimePos(2);
 			else {
 				time_t curr_time = time(NULL);
-				new_to = config.vbsm.init_timestamp - curr_time;
+				new_to = config.common.init_timestamp - curr_time;
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);

@@ -51,19 +51,23 @@ unsigned int convertTime(char *inTime) {
 
 
 void importFilterSrt(char *importTextFile) {
-	if (!importTextFile) {error_handler("importFilterSrt","failed to open subtitles", 1);}
+	if (!importTextFile) 
+		error_handler("importFilterSrt","failed to open subtitles", 1);
+
 	FILE *fpIn = fopen (importTextFile, "r");
 
 	char tmpName[32];
 	sprintf(tmpName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(tmpName);
-	if (mkstempRes == -1) {error_handler("importFilterSrt","failed to create temporary file", 1);}
+	if (mkstempRes == -1) 
+		error_handler("importFilterSrt","failed to create temporary file", 1);
 
 	FILE *fpOut = fopen (tmpName, "w");
 
 	char *line;
-	line = malloc(256);
-	if (!line) {error_handler("importFilterSrt","malloc failed", 1);}
+	line = malloc(config.common.line_size);
+	if (!line) 
+		error_handler("importFilterSrt","malloc failed", 1);
 
 	bool isNextLineSubt = false;
 	bool wasPrevLineSubt = false;
@@ -71,9 +75,10 @@ void importFilterSrt(char *importTextFile) {
 	char *timeBegin, *timeEnd;
 	unsigned int timeBeginVal, timeEndVal;
 
-	while (fgets(line, 255, fpIn)) {
+	while (fgets(line, config.common.line_size, fpIn)) {
 		line[strlen(line) - 1] = 0;     /* kill '\n' */
-		// An edmpty line closes subtitle
+
+		// An empty line closes subtitle
 		if (strlen(line) < 2) {
 			if (wasPrevLineSubt) {fprintf(fpOut, "\n", line);}
 			isNextLineSubt = false;
@@ -112,12 +117,13 @@ void importFilterSrt(char *importTextFile) {
 
 void importText(char *importTextFile, int importFlag) {
 	// Set import filter
-	if (importFlag == VBS_IMPORT_FILTER_SRT) {importFilterSrt(importTextFile);}
+	if (importFlag == VBS_IMPORT_FILTER_SRT) 
+		importFilterSrt(importTextFile);
 
 	GtkTreeIter iter;
 
 	char *line;
-	line = malloc(256);
+	line = malloc(config.common.line_size);
 	if (!line) {error_handler("create_and_fill_model","malloc failed",1);}
 
 	FILE *fp;
@@ -125,11 +131,11 @@ void importText(char *importTextFile, int importFlag) {
 	if (!fp) {error_handler("importText","failed to open subtitles", 1);}
 
 	int unsigned timeFrom = 0, timeTo = 0; 
-	char *timeFromStr, *timeToStr, *lineRest, lineCopy[256];
+	char *timeFromStr, *timeToStr, *lineRest, lineCopy[config.common.line_size];
 	gchar *lineUTF8;
 	gsize bytes_written;
 
-	while (fgets(line, 255, fp)) {
+	while (fgets(line, config.common.line_size, fp)) {
 		line[strlen(line) - 1] = 0;     /* kill '\n' */
 
 		// Kill any remaining <CR>
@@ -160,11 +166,13 @@ void importText(char *importTextFile, int importFlag) {
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, COL_LINE, lineUTF8, COL_FROM, timeFrom, COL_TO, timeTo, -1);
 	}
+
 	fclose(fp);
 	free(line);
 
-	if (importFlag == VBS_IMPORT_FILTER_SRT) {unlink(importTextFile);}
-
+	if (importFlag == VBS_IMPORT_FILTER_SRT)
+		unlink(importTextFile);
+	
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	model = GTK_TREE_MODEL(store);

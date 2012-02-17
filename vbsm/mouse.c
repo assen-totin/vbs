@@ -31,7 +31,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 				// Tell mplayer to load subtitles as they exist now
 				writeMPlayer("pausing_keep sub_remove");
 				char fileNameEscaped[1024];
-				escapeFileName(&config.vbsm.globalExportFile[0],&fileNameEscaped[0]);
+				escapeFileName(&config.common.import_export_filename[0],&fileNameEscaped[0]);
 				sprintf(command, "pausing_keep sub_load %s", &fileNameEscaped[0]);
 				writeMPlayer(command);
 

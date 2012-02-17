@@ -50,7 +50,6 @@ enum {
 };
 
 struct struct_vbsm {
-	time_t init_timestamp;
         time_t timestamp;
         bool running;
         bool inside_sub;
@@ -64,9 +63,8 @@ struct struct_vbsm {
         GtkWidget *progress;
         FILE *pipeWrite;
         FILE *pipeRead;
-        FILE *tmpFile;
         char tmpFileName[255];
-        char globalExportFile[1024];
+	FILE *tmpFile;
 };
 
 
@@ -81,6 +79,7 @@ struct struct_vbss {
 };
 
 struct struct_common {
+	time_t init_timestamp;
         int test_mode;
         int magic_key;
 	char config_file_name[255];
@@ -92,6 +91,8 @@ struct struct_common {
 	char server_name[255];
         int tcp_port;
         struct hostent *host_entry;
+	char import_export_filename[1024];
+	FILE import_export_fp;
 };
 
 struct configuration {
