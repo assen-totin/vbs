@@ -10,15 +10,17 @@
 
 #include "../common/common.h"
 
-unsigned int convert_time_from_srt(char *in_time) {
+int convert_time_from_srt(char *in_time) {
         char *str_h, *str_m, *str_tmp, *str_s;
+
         str_h = strtok(in_time, ":");
+	int res_h = atoi(str_h);
+
         str_m = strtok(NULL, ":");
+	int res_m = atoi(str_m);
+
         str_tmp = strtok(NULL, ":");
         str_s = strtok(str_tmp, ",");
-
-        int res_h = atoi(str_h);
-        int res_m = atoi(str_m);
         int res_s = atoi(str_s);
 
         int res = res_h*3600 + res_m*60 + res_s;
@@ -39,51 +41,72 @@ void load_srt() {
 	if (!line_out) 
 		error_handler("proc_subtitle_local","malloc failed", 1);
 
-	bool sub_is_ready = false;
-	bool isNextLineSubt = false;
-	bool wasPrevLineSubt = false;
-	char *isLineTiming;
+        char *line_tmp = malloc(config.common.line_size);
+        if (!line_tmp)
+                error_handler("proc_subtitle_local","malloc failed", 1);
+
 	char *timeBegin, *timeEnd;
-	unsigned int timeBeginVal, timeEndVal;
+	char *tmp1, *tmp2;
+	int timeBeginVal, timeEndVal;
+	int counter = -1;
 
 	// LOAD SUBS FROM FILE
 	bzero(line_out, config.common.line_size);
 	while (fgets(line_in, config.common.line_size, config.common.import_fp)) {
-		//line_in[strlen(line_in) - 1] = 0;     /* kill '\n' */
+                // An empty line closes subtitle
+                if (strlen(line_in) < 3) {
+			if (counter > 0) {
+	                        subs[config.vbss.local_subs_count].time_from = timeBeginVal;
+        	                subs[config.vbss.local_subs_count].time_to = timeEndVal;
+                	        strcpy(&subs[config.vbss.local_subs_count].sub[0], line_out);
+                        	config.vbss.local_subs_count++;
+				counter = -1;
+			}
+			continue;
+                }
 
-		// An empty line closes subtitle
-		if ((strlen(line_in) < 3) && (isNextLineSubt)) {
-			isNextLineSubt = false;
-			sub_is_ready = true;
-		}
+		// Kill newlines
+		if (strstr(line_in, "\r"))
+			strcpy(line_tmp, strtok(line_in, "\r"));
+		else
+			strcpy(line_tmp, line_in);
+		if (strstr(line_tmp, "\n"))
+			strcpy(line_in, strtok(line_tmp, "\n"));
+		else
+			strcpy(line_in, line_tmp);
+
 		// Next Line will be a subtitle line only if current line includes timing
-		else if (isLineTiming = strstr(line_in,"-->")) {
+		if (strstr(line_in,"-->")) {
 			timeBegin = strtok(line_in, "-->");
-			timeEnd = strtok(NULL,"-->");
-			timeBeginVal = convert_time_from_srt(timeBegin);
-			timeEndVal = convert_time_from_srt(timeEnd);
+			timeEnd = strtok(NULL, "-->");
 
-			isNextLineSubt = true;
-			sub_is_ready = false;
-		}
-		else if (isNextLineSubt) {
-			sprintf(line_out, "%s%s", line_out, line_in);
-			sub_is_ready = false;
+			strcpy(line_tmp, timeBegin);
+			timeBeginVal = convert_time_from_srt(line_tmp);
+
+			strcpy(line_tmp, timeEnd);
+			timeEndVal = convert_time_from_srt(line_tmp);
+
+			counter = 0;
+
+			continue;
 		}
 
-		if (sub_is_ready) {
-			sub_is_ready = false;
-			isNextLineSubt = false;
-			subs[config.vbss.local_subs_count].time_from = timeBeginVal;
-			subs[config.vbss.local_subs_count].time_to = timeEndVal;
-			strcpy(&subs[config.vbss.local_subs_count].sub[0], line_out);
-			config.vbss.local_subs_count++;
-			bzero(line_out, config.common.line_size);
+		if (counter == 0) {
+			strcpy(line_out, line_in);
+			counter++;
+			continue;
+		}
+
+		else if (counter > 0) { 
+			sprintf(line_out, "%s\n%s", line_out, line_in);
+			counter++;
+			continue;
 		}
 	}
 
 	free(line_in);
 	free(line_out);
+	free(line_tmp);
 }
 
 int show_subtitle(GtkWidget *subtitle) {
@@ -96,6 +119,7 @@ int show_subtitle(GtkWidget *subtitle) {
 	g_checksum_update(md5_new, &current_sub[0], sizeof(current_sub));
 
 	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0)
+
                 gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
 
         return 1;
@@ -114,22 +138,16 @@ int proc_subtitle_net() {
 }
 
 int proc_subtitle_local() {
-        // Exit, unless this is the first call to this function
-        if (config.common.running)
-                return 1;
-
 	int i;
 
 	config.common.init_timestamp = time(NULL);
-	config.common.running = true;
 
 	// RENDER SUBS
 	while (1) {
 		if (!config.vbss.paused) {
 			for (i=0; i<config.vbss.local_subs_count; i++) {
 				time_t curr_timestamp = time(NULL);
-
-				if ((curr_timestamp - config.common.init_timestamp) >= subs[i].time_from) {
+				if (((curr_timestamp - config.common.init_timestamp) >= subs[i].time_from)&&((curr_timestamp - config.common.init_timestamp) <= subs[i].time_to)) {
 					config.common.inside_sub = true;
 					strcpy(&current_sub[0], &subs[i].sub[0]);
 					break;
@@ -174,6 +192,7 @@ void on_space_pressed (GtkWidget *window) {
 			config.vbss.paused = false;
 			time_t curr_timestamp = time(NULL);
 			config.common.init_timestamp += (curr_timestamp - config.common.timestamp);
+			strcpy(&current_sub[0], "\n");
 		}
 	}
 }
@@ -192,8 +211,7 @@ int main (int argc, char *argv[]) {
 	// Set up config from defaults
 	check_config();
 	config.common.inside_sub = false;
-	config.common.running = false;
-	config.vbss.paused = false;
+	config.vbss.paused = true;
 	config.vbss.local_subs_count = 0;
 	if (config.common.use_network == 1) 
 		get_host_by_name(&config.common.server_name[0]);
@@ -243,7 +261,9 @@ int main (int argc, char *argv[]) {
 		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
 	else {
 		load_srt();
+		config.common.timestamp = time(NULL);
 		strcpy(&current_sub[0], VBSS_NETWORK_OFF);
+		g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 	}
 	gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
 
@@ -253,9 +273,6 @@ int main (int argc, char *argv[]) {
 
 	/*** Callbacks ***/
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
-
-        // Key events
-        g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 
 	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
 

@@ -64,52 +64,75 @@ void importFilterSrt(char *importTextFile) {
 
 	FILE *fpOut = fopen (tmpName, "w");
 
-	char *line;
-	line = malloc(config.common.line_size);
-	if (!line) 
+	char *line_in = malloc(config.common.line_size);
+	if (!line_in) 
 		error_handler("importFilterSrt","malloc failed", 1);
 
-	bool isNextLineSubt = false;
-	bool wasPrevLineSubt = false;
-	char *isLineTiming;
+        char *line_tmp = malloc(config.common.line_size);
+        if (!line_tmp)
+                error_handler("proc_subtitle_local","malloc failed", 1);
+
+	char *tmp1, *tmp2;
 	char *timeBegin, *timeEnd;
 	unsigned int timeBeginVal, timeEndVal;
+	int counter = -1;
 
-	while (fgets(line, config.common.line_size, fpIn)) {
-		line[strlen(line) - 1] = 0;     /* kill '\n' */
+	while (fgets(line_in, config.common.line_size, fpIn)) {
+                // An empty line closes subtitle
+                if (strlen(line_in) < 3) {
+                        if (counter > 0) {
+				fprintf(fpOut, "\n");
+                                counter = -1;
+                        }
+                        continue;
+                }
 
-		// An empty line closes subtitle
-		if (strlen(line) < 2) {
-			if (wasPrevLineSubt) {fprintf(fpOut, "\n", line);}
-			isNextLineSubt = false;
-			wasPrevLineSubt = false;
-		}
+                // Kill newlines
+                if (strstr(line_in, "\r"))
+                        strcpy(line_tmp, strtok(line_in, "\r"));
+                else
+                        strcpy(line_tmp, line_in);
+                if (strstr(line_tmp, "\n"))
+                        strcpy(line_in, strtok(line_tmp, "\n"));
+                else
+                        strcpy(line_in, line_tmp);
 
-		// Next Line will be a subtitle line only if current line includes timing
-		else if (isLineTiming = strstr(line,"-->")) {
-			timeBegin = strtok(line, "-->");
-			timeEnd = strtok(NULL,"-->");
-			timeBeginVal = convertTime(timeBegin);
-			timeEndVal = convertTime(timeEnd);
+                // Next Line will be a subtitle line only if current line includes timing
+                if (strstr(line_in,"-->")) {
+                        timeBegin = strtok(line_in, "-->");
+                        timeEnd = strtok(NULL, "-->");
+
+                        strcpy(line_tmp, timeBegin);
+                        timeBeginVal = convertTime(line_tmp);
+
+                        strcpy(line_tmp, timeEnd);
+                        timeEndVal = convertTime(line_tmp);
+
 			fprintf(fpOut, "%u %u ", timeBeginVal, timeEndVal);
 
-			isNextLineSubt = true;
-			wasPrevLineSubt = false;
-		}
+			counter = 0;
 
-		else if (wasPrevLineSubt) {
-			fprintf(fpOut, "|%s", line);
-		}
+                        continue;
+                }
 
-		else if (isNextLineSubt) {
-			fprintf(fpOut, "%s", line);
-			wasPrevLineSubt = true;
-		}
+                if (counter == 0) {
+			fprintf(fpOut, "%s", line_in);
+                        counter++;
+                        continue;
+                }
+
+                else if (counter > 0) {
+			fprintf(fpOut, "|%s", line_in);
+                        counter++;
+                        continue;
+                }
 	}
 
 	fclose(fpIn);
 	fclose(fpOut);
-	free(line);
+
+	free(line_in);
+	free(line_tmp);
 
 	sprintf(importTextFile, "%s", tmpName);
 }

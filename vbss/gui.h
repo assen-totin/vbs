@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-unsigned int convert_time_from_srt(char *in_time);
+int convert_time_from_srt(char *in_time);
 
 void load_srt();
 
@@ -19,11 +19,10 @@ int proc_subtitle_local();
 int show_subtitle(GtkWidget *subtitle);
 
 void on_space_pressed (GtkWidget *window);
-
 void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata);
 
 #define VBSS_EXPECTING_CONNECTION "Expecting network connection..."
-#define VBSS_NETWORK_OFF "Loaded local subtitles..."
+#define VBSS_NETWORK_OFF "Press SPACE\nto start playback..."
 
 struct vbss_sub {
 	time_t time_from;
