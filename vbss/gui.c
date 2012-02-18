@@ -257,7 +257,7 @@ int main (int argc, char *argv[]) {
         // Key events
         g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 
-	gdk_threads_add_timeout(1000, (GtkFunction) show_subtitle, subtitle);
+	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
 
 	if (config.common.use_network == 1)
 		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
