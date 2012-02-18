@@ -29,7 +29,7 @@ int main (int argc, char **argv){
 
 	// Menu
 	GtkWidget *menu;
-	menu = makeMenu(window);
+	menu = makeMenu2(window);
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);
