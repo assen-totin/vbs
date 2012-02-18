@@ -235,8 +235,10 @@ int main (int argc, char *argv[]) {
 	colour.green = 0x0;
 	colour.blue = 0x0;
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	if (config.common.test_mode)
+	if (config.common.test_mode) {
 		gtk_widget_set_size_request (window, 600, 200);
+		config.vbss.font_size = 16;
+	}
 	else {
 		gtk_window_set_decorated (GTK_WINDOW(window), 0);
 		gtk_window_fullscreen(GTK_WINDOW(window));	
