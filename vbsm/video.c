@@ -10,22 +10,6 @@
 
 #include "../common/common.h"
 
-bool haveLoadedVideo(GtkWidget *window){
-	if (config.vbsm.pipeWrite) {
-		// Check if mplayer has exited?
-		int status;
-		int res = waitpid(-1, &status, WNOHANG);
-		if (res == 0) {return true;}
-		else {return false;}
-	}
-
-	else {
-		warnDialog(window, "No video loaded!");
-		return false;
-	}
-}
-
-
 void writeMPlayer(char *command) {
 	fprintf(config.vbsm.pipeWrite, "%s\n", command);
 	fflush(config.vbsm.pipeWrite);
@@ -34,10 +18,12 @@ void writeMPlayer(char *command) {
 
 int getTimePos(int flag) {
 	// Ask mplayer about exact position, read it
-	if (flag == 1) {writeMPlayer("pausing_keep get_time_pos");}
-	else if (flag == 2) {writeMPlayer("get_time_pos");}
+	if (flag == 1) 
+		writeMPlayer("pausing_keep get_time_pos");
+	else if (flag == 2) 
+		writeMPlayer("get_time_pos");
 
-	// Read it's answer -  Mplayer sends a lot of other stuff, jump over it
+	// Read its answer -  Mplayer sends a lot of other stuff, jump over it
 	char line[256], *partOne, *partTwo;
 	double doubleTwo;
 	bool goOn = true;
@@ -56,7 +42,6 @@ int getTimePos(int flag) {
 			goOn = false;
 		}
 	}
-
 	return res;
 }
 

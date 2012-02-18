@@ -130,9 +130,13 @@ int show_subtitle(GtkWidget *subtitle) {
 int proc_subtitle_net() {
         char buffer_new[config.common.line_size];
 
-        if (get_subtitle(&buffer_new[0])) {
-                strcpy(&current_sub[0], &buffer_new[0]);
-        }
+	while (1) {
+	        if (get_subtitle(&buffer_new[0])) {
+        	        strcpy(&current_sub[0], &buffer_new[0]);
+	        }
+
+		sleep(1);
+	}
 
         return 1;
 }
@@ -210,11 +214,13 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	config.common.inside_sub = false;
-	config.vbss.paused = true;
-	config.vbss.local_subs_count = 0;
 	if (config.common.use_network == 1) 
 		get_host_by_name(&config.common.server_name[0]);
+	else {
+		config.common.inside_sub = false;
+		config.vbss.paused = true;
+		config.vbss.local_subs_count = 0;
+	}
 
 	/*** Initialize GTK+ ***/
 	if(!g_thread_supported())

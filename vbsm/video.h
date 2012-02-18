@@ -14,7 +14,5 @@ void writeMPlayer(char *command);
 
 int getTimePos(int flag);
 
-bool haveLoadedVideo(GtkWidget *window);
-
 #define VBS_MPLAYER_BINARY "mplayer"
 

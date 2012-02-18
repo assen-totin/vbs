@@ -23,7 +23,7 @@ void view_onBPressed () {
 				new_from = getTimePos(2);
 			else {
 				time_t curr_time = time(NULL);
-				new_from = config.common.init_timestamp - curr_time;
+				new_from = 1000*(curr_time - config.common.init_timestamp);
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
@@ -67,7 +67,7 @@ void view_onMPressed () {
 				new_to = getTimePos(2);
 			else {
 				time_t curr_time = time(NULL);
-				new_to = config.common.init_timestamp - curr_time;
+				new_to = 1000*(curr_time - config.common.init_timestamp);
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
@@ -109,25 +109,21 @@ void view_onSpacePressed (GtkWidget *window) {
 	GtkTreeIter       iter;
 
 	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
+		config.common.running = FALSE;
+		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
+
 		// Pause the player
 		if (mplayerAlive()) 
 			writeMPlayer("pause");
-
-		config.common.running = FALSE;
-
-		// Set status
-		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 	}
 	else if (config.common.running == FALSE) {
-		if (haveLoadedText(window) && haveLoadedVideo(window)) {
-			// Start the player
-			if (mplayerAlive()) 
-				writeMPlayer("pause");
-
+		if (haveLoadedText(window)) {
 			config.common.running = TRUE;
-
-			// Set status
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
+
+			// Start the player
+			if (mplayerAlive())
+				writeMPlayer("pause");
 		}
 	}
 }

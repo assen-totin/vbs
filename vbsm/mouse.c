@@ -16,12 +16,12 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 	GtkWidget *window = userdata;
 	int subNum;
 
-	if ((config.common.running == FALSE) && (haveLoadedText(window)) && (haveLoadedVideo(window))) {
+	if ((config.common.running == FALSE) && (haveLoadedText(window))) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
-			if (from > 0) {
+			if ((from > 0) && (mplayerAlive())){
 				// Move the player -  seeking actually needs some time to complete, 
 				// that's why we seek a second earlier and leave 1 second timeout, then pause
 				char command[255];

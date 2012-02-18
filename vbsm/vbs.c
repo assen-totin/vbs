@@ -11,6 +11,8 @@
 #include "../common/common.h"
 
 bool mplayerAlive() {
+	if (!config.vbsm.pipeWrite) 
+		return false;
 	if (config.vbsm.mplayer_pid == 0) 
 		return false;
 	int status;
@@ -85,21 +87,22 @@ int main (int argc, char **argv){
 	GtkWidget *window, *scroll;
 	GtkWidget *status, *vbox, *progress;
 
+        // Set up config from defaults
+        check_config();
+        if (config.common.use_network == 1)
+                get_host_by_name(&config.common.server_name[0]);
+
 	// Initalize time-ticks counter, set it to zero
 	config.common.running = FALSE;
 	config.vbsm.have_loaded_text = FALSE;
 	config.vbsm.mplayer_pid = 0;
+	config.common.init_timestamp = time(NULL);
 
 	// Create temporary file (GTK is buggy or GCC?)
 	sprintf(config.vbsm.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(config.vbsm.tmpFileName);
 	if (mkstempRes == -1) {error_handler("main","failed to create temporary file name",1 );}
 	config.vbsm.tmpFile = fopen(config.vbsm.tmpFileName,"w");
-
-        // Set up config from defaults
-        check_config();
-	if (config.common.use_network == 1)
-	        get_host_by_name(&config.common.server_name[0]);
 
 	// GTK Init
 	gtk_init (&argc, &argv);

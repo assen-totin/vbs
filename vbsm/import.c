@@ -11,7 +11,8 @@
 #include "../common/common.h"
 
 bool haveLoadedText(GtkWidget *window){
-	if (config.vbsm.have_loaded_text) {return true;}
+	if (config.vbsm.have_loaded_text) 
+		return true;
 	else {
 		warnDialog(window, "No text loaded!");
 		return false;

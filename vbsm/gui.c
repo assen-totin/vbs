@@ -11,7 +11,6 @@
 #include "../common/common.h"
 
 int progressBarUpdate() {
-
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
 		time_t curr_time = time(NULL);
@@ -26,7 +25,6 @@ int progressBarUpdate() {
 		}
 	}
 
-
 	// If only playing the movie, move to next subtitles as it gets displayed - until a 'b' is pressed
 	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)){
 		GtkTreeSelection *selection;
@@ -37,7 +35,12 @@ int progressBarUpdate() {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
-			local = getTimePos(2);
+			if (mplayerAlive())
+				local = getTimePos(2);
+			else {
+				time_t curr_time = time(NULL);
+				local = 1000*(curr_time - config.common.init_timestamp);
+			}
 			if ((to > from) && (to < local)) {
 				if (gtk_tree_model_iter_next(model,&iter)) {
 					// Move to next line
@@ -50,7 +53,6 @@ int progressBarUpdate() {
 			}
 		}
 	}
-
 
 	return 1;
 }
