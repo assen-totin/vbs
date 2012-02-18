@@ -26,38 +26,10 @@ unsigned int convert_time_from_srt(char *in_time) {
         return res;
 }
 
-
-// Fetch a subtitle and process it
-int proc_subtitle_net(GtkWidget *subtitle) {
-	char buffer_new[config.common.line_size], md5_old[17], md5_new[17];
-	const char *buffer_old_p;
-
-	bzero((char *) &md5_new[0], sizeof(md5_new));
-
-	// Network subtitles
-	if (get_subtitle(&buffer_new[0])) {
-		buffer_old_p = gtk_label_get_text(GTK_LABEL(subtitle));
-
-		MD5(buffer_old_p, sizeof(*buffer_old_p), &md5_old[0]);
-		MD5(&buffer_new[0], sizeof(buffer_new), &md5_new[0]);
-
-		if (strcmp(&md5_old[0], &md5_new[0]) != 0)
-			gtk_label_set_text(GTK_LABEL(subtitle), &buffer_new[0]);
-	}
-
-	return 1;
-}
-
-int proc_subtitle_local(GtkWidget *subtitle) {
-	// Exit, unless this is the first call to this function
-	if (config.common.running)
-		return 1;
-
+void load_srt() {
 	config.common.import_fp = fopen(config.common.import_filename, "r");
         if (!config.common.import_fp)
 		error_handler("proc_subtitle_local","failed to open subtitles", 1);
-
-	config.common.running = true;
 
 	char *line_in = malloc(config.common.line_size);
 	if (!line_in) 
@@ -67,8 +39,6 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 	if (!line_out) 
 		error_handler("proc_subtitle_local","malloc failed", 1);
 
-	struct vbss_sub subs[1000];
-	int a = 0, i;
 	bool sub_is_ready = false;
 	bool isNextLineSubt = false;
 	bool wasPrevLineSubt = false;
@@ -104,37 +74,64 @@ int proc_subtitle_local(GtkWidget *subtitle) {
 		if (sub_is_ready) {
 			sub_is_ready = false;
 			isNextLineSubt = false;
-			subs[a].time_from = timeBeginVal;
-			subs[a].time_to = timeEndVal;
-			strcpy(&subs[a].sub[0], line_out);
-			a++;
+			subs[config.vbss.local_subs_count].time_from = timeBeginVal;
+			subs[config.vbss.local_subs_count].time_to = timeEndVal;
+			strcpy(&subs[config.vbss.local_subs_count].sub[0], line_out);
+			config.vbss.local_subs_count++;
 			bzero(line_out, config.common.line_size);
 		}
 	}
 
 	free(line_in);
 	free(line_out);
+}
+
+int show_subtitle(GtkWidget *subtitle) {
+	GChecksum *md5_old = g_checksum_new(G_CHECKSUM_MD5);
+	GChecksum *md5_new = g_checksum_new(G_CHECKSUM_MD5);
+
+	const char *buffer_old_p = gtk_label_get_text(GTK_LABEL(subtitle));
+
+	g_checksum_update(md5_old, buffer_old_p, sizeof(*buffer_old_p));
+	g_checksum_update(md5_new, &current_sub[0], sizeof(current_sub));
+
+	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0)
+                gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
+
+        return 1;
+}
+
+
+// Fetch a subtitle and process it
+int proc_subtitle_net() {
+        char buffer_new[config.common.line_size];
+
+        if (get_subtitle(&buffer_new[0])) {
+                strcpy(&current_sub[0], &buffer_new[0]);
+        }
+
+        return 1;
+}
+
+int proc_subtitle_local() {
+        // Exit, unless this is the first call to this function
+        if (config.common.running)
+                return 1;
+
+	int i;
 
 	config.common.init_timestamp = time(NULL);
+	config.common.running = true;
 
-/*
-char b[100], c[100];
-sprintf(&b[0], "%u", a);
-error_handler("1", b, 0);
-*/
 	// RENDER SUBS
 	while (1) {
 		if (!config.vbss.paused) {
-			for (i=0; i<a; i++) {
+			for (i=0; i<config.vbss.local_subs_count; i++) {
 				time_t curr_timestamp = time(NULL);
-//char d[100], e[100];
-//sprintf(&d[0], "%u %u", subs[i].time_from, subs[i].time_to);
-//sprintf(&e[0], "%u", (curr_timestamp - config.common.init_timestamp));
-//error_handler(d, e, 0);
 
-				if ((curr_timestamp - config.common.init_timestamp) == subs[i].time_from) {
+				if ((curr_timestamp - config.common.init_timestamp) >= subs[i].time_from) {
 					config.common.inside_sub = true;
-					gtk_label_set_text(GTK_LABEL(subtitle), &subs[i].sub[0]);
+					strcpy(&current_sub[0], &subs[i].sub[0]);
 					break;
 				}
 			}
@@ -142,8 +139,8 @@ error_handler("1", b, 0);
 			if (config.common.inside_sub) {
 				while (1) {
 					time_t curr_timestamp = time(NULL);
-					if ((curr_timestamp - config.common.init_timestamp) == subs[i].time_to) {
-						gtk_label_set_text(GTK_LABEL(subtitle), "\n");
+					if ((curr_timestamp - config.common.init_timestamp) >= subs[i].time_to) {
+						strcpy(&current_sub[0], "\n");
 						config.common.inside_sub = false;
 						break;
 					}
@@ -156,6 +153,7 @@ error_handler("1", b, 0);
 	}
 	return 1;
 }
+
 
 void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
         GtkWidget *window = userdata;
@@ -186,17 +184,24 @@ int main (int argc, char *argv[]) {
 	GdkColor colour;
 	GtkWidget *window = NULL;
 	GtkWidget *subtitle = NULL;
+	GThread *thread;
+	GError *error = NULL;
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_colour_fg, *attr_colour_bg;
 
 	// Set up config from defaults
 	check_config();
 	config.common.inside_sub = false;
+	config.common.running = false;
 	config.vbss.paused = false;
+	config.vbss.local_subs_count = 0;
 	if (config.common.use_network == 1) 
 		get_host_by_name(&config.common.server_name[0]);
 
 	/*** Initialize GTK+ ***/
+	if(!g_thread_supported())
+		g_thread_init( NULL );
+	gdk_threads_init();
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
 	gtk_init (&argc, &argv);
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, g_log_default_handler, NULL);
@@ -232,10 +237,15 @@ int main (int argc, char *argv[]) {
         attr_colour_bg->end_index = G_MAXUINT;
         pango_attr_list_insert(attr_list, attr_colour_bg);
 
-	if (config.common.use_network == 1)
-	        subtitle = gtk_label_new(VBSS_EXPECTING_CONNECTION);
-	else
-		subtitle = gtk_label_new(VBSS_NETWORK_OFF);
+	subtitle = gtk_label_new("");
+
+	if (config.common.use_network == 1) 
+		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
+	else {
+		load_srt();
+		strcpy(&current_sub[0], VBSS_NETWORK_OFF);
+	}
+	gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
 
 	gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
 
@@ -247,10 +257,14 @@ int main (int argc, char *argv[]) {
         // Key events
         g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 
+	gdk_threads_add_timeout(1000, (GtkFunction) show_subtitle, subtitle);
+
 	if (config.common.use_network == 1)
-		g_timeout_add(1000, (GtkFunction) proc_subtitle_net, subtitle);
-	else 
-		g_timeout_add(5000, (GtkFunction) proc_subtitle_local, subtitle);
+		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
+	else
+		thread = g_thread_create((GThreadFunc) proc_subtitle_local, NULL, FALSE, &error);
+	if(!thread)
+		error_handler("main","Failed to create thread",1);
 
 	/*** Enter the main loop ***/
 	gtk_widget_show_all(window);
@@ -260,6 +274,8 @@ int main (int argc, char *argv[]) {
 	//pango_attribute_destroy(attr_size);
 	//pango_attribute_destroy(attr_colour);
 	//pango_attr_list_unref(attr_list);
+
+	gdk_threads_leave();
 
 	return 0;
 }

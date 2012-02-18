@@ -8,9 +8,15 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-int proc_subtitle_net(GtkWidget *subtitle);
-
 unsigned int convert_time_from_srt(char *in_time);
+
+void load_srt();
+
+int proc_subtitle_net();
+
+int proc_subtitle_local();
+
+int show_subtitle(GtkWidget *subtitle);
 
 void on_space_pressed (GtkWidget *window);
 
@@ -25,4 +31,6 @@ struct vbss_sub {
 	char sub[1024];
 };
 
-
+// Globals
+struct vbss_sub subs[1000];
+char current_sub[1024];

@@ -18,8 +18,7 @@ IMGDIR = /usr/local/share/vbs
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
-
-LIBS = -lcrypto
+ADD_FLAGS2=`pkg-config --libs gthread-2.0`
 
 TARGET = vbss 
 
@@ -46,5 +45,5 @@ uninstall:
 
 $(TARGET): gui.c 
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c
-	$(CC) -o $@ $(ADD_FLAGS) $(LIBS) $(OBJS_LOCAL) $(OBJS_REMOTE)
+	$(CC) -o $@ $(ADD_FLAGS) $(ADD_FLAGS2) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

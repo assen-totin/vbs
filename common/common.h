@@ -67,6 +67,7 @@ struct struct_vbsm {
 
 struct struct_vbss {
 	bool paused;
+	int local_subs_count;
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;
