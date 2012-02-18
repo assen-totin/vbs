@@ -137,10 +137,12 @@ struct configuration config;
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
 #include "../vbsm/video.h"
+#include "../vbsm/menu.h"
+
+#include "../vbsc/vbsc.h"
 
 #include "config.h"
 #include "error.h"
 #include "network.h"
 #include "util.h"
-#include "menu.h"
 

@@ -76,8 +76,8 @@ void *create_view_and_model (void){
 	gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
 
 	/* The tree view has acquired its own reference to the
-		*  model, so we can drop ours. That way the model will
-		*  be freed automatically when the tree view is destroyed */
+	*  model, so we can drop ours. That way the model will
+	*  be freed automatically when the tree view is destroyed */
 
 	g_object_unref (model);
 }

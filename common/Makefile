@@ -13,7 +13,7 @@ SHELL = /bin/bash
 CC = gcc
 CFLAGS = -c -O2
 
-OBJS = config.o error.o network.o util.o menu.o
+OBJS = config.o error.o network.o util.o 
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
@@ -25,10 +25,9 @@ all: $(TARGET)
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-$(TARGET): config.c error.c network.c util.c menu.c
+$(TARGET): config.c error.c network.c util.c 
 	$(CC) $(CFLAGS) $(INCLUDES) error.c
 	$(CC) $(CFLAGS) $(INCLUDES) config.c
 	$(CC) $(CFLAGS) $(INCLUDES) network.c
 	$(CC) $(CFLAGS) $(INCLUDES) util.c
-	$(CC) $(CFLAGS) $(INCLUDES) menu.c
 

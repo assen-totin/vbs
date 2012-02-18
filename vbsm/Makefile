@@ -21,8 +21,8 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 TARGET = vbsm 
 
-OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o video.o vbs.o 
-OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o ../common/util.o ../common/menu.o
+OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o video.o vbs.o menu.o
+OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o ../common/util.o 
 
 all: $(TARGET)
 
@@ -42,7 +42,7 @@ uninstall:
 	rm -f $(IMGDIR)/vbs.png
 	rm -f /usr/share/applications/vbsm.desktop
 
-$(TARGET): gui.c keyboard.c mouse.c export.c import.c video.c edit.c vbs.c
+$(TARGET): gui.c keyboard.c mouse.c export.c import.c video.c edit.c vbs.c menu.c
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c
 	$(CC) $(CFLAGS) $(INCLUDES) keyboard.c
 	$(CC) $(CFLAGS) $(INCLUDES) mouse.c
@@ -51,5 +51,6 @@ $(TARGET): gui.c keyboard.c mouse.c export.c import.c video.c edit.c vbs.c
 	$(CC) $(CFLAGS) $(INCLUDES) video.c
 	$(CC) $(CFLAGS) $(INCLUDES) edit.c
 	$(CC) $(CFLAGS) $(INCLUDES) vbs.c
+	$(CC) $(CFLAGS) $(INCLUDES) menu.c
 	$(CC) -o $@ $(ADD_FLAGS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 
