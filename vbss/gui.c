@@ -118,9 +118,11 @@ int show_subtitle(GtkWidget *subtitle) {
 	g_checksum_update(md5_old, buffer_old_p, sizeof(*buffer_old_p));
 	g_checksum_update(md5_new, &current_sub[0], sizeof(current_sub));
 
-	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0)
-
+	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0) {
                 gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
+		if ((config.common.recv_from_network == 0) && (config.common.send_to_network == 0))
+			put_subtitle(&current_sub[0]);
+	}
 
         return 1;
 }
@@ -188,7 +190,9 @@ int main (int argc, char *argv[]) {
 
 	// Set up config from defaults
 	check_config();
-	if (config.common.use_network == 1) 
+	if ((config.common.recv_from_network == 1) && (config.common.send_to_network == 1))
+		error_handler("main", "Cannot have both send and recv enabled at the same time", 1);
+	if ((config.common.recv_from_network == 1) || (config.common.send_to_network == 1))
 		get_host_by_name(&config.common.server_name[0]);
 	else {
 		config.common.inside_sub = false;
@@ -209,7 +213,7 @@ int main (int argc, char *argv[]) {
 	colour.green = 0x0;
 	colour.blue = 0x0;
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	if (config.common.test_mode) {
+	if (config.vbss.full_screen == 0) {
 		gtk_widget_set_size_request (window, 600, 200);
 		config.vbss.font_size = 16;
 	}
@@ -239,7 +243,7 @@ int main (int argc, char *argv[]) {
 
 	subtitle = gtk_label_new("");
 
-	if (config.common.use_network == 1) 
+	if (config.common.recv_from_network == 1) 
 		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
 	else {
 		load_srt();
@@ -258,7 +262,7 @@ int main (int argc, char *argv[]) {
 
 	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
 
-	if (config.common.use_network == 1)
+	if (config.common.recv_from_network == 1)
 		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
 	else
 		thread = g_thread_create((GThreadFunc) proc_subtitle_local, NULL, FALSE, &error);

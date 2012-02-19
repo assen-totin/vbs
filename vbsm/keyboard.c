@@ -43,7 +43,7 @@ void view_onBPressed () {
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 
 			// If networking is enabled, send the line to server
-			if (config.common.use_network == 1)
+			if (config.common.send_to_network == 1)
 				put_subtitle(line);
 
 			g_free(line);
@@ -89,7 +89,7 @@ void view_onMPressed () {
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
 
 			// If networking is enabled, drop the line from server
-			if (config.common.use_network == 1)
+			if (config.common.send_to_network == 1)
 				put_subtitle("\n");
 
 			// Export subtitles

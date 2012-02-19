@@ -70,7 +70,7 @@ static GtkItemFactoryEntry menuEntries[] = {
 	{ "/Export/Set Newline Char...", "", setNewline,  43, "<Item>" },
 
         { "/_Network",        "<ALT>N",      NULL,         0, "<Branch>" },
-	{ "/Network/Enable Network...", "", useNetwork,  71, "<Item>" },
+	{ "/Network/Send to Server...", "", useNetwork,  71, "<Item>" },
 	{ "/Network/", "", NULL,  0, "<Separator>" },
         { "/Network/Server...", "", setNetworkServer,  72, "<Item>" },
         { "/Network/Port...", "", setNetworkPort,  73, "<Item>" },
@@ -110,7 +110,7 @@ GtkWidget *makeMenu(GtkWidget *window);
 #define VBS_NETWORK_PORT "TCP Port"
 #define VBS_NETWORK_PORT_NAME "Current Port:"
 #define VBS_ENABLE_NETWORK "Enable/Disable Network"
-#define VBS_ENABLE_NETWORK_NAME "Select network mode:"
+#define VBS_ENABLE_NETWORK_NAME "Send subtitles to server:"
 
 #define VBS_TIMER_TITLE "Set Start Time"
 #define VBS_TIMER_OK "Internal timer set to local time."

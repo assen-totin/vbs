@@ -400,9 +400,9 @@ void setNetworkServer (GtkWidget *window) {
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
         if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"ON"))
-		config.common.use_network = 1;
+		config.common.send_to_network = 1;
         else 
-		config.common.use_network = 0;
+		config.common.send_to_network = 0;
         write_config();
         gtk_widget_destroy(quitDialog);
 }
@@ -428,7 +428,7 @@ void useNetwork (GtkWidget *window) {
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
         int index;
-        if(config.common.use_network == 0)
+        if(config.common.send_to_network == 0)
 		index = 0;
         else 
 		index = 1;

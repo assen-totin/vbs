@@ -67,6 +67,7 @@ struct struct_vbsm {
 
 struct struct_vbss {
 	bool paused;
+	int full_screen;
 	int local_subs_count;
 	int colour_bg_r;
 	int colour_bg_g;
@@ -82,7 +83,6 @@ struct struct_common {
 	bool inside_sub;
 	time_t init_timestamp;
 	time_t timestamp;
-        int test_mode;
         int magic_key;
 	char config_file_name[1024];
         int export_cr;
@@ -93,7 +93,8 @@ struct struct_common {
         char export_filename[1024];
         FILE *export_fp;
         int line_size;
-	int use_network;
+	int send_to_network;
+	int recv_from_network;
 	char server_name[255];
         int tcp_port;
         struct hostent *host_entry;

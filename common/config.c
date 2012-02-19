@@ -12,7 +12,6 @@
 
 void default_config() {
 	config.common.init_timestamp = time(NULL);
-	config.common.test_mode = VBS_TEST_MODE;
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
 	strcpy(&config.common.config_file_name[0], VBS_CONFIG_FILENAME);
 	config.common.export_cr = VBS_DEFAULT_CR;
@@ -21,10 +20,12 @@ void default_config() {
         strcpy(&config.common.import_filename[0], VBS_IMPORT_FILENAME);
         strcpy(&config.common.export_filename[0], VBS_EXPORT_FILENAME);
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
-	config.common.use_network = 0;
+	config.common.send_to_network = 0;
+	config.common.recv_from_network = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
 	config.common.tcp_port = VBS_DEFAULT_TCP_PORT;
 
+	config.vbss.full_screen = VBS_FULL_SCREEN;
 	config.vbss.colour_bg_r = VBS_DEFAULT_COLOUR_BG_RED;
 	config.vbss.colour_bg_g = VBS_DEFAULT_COLOUR_BG_GREEN;
 	config.vbss.colour_bg_b = VBS_DEFAULT_COLOUR_BG_BLUE;
@@ -54,7 +55,7 @@ void write_config() {
                 error_handler("write_config", "could not open config file", 1);
         fprintf(fp_config, "%s", VBS_CONFIG_HEADER);
 
-	fprintf(fp_config, "TEST_MODE=%u\n", config.common.test_mode);
+	fprintf(fp_config, "FULL_SCREEN=%u\n", config.vbss.full_screen);
 	fprintf(fp_config, "MAGIC_KEY=%u\n", config.common.magic_key);
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
         fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
@@ -62,7 +63,8 @@ void write_config() {
         fprintf(fp_config, "IMPORT_FILENAME=%s\n", &config.common.import_filename[0]);
         fprintf(fp_config, "EXPORT_FILENAME=%s\n", &config.common.export_filename[0]);
 	fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
-	fprintf(fp_config, "USE_NETWORK=%u\n", config.common.use_network);
+	fprintf(fp_config, "SEND_TO_NETWORK=%u\n", config.common.send_to_network);
+	fprintf(fp_config, "RECV_FROM_NETWORK=%u\n", config.common.recv_from_network);
 	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
         fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
 
@@ -88,8 +90,8 @@ void read_config() {
 		if (!(line[0]=='#')) {
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
 
-			if (strstr(line, "TEST_MODE"))
-				config.common.test_mode = config_int(line);
+			if (strstr(line, "FULL_SCREEN"))
+				config.vbss.full_screen = config_int(line);
                         else if (strstr(line, "MAGIC_KEY"))
                                 config.common.magic_key = config_int(line);
 			else if (strstr(line, "EXPORT_CR")) 
@@ -104,8 +106,10 @@ void read_config() {
                                 config_char(line, &config.common.import_filename[0]);
                         else if (strstr(line, "LINE_SIZE"))
                                 config.common.line_size = config_int(line);
-                        else if (strstr(line, "USE_NETWORK"))
-                                config.common.use_network = config_int(line);
+                        else if (strstr(line, "SEND_TO_NETWORK"))
+                                config.common.send_to_network = config_int(line);
+                        else if (strstr(line, "RECV_FROM_NETWORK"))
+                                config.common.recv_from_network = config_int(line);
 			else if (strstr(line, "SERVER_NAME")) 
 				config_char(line, &config.common.server_name[0]);
 			else if (strstr(line, "TCP_PORT")) 

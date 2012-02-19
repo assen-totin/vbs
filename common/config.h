@@ -32,5 +32,5 @@ void check_config();
 #define VBS_DEFAULT_COLOUR_FG_BLUE 65535
 #define VBS_DEFAULT_FONT_SIZE 32
 #define VBS_DEFAULT_CR 0 
-#define VBS_TEST_MODE 1
+#define VBS_FULL_SCREEN 0
 
