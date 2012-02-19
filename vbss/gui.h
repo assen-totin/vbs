@@ -18,9 +18,6 @@ int proc_subtitle_local();
 
 int show_subtitle(GtkWidget *subtitle);
 
-void on_space_pressed (GtkWidget *window);
-void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata);
-
 #define VBSS_EXPECTING_CONNECTION "Expecting network connection..."
 #define VBSS_NETWORK_OFF "Press SPACE to start playback..."
 

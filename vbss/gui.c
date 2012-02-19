@@ -176,32 +176,6 @@ int proc_subtitle_local() {
 	return 1;
 }
 
-
-void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
-        GtkWidget *window = userdata;
-        switch ( event->keyval ) {
-                case GDK_space:
-                        on_space_pressed(window);
-                        break;
-        }
-}
-
-void on_space_pressed (GtkWidget *window) {
-	if (!config.common.inside_sub) {
-		if (!config.vbss.paused) {
-			config.vbss.paused = true;
-			config.common.timestamp = time(NULL);
-		}
-		else {
-			config.vbss.paused = false;
-			time_t curr_timestamp = time(NULL);
-			config.common.init_timestamp += (curr_timestamp - config.common.timestamp);
-			strcpy(&current_sub[0], "\n");
-		}
-	}
-}
-
-
 // Main
 int main (int argc, char *argv[]) {
 	GdkColor colour;

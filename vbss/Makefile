@@ -22,7 +22,7 @@ ADD_FLAGS2=`pkg-config --libs gthread-2.0`
 
 TARGET = vbss 
 
-OBJS_LOCAL = gui.o 
+OBJS_LOCAL = gui.o keys.o 
 OBJS_REMOTE = ../common/network.o ../common/error.o ../common/config.o ../common/util.o
 
 all: $(TARGET)
@@ -43,7 +43,8 @@ uninstall:
 	rm -f $(IMGDIR)/vbs.png
 	rm -f /usr/share/applications/vbss.desktop
 
-$(TARGET): gui.c 
+$(TARGET): gui.c keys.c
 	$(CC) $(CFLAGS) $(INCLUDES) gui.c
+	$(CC) $(CFLAGS) $(INCLUDES) keys.c
 	$(CC) -o $@ $(ADD_FLAGS) $(ADD_FLAGS2) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

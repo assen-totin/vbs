@@ -128,7 +128,9 @@ GtkWidget *view;
 struct configuration config;
 
 #include "../vbsd/server.h"
+
 #include "../vbss/gui.h"
+#include "../vbss/keys.h"
 
 #include "../vbsm/vbs.h"
 #include "../vbsm/export.h"
@@ -139,7 +141,7 @@ struct configuration config;
 #include "../vbsm/video.h"
 #include "../vbsm/menu.h"
 
-#include "../vbsc/vbsc.h"
+//#include "../vbsc/vbsc.h"
 
 #include "config.h"
 #include "error.h"
