@@ -9,3 +9,6 @@
 // for details.
 
 void fixNewline(char *buffer);
+
+void split_path(char *path, char *dir, char *file);
+

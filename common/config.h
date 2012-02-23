@@ -8,12 +8,21 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
+void get_cmdl_config(int argc, char *argv[]);
 void default_config();
 void config_char(char *line, char *param);
 int config_int(char *line);
 void write_config();
 void read_config();
 void check_config();
+
+static GOptionEntry cmdl_entries[] =
+{
+	{ "config", 'f', 0, G_OPTION_ARG_STRING, &cmdl_config.common.config_file_name[0], "Alternative config file", "NULL" },
+	{ NULL }
+};
+
+#define GETTEXT_PACKAGE "gtk20"
 
 #define VBS_LOCAL_CONFIG_DIR ".vbs"
 #define VBS_CONFIG_FILENAME "config"

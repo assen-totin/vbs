@@ -28,3 +28,22 @@ void fixNewline(char *buffer) {
         strcpy(buffer, &linePrint[0]);
 }
 
+void split_path(char *path, char *dir, char *file) {
+        char *tmp;
+        char tmp_old[100];
+
+        strcpy(&tmp_old[0], strtok(path, "/"));
+
+        while(1) {
+                tmp = strtok(NULL, "/");
+                if(tmp) {
+                        sprintf(dir, "%s/%s", dir, &tmp_old[0]);
+                        sprintf(&tmp_old[0], "%s", tmp);
+                }
+                else
+                        break;
+        }
+
+        strcpy(file, &tmp_old[0]);
+}
+

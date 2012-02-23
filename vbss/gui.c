@@ -188,6 +188,9 @@ int main (int argc, char *argv[]) {
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_colour_fg, *attr_colour_bg;
 
+	// Check for alternative config
+	get_cmd_line(argc, argv);
+
 	// Set up config from defaults
 	check_config();
 	if ((config.common.recv_from_network == 1) && (config.common.send_to_network == 1))

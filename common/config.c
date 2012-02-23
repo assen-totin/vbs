@@ -10,6 +10,19 @@
 
 #include "common.h"
 
+void get_cmdl_config(int argc, char *argv[]) {
+	GError *error = NULL;
+	GOptionContext *cmdl_context;
+
+	cmdl_context = g_option_context_new ("- config");
+	g_option_context_add_main_entries (cmdl_context, cmdl_entries, GETTEXT_PACKAGE);
+	g_option_context_add_group (cmdl_context, gtk_get_option_group (TRUE));
+
+	if (!g_option_context_parse (cmdl_context, &argc, &argv, &error))
+		error_handler("option parsing", error->message, 1);
+}
+
+
 void default_config() {
 	config.common.init_timestamp = time(NULL);
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
@@ -139,20 +152,28 @@ void check_config() {
 	struct stat stat_buf;
 	int mkdir_res, stat_res, errsv;
 	FILE *fp_config;
+	char dir[1024], file[1024];
 
 	// Create a default in-memory condiguration
 	default_config();
 
-	passwd_entry = getpwuid(getuid());
+	if (strlen(cmdl_config.common.config_file_name) > 2) {
+		strcpy(&config.common.config_file_name[0], &cmdl_config.common.config_file_name[0]);
+	}
+	else {
+		passwd_entry = getpwuid(getuid());
+
+		#ifdef VBS_LOCAL_CONFIG_DIR
+			sprintf(config.common.config_file_name, "%s/%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
+		#else
+			sprintf(config.common.config_file_name, "/etc/%s/%s", VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
+		#endif
+	}
+
+	split_path(&config.common.config_file_name[0], &dir[0], &file[0]);
 
 	// First, check config directory
-	#ifdef VBS_LOCAL_CONFIG_DIR
-		sprintf(config.common.config_file_name, "%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR);
-	#else
-		sprintf(config.common.config_file_name, "/etc/%s", VBS_GLOBAL_CONFIG_DIR);
-	#endif
-
-	stat_res = stat(config.common.config_file_name, &stat_buf);
+	stat_res = stat(&dir[0], &stat_buf);
 	errsv = errno;
 	if (stat_res == 0) {
 		// Is it a dir?
@@ -162,7 +183,7 @@ void check_config() {
 	else if (stat_res == -1) {
 		// Create if missing
 		if (errsv == ENOENT) {
-			mkdir_res = mkdir(config.common.config_file_name, 0755);
+			mkdir_res = mkdir(&dir[0], 0755);
 			if (mkdir_res == 1)
 				error_handler("main","config dir creation failed", 1);
 		}
@@ -171,12 +192,6 @@ void check_config() {
 	}
 
 	// Next, check config file
-	#ifdef VBS_LOCAL_CONFIG_DIR
-		sprintf(config.common.config_file_name, "%s/%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
-	#else
-		sprintf(config.common.config_file_name, "/etc/%s/%s", VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
-	#endif
-
 	stat_res = stat(config.common.config_file_name, &stat_buf);
 	errsv = errno;
 
