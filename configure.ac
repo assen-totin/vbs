@@ -8,7 +8,7 @@ AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
-AC_PROG_INSTALL
+#AC_PROG_INSTALL
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
@@ -29,8 +29,11 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([bzero dup2 gethostbyname memset mkdir socket strstr])
 
 # Check for packages
-PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.22.0])
-PKG_CHECK_MODULES([GTHREAD], [gthread-2.0 >= 2.26.0])
+#PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.22.0])
+#PKG_CHECK_MODULES([GTHREAD], [gthread-2.0 >= 2.26.0])
+PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0])
+PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
 # Makefiles
 MAKEFILE_LIBTOOL=`which libtool`
