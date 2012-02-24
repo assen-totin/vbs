@@ -28,9 +28,12 @@ REQUIREMENTS
 INSTALLATION
 ============
 
-1. Go to the "common" directory and run "make".
+1. ./configure
 
-2. Depending on what you need, go to "vbsm", "vbss" or "vbsd" directory. Run "make", then "make install". 
+2. make
+
+3. (as root) make install
+
 The binaries are called "vbsm", "vbss" and "vbsd". If you are using Gnome, a menu entry will be installed for you.
 
 
@@ -38,6 +41,6 @@ The binaries are called "vbsm", "vbss" and "vbsd". If you are using Gnome, a men
 UNINSTALL
 ========
 
-Run "make uninstall" from either "vbsm", "vbsd" or "vbss" to remove all files for this part of the suit.
+make uninstall
 
 

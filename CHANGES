@@ -9,6 +9,7 @@ from where it can be retrieved by the vbss ("slave" client).
 
 3. Added vbss - client for showing same subtitles in multiple locations.
 
+4. Added autoconf support
 
 Aug 27, 2006 - Version 1.0
 ==========================
