@@ -7,4 +7,4 @@ Comment=Subtitler Tool
 Exec=vbsm
 Terminal=false
 Categories=GTK;Application;AudioVideo;Audio;Video;Player;TV;
-Icon=@IMGDIR@/vbs.png
+Icon=@DATAROOTDIR@/vbs.png

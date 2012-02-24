@@ -17,6 +17,8 @@ BINDIR=$exec_prefix/bin
 AC_SUBST([BINDIR])
 SBINDIR=$exec_prefix/sbin
 AC_SUBST([SBINDIR])
+DATAROOTDIR=$prefix/share
+AC_SUBST([DATAROOTDIR])
 
 # Checks for programs.
 AC_PROG_CC
@@ -36,8 +38,6 @@ AC_SUBST([MAKEFILE_CC])
 AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile])
 
 # Desktop files
-IMGDIR=$prefix/share/vbs
-AC_SUBST([IMGDIR])
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop])
 
 # Grand finale
