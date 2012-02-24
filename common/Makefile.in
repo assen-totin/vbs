@@ -14,6 +14,8 @@ CFLAGS = -c -O2
 
 OBJS = cfg.o error.o network.o util.o 
 
+IMGDIR = /usr/local/share/vbs
+
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 
 TARGET = cfg
@@ -28,4 +30,11 @@ $(TARGET): cfg.c error.c network.c util.c
 	$(CC) $(CFLAGS) $(INCLUDES) cfg.c
 	$(CC) $(CFLAGS) $(INCLUDES) network.c
 	$(CC) $(CFLAGS) $(INCLUDES) util.c
+
+install:
+	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
+	cp -f ../common/vbs.png  $(IMGDIR)
+
+uninstall:
+	rm -f $(IMGDIR)/vbs.png
 

@@ -11,8 +11,7 @@
 CC = @MAKEFILE_CC@
 CFLAGS = -c -O2
 
-BINDIR = /usr/local/bin
-IMGDIR = /usr/local/share/vbs
+BINDIR = @BINDIR@ 
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
@@ -30,15 +29,10 @@ clean:
 
 install:
 	cp -f $(TARGET) $(BINDIR)
-	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
-	cp -f ../common/vbs.png  $(IMGDIR)
-	cp vbss.desktop.template vbss.desktop
-	echo "Icon=$(IMGDIR)/vbs.png"  >> vbss.desktop
 	cp -f vbss.desktop /usr/share/applications
 
 uninstall:
 	rm -f $(TARGET) $(BINDIR)/$(TARGET)
-	rm -f $(IMGDIR)/vbs.png
 	rm -f /usr/share/applications/vbss.desktop
 
 $(TARGET): gui.c keys.c

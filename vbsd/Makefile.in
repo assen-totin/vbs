@@ -8,18 +8,12 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-SHELL = @MAKEFILE_SHELL@
-
-LIBTOOL = @MAKEFILE_LIBTOOL@
-LIBTOOL_OPTIONS_COMPILE = --tag=CC --mode=compile
-LIBTOOL_OPTIONS_LINK = --tag=CC --mode=link
-
 CC = @MAKEFILE_CC@
 CFLAGS = -c -O2
 
 LIBS = -lm
 
-BINDIR = /usr/local/bin
+SBINDIR = @SBINDIR@
 
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
@@ -37,10 +31,10 @@ clean:
 	rm -f $(OBJS_LOCAL) $(TARGET) 
 
 install:
-	cp -f $(TARGET) $(BINDIR)
+	cp -f $(TARGET) $(SBINDIR)
 
 uninstall:
-	rm -f $(TARGET) $(BINDIR)/$(TARGET)
+	rm -f $(TARGET) $(SBINDIR)/$(TARGET)
 
 $(TARGET): server.c
 	$(CC) $(CFLAGS) $(INCLUDES) server.c
