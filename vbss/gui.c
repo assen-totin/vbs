@@ -110,6 +110,7 @@ void load_srt() {
 }
 
 int show_subtitle(GtkWidget *subtitle) {
+
 	GChecksum *md5_old = g_checksum_new(G_CHECKSUM_MD5);
 	GChecksum *md5_new = g_checksum_new(G_CHECKSUM_MD5);
 
@@ -120,7 +121,7 @@ int show_subtitle(GtkWidget *subtitle) {
 
 	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0) {
                 gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
-		if ((config.common.recv_from_network == 0) && (config.common.send_to_network == 0))
+		if ((config.common.recv_from_network == 0) && (config.common.send_to_network == 1))
 			put_subtitle(&current_sub[0]);
 	}
 
@@ -199,7 +200,7 @@ int main (int argc, char *argv[]) {
 		error_handler("main", "Cannot have both send and recv enabled at the same time", 1);
 	if ((config.common.recv_from_network == 1) || (config.common.send_to_network == 1))
 		get_host_by_name(&config.common.server_name[0]);
-	else {
+	if (config.common.recv_from_network == 0) {
 		config.common.inside_sub = false;
 		config.vbss.paused = true;
 		config.vbss.local_subs_count = 0;
@@ -271,6 +272,7 @@ int main (int argc, char *argv[]) {
 		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
 	else
 		thread = g_thread_create((GThreadFunc) proc_subtitle_local, NULL, FALSE, &error);
+
 	if(!thread)
 		error_handler("main","Failed to create thread",1);
 

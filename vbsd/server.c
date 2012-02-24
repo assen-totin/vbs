@@ -101,9 +101,9 @@ int main() {
 				}
 				else {
 					// DO SOMETHING WITH 'buffer'
-					syslog(LOG_CRIT, buffer);
+					//syslog(LOG_CRIT, buffer);
 					if (check_magic_key(0, 3, buffer) == 1) {
-						syslog(LOG_CRIT, "Got magic!");
+						//syslog(LOG_CRIT, "Got magic!");
 						strcpy(shm_at, buffer + 4);
 					}
 
