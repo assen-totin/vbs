@@ -14,7 +14,7 @@ void get_cmdl_config(int argc, char *argv[]) {
 	GError *error = NULL;
 	GOptionContext *cmdl_context;
 
-	cmdl_context = g_option_context_new ("- config");
+	cmdl_context = g_option_context_new ("");
 	g_option_context_add_main_entries (cmdl_context, cmdl_entries, GETTEXT_PACKAGE);
 	g_option_context_add_group (cmdl_context, gtk_get_option_group (TRUE));
 
@@ -157,8 +157,8 @@ void check_config() {
 	// Create a default in-memory condiguration
 	default_config();
 
-	if (strlen(cmdl_config.common.config_file_name) > 2) {
-		strcpy(&config.common.config_file_name[0], &cmdl_config.common.config_file_name[0]);
+	if ((cmdl_config.short_f) && (strlen((const char *) cmdl_config.short_f) > 2)) {
+		strcpy(&config.common.config_file_name[0], cmdl_config.short_f);
 	}
 	else {
 		passwd_entry = getpwuid(getuid());

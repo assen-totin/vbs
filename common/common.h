@@ -107,7 +107,9 @@ struct configuration {
 	struct struct_vbss vbss;
 };
 
-struct configuration config;
+struct cmdl {
+	gchar *short_f;
+};
 
 struct encEntry {
 	char name[255];
@@ -127,7 +129,8 @@ static struct encEntry encEntries[] = {
 // Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
 GtkListStore *store;
 GtkWidget *view;
-struct configuration config, cmdl_config;
+struct configuration config;
+struct cmdl cmdl_config;
 
 #include "../vbsd/server.h"
 

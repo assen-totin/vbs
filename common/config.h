@@ -18,7 +18,7 @@ void check_config();
 
 static GOptionEntry cmdl_entries[] =
 {
-	{ "config", 'f', 0, G_OPTION_ARG_STRING, &cmdl_config.common.config_file_name[0], "Alternative config file", "NULL" },
+	{ "config", 'f', 0, G_OPTION_ARG_STRING, &cmdl_config.short_f, "Alternative config file", "" },
 	{ NULL }
 };
 
