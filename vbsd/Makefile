@@ -22,7 +22,7 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 TARGET = vbsd 
 
 OBJS_LOCAL = server.o 
-OBJS_REMOTE = ../common/error.o ../common/config.o ../common/network.o ../common/util.o
+OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
