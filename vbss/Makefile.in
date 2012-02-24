@@ -8,12 +8,6 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-SHELL = @MAKEFILE_SHELL@
-
-LIBTOOL = @MAKEFILE_LIBTOOL@
-LIBTOOL_OPTIONS_COMPILE = --tag=CC --mode=compile
-LIBTOOL_OPTIONS_LINK = --tag=CC --mode=link
-
 CC = @MAKEFILE_CC@
 CFLAGS = -c -O2
 

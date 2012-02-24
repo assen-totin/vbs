@@ -34,19 +34,11 @@ PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
 # Makefiles
-MAKEFILE_LIBTOOL=`which libtool`
 MAKEFILE_CC=`which gcc`
-MAKEFILE_SHELL=`which bash`
-
-AC_SUBST([MAKEFILE_LIBTOOL])
 AC_SUBST([MAKEFILE_CC])
-AC_SUBST([MAKEFILE_SHELL])
 
-AC_CONFIG_FILES([Makefile
-                 common/Makefile
-                 vbsd/Makefile
-                 vbsm/Makefile
-                 vbss/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile])
+
 # Grand finale
 AC_OUTPUT
 

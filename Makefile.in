@@ -12,6 +12,6 @@ all clean install uninstall:
 	$(MAKE) -C common $@
 	$(MAKE) -C vbsm $@
 	$(MAKE) -C vbss $@
-	$(MAKE) -C vbss $@
+	$(MAKE) -C vbsd $@
 
 
