@@ -84,7 +84,6 @@ struct struct_common {
 	time_t init_timestamp;
 	time_t timestamp;
         int magic_key;
-	//char config_dir_name[1024];
 	char config_file_name[1024];
         int export_cr;
         char export_encoding[255];
@@ -148,7 +147,7 @@ struct cmdl cmdl_config;
 
 //#include "../vbsc/vbsc.h"
 
-#include "config.h"
+#include "cfg.h"
 #include "error.h"
 #include "network.h"
 #include "util.h"
