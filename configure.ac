@@ -3,8 +3,8 @@
 
 AC_PREREQ([2.66])
 AC_INIT([VBS], [2.0.0], [assen.totin@gmail.com])
-AC_CONFIG_SRCDIR([config.h])
-AC_CONFIG_HEADERS([config.h])
+#AC_CONFIG_SRCDIR([config.h])
+#AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
@@ -29,8 +29,6 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([bzero dup2 gethostbyname memset mkdir socket strstr])
 
 # Check for packages
-#PKG_CHECK_MODULES([GTK], [gtk+-2.0 >= 2.22.0])
-#PKG_CHECK_MODULES([GTHREAD], [gthread-2.0 >= 2.26.0])
 PKG_CHECK_MODULES([GTK], [gtk+-2.0])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
@@ -46,7 +44,6 @@ AC_SUBST([MAKEFILE_SHELL])
 
 AC_CONFIG_FILES([Makefile
                  common/Makefile
-                 vbsc/Makefile
                  vbsd/Makefile
                  vbsm/Makefile
                  vbss/Makefile])
