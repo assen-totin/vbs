@@ -189,10 +189,12 @@ int main (int argc, char *argv[]) {
 	PangoAttribute *attr_size, *attr_colour_fg, *attr_colour_bg;
 
 	// Check for alternative config
-	get_cmd_line(argc, argv);
+	get_cmdl_config(argc, argv);
 
 	// Set up config from defaults
 	check_config();
+
+	// Config changes
 	if ((config.common.recv_from_network == 1) && (config.common.send_to_network == 1))
 		error_handler("main", "Cannot have both send and recv enabled at the same time", 1);
 	if ((config.common.recv_from_network == 1) || (config.common.send_to_network == 1))
