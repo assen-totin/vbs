@@ -34,6 +34,8 @@ void split_path(char *path, char *dir, char *file) {
 
         strcpy(&tmp_old[0], strtok(path, "/"));
 
+	bzero(dir, sizeof(*dir));
+
         while(1) {
                 tmp = strtok(NULL, "/");
                 if(tmp) {
