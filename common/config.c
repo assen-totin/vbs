@@ -157,10 +157,7 @@ void check_config() {
 	// Create a default in-memory condiguration
 	default_config();
 
-error_handler("cmdl_config.common.config_file_name",&cmdl_config.common.config_file_name[0],0);
-
 	if (strlen(cmdl_config.common.config_file_name) > 2) {
-error_handler("UNF","UNF",0);
 		strcpy(&config.common.config_file_name[0], &cmdl_config.common.config_file_name[0]);
 	}
 	else {
@@ -172,14 +169,9 @@ error_handler("UNF","UNF",0);
 			sprintf(config.common.config_file_name, "/etc/%s/%s", VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
 		#endif
 	}
-error_handler("config.common.config_file_name",&config.common.config_file_name[0],0);
 
 	strcpy(&tmp[0], &config.common.config_file_name[0]);
 	split_path(&tmp[0], &dir[0], &file[0]);
-
-error_handler("config.common.config_file_name",&config.common.config_file_name[0],0);
-error_handler("dir",&dir[0],0);
-error_handler("file",&file[0],0);
 
 	// First, check config directory
 	stat_res = stat(&dir[0], &stat_buf);
