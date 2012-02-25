@@ -91,7 +91,7 @@ int main (int argc, char **argv){
         get_cmdl_config(argc, argv);
 
         // Set up config from defaults
-        check_config();
+        check_config(0);
         if (config.common.send_to_network == 1)
                 get_host_by_name(&config.common.server_name[0]);
 

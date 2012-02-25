@@ -8,7 +8,6 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#define VBS_GLOBAL_CONFIG_DIR "vbs"
 #define QUEUE_SIZE 64
 
 int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]);

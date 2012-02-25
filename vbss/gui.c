@@ -193,7 +193,7 @@ int main (int argc, char *argv[]) {
 	get_cmdl_config(argc, argv);
 
 	// Set up config from defaults
-	check_config();
+	check_config(0);
 
 	// Config changes
 	if ((config.common.recv_from_network == 1) && (config.common.send_to_network == 1))

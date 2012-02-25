@@ -14,7 +14,7 @@ void config_char(char *line, char *param);
 int config_int(char *line);
 void write_config();
 void read_config();
-void check_config();
+void check_config(int mode);
 
 static GOptionEntry cmdl_entries[] =
 {
@@ -24,6 +24,7 @@ static GOptionEntry cmdl_entries[] =
 
 #define GETTEXT_PACKAGE "gtk20"
 
+#define VBS_GLOBAL_CONFIG_DIR "vbs"
 #define VBS_LOCAL_CONFIG_DIR ".vbs"
 #define VBS_CONFIG_FILENAME "config"
 #define VBS_CONFIG_HEADER "# VBS Config File\n#\n# Do not edit by hand!\n#\n\n"

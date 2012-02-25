@@ -18,7 +18,7 @@ int main (int argc, char **argv){
         get_cmdl_config(argc, argv);
 
         // Set up config from defaults
-        check_config();
+        check_config(0);
 
 	// GTK Init
 	gtk_init (&argc, &argv);

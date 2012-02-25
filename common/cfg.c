@@ -26,7 +26,6 @@ void get_cmdl_config(int argc, char *argv[]) {
 void default_config() {
 	config.common.init_timestamp = time(NULL);
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
-	strcpy(&config.common.config_file_name[0], VBS_CONFIG_FILENAME);
 	config.common.export_cr = VBS_DEFAULT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
@@ -147,7 +146,7 @@ void read_config() {
 	fclose(fp_config);
 }
 
-void check_config() {
+void check_config(int mode) {
 	struct passwd *passwd_entry;
 	struct stat stat_buf;
 	int mkdir_res, stat_res, errsv;
@@ -163,11 +162,10 @@ void check_config() {
 	else {
 		passwd_entry = getpwuid(getuid());
 
-		#ifdef VBS_LOCAL_CONFIG_DIR
+		if (mode == 0)
 			sprintf(config.common.config_file_name, "%s/%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
-		#else
+		else if (mode == 1)
 			sprintf(config.common.config_file_name, "/etc/%s/%s", VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
-		#endif
 	}
 
 	strcpy(&tmp[0], &config.common.config_file_name[0]);

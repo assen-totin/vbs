@@ -53,7 +53,7 @@ int main() {
 	umask(0);
 	chdir("/");
 
-	check_config();
+	check_config(1);
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
