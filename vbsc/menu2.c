@@ -31,9 +31,6 @@ static void quit_dialog_ok( GtkWidget *widget, gpointer data ){
 
 void quit_dialog(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel;
-	char quitMessage[1024];
-
-	sprintf(quitMessage, "%s %s\n", VBS_MENU_QUIT_TEXT, &config.common.export_filename[0]); 
 
 	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
 
@@ -41,7 +38,7 @@ void quit_dialog(GtkWidget *window) {
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
 
-	quitLabel = gtk_label_new(quitMessage);
+	quitLabel = gtk_label_new(VBS_MENU_QUIT_TITLE);
 
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
 
