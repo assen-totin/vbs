@@ -25,7 +25,7 @@ int main (int argc, char **argv){
 	gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler Configurator");
 	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
 	gtk_widget_set_size_request (window, 500, 400);
-	g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
+	g_signal_connect (window, "delete_event", G_CALLBACK(quit_dialog), window);
 
 	// Menu
 	GtkWidget *menu = makeMenu(window, &menu_entries[0], VBSC_MENU_COUNT);

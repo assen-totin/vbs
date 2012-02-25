@@ -11,24 +11,15 @@
 #include "../common/common.h"
 
 void file_dialog_ok_21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	char importTextFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK21","Filename too long.", 1);}
-	sprintf(importTextFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	clearStore();
-	importText(&importTextFile[0], VBS_IMPORT_FILTER_TEXT);
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_21","Filename too long.", 1);}
+	sprintf(&config.common.import_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
 
-void fileDialog_ok_41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
+void file_dialog_ok_41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
+	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_41","Filename too long.",1);}
 	sprintf(&config.common.export_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-}
-
-
-void quit_dialog_cancel( GtkWidget *widget, gpointer data ){
-	GtkWidget *quitDialog = data;
-	gtk_widget_destroy(quitDialog);
 }
 
 
@@ -54,7 +45,7 @@ void quit_dialog(GtkWidget *window) {
 
 	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
 
-	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
+	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quit_dialog_ok), (gpointer) quitDialog);
 
 	g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
 

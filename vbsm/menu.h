@@ -16,7 +16,6 @@ void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs );
 
 void quitDialog(GtkWidget *window);
 static void quitDialogOK( GtkWidget *widget, gpointer data );
-void quitDialogCancel( GtkWidget *widget, gpointer data );
 
 void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window);
 void setTimer(GtkWidget *window);

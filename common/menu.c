@@ -27,6 +27,11 @@ GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nme
 	return gtk_item_factory_get_widget (item_factory, "<vbsMainMenu>");
 }
 
+void quitDialogCancel( GtkWidget *widget, gpointer data ){
+        GtkWidget *quitDialog = data;
+        gtk_widget_destroy(quitDialog);
+}
+
 
 void helpAbout(GtkWidget *window) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;

@@ -43,10 +43,10 @@ PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 # Makefiles
 MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile])
 
 # Desktop files
-AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop])
+AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
 
 # Grand finale
 AC_OUTPUT

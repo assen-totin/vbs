@@ -79,12 +79,6 @@ void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 }
 
 
-void quitDialogCancel( GtkWidget *widget, gpointer data ){
-	GtkWidget *quitDialog = data;
-	gtk_widget_destroy(quitDialog);
-}
-
-
 void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *window){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;

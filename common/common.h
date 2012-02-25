@@ -152,5 +152,6 @@ struct cmdl cmdl_config;
 #include "../vbsm/video.h"
 #include "../vbsm/menu.h"
 
-//#include "../vbsc/vbsc.h"
+#include "../vbsc/vbsc.h"
+#include "../vbsc/menu2.h"
 

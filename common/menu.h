@@ -10,6 +10,7 @@
 
 //GtkWidget *makeMenu(GtkWidget *window);
 GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries);
+void quitDialogCancel( GtkWidget *widget, gpointer data);
 void helpAbout(GtkWidget *window);
 void setEncodingImportOK(GtkWidget *widget, gpointer data);
 void setEncodingExportOK(GtkWidget *widget, gpointer data);
