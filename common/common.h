@@ -138,12 +138,12 @@ int can_recv_from_net;
 #include "util.h"
 #include "menu.h"
 
-#include "../vbsd/server.h"
+#include "../vbsd/vbsd.h"
 
-#include "../vbss/gui.h"
-#include "../vbss/keys.h"
+#include "../vbss/vbss.h"
+#include "../vbss/keyboard.h"
 
-#include "../vbsm/vbs.h"
+#include "../vbsm/vbsm.h"
 #include "../vbsm/export.h"
 #include "../vbsm/keyboard.h"
 #include "../vbsm/mouse.h"
@@ -153,5 +153,5 @@ int can_recv_from_net;
 #include "../vbsm/menu.h"
 
 #include "../vbsc/vbsc.h"
-#include "../vbsc/menu2.h"
+#include "../vbsc/menu.h"
 

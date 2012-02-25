@@ -19,13 +19,13 @@ ADD_FLAGS2=`pkg-config --libs gthread-2.0`
 
 TARGET = vbss 
 
-OBJS_LOCAL = gui.o keys.o 
+OBJS_LOCAL = vbss.o keyboard.o 
 OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/util.o 
 
 all: $(TARGET)
 
 clean:
-	rm -f $(OBJS_LOCAL) $(TARGET)
+	rm -f $(OBJS_LOCAL) $(TARGET) vbss.desktop
 
 install:
 	cp -f $(TARGET) $(BINDIR)
@@ -35,8 +35,8 @@ uninstall:
 	rm -f $(TARGET) $(BINDIR)/$(TARGET)
 	rm -f /usr/share/applications/vbss.desktop
 
-$(TARGET): gui.c keys.c
-	$(CC) $(CFLAGS) $(INCLUDES) gui.c
-	$(CC) $(CFLAGS) $(INCLUDES) keys.c
+$(TARGET): vbss.c keyboard.c
+	$(CC) $(CFLAGS) $(INCLUDES) vbss.c
+	$(CC) $(CFLAGS) $(INCLUDES) keyboard.c
 	$(CC) -o $@ $(ADD_FLAGS) $(ADD_FLAGS2) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

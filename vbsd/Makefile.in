@@ -19,7 +19,7 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
 TARGET = vbsd 
 
-OBJS_LOCAL = server.o 
+OBJS_LOCAL = vbsd.o 
 OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o 
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
@@ -36,7 +36,7 @@ install:
 uninstall:
 	rm -f $(TARGET) $(SBINDIR)/$(TARGET)
 
-$(TARGET): server.c
-	$(CC) $(CFLAGS) $(INCLUDES) server.c
+$(TARGET): vbsd.c
+	$(CC) $(CFLAGS) $(INCLUDES) vbsd.c
 	$(CC) -o $@ $(LIBS) $(ADD_FLAGS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 
