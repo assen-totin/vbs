@@ -3,13 +3,14 @@
 
 AC_PREREQ([2.66])
 AC_INIT([VBS], [2.0.0], [assen.totin@gmail.com])
+AC_CONFIG_HEADERS([config.h])
 
 # prefix
 if test "x$prefix" = "xNONE" ; then
-  prefix="/usr/local"
+	prefix="/usr/local"
 fi
 if test "x$exec_prefix" = "xNONE" ; then
-  exec_prefix=$prefix
+	exec_prefix=$prefix
 fi
 PREFIX=$prefix
 AC_SUBST([PREFIX])
@@ -22,6 +23,13 @@ AC_SUBST([DATAROOTDIR])
 
 # Checks for programs.
 AC_PROG_CC
+
+AC_CHECK_PROG([HAVE_MPLAYER],[mplayer],[yes],[no])
+if test $HAVE_MPLAYER = "no" ; then
+	echo "*** MPlayer not found. You're losing video in vbsm."
+else
+	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
+fi
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':
