@@ -14,6 +14,9 @@ int main (int argc, char **argv){
 	GtkWidget *window, *scroll;
 	GtkWidget *status, *vbox, *progress;
 
+        // Check for alternative config
+        get_cmdl_config(argc, argv);
+
         // Set up config from defaults
         check_config();
 

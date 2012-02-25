@@ -13,6 +13,7 @@
 void file_dialog_ok_21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_21","Filename too long.", 1);}
 	sprintf(&config.common.import_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	write_config();
 }
 
 
@@ -20,6 +21,7 @@ void file_dialog_ok_41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	// Stupid, but global variables need care.
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_41","Filename too long.",1);}
 	sprintf(&config.common.export_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	write_config();
 }
 
 
