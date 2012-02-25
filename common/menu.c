@@ -10,19 +10,17 @@
 
 #include "../common/common.h"
 
-GtkWidget *makeMenu(GtkWidget *window) {
+GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries) {
 	GtkAccelGroup *accel_group;
 	GtkItemFactory *item_factory;
 
 	accel_group = gtk_accel_group_new();
 	item_factory = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<vbsMainMenu>", accel_group);
 
-	static gint nmenuEntries = sizeof (menuEntries) / sizeof (menuEntries[0]);
-
 	// Last argument: callback_data,
 	// gets passed to all the callback functions for all the entries with callback_action != 0
 
-	gtk_item_factory_create_items(item_factory, nmenuEntries, &menuEntries[0], window);
+	gtk_item_factory_create_items(item_factory, nmenuEntries, menuEntries, window);
 
 	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 

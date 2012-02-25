@@ -25,8 +25,9 @@ void helpContents(GtkWidget *window);
 
 void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *window);
 
-static GtkItemFactoryEntry menuEntries[] = {
-	{ "/_File",         "<ALT>F",      NULL,         0, "<Branch>" },
+#define VBSM_MENU_COUNT 31
+static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
+	{ "/_File", "<ALT>F", NULL, 0, "<Branch>" },
 	{ "/File/_Quit", "<CTRL>Q", quitDialog,  11, "<Item>" },
 
 	{ "/_Edit",         "<ALT>E",      NULL,         0, "<Branch>" },
@@ -68,8 +69,6 @@ static GtkItemFactoryEntry menuEntries[] = {
 	{ "/Help/About", "", helpAbout,  52, "<Item>" }
 };
 
-
-GtkWidget *makeMenu(GtkWidget *window);
 
 #define VBS_MENU_IMPORT_TEXTONLY_TITLE "Select Text-only File"
 

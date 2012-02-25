@@ -28,8 +28,7 @@ int main (int argc, char **argv){
 	g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
 
 	// Menu
-	GtkWidget *menu;
-	menu = makeMenu2(window);
+	GtkWidget *menu = makeMenu(window, &menu_entries[0], VBSC_MENU_COUNT);
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);

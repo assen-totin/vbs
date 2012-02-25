@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Encoding=UTF-8
-Name=Voody Blue Subtitler (Master)
-GenericName=Voody Blue Subtitler (Master)
+Name=Voody Blue Subtitler (Config Tool)
+GenericName=Voody Blue Subtitler (Config Tool)
 Comment=Subtitler Tool
 Exec=vbsm
 Terminal=false

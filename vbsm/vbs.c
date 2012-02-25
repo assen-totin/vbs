@@ -151,7 +151,8 @@ int main (int argc, char **argv){
 
 	// Menu
 	GtkWidget *menu;
-	menu = makeMenu(window);
+	//menu = makeMenu(window);
+	menu = makeMenu(window, &menuEntries[0], VBSM_MENU_COUNT);
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);
