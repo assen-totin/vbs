@@ -152,4 +152,5 @@ struct cmdl cmdl_config;
 #include "error.h"
 #include "network.h"
 #include "util.h"
+#include "menu.h"
 

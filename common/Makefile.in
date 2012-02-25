@@ -12,9 +12,9 @@ CC = @MAKEFILE_CC@
 
 CFLAGS = -c -O2
 
-OBJS = cfg.o error.o network.o util.o 
+OBJS = cfg.o error.o network.o util.o menu.o 
 
-IMGDIR = /usr/local/share/vbs
+IMGDIR = @IMGDIR@
 
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 
@@ -25,11 +25,12 @@ all: $(TARGET)
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-$(TARGET): cfg.c error.c network.c util.c 
+$(TARGET): cfg.c error.c network.c util.c menu.c
 	$(CC) $(CFLAGS) $(INCLUDES) error.c
 	$(CC) $(CFLAGS) $(INCLUDES) cfg.c
 	$(CC) $(CFLAGS) $(INCLUDES) network.c
 	$(CC) $(CFLAGS) $(INCLUDES) util.c
+	$(CC) $(CFLAGS) $(INCLUDES) menu.c
 
 install:
 	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
