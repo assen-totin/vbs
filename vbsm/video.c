@@ -110,7 +110,7 @@ void *loadVideo(char fileName[1024]) {
 			close(writePipeFD[0]);
 			close(readPipeFD[1]);
 
-			execlp(VBS_MPLAYER_BINARY, VBS_MPLAYER_BINARY, "-slave", "-quiet", "-osdlevel", "3", &fileName[0], (char *) NULL);
+			execlp(VBS_MPLAYER_BINARY, VBS_MPLAYER_BINARY, "-slave", "-quiet", "-input", "nodefault-bindings:file=/dev/null:conf=/dev/null", "-osdlevel", "3", &fileName[0], (char *) NULL);
 		}
 
 		// Parent

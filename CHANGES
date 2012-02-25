@@ -11,6 +11,8 @@ from where it can be retrieved by the vbss ("slave" client).
 
 4. Added autoconf support
 
+5. Disabled keyboard controls for mplayer
+
 Aug 27, 2006 - Version 1.0
 ==========================
 
