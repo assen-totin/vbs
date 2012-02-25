@@ -130,6 +130,8 @@ GtkWidget *view;
 struct configuration config;
 struct cmdl cmdl_config;
 
+#include "../config.h"
+
 #include "../vbsd/server.h"
 
 #include "../vbss/gui.h"

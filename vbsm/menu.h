@@ -60,8 +60,10 @@ static GtkItemFactoryEntry menuEntries[] = {
 	{ "/Text/", "", NULL,  0, "<Separator>" },
 	{ "/Text/Set Encoding...", "", setEncodingImport,  23, "<Item>" },
 
+#ifdef HAVE_MPLAYER
 	{ "/_Video",         "<ALT>V",      NULL,         0, "<Branch>" },
 	{ "/Video/Load _Video...", "<CTRL>V", fileDialog,  31, "<Item>" },
+#endif
 
 	{ "/_Export",        "<ALT>E",      NULL,         0, "<Branch>" },
 	{ "/Export/D_estination...", "<CTRL>E", fileDialog,  41, "<Item>" },
