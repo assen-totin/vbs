@@ -20,7 +20,7 @@ ADD_FLAGS2=`pkg-config --libs gthread-2.0`
 TARGET = vbss 
 
 OBJS_LOCAL = gui.o keys.o 
-OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/util.o
+OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/util.o ../common/menu.o
 
 all: $(TARGET)
 

@@ -132,6 +132,12 @@ struct cmdl cmdl_config;
 
 #include "../config.h"
 
+#include "cfg.h"
+#include "error.h"
+#include "network.h"
+#include "util.h"
+#include "menu.h"
+
 #include "../vbsd/server.h"
 
 #include "../vbss/gui.h"
@@ -147,10 +153,4 @@ struct cmdl cmdl_config;
 #include "../vbsm/menu.h"
 
 //#include "../vbsc/vbsc.h"
-
-#include "cfg.h"
-#include "error.h"
-#include "network.h"
-#include "util.h"
-#include "menu.h"
 
