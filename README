@@ -109,24 +109,29 @@ vbss will start in windowed mode and will use smaller font size.
 The font size can be changed specified in the config file, as well as the background and 
 foreground colours (not very useful in practice).
 
-vbss can operate in two modes depending config setting. 
+vbss can operate in three modes depending on a config setting. 
 
-- If RECV_FROM_NETWORK is 1, vbss will try to contact a vbsd server set in SERVER_NAME at 
+- If NETWORK_MODE is 0, vbss will try to load the file specified in IMPORT_FILENAME
+(it should be in SubRip format) and play it back. 
+
+- If NETWORK_MODE is 1, vbss will try to load the file specified in IMPORT_FILENAME
+(it should be in SubRip format), play it back and send the subtitles to the specified 
+server and port.
+
+- If NETWORK_MODE is 2, vbss will try to contact a vbsd server set in SERVER_NAME at 
 the specified TCP_PORT. It will poll the server each second, displaying whatever the server 
 is streaming wight now. 
-
-- If RECV_FROM_NETWORK is 0, vbss will try to load the file specified in IMPORT_FILENAME 
-(it should be in SubRip format) and play it back. In addition, if SEND_TO_NETWORK is 1, 
-vbss will send the subtitles to the specified server and port. 
-
-You cannot have both RECV_FROM_NETWORK and RECV_FROM_NETWORK set to 1 at the same time.
 
 When playing back a local file, the playbak will not start until you press once the space 
 bar (a prompt will be shown on screen). Once the playback begins, the follwing hot keys are 
 available:
 - space: toggle pause/playback
-- k: jump one minute forward
-- j: rewind one minute
+- q: rewind one minute
+- w: rewind five seconds
+- e: rewind one second
+- r: jump one second forward
+- t: jump five seconds forward
+- y: jump one minute forward
 
 C. vbsd
 -------

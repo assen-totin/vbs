@@ -13,4 +13,3 @@ void formatCellFrom(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeMo
 void formatCellTo(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data);
 void *create_view_and_model (void);
 
-#define VBS_CAN_RECEIVE_FROM_NETWORK 0

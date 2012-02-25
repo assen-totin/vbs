@@ -150,9 +150,8 @@ int main (int argc, char **argv){
 	g_signal_connect(view, "key_press_event", (GCallback) view_onKeyPressed, window);
 
 	// Menu
-	GtkWidget *menu;
-	//menu = makeMenu(window);
-	menu = makeMenu(window, &menuEntries[0], VBSM_MENU_COUNT);
+	can_recv_from_net = 0;
+	GtkWidget *menu = makeMenu(window, &menuEntries[0], VBSM_MENU_COUNT);
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);

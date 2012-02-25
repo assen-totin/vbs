@@ -128,6 +128,7 @@ GtkListStore *store;
 GtkWidget *view;
 struct configuration config;
 struct cmdl cmdl_config;
+int can_recv_from_net;
 
 #include "../config.h"
 

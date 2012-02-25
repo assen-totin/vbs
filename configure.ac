@@ -49,7 +49,7 @@ AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makef
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
 
 # Icons
-AC_DEFINE_UNQUOTED([VBS_ICON], ["$DATAROOTDIR/vbs"], [Define icons location])
+AC_DEFINE_UNQUOTED([VBS_ICON], ["$DATAROOTDIR/vbs/vbs.png"], [Define icons location])
 
 # Grand finale
 AC_OUTPUT

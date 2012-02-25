@@ -16,11 +16,24 @@ void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
                 case GDK_space:
                         on_space_pressed(window);
                         break;
-                case GDK_j:
-                        on_j_pressed(window);
+                case GDK_q:
+                        on_q_pressed(window);
                         break;
-                case GDK_k:on_k_pressed(window);
-
+                case GDK_w: 
+			on_w_pressed(window);
+			break;
+                case GDK_e: 
+                        on_e_pressed(window);
+                        break;
+                case GDK_r: 
+                        on_r_pressed(window);
+                        break;
+                case GDK_t: 
+                        on_t_pressed(window);
+                        break;
+                case GDK_y: 
+                        on_y_pressed(window);
+                        break;
         }
 }
 
@@ -39,15 +52,39 @@ void on_space_pressed (GtkWidget *window) {
         }
 }
 
-void on_j_pressed (GtkWidget *window) {
+void on_q_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-        	config.common.init_timestamp += 60;
+        	config.common.init_timestamp -= 60;
         }
 }
 
-void on_k_pressed (GtkWidget *window) {
+void on_w_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp -= 60;
+                config.common.init_timestamp -= 5;
+        }
+}
+
+void on_e_pressed (GtkWidget *window) {
+        if ((!config.common.inside_sub) && (!config.vbss.paused)) {
+                config.common.init_timestamp -= 1;
+        }
+}
+
+void on_r_pressed (GtkWidget *window) {
+        if ((!config.common.inside_sub) && (!config.vbss.paused)) {
+                config.common.init_timestamp += 1;
+        }
+}
+
+void on_t_pressed (GtkWidget *window) {
+        if ((!config.common.inside_sub) && (!config.vbss.paused)) {
+                config.common.init_timestamp += 5;
+        }
+}
+
+void on_y_pressed (GtkWidget *window) {
+        if ((!config.common.inside_sub) && (!config.vbss.paused)) {
+                config.common.init_timestamp += 60;
         }
 }
 

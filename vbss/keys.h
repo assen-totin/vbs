@@ -10,7 +10,11 @@
 
 
 void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata);
-void on_j_pressed (GtkWidget *window);
-void on_k_pressed (GtkWidget *window);
 void on_space_pressed (GtkWidget *window);
+void on_q_pressed (GtkWidget *window);
+void on_w_pressed (GtkWidget *window);
+void on_e_pressed (GtkWidget *window);
+void on_r_pressed (GtkWidget *window);
+void on_t_pressed (GtkWidget *window);
+void on_y_pressed (GtkWidget *window);
 

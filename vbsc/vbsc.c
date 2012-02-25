@@ -19,6 +19,7 @@ int main (int argc, char **argv){
 
         // Set up config from defaults
         check_config(0);
+	can_recv_from_net = 1;
 
 	// GTK Init
 	gtk_init (&argc, &argv);
