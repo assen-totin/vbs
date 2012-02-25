@@ -121,7 +121,7 @@ int show_subtitle(GtkWidget *subtitle) {
 
 	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0) {
                 gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
-		if ((config.common.recv_from_network == 0) && (config.common.send_to_network == 1))
+		if (config.common.network_mode == 1)
 			put_subtitle(&current_sub[0]);
 	}
 
@@ -196,11 +196,9 @@ int main (int argc, char *argv[]) {
 	check_config(0);
 
 	// Config changes
-	if ((config.common.recv_from_network == 1) && (config.common.send_to_network == 1))
-		error_handler("main", "Cannot have both send and recv enabled at the same time", 1);
-	if ((config.common.recv_from_network == 1) || (config.common.send_to_network == 1))
+	if ((config.common.network_mode == 1) || (config.common.network_mode == 2))
 		get_host_by_name(&config.common.server_name[0]);
-	if (config.common.recv_from_network == 0) {
+	if (config.common.network_mode == 2) {
 		config.common.inside_sub = false;
 		config.vbss.paused = true;
 		config.vbss.local_subs_count = 0;
@@ -249,7 +247,7 @@ int main (int argc, char *argv[]) {
 
 	subtitle = gtk_label_new("");
 
-	if (config.common.recv_from_network == 1) 
+	if (config.common.network_mode == 2) 
 		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
 	else {
 		load_srt();
@@ -268,7 +266,7 @@ int main (int argc, char *argv[]) {
 
 	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
 
-	if (config.common.recv_from_network == 1)
+	if (config.common.network_mode == 2)
 		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
 	else
 		thread = g_thread_create((GThreadFunc) proc_subtitle_local, NULL, FALSE, &error);

@@ -75,8 +75,7 @@ void write_config() {
         fprintf(fp_config, "IMPORT_FILENAME=%s\n", &config.common.import_filename[0]);
         fprintf(fp_config, "EXPORT_FILENAME=%s\n", &config.common.export_filename[0]);
 	fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
-	fprintf(fp_config, "SEND_TO_NETWORK=%u\n", config.common.send_to_network);
-	fprintf(fp_config, "RECV_FROM_NETWORK=%u\n", config.common.recv_from_network);
+	fprintf(fp_config, "NETWORK_MODE=%u\n", config.common.send_to_network);
 	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
         fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
 
@@ -118,10 +117,8 @@ void read_config() {
                                 config_char(line, &config.common.import_filename[0]);
                         else if (strstr(line, "LINE_SIZE"))
                                 config.common.line_size = config_int(line);
-                        else if (strstr(line, "SEND_TO_NETWORK"))
+                        else if (strstr(line, "NETWORK_MODE"))
                                 config.common.send_to_network = config_int(line);
-                        else if (strstr(line, "RECV_FROM_NETWORK"))
-                                config.common.recv_from_network = config_int(line);
 			else if (strstr(line, "SERVER_NAME")) 
 				config_char(line, &config.common.server_name[0]);
 			else if (strstr(line, "TCP_PORT")) 

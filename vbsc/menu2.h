@@ -21,10 +21,6 @@ void set_magic_key (GtkWidget *window);
 void set_magic_key_ok(GtkWidget *widget, gpointer data);
 void set_full_screen (GtkWidget *window);
 void set_full_screen_ok(GtkWidget *widget, gpointer data);
-void use_network_2 (GtkWidget *window);
-void use_network_2_ok(GtkWidget *widget, gpointer data);
-
-#define VBSC_MENU_COUNT 20
 
 #define VBSC_MENU_MAGIC_KEY_TITLE "Set Magic Key"
 #define VBSC_MENU_MAGIC_KEY_TEXT "Enter magic key (a number between 1 and 2147483647):"
@@ -32,8 +28,8 @@ void use_network_2_ok(GtkWidget *widget, gpointer data);
 #define VBSC_MENU_FONT_SIZE_TEXT "Enter font size (in points):"
 #define VBSC_MENU_FULL_SCREEN_TITLE "Set Full-Screen"
 #define VBSC_MENU_FULL_SCREEN_TEXT "Full-Screen mode:"
-#define VBSC_MENU_RECV_TITLE "Set Receive From Network"
-#define VBSC_MENU_RECV_TEXT "Receive from network: "
+
+#define VBSC_MENU_COUNT 19
  
 static GtkItemFactoryEntry menu_entries[VBSC_MENU_COUNT] = {
 	{ "/_File",         "<ALT>F",      NULL,         0, "<Branch>" },
@@ -49,8 +45,7 @@ static GtkItemFactoryEntry menu_entries[VBSC_MENU_COUNT] = {
 	{ "/Text Export/Set Newline Char...", "", setNewline,  43, "<Item>" },
 
         { "/_Network",        "<ALT>N",      NULL,         0, "<Branch>" },
-	{ "/Network/Send to Network...", "", useNetwork,  71, "<Item>" },
-	{ "/Network/Receive from Network...", "", use_network_2,  75, "<Item>" },
+	{ "/Network/Network Mode...", "", useNetwork,  71, "<Item>" },
         { "/Network/Server...", "", setNetworkServer,  72, "<Item>" },
         { "/Network/Port...", "", setNetworkPort,  73, "<Item>" },
 	{ "/Network/Magic Key...", "", set_magic_key,  74, "<Item>" },

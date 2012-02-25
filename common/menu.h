@@ -44,6 +44,6 @@ void useNetwork (GtkWidget *window);
 #define VBS_MENU_NETWORK_SERVER_TEXT "Current server:"
 #define VBS_MENU_DNS_WARNING_TITLE "Press OK to change server."
 #define VBS_MENU_DNS_WARNING_TEXT "DNS resolving failed."
-#define VBS_MENU_ENABLE_NETWORK_TITLE "Enable/Disable Network"
-#define VBS_MENU_ENABLE_NETWORK_TEXT "Send subtitles to server:"
+#define VBS_MENU_ENABLE_NETWORK_TITLE "Network Mode"
+#define VBS_MENU_ENABLE_NETWORK_TEXT "Select network mode:"
 

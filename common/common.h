@@ -92,8 +92,7 @@ struct struct_common {
         char export_filename[1024];
         FILE *export_fp;
         int line_size;
-	int send_to_network;
-	int recv_from_network;
+	int network_mode;
 	char server_name[255];
         int tcp_port;
         struct hostent *host_entry;

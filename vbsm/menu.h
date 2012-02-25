@@ -55,7 +55,7 @@ static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
 	{ "/Export/Set Newline Char...", "", setNewline,  43, "<Item>" },
 
         { "/_Network",        "<ALT>N",      NULL,         0, "<Branch>" },
-	{ "/Network/Send to Server...", "", useNetwork,  71, "<Item>" },
+	{ "/Network/Network Mode...", "", useNetwork,  71, "<Item>" },
 	{ "/Network/", "", NULL,  0, "<Separator>" },
         { "/Network/Server...", "", setNetworkServer,  72, "<Item>" },
         { "/Network/Port...", "", setNetworkPort,  73, "<Item>" },
