@@ -273,7 +273,10 @@ void useNetwork (GtkWidget *window) {
         config.vbsm.menu_widget = gtk_combo_box_new_text();
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Network is off");
         gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Send to network");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Receive from network");
+
+	if (VBS_CAN_RECEIVE_FROM_NETWORK == 1)
+		gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Receive from network");
+
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), config.common.network_mode);
 
         gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);

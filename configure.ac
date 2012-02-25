@@ -24,8 +24,8 @@ AC_SUBST([DATAROOTDIR])
 # Checks for programs.
 AC_PROG_CC
 
-AC_CHECK_PROG([HAVE_MPLAYER],[mplayer],[yes],[no])
-if test $HAVE_MPLAYER = "no" ; then
+AC_CHECK_PROG([CHECK_MPLAYER],[mplayer],[yes],[no])
+if test $CHECK_MPLAYER = "no" ; then
 	echo "*** MPlayer not found. You're losing video in vbsm."
 else
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
@@ -47,6 +47,9 @@ AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makef
 
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
+
+# Icons
+AC_DEFINE_UNQUOTED([VBS_ICON], ["$DATAROOTDIR/vbs"], [Define icons location])
 
 # Grand finale
 AC_OUTPUT
