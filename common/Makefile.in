@@ -25,6 +25,10 @@ all: $(TARGET)
 clean:
 	rm -f $(OBJS) $(TARGET)
 
+distclean:
+	make clean
+	rm -f Makefile
+
 $(TARGET): cfg.c error.c network.c util.c menu.c
 	$(CC) $(CFLAGS) $(INCLUDES) error.c
 	$(CC) $(CFLAGS) $(INCLUDES) cfg.c

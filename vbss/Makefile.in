@@ -27,6 +27,10 @@ all: $(TARGET)
 clean:
 	rm -f $(OBJS_LOCAL) $(TARGET) vbss.desktop
 
+distclean:
+	make clean
+	rm -f Makefile vbss.desktop
+
 install:
 	cp -f $(TARGET) $(BINDIR)
 	cp -f vbss.desktop /usr/share/applications
