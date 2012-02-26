@@ -32,7 +32,7 @@ static GOptionEntry cmdl_entries[] =
 #define VBS_IMPORT_FILENAME "/tmp/vbs-in.txt"
 #define VBS_DEFAULT_LINE_SIZE 1024
 #define VBS_DEFAULT_TCP_PORT 42
-#define VBS_DEFAULT_SERVER "vbs42.online.bg"
+#define VBS_DEFAULT_SERVER "localhost"
 #define VBS_DEFAULT_MAGIC_KEY 1973
 #define VBS_DEFAULT_COLOUR_BG_RED 17476
 #define VBS_DEFAULT_COLOUR_BG_GREEN 17476

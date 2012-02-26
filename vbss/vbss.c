@@ -198,7 +198,7 @@ int main (int argc, char *argv[]) {
 	// Config changes
 	if ((config.common.network_mode == 1) || (config.common.network_mode == 2))
 		get_host_by_name(&config.common.server_name[0]);
-	if (config.common.network_mode == 2) {
+	if ((config.common.network_mode == 0) || (config.common.network_mode == 1)) {
 		config.common.inside_sub = false;
 		config.vbss.paused = true;
 		config.vbss.local_subs_count = 0;

@@ -41,7 +41,7 @@ void useNetwork (GtkWidget *window);
 #define VBS_MENU_NETWORK_PORT_TITLE "TCP Port"
 #define VBS_MENU_NETWORK_PORT_TEXT "Current Port:"
 #define VBS_MENU_NETWORK_SERVER_TITLE "Server Name"
-#define VBS_MENU_NETWORK_SERVER_TEXT "Current server:"
+#define VBS_MENU_NETWORK_SERVER_TEXT "Current server (FQDN):"
 #define VBS_MENU_DNS_WARNING_TITLE "Press OK to change server."
 #define VBS_MENU_DNS_WARNING_TEXT "DNS resolving failed."
 #define VBS_MENU_ENABLE_NETWORK_TITLE "Network Mode"
