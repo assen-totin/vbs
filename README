@@ -1,7 +1,7 @@
-Voody Blue Subtitler (aka VBS) is a suit of programmes that allow you to
+Voody Blue Subtitler (aka VBS) is a suit of programmes that allow you to:
 - manually synchronize a text file with a video stream, thus creating a subtitles file;
 - play back a subtitle file
-- relay the subtitles through a small server to muliple clients
+- relay the subtitles through a small server to multiple clients
 
 VBS consists of several pieces: 
 - vbsm - the "master" client which can do the timing of subtitles, with or without
