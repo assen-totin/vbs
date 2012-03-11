@@ -1,10 +1,10 @@
 Summary: Voody Blue Subtitler suit 
 Name: vbs
-Version: 2.0
+Version: 2.1
 Release: 1
 Group: Applications/Multimedia
 License: GPL
-Source: http://bilbo.online.bg/~assen/vbs/vbs-2.0.tar.gz
+Source: http://bilbo.online.bg/~assen/vbs/vbs-2.1.tar.gz
 BuildRoot: /var/tmp/%{name}-buildroot
 Requires: gtk2 >= 2.2.0
 Requires: mplayer >= 1.0

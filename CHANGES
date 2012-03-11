@@ -1,5 +1,16 @@
-Mar 1, 2011 - Version 2.0
-=========================
+Mar 11, 2012 - Version 2.1
+==========================
+
+1. Added workaround for mplayer not detecting UTF8 in subtitles
+
+2. Fixed mplayer crash due to a negative (or too large) timing occuring 
+when the first subtitle is double-clicked and start time is less than 
+the go-back offset.
+
+3. Improved handling when last line of text is reached
+
+Mar  1, 2012 - Version 2.0
+==========================
 
 1. Renamed vbs to vbsm ("master" client). 
 Added networking for sending current subtitle to vbsd daemon.

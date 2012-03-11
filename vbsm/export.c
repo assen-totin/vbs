@@ -10,25 +10,6 @@
 
 #include "../common/common.h"
 
-void escapeFileName(char *fileName, char *fileNameEscaped) {
-	// Escape spaces in file name
-	if (strstr(fileName, " ")) {
-		char localName[1024];
-		sprintf(&localName[0], "%s", fileName);
-
-		char *str1, *token;
-		int j;
-		for (j = 1, str1 = &localName[0]; ; j++, str1 = NULL) {
-			token = strtok(str1, " ");
-			if (token == NULL){break;}
-			if (j == 1) {sprintf(fileNameEscaped, "%s", token);}
-			else {sprintf(fileNameEscaped, "%s\\ %s", fileNameEscaped, token);}
-		}
-	}
-	else {sprintf(fileNameEscaped, "%s", fileName);}
-}
-
-
 void convertTimeSrt(unsigned int theTime, char *res, int flag) {
 
 	div_t qH = div(theTime, 3600000);
@@ -68,7 +49,8 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 
 	// Print next number
 	export_sub->count++;
-	fprintf(export_sub->fp, "%u%s", export_sub->count, &CrLf[0]);
+	fprintf(export_sub->fp_export, "%u%s", export_sub->count, &CrLf[0]);
+	fprintf(export_sub->fp_mplayer, "%u%s", export_sub->count, &CrLf[0]);
 
 	// Calc & print times
 	char timeFrom[32], timeTo[32], timeLine[64];
@@ -76,7 +58,9 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 	convertTimeSrt(to, &timeTo[0], 1);
 
 	sprintf(timeLine, "%s --> %s", timeFrom, timeTo);
-	fprintf(export_sub->fp, "%s%s", timeLine, &CrLf[0]);
+	fprintf(export_sub->fp_export, "%s%s", timeLine, &CrLf[0]);
+	if (to > 0) 
+		fprintf(export_sub->fp_mplayer, "%s%s", timeLine, &CrLf[0]);
 
 	// Convert back to non-UTF-8 encoding
 	gchar *lineCP1251;
@@ -92,8 +76,14 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 	char line_fixed[config.common.line_size];
 	strcpy(&line_fixed[0], lineCP1251);
 	fixNewline(&line_fixed[0]);
+	fprintf(export_sub->fp_export, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
 
-	fprintf(export_sub->fp, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
+	// For mplayer, only export subtitles which have been timed
+	if (to > 0) {
+		strcpy(&line_fixed[0], line);
+		fixNewline(&line_fixed[0]);
+		fprintf(export_sub->fp_mplayer, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
+	}
 
 	g_free(line);
 	return FALSE;
@@ -102,14 +92,19 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 
 void exportSubtitles() {
 	struct exportSub export_sub_val, *export_sub;
-	FILE *fp;
+	FILE *fp_export, *fp_mplayer;
 	GtkTreeModel *model;
 
-	fp = fopen(config.common.export_filename, "w");
-	if (!fp) 
+	fp_export = fopen(config.common.export_filename, "w");
+	if (!fp_export) 
 		error_handler("exportSubtitles", "failed to export subtitles", 1);
 
-	export_sub_val.fp = fp;
+	fp_mplayer = fopen(config.vbsm.mplayerSubFileName, "w");
+	if (!fp_mplayer)
+		error_handler("exportSubtitles", "failed to write mplayer subtitles", 1);
+
+	export_sub_val.fp_export = fp_export;
+	export_sub_val.fp_mplayer = fp_mplayer;
 	export_sub_val.count = 0;
 
 	export_sub = &export_sub_val;
@@ -117,10 +112,11 @@ void exportSubtitles() {
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
 	gtk_tree_model_foreach(model, exportSubtitlesSrt, export_sub);
 
-	int retval = fclose(fp);
+	int retval = fclose(fp_export);
+	retval = fclose(fp_mplayer);
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-	fprintf(config.vbsm.tmpFile, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
+	fprintf(config.vbsm.logFile, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
 }
 
 

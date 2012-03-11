@@ -9,7 +9,8 @@
 // for details.
 
 struct exportSub {
-	FILE *fp;
+	FILE *fp_export;
+	FILE *fp_mplayer;
 	short unsigned count;
 };
 
@@ -18,7 +19,4 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 void exportSubtitles();
 
 void convertTimeSrt(unsigned int theTime, char *res, int flag);
-
-void escapeFileName(char *fileName, char *fileNameEscaped);
-
 

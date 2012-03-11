@@ -48,7 +48,7 @@ void view_onBPressed () {
 
 			g_free(line);
 
-			fprintf(config.vbsm.tmpFile, "Processed B key.\n");
+			fprintf(config.vbsm.logFile, "Processed B key.\n");
 		}
 	}
 }
@@ -74,12 +74,13 @@ void view_onMPressed () {
 
 			// Move to next line
 			gtk_tree_selection_unselect_iter(selection, &iter);
-			gtk_tree_model_iter_next(model,&iter);
-			gtk_tree_selection_select_iter(selection, &iter);
+			if (gtk_tree_model_iter_next(model, &iter)) {
+				gtk_tree_selection_select_iter(selection, &iter);
 
-			// Scroll down
-			GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+				// Scroll down
+				GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+			}
 
 			config.common.inside_sub = FALSE;
 

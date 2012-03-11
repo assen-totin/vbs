@@ -25,7 +25,7 @@ int progressBarUpdate() {
 		}
 	}
 
-	// If only playing the movie, move to next subtitles as it gets displayed - until a 'b' is pressed
+	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
 	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)){
 		GtkTreeSelection *selection;
 		GtkTreeModel     *model;
@@ -42,7 +42,7 @@ int progressBarUpdate() {
 				local = 1000*(curr_time - config.common.init_timestamp);
 			}
 			if ((to > from) && (to < local)) {
-				if (gtk_tree_model_iter_next(model,&iter)) {
+				if (gtk_tree_model_iter_next(model, &iter)) {
 					// Move to next line
 					gtk_tree_selection_select_iter(selection, &iter);
 

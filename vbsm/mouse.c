@@ -23,16 +23,19 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
 			if ((from > 0) && (mplayerAlive())){
 				// Move the player -  seeking actually needs some time to complete, 
-				// that's why we seek a second earlier and leave 1 second timeout, then pause
+				// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
+				// If seeking to first row, we might net a negative time (will crash mplayer) - be carefull
+				int new_time = from/1000 - 5;
+				if (new_time < 0) 
+					new_time = 1;
+
 				char command[255];
-				sprintf(command, "pausing_keep seek %u 2", from/1000-2);
+				sprintf(command, "pausing_keep seek %u 2", new_time);
 				writeMPlayer(command);
 
 				// Tell mplayer to load subtitles as they exist now
 				writeMPlayer("pausing_keep sub_remove");
-				char fileNameEscaped[1024];
-				escapeFileName(&config.common.export_filename[0],&fileNameEscaped[0]);
-				sprintf(command, "pausing_keep sub_load %s", &fileNameEscaped[0]);
+				sprintf(command, "pausing_keep sub_load %s", &config.vbsm.mplayerSubFileName[0]);
 				writeMPlayer(command);
 
 // This *should* normally work; 

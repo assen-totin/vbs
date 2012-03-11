@@ -101,11 +101,16 @@ int main (int argc, char **argv){
 	config.vbsm.mplayer_pid = 0;
 	config.common.init_timestamp = time(NULL);
 
-	// Create temporary file (GTK is buggy or GCC?)
-	sprintf(config.vbsm.tmpFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(config.vbsm.tmpFileName);
-	if (mkstempRes == -1) {error_handler("main","failed to create temporary file name",1 );}
-	config.vbsm.tmpFile = fopen(config.vbsm.tmpFileName,"w");
+	// Create log file
+	sprintf(config.vbsm.logFileName, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
+	int mkstempRes = mkstemp(config.vbsm.logFileName);
+	if (mkstempRes == -1) {error_handler("main","failed to create log file name",1 );}
+	config.vbsm.logFile = fopen(config.vbsm.logFileName, "w");
+
+	// Create tmp subtites file for mplayer
+	sprintf(config.vbsm.mplayerSubFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
+	mkstempRes = mkstemp(config.vbsm.mplayerSubFileName);
+	if (mkstempRes == -1) {error_handler("main","failed to create temporary sub file name",1 );}
 
 	// GTK Init
 	gtk_init (&argc, &argv);

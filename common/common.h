@@ -59,8 +59,9 @@ struct struct_vbsm {
         GtkWidget *progress;
         FILE *pipeWrite;
         FILE *pipeRead;
-        char tmpFileName[255];
-	FILE *tmpFile;
+        char logFileName[255];
+	FILE *logFile;
+	char mplayerSubFileName[255];
 };
 
 

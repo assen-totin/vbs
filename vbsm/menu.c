@@ -158,8 +158,10 @@ static void quitDialogOK( GtkWidget *widget, gpointer data ){
 		waitpid(-1, &status, 0);
 	}
 
-	fclose(config.vbsm.tmpFile);
-	unlink(config.vbsm.tmpFileName);
+	fclose(config.vbsm.logFile);
+	unlink(config.vbsm.logFileName);
+
+        unlink(config.vbsm.mplayerSubFileName);
 
 	gtk_main_quit();
 }
