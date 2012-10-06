@@ -20,6 +20,8 @@ SBINDIR=$exec_prefix/sbin
 AC_SUBST([SBINDIR])
 DATAROOTDIR=$prefix/share
 AC_SUBST([DATAROOTDIR])
+IMGDIR=$DATAROOTDIR/icons
+AC_SUBST([IMGDIR])
 
 # Checks for programs.
 AC_PROG_CC

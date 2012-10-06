@@ -37,8 +37,8 @@ $(TARGET): cfg.c error.c network.c util.c menu.c
 	$(CC) $(CFLAGS) $(INCLUDES) menu.c
 
 install:
-	@if !(test -e $(IMGDIR)) ; then mkdir -p $(IMGDIR); fi
-	cp -f ../common/vbs.png  $(IMGDIR)
+	test -z $(IMGDIR) || mkdir -p $(IMGDIR)
+	cp -f vbs.png  $(IMGDIR)
 
 uninstall:
 	rm -f $(IMGDIR)/vbs.png
