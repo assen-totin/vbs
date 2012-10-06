@@ -3,6 +3,8 @@
 
 AC_PREREQ([2.66])
 AC_INIT([VBS], [2.0.0], [assen.totin@gmail.com])
+ORIG_CMDLINE_ARGS=$@
+AC_SUBST([ORIG_CMDLINE_ARGS])
 AC_CONFIG_HEADERS([config.h])
 
 # prefix
@@ -50,9 +52,18 @@ AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makef
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
 
+# RPM spec file
+AC_CONFIG_FILES([vbs.spec])
+
 # Icons
-AC_DEFINE_UNQUOTED([VBS_ICON], ["$DATAROOTDIR/vbs/vbs.png"], [Define icons location])
+AC_DEFINE_UNQUOTED([VBS_ICON], ["$IMGDIR/vbs.png"], [Define icons location])
 
 # Grand finale
 AC_OUTPUT
+
+echo
+echo "Configuration complete."
+echo
+echo "Now, run make."
+echo
 

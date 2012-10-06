@@ -35,6 +35,7 @@ distclean:
 	rm -f Makefile
 
 install:
+	test -z $(DESTDIR)$(SBINDIR) || mkdir -p $(DESTDIR)$(SBINDIR)
 	cp -f $(TARGET) $(SBINDIR)
 
 uninstall:

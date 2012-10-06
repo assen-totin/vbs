@@ -39,7 +39,9 @@ $(TARGET): cfg.c error.c network.c util.c menu.c
 install:
 	test -z $(IMGDIR) || mkdir -p $(IMGDIR)
 	cp -f vbs.png  $(IMGDIR)
+	gtk-update-icon-cache -f -t
 
 uninstall:
 	rm -f $(IMGDIR)/vbs.png
+	gtk-update-icon-cache -f -t
 

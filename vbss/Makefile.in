@@ -32,12 +32,14 @@ distclean:
 	rm -f Makefile vbss.desktop
 
 install:
+	test -z $(DESTDIR)$(BINDIR) || mkdir -p $(DESTDIR)$(BINDIR)
 	cp -f $(TARGET) $(BINDIR)
-	cp -f vbss.desktop /usr/share/applications
+	test -z $(DESTDIR)$(DATAROOTDIR)/applications || mkdir -p $(DESTDIR)$(DATAROOTDIR)/applications
+	cp -f vbss.desktop $(DESTDIR)$(DATAROOTDIR)/applications
 
 uninstall:
 	rm -f $(TARGET) $(BINDIR)/$(TARGET)
-	rm -f /usr/share/applications/vbss.desktop
+	rm -f $(DATAROOTDIR)/applications/vbss.desktop
 
 $(TARGET): vbss.c keyboard.c
 	$(CC) $(CFLAGS) $(INCLUDES) vbss.c

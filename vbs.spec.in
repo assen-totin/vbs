@@ -1,0 +1,62 @@
+Summary: Voody Blue Subtitler suit 
+Name: vbs
+Version: @PACKAGE_VERSION@ 
+Release: 1
+Group: Applications/Multimedia
+License: GPL
+Source: http://bilbo.online.bg/~assen/vbs/vbs-@PACKAGE_VERSION@.tar.gz
+BuildRoot: /var/tmp/%{name}-buildroot
+Requires: gtk2 >= 2.2.0
+Requires: mplayer >= 1.0
+
+%description
+Voody Blue Subtitler (aka VBS) is a suit of programmes to manually
+synchronize a text file with a video stream, thus creating a subtitles file, 
+or to play back sucha file, or to stream it over the network.
+
+%prep
+# Commented out to enable building RPM from local source tree
+#%setup -q
+
+%build
+./configure @ORIG_CMDLINE_ARGS@
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT@BINDIR@
+mkdir -p $RPM_BUILD_ROOT@SBINDIR@
+mkdir -p $RPM_BUILD_ROOT@IMGDIR@
+mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/applications
+
+make install DESTDIR=$RPM_BUILD_ROOT
+
+%post
+gtk-update-icon-cache -f -t @IMGDIR@
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root)
+%doc README TODO LICENSE CHANGES AUTHOR BUGS
+
+@BINDIR@/vbsm
+@BINDIR@/vbss
+@BINDIR@/vbsc
+@SBINDIR@/vbsd
+@IMGDIR@/vbs.png
+@DATAROOTDIR@/applications/vbsm.desktop
+@DATAROOTDIR@/applications/vbss.desktop
+@DATAROOTDIR@/applications/vbsc.desktop
+
+%changelog
+* Sun Aug 27 2006 Assen Totin <assen@online.bg>
+- Initial release.
+
+* Thu Mar 1 2012 Assen Totin <assen.totin@gmail.com>
+- Release 2.0
+
+* Thu Mar 8 2012 Assen Totin <assen.totin@gmail.com>
+- Release 2.1
+
