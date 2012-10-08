@@ -68,8 +68,8 @@ struct struct_vbsm {
 	pid_t mplayer_pid;
 	FILE *mplayer_pipe_write;
 	FILE *mplayer_pipe_read;
-	GstElement *playbin2;
-	GstElement *textoverlay;
+	GstElement *gstreamer_playbin2;
+	GstElement *gstreamer_textoverlay;
 };
 
 
