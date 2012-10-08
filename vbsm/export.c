@@ -50,7 +50,8 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 	// Print next number
 	export_sub->count++;
 	fprintf(export_sub->fp_export, "%u%s", export_sub->count, &CrLf[0]);
-	fprintf(export_sub->fp_mplayer, "%u%s", export_sub->count, &CrLf[0]);
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
+		fprintf(export_sub->fp_mplayer, "%u%s", export_sub->count, &CrLf[0]);
 
 	// Calc & print times
 	char timeFrom[32], timeTo[32], timeLine[64];
@@ -59,7 +60,7 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 
 	sprintf(timeLine, "%s --> %s", timeFrom, timeTo);
 	fprintf(export_sub->fp_export, "%s%s", timeLine, &CrLf[0]);
-	if (to > 0) 
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (to > 0))
 		fprintf(export_sub->fp_mplayer, "%s%s", timeLine, &CrLf[0]);
 
 	// Convert back to non-UTF-8 encoding
@@ -75,13 +76,13 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 	// Replace | with \n
 	char line_fixed[config.common.line_size];
 	strcpy(&line_fixed[0], lineCP1251);
-	fixNewline(&line_fixed[0]);
+	fix_new_line(&line_fixed[0]);
 	fprintf(export_sub->fp_export, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
 
 	// For mplayer, only export subtitles which have been timed
-	if (to > 0) {
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) &&  (to > 0)) {
 		strcpy(&line_fixed[0], line);
-		fixNewline(&line_fixed[0]);
+		fix_new_line(&line_fixed[0]);
 		fprintf(export_sub->fp_mplayer, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
 	}
 
@@ -97,14 +98,19 @@ void export_subtitles() {
 
 	fp_export = fopen(config.common.export_filename, "w");
 	if (!fp_export) 
-		error_handler("exportSubtitles", "failed to export subtitles", 1);
+		error_handler("export_subtitles", "failed to export subtitles", 1);
 
-	fp_mplayer = fopen(config.vbsm.sub_file_name, "w");
-	if (!fp_mplayer)
-		error_handler("exportSubtitles", "failed to write mplayer subtitles", 1);
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+		fp_mplayer = fopen(config.vbsm.sub_file_name, "w");
+		if (!fp_mplayer)
+			error_handler("export_subtitles", "failed to write mplayer subtitles", 1);
+	}
 
 	export_sub_val.fp_export = fp_export;
-	export_sub_val.fp_mplayer = fp_mplayer;
+
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
+		export_sub_val.fp_mplayer = fp_mplayer;
+
 	export_sub_val.count = 0;
 
 	export_sub = &export_sub_val;
@@ -113,7 +119,9 @@ void export_subtitles() {
 	gtk_tree_model_foreach(model, export_subtitles_srt, export_sub);
 
 	int retval = fclose(fp_export);
-	retval = fclose(fp_mplayer);
+
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
+		retval = fclose(fp_mplayer);
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
 	fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);

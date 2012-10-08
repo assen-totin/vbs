@@ -78,11 +78,25 @@ int main (int argc, char **argv){
 	config.vbsm.progress = progress;
 
 	// Root window
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
-	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
-	gtk_widget_set_size_request (window, 500, 400);
-	g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
+	int window_width = 500, window_height = 400;
+        GdkScreen *gdk_screen = gdk_screen_get_default();
+        int screen_width = gdk_screen_get_width(gdk_screen);
+        int screen_height = gdk_screen_get_height(gdk_screen);
+
+        window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
+        gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
+        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+                GdkScreen *gdk_screen = gdk_screen_get_default();
+		if (gdk_screen) {
+	                int screen_width = gdk_screen_get_width(gdk_screen);
+        	        int screen_height = gdk_screen_get_height(gdk_screen);
+	                window_width = (int) (0.8 * screen_width);
+                	window_height = (int) (0.9 * screen_height);
+		}
+        }
+        gtk_widget_set_size_request (window, window_width, window_height);
+        g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
 
 	// Link double-click event
 	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, window);

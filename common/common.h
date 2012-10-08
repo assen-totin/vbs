@@ -79,8 +79,8 @@ struct struct_vbsm {
 	GtkWidget *mplayer_view;
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
-
         GtkWidget *gstreamer_widget_player;
+	char gstreamer_video_sink[1024];
 };
 
 

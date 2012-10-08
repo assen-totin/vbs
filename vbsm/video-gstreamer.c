@@ -10,6 +10,7 @@
 
 #include "../common/common.h"
 #include "video-gstreamer.h"
+#include <gdk/gdkx.h>
 
 static GstSeekFlags seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
 
@@ -31,7 +32,7 @@ int gstreamer_query_position() {
         if (format != GST_FORMAT_TIME)
                 return -1;
 
-        return (int)cur/1000000;
+        return (int)(cur/1000000);
 }
 
 int gstreamer_query_duration() {
@@ -42,7 +43,7 @@ int gstreamer_query_duration() {
         if (format != GST_FORMAT_TIME)
                 return -1;
 
-        return (int) cur/1000000;
+        return (int)(cur/1000000);
 }
 
 
@@ -56,16 +57,17 @@ void gstreamer_play() {
 }
 
 
+/*
 void gstreamer_load_video(char file_name[1024]) {
 	char uri[2048];
 
-	sprintf(&uri[0], "file://%s", &file_name[1024]);
+	sprintf(&uri[0], "file://%s", &file_name[0]);
 
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", uri, NULL);
 
 	gstreamer_pause();
 }
-
+*/
 
 void gstreamer_sub_clear() {
         g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
@@ -75,39 +77,52 @@ void gstreamer_sub_clear() {
 }
 
 void gstreamer_sub_set(char sub[1024]) {
+        // Replace | with \n
+        fix_new_line(&sub[0]);
+        
         g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
                         "text", &sub[0],
                         NULL);
-
 }
 
-void gstreamer_init() {
+void gstreamer_init(char file_name[1024]) {
+	gst_init(0, NULL);
+
+	char uri[2048];
+	sprintf(&uri[0], "file://%s", &file_name[0]);
+
         config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
 
-        GstElement *videosink = gst_element_factory_make ("ximagesink", "videosink");
+	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", &uri[0], NULL);
+
+        GstElement *videosink = gst_element_factory_make (&config.vbsm.gstreamer_video_sink[0], "videosink");
 
         config.vbsm.gstreamer_textoverlay = gst_element_factory_make("textoverlay", "textoverlay");
 
         GstElement *mybin = gst_bin_new("mybin");
         gst_bin_add (GST_BIN (mybin), config.vbsm.gstreamer_textoverlay);
+
         GstPad *pad = gst_element_get_pad(config.vbsm.gstreamer_textoverlay, "video_sink");
         gst_element_add_pad(mybin, gst_ghost_pad_new("sink", pad));
+
         gst_bin_add (GST_BIN (mybin), videosink);
 
         g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
                         "halign", "center",
                         "valign", "bottom",
-                        "font-desc", "Sans Bold 16",
+                        "font-desc", "Sans Bold 14",
                         "text", " ",
                         NULL);
-
+	/*
         GstBus *bus;
         bus = gst_pipeline_get_bus (GST_PIPELINE (config.vbsm.gstreamer_playbin2));
         gst_bus_add_watch (bus, bus_cb, NULL);
         gst_object_unref (bus);
-        
+        */
+
+	// Merge with existing widget
         if (GST_IS_X_OVERLAY (videosink)) {
-                gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GPOINTER_TO_INT (config.vbsm.gstreamer_widget_player));
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XWINDOW (config.vbsm.gstreamer_widget_player->window));
         }
 
         gst_element_link_pads(config.vbsm.gstreamer_textoverlay, "src", videosink, "sink");

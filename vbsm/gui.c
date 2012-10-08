@@ -86,16 +86,17 @@ int progress_bar_update() {
 		}
 	}
 
-	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
-	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)){
-		GtkTreeSelection *selection;
-		GtkTreeModel     *model;
-		GtkTreeIter       iter;
-		gint from, to, local;
+        GtkTreeSelection *selection;
+        GtkTreeModel *model;
+        GtkTreeIter iter;
+        gint from, to, local;
+	gchar *line;
 
+	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
+	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
+			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, COL_LINE, &line, -1);
 
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 				if (mplayer_is_alive())
@@ -108,13 +109,21 @@ int progress_bar_update() {
 
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 				local = gstreamer_query_position();
-				if (local == GST_CLOCK_TIME_NONE) {
+				if (local == -1) {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
 			}
 
-			if ((to > from) && (to < local)) {
+			// If using GStreamer, show the sub while inside
+                        if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
+                                char line3[1024];
+                                strcpy(&line3[0], line);
+                                gstreamer_sub_set(line3);
+                         }
+
+			// If out of the sub, move the list to next
+			if ((to > from) && (local > to)) {
 				if (gtk_tree_model_iter_next(model, &iter)) {
 					// Move to next line
 					gtk_tree_selection_select_iter(selection, &iter);
@@ -122,6 +131,10 @@ int progress_bar_update() {
 					// Scroll down
 					GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
 					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(config.vbsm.mplayer_view), path, NULL, TRUE, 0.5, 0);
+
+				}
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+					gstreamer_sub_clear();
 				}
 			}
 		}

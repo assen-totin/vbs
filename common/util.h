@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void fixNewline(char *buffer);
+void fix_new_line(char *buffer);
 
 void split_path(char *path, char *dir, char *file);
 
