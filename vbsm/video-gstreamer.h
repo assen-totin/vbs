@@ -19,7 +19,8 @@ void gstreamer_pause();
 void gstreamer_play();
 void gstreamer_seek (gint);
 void gstreamer_seek_absolute (guint64);
-guint64 gstreamer_query_position();
-guint64 gstreamer_query_duration();
-
+int gstreamer_query_position();
+int gstreamer_query_duration();
+void gstreamer_sub_clear();
+void gstreamer_set_clear(char sub[1024]);
 

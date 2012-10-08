@@ -10,17 +10,17 @@
 
 #include "../common/common.h"
 
-void gstreamer_seek (gint value) {
+void gstreamer_seek (int value) {
         gst_element_seek (config.vbsm.gstreamer_playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_CUR, value * GST_SECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
 }
 
 
-void gstreamer_seek_absolute (guint64 value) {
-        gst_element_seek (playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_SET, value, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+void gstreamer_seek_absolute (int value) {
+        gst_element_seek (config.vbsm.gstreamer_playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_SET, value * GST_MSECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
 }
 
 
-guint64 gstreamer_query_position () {
+int gstreamer_query_position() {
         GstFormat format = GST_FORMAT_TIME;
         gint64 cur;
 
@@ -28,10 +28,10 @@ guint64 gstreamer_query_position () {
         if (format != GST_FORMAT_TIME)
                 return GST_CLOCK_TIME_NONE;
 
-        return cur;
+        return int(cur/1000000);
 }
 
-guint64 gstreamer_query_duration () {
+int gstreamer_query_duration() {
         GstFormat format = GST_FORMAT_TIME;
         gint64 cur;
 
@@ -39,7 +39,7 @@ guint64 gstreamer_query_duration () {
         if (format != GST_FORMAT_TIME)
                 return GST_CLOCK_TIME_NONE;
 
-        return cur;
+        return int(cur/1000000);
 }
 
 
@@ -61,5 +61,20 @@ void gstreamer_load_video(char file_name[1024]) {
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", uri, NULL);
 
 	gstreamer_pause();
+}
+
+
+void gstreamer_sub_clear() {
+        g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
+                        "text", " ",
+                        NULL);
+
+}
+
+void gstreamer_sub_set(char[1024] sub) {
+        g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
+                        "text", &sub[0],
+                        NULL);
+
 }
 

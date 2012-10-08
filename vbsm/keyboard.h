@@ -8,11 +8,8 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void view_onBPressed ();
-
-void view_onMPressed ();
-
-void view_onSpacePressed (GtkWidget *window);
-
-void view_onKeyPressed (GtkTreeView *view, GdkEventKey *event, gpointer counter);
+void on_pressed_b();
+void on_pressed_m();
+void on_pressed_space (GtkWidget *window);
+void on_pressed_key(GtkTreeView *view, GdkEventKey *event, gpointer counter);
 

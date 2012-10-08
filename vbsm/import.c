@@ -207,7 +207,7 @@ void importText(char *importTextFile, int importFlag) {
 	gtk_tree_selection_select_iter(selection, &iter);
 
 	config.vbsm.have_loaded_text = true;
-	exportSubtitles();
+	export_subtitles();
 
 }
 

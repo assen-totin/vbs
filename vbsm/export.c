@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-void convertTimeSrt(unsigned int theTime, char *res, int flag) {
+void convert_time_srt(unsigned int theTime, char *res, int flag) {
 
 	div_t qH = div(theTime, 3600000);
 	div_t qM = div(qH.rem, 60000);
@@ -33,7 +33,7 @@ void convertTimeSrt(unsigned int theTime, char *res, int flag) {
 }
 
 
-gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer userdata) {
+gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer userdata) {
 	struct exportSub *export_sub = userdata;
 	
 	gchar *line;
@@ -54,8 +54,8 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 
 	// Calc & print times
 	char timeFrom[32], timeTo[32], timeLine[64];
-	convertTimeSrt(from, &timeFrom[0], 1);
-	convertTimeSrt(to, &timeTo[0], 1);
+	convert_time_srt(from, &timeFrom[0], 1);
+	convert_time_srt(to, &timeTo[0], 1);
 
 	sprintf(timeLine, "%s --> %s", timeFrom, timeTo);
 	fprintf(export_sub->fp_export, "%s%s", timeLine, &CrLf[0]);
@@ -90,7 +90,7 @@ gboolean exportSubtitlesSrt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 }
 
 
-void exportSubtitles() {
+void export_subtitles() {
 	struct exportSub export_sub_val, *export_sub;
 	FILE *fp_export, *fp_mplayer;
 	GtkTreeModel *model;
@@ -110,7 +110,7 @@ void exportSubtitles() {
 	export_sub = &export_sub_val;
 
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-	gtk_tree_model_foreach(model, exportSubtitlesSrt, export_sub);
+	gtk_tree_model_foreach(model, export_subtitles_srt, export_sub);
 
 	int retval = fclose(fp_export);
 	retval = fclose(fp_mplayer);

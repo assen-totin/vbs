@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-int progressBarUpdate();
+int progress_bar_update();
 
 void warnDialog(GtkWidget *window, char warning[1024]);
 

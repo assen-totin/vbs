@@ -137,10 +137,10 @@ int main (int argc, char **argv){
 	g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
 
 	// Link double-click event
-	g_signal_connect(view, "row-activated", (GCallback) view_onRowActivated, window);
+	g_signal_connect(view, "row-activated", (GCallback) on_clicked_row, window);
 
 	// Key events
-	g_signal_connect(view, "key_press_event", (GCallback) view_onKeyPressed, window);
+	g_signal_connect(view, "key_press_event", (GCallback) on_pressed_key, window);
 
 	// Menu
 	can_recv_from_net = 0;
@@ -161,7 +161,7 @@ int main (int argc, char **argv){
 	gtk_widget_show_all(window);
 
 	// Progress bar check & update function
-	g_timeout_add(1000, (GtkFunction) progressBarUpdate, NULL);
+	g_timeout_add(1000, (GtkFunction) progress_bar_update, NULL);
 
 	gtk_main();
 

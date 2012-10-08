@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-int progressBarUpdate() {
+int progress_bar_update() {
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
 		time_t curr_time = time(NULL);
@@ -35,12 +35,24 @@ int progressBarUpdate() {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
-			if (mplayer_is_alive())
-				local = mplayer_get_time_pos(2);
-			else {
-				time_t curr_time = time(NULL);
-				local = 1000*(curr_time - config.common.init_timestamp);
+
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+				if (mplayer_is_alive())
+					local = mplayer_get_time_pos(2);
+				else {
+					time_t curr_time = time(NULL);
+					local = 1000*(curr_time - config.common.init_timestamp);
+				}
 			}
+
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				local = gstreamer_query_position();
+				if (local == GST_CLOCK_TIME_NONE) {
+					time_t curr_time = time(NULL);
+					local = 1000*(curr_time - config.common.init_timestamp);
+				}
+			}
+
 			if ((to > from) && (to < local)) {
 				if (gtk_tree_model_iter_next(model, &iter)) {
 					// Move to next line

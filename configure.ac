@@ -34,6 +34,7 @@ if test $CHECK_MPLAYER = "no" ; then
 else
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
 fi
+AC_SUBST([HAVE_MPLAYER])
 
 # FIXME: Find a way to get rid of the GStreamer version in package name?
 PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10],
@@ -41,8 +42,14 @@ PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10],
 	[AC_MSG_ERROR(["*** GStreamer not found. vbsm Won't be able to use it."])]
 
 ])
+AC_SUBST([HAVE_GSTREAMER])
 
-PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10])
+HAVE_MPLAYER_GSTREAMER="0"
+if test $HAVE_MPLAYER = "1"; then
+	if test $HAVE_GSTREAMER = "1"; then
+	HAVE_MPLAYER_GSTREAMER="1"
+fi
+AC_SUBST([HAVE_MPLAYER_GSTREAMER])
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lm':

@@ -37,22 +37,22 @@ int mplayer_get_time_pos(int flag) {
 		mplayer_pipe_write("get_time_pos");
 
 	// Read its answer -  Mplayer sends a lot of other stuff, jump over it
-	char line[256], *partOne, *partTwo;
-	double doubleTwo;
-	bool goOn = true;
+	char line[256], *part_one, *part_two;
+	double double_two;
+	bool go_on = true;
 	int res;
 
-	while (goOn && (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read))) {
+	while (go_on && (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read))) {
 		if (strstr(&line[0],"ANS_TIME_POSITION")) {
 			// This is our line!
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
 			// Split by the "=" sign
-			partOne = strtok(&line[0], "=");
-			partTwo = strtok(NULL,"=");
-			doubleTwo = strtod(partTwo, NULL);
-			doubleTwo = 1000 * doubleTwo;
+			part_one = strtok(&line[0], "=");
+			part_two = strtok(NULL,"=");
+			double_two = strtod(part_two, NULL);
+			double_two = 1000 * double_two;
 			res = (int)doubleTwo;
-			goOn = false;
+			go_on = false;
 		}
 	}
 	return res;
