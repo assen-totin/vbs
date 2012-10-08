@@ -55,6 +55,13 @@ void on_pressed_b () {
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
+			// If using GStreamer, show the sub
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				char[1024] line3;
+				strcpy(&line3[0], line);
+				gstreamer_sub_set(line3);
+			}
+
 			g_free(line);
 
 			fprintf(config.vbsm.log_file_fp, "Processed B key.\n");
@@ -86,6 +93,8 @@ void on_pressed_m () {
                                         time_t curr_time = time(NULL);
                                         new_from = 1000*(curr_time - config.common.init_timestamp);
                                 }
+				// Clear the sub
+				gstreamer_sub_clear();
                         }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
