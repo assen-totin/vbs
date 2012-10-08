@@ -48,20 +48,28 @@ enum {
         VBS_IMPORT_FILTER_SRT
 };
 
+enum {
+	VBSM_BACKEND_MPLAYER = 0,
+	VBSM_BACKEND_GSTREAMER
+};
+
 struct struct_vbsm {
         bool have_loaded_text;
         guint status_context_id;
-        pid_t mplayer_pid;
         short unsigned progress_seconds;
         GtkWidget *menu_widget;
 	GtkWidget *menu_widget2;
         GtkWidget *status;
         GtkWidget *progress;
-        FILE *pipeWrite;
-        FILE *pipeRead;
-        char logFileName[255];
-	FILE *logFile;
-	char mplayerSubFileName[255];
+        char log_file_name[255];
+	FILE *log_file_fp;
+	char sub_file_name[255];
+	int unsigned video_backend;
+	pid_t mplayer_pid;
+	FILE *mplayer_pipe_write;
+	FILE *mplayer_pipe_read;
+	GstElement *playbin2;
+	GstElement *textoverlay;
 };
 
 
@@ -150,7 +158,7 @@ int can_recv_from_net;
 #include "../vbsm/mouse.h"
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
-#include "../vbsm/video.h"
+#include "../vbsm/video-mplayer.h"
 #include "../vbsm/menu.h"
 
 #include "../vbsc/vbsc.h"

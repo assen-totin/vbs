@@ -10,18 +10,6 @@
 
 #include "../common/common.h"
 
-bool mplayerAlive() {
-	if (!config.vbsm.pipeWrite) 
-		return false;
-	if (config.vbsm.mplayer_pid == 0) 
-		return false;
-	int status;
-	pid_t cpid = waitpid(-1, &status, WNOHANG);
-	if (cpid == config.vbsm.mplayer_pid) 
-		return false;
-	return true;
-}
-
 void formatCellFrom(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
 	gint from;
 	gchar res[32];
@@ -108,8 +96,8 @@ int main (int argc, char **argv){
 	config.vbsm.logFile = fopen(config.vbsm.logFileName, "w");
 
 	// Create tmp subtites file for mplayer
-	sprintf(config.vbsm.mplayerSubFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-	mkstempRes = mkstemp(config.vbsm.mplayerSubFileName);
+	sprintf(config.vbsm.sub_file_name, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
+	mkstempRes = mkstemp(config.vbsm.sub_file_name);
 	if (mkstempRes == -1) {error_handler("main","failed to create temporary sub file name",1 );}
 
 	// GTK Init

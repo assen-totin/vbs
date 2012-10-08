@@ -21,7 +21,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
-			if ((from > 0) && (mplayerAlive())){
+			if ((from > 0) && (mplayer_is_alive())){
 				// Move the player -  seeking actually needs some time to complete, 
 				// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
 				// If seeking to first row, we might net a negative time (will crash mplayer) - be carefull
@@ -31,12 +31,12 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 
 				char command[255];
 				sprintf(command, "pausing_keep seek %u 2", new_time);
-				writeMPlayer(command);
+				mplayer_pipe_write(command);
 
 				// Tell mplayer to load subtitles as they exist now
-				writeMPlayer("pausing_keep sub_remove");
-				sprintf(command, "pausing_keep sub_load %s", &config.vbsm.mplayerSubFileName[0]);
-				writeMPlayer(command);
+				mplayer_pipe_write("pausing_keep sub_remove");
+				sprintf(command, "pausing_keep sub_load %s", &config.vbsm.sub_file_name[0]);
+				mplayer_pipe_write(command);
 
 // This *should* normally work; 
 // However, my mplayer crashes with "signal 11 in sub_find" when executing "sub_select"
@@ -45,7 +45,7 @@ void view_onRowActivated (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColum
 //    subNum = getSubNum();
 				subNum = 1;
 				sprintf(command, "pausing_keep sub_select %u", subNum);
-				writeMPlayer(command);
+				mplayer_pipe_write(command);
 			}
 		}
 	}

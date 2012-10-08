@@ -99,7 +99,7 @@ void exportSubtitles() {
 	if (!fp_export) 
 		error_handler("exportSubtitles", "failed to export subtitles", 1);
 
-	fp_mplayer = fopen(config.vbsm.mplayerSubFileName, "w");
+	fp_mplayer = fopen(config.vbsm.sub_file_name, "w");
 	if (!fp_mplayer)
 		error_handler("exportSubtitles", "failed to write mplayer subtitles", 1);
 
@@ -116,7 +116,7 @@ void exportSubtitles() {
 	retval = fclose(fp_mplayer);
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-	fprintf(config.vbsm.logFile, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
+	fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
 }
 
 

@@ -19,8 +19,8 @@ void view_onBPressed () {
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
-			if (mplayerAlive())
-				new_from = getTimePos(2);
+			if (mplayer_is_alive())
+				new_from = mplayer_get_time_pos(2);
 			else {
 				time_t curr_time = time(NULL);
 				new_from = 1000*(curr_time - config.common.init_timestamp);
@@ -48,7 +48,7 @@ void view_onBPressed () {
 
 			g_free(line);
 
-			fprintf(config.vbsm.logFile, "Processed B key.\n");
+			fprintf(config.vbsm.log_file_fp, "Processed B key.\n");
 		}
 	}
 }
@@ -63,8 +63,8 @@ void view_onMPressed () {
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)){
-			if (mplayerAlive())
-				new_to = getTimePos(2);
+			if (mplayer_is_alive())
+				new_to = mplayer_get_time_pos(2);
 			else {
 				time_t curr_time = time(NULL);
 				new_to = 1000*(curr_time - config.common.init_timestamp);
@@ -114,8 +114,8 @@ void view_onSpacePressed (GtkWidget *window) {
 		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 
 		// Pause the player
-		if (mplayerAlive()) 
-			writeMPlayer("pause");
+		if (mplayer_is_alive()) 
+			mplayer_pipe_write("pause");
 	}
 	else if (config.common.running == FALSE) {
 		if (haveLoadedText(window)) {
@@ -123,8 +123,8 @@ void view_onSpacePressed (GtkWidget *window) {
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 
 			// Start the player
-			if (mplayerAlive())
-				writeMPlayer("pause");
+			if (mplayer_is_alive())
+				mplayer_pipe_write("pause");
 		}
 	}
 }

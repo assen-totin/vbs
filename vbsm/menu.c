@@ -68,7 +68,7 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	char videoFile[1024];
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.", 1);}
 	sprintf(videoFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	loadVideo(videoFile);
+	mplayer_load_video(videoFile);
 }
 
 
@@ -152,16 +152,16 @@ static void quitDialogOK( GtkWidget *widget, gpointer data ){
 	GtkWidget *quitDialog = data;
 	gtk_widget_destroy(quitDialog);
 
-	if (mplayerAlive()) {
-		writeMPlayer("quit");
+	if (mplayer_is_alive()) {
+		mplayer_pipe_write("quit");
 		int status;
 		waitpid(-1, &status, 0);
 	}
 
-	fclose(config.vbsm.logFile);
-	unlink(config.vbsm.logFileName);
+	fclose(config.vbsm.log_file_fp);
+	unlink(config.vbsm.log_file_name);
 
-        unlink(config.vbsm.mplayerSubFileName);
+        unlink(config.vbsm.sub_file_name);
 
 	gtk_main_quit();
 }

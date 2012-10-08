@@ -35,8 +35,8 @@ int progressBarUpdate() {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
-			if (mplayerAlive())
-				local = getTimePos(2);
+			if (mplayer_is_alive())
+				local = mplayer_get_time_pos(2);
 			else {
 				time_t curr_time = time(NULL);
 				local = 1000*(curr_time - config.common.init_timestamp);

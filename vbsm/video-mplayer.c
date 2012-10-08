@@ -10,18 +10,31 @@
 
 #include "../common/common.h"
 
-void writeMPlayer(char *command) {
-	fprintf(config.vbsm.pipeWrite, "%s\n", command);
-	fflush(config.vbsm.pipeWrite);
+bool mplayer_is_alive() {
+        if (!config.vbsm.mplayer_pipe_write)
+                return false;
+        if (config.vbsm.mplayer_pid == 0)
+                return false;
+        int status;
+        pid_t cpid = waitpid(-1, &status, WNOHANG);
+        if (cpid == config.vbsm.mplayer_pid)
+                return false;
+        return true;
 }
 
 
-int getTimePos(int flag) {
+void mplayer_pipe_write(char *command) {
+	fprintf(config.vbsm.mplayer_pipe_write, "%s\n", command);
+	fflush(config.vbsm.mplayer_pipe_write);
+}
+
+
+int mplayer_get_time_pos(int flag) {
 	// Ask mplayer about exact position, read it
 	if (flag == 1) 
-		writeMPlayer("pausing_keep get_time_pos");
+		mplayer_pipe_write("pausing_keep get_time_pos");
 	else if (flag == 2) 
-		writeMPlayer("get_time_pos");
+		mplayer_pipe_write("get_time_pos");
 
 	// Read its answer -  Mplayer sends a lot of other stuff, jump over it
 	char line[256], *partOne, *partTwo;
@@ -29,7 +42,7 @@ int getTimePos(int flag) {
 	bool goOn = true;
 	int res;
 
-	while (goOn && (fgets(&line[0], 255, config.vbsm.pipeRead))) {
+	while (goOn && (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read))) {
 		if (strstr(&line[0],"ANS_TIME_POSITION")) {
 			// This is our line!
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
@@ -55,7 +68,7 @@ int getSubNum() {
 	bool goOn = true;
 	int res;
 
-	while (goOn && (fgets(&line[0], 255, config.vbsm.pipeRead))) {
+	while (goOn && (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read))) {
 		if (strstr(&line[0],"Added subtitle file")) {
 			// This is our line! Split by the ")" sign
 			partOne = strtok(&line[0], ")");
@@ -71,20 +84,20 @@ int getSubNum() {
 */
 
 
-void *loadVideo(char fileName[1024]) {
+void *mplayer_load_video(char fileName[1024]) {
 	char popenCmd[2048];
 	memset(&popenCmd[0],'\0', sizeof(popenCmd));
 
 	if (config.vbsm.mplayer_pid > 0) {
-		if (mplayerAlive()) {
+		if (mplayer_is_alive()) {
 			sprintf(popenCmd, "load %s", &fileName[0]); 
-			writeMPlayer(popenCmd);
+			mplayer_pipe_write(popenCmd);
 		}
 
 		else {
 			config.vbsm.mplayer_pid = 0;
-			fclose(config.vbsm.pipeRead);
-			fclose(config.vbsm.pipeWrite);
+			fclose(config.vbsm.mplayer_pipe_read);
+			fclose(config.vbsm.mplayer_pipe_write);
 		}
 	}
 	
@@ -93,11 +106,11 @@ void *loadVideo(char fileName[1024]) {
 		pid_t cpid;
 
 		// Pipes
-		if (pipe(readPipeFD) == -1) { error_handler("loadVideo","read pipe creation failed", 1);}
-		if (pipe(writePipeFD) == -1) { error_handler("loadVideo","write pipe creation failed", 1);}
+		if (pipe(readPipeFD) == -1) { error_handler("mplayer_load_video","read pipe creation failed", 1);}
+		if (pipe(writePipeFD) == -1) { error_handler("mplayer_load_video","write pipe creation failed", 1);}
 
 		cpid = fork();
-		if (cpid == -1) {error_handler("loadVideo","fork failed", 1);}
+		if (cpid == -1) {error_handler("mplayer_load_video","fork failed", 1);}
 
 		// Child
 		if (cpid == 0) { 
@@ -117,11 +130,11 @@ void *loadVideo(char fileName[1024]) {
 		close(readPipeFD[1]);          /* Close unused write end */
 		close(writePipeFD[0]);         /* Close unused read end */
 
-		config.vbsm.pipeRead = fdopen(readPipeFD[0], "r");
-		config.vbsm.pipeWrite = fdopen(writePipeFD[1], "w");
+		config.vbsm.mplayer_pipe_read = fdopen(readPipeFD[0], "r");
+		config.vbsm.mplayer_pipe_write = fdopen(writePipeFD[1], "w");
 		config.vbsm.mplayer_pid = cpid;
 	}
 
-	writeMPlayer("pause");
+	mplayer_pipe_write("pause");
 }
 
