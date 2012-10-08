@@ -51,7 +51,7 @@ int mplayer_get_time_pos(int flag) {
 			part_two = strtok(NULL,"=");
 			double_two = strtod(part_two, NULL);
 			double_two = 1000 * double_two;
-			res = (int)doubleTwo;
+			res = (int)double_two;
 			go_on = false;
 		}
 	}

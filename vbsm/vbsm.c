@@ -30,10 +30,10 @@ int main (int argc, char **argv){
 	config.common.init_timestamp = time(NULL);
 
 	// Create log file
-	sprintf(config.vbsm.logFileName, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(config.vbsm.logFileName);
+	sprintf(config.vbsm.log_file_name, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
+	int mkstempRes = mkstemp(config.vbsm.log_file_name);
 	if (mkstempRes == -1) {error_handler("main","failed to create log file name",1 );}
-	config.vbsm.logFile = fopen(config.vbsm.logFileName, "w");
+	config.vbsm.log_file_fp = fopen(config.vbsm.log_file_name, "w");
 
 	// Create tmp subtites file for mplayer
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
@@ -102,7 +102,7 @@ int main (int argc, char **argv){
 	gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-		gtk_box_pack_start(GTK_BOX(vbox), gstreamer_player_widget, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
 	}
 	gtk_box_pack_start(GTK_BOX(vbox), mplayer_scroll, TRUE, TRUE, 0);
 

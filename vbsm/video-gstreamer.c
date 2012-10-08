@@ -9,6 +9,9 @@
 // for details.
 
 #include "../common/common.h"
+#include "video-gstreamer.h"
+
+static GstSeekFlags seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
 
 void gstreamer_seek (int value) {
         gst_element_seek (config.vbsm.gstreamer_playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_CUR, value * GST_SECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
@@ -24,22 +27,22 @@ int gstreamer_query_position() {
         GstFormat format = GST_FORMAT_TIME;
         gint64 cur;
 
-        gst_element_query_position (playbin2, &format, &cur);
+        gst_element_query_position (config.vbsm.gstreamer_playbin2, &format, &cur);
         if (format != GST_FORMAT_TIME)
-                return GST_CLOCK_TIME_NONE;
+                return -1;
 
-        return int(cur/1000000);
+        return (int)cur/1000000;
 }
 
 int gstreamer_query_duration() {
         GstFormat format = GST_FORMAT_TIME;
         gint64 cur;
 
-        gst_element_query_duration (playbin2, &format, &cur);
+        gst_element_query_duration (config.vbsm.gstreamer_playbin2, &format, &cur);
         if (format != GST_FORMAT_TIME)
-                return GST_CLOCK_TIME_NONE;
+                return -1;
 
-        return int(cur/1000000);
+        return (int) cur/1000000;
 }
 
 
@@ -71,7 +74,7 @@ void gstreamer_sub_clear() {
 
 }
 
-void gstreamer_sub_set(char[1024] sub) {
+void gstreamer_sub_set(char sub[1024]) {
         g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
                         "text", &sub[0],
                         NULL);
@@ -113,3 +116,28 @@ void gstreamer_init() {
 
         gst_element_set_state (config.vbsm.gstreamer_playbin2, GST_STATE_PAUSED);
 }
+
+static gboolean bus_cb (GstBus *bus, GstMessage *msg, gpointer data) {
+        switch (GST_MESSAGE_TYPE (msg)) {
+                case GST_MESSAGE_EOS: {
+                        g_debug ("end-of-stream");
+                        break;
+                }
+                case GST_MESSAGE_ERROR: {
+                        gchar *debug;
+                        GError *err;
+
+                        gst_message_parse_error (msg, &err, &debug);
+                        g_free (debug);
+
+                        g_warning ("Error: %s", err->message);
+                        g_error_free (err);
+                        break;
+                }
+                default:
+                        break;
+        }
+
+        return TRUE;
+}
+

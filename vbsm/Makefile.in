@@ -18,24 +18,24 @@ TARGET = vbsm
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 LIBS=`pkg-config --cflags --libs gtk+-2.0`
 OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o ../common/menu.o
-OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o video-mplayer.o vbsm.o menu.o
+OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o vbsm.o menu.o
 ADD_LIBS = 
 
 HAVE_MPLAYER = @HAVE_MPLAYER@
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 HAVE_MPLAYER_GSTREAMER = @HAVE_MPLAYER_GSTREAMER@
 
-ifeq($(HAVE_MPLAYER),1)
+ifeq ($(HAVE_MPLAYER),1)
 	OBJS_VIDEO = video-mplayer.o
 endif
-ifeq($(HAVE_GSTREAMER),1)
+ifeq ($(HAVE_GSTREAMER),1)
 	OBJS_VIDEO = video-gstreamer.o
 	ADD_LIBS = `pkg-config --cflags --libs gstreamer-0.10`
 	ADD_INCLUDES = `pkg-config --cflags --libs gstreamer-0.10`
 endif
-ifeq($(HAVE_MPLAYER_GSTREAMER),1)
+ifeq ($(HAVE_MPLAYER_GSTREAMER),1)
 	OBJS_VIDEO = video-mplayer.o video-gstreamer.o 
-	ADD_LIBS = `pkg-config --cflags --libs gstreamer-0.10`
+	ADD_LIBS = `pkg-config --cflags --libs gstreamer-0.10 gstreamer-interfaces-0.10`
 	ADD_INCLUDES = `pkg-config --cflags --libs gstreamer-0.10`
 endif
 
@@ -59,19 +59,15 @@ uninstall:
 	rm -f $(DATAROOTDIR)/applications/vbsm.desktop
 
 $(TARGET): gui.c keyboard.c mouse.c export.c import.c video-mplayer.c video-gstreamer.c edit.c vbsm.c menu.c
-	$(CC) $(CFLAGS) $(INCLUDES) gui.c
-	$(CC) $(CFLAGS) $(INCLUDES) keyboard.c
-	$(CC) $(CFLAGS) $(INCLUDES) mouse.c
-	$(CC) $(CFLAGS) $(INCLUDES) export.c
-	$(CC) $(CFLAGS) $(INCLUDES) import.c
-	$(CC) $(CFLAGS) $(INCLUDES) edit.c
-	$(CC) $(CFLAGS) $(INCLUDES) menu.c
-	$(CC) $(CFLAGS) $(INCLUDES) vbsm.c
-	ifeq($(HAVE_MPLAYER),1)
-		$(CC) $(CFLAGS) $(INCLUDES) video-mplayer.c
-	endif
-	ifeq($(HAVE_GSTREAMER),1)
-		$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) video-gstreamer.c
-	endif
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) gui.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) keyboard.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) mouse.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) export.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) import.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) edit.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) menu.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) vbsm.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) video-mplayer.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) video-gstreamer.c
 	$(CC) -o $@ $(LIBS) $(ADD_LIBS) $(OBJS_LOCAL) $(OBJS_VIDEO) $(OBJS_REMOTE)
 

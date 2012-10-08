@@ -14,7 +14,7 @@ void format_cell_from(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTree
         gint from;
         gchar res[32];
         gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
-        convertTimeSrt(from, &res[0], 2);
+        convert_time_srt(from, &res[0], 2);
         g_object_set(renderer, "text", res, NULL);
 }
 
@@ -23,7 +23,7 @@ void format_cell_to(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeMo
         gint from;
         gchar res[32];
         gtk_tree_model_get(model, iter, COL_TO, &from, -1);
-        convertTimeSrt(from, &res[0], 2);
+        convert_time_srt(from, &res[0], 2);
         g_object_set(renderer, "text", res, NULL);
 }
 
@@ -36,7 +36,7 @@ void *create_view_and_model (void){
 
         config.vbsm.mplayer_view = gtk_tree_view_new();
 
-        store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
+        config.vbsm.mplayer_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
 
         /* --- Column #1 --- */
         renderer = gtk_cell_renderer_text_new();

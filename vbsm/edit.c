@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-void view_cellEdit(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer notUsed) {
+void cell_edit(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, gpointer notUsed) {
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;

@@ -21,6 +21,11 @@ TARGET = vbsc
 OBJS_LOCAL = vbsc.o menu.o
 OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/util.o ../common/menu.o
 
+HAVE_GSTREAMER = @HAVE_GSTREAMER@
+ifeq ($(HAVE_GSTREAMER),1)
+        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+endif
+
 all: $(TARGET)
 
 clean:
@@ -41,7 +46,7 @@ uninstall:
 	rm -f $(DATAROOTDIR)/applications/vbsc.desktop
 
 $(TARGET): vbsc.c menu.c
-	$(CC) $(CFLAGS) $(INCLUDES) vbsc.c
-	$(CC) $(CFLAGS) $(INCLUDES) menu.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) vbsc.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) menu.c
 	$(CC) -o $@ $(ADD_FLAGS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

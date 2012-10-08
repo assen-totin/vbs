@@ -29,7 +29,7 @@ void on_pressed_b () {
 			}
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 				new_from = gstreamer_query_position();
-				if (new_from == GST_CLOCK_TIME_NONE) {
+				if (new_from == -1) {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
@@ -57,7 +57,7 @@ void on_pressed_b () {
 
 			// If using GStreamer, show the sub
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-				char[1024] line3;
+				char line3[1024];
 				strcpy(&line3[0], line);
 				gstreamer_sub_set(line3);
 			}
@@ -76,7 +76,7 @@ void on_pressed_m () {
 	GtkTreeIter       iter;
 	gint new_to;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayr_view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
@@ -88,10 +88,10 @@ void on_pressed_m () {
 				}
 			}
                         else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-                                new_from = gstreamer_query_position();
-                                if (new_from == GST_CLOCK_TIME_NONE) {
+                                new_to = gstreamer_query_position();
+                                if (new_to == -1) {
                                         time_t curr_time = time(NULL);
-                                        new_from = 1000*(curr_time - config.common.init_timestamp);
+                                        new_to = 1000*(curr_time - config.common.init_timestamp);
                                 }
 				// Clear the sub
 				gstreamer_sub_clear();

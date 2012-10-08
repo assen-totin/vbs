@@ -24,6 +24,11 @@ OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/ut
 
 all: $(TARGET)
 
+HAVE_GSTREAMER = @HAVE_GSTREAMER@
+ifeq ($(HAVE_GSTREAMER),1)
+        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+endif
+
 clean:
 	rm -f $(OBJS_LOCAL) $(TARGET) vbss.desktop
 
@@ -42,7 +47,7 @@ uninstall:
 	rm -f $(DATAROOTDIR)/applications/vbss.desktop
 
 $(TARGET): vbss.c keyboard.c
-	$(CC) $(CFLAGS) $(INCLUDES) vbss.c
-	$(CC) $(CFLAGS) $(INCLUDES) keyboard.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) vbss.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) keyboard.c
 	$(CC) -o $@ $(ADD_FLAGS) $(ADD_FLAGS2) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

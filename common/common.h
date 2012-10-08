@@ -34,6 +34,13 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "../config.h"
+
+#ifdef HAVE_GSTREAMER
+        #include <gst/gst.h>
+        #include <gst/interfaces/xoverlay.h>
+#endif
+
 #define VBS_TMP_DIR "/tmp"
 
 enum {
@@ -141,8 +148,6 @@ struct configuration config;
 struct cmdl cmdl_config;
 int can_recv_from_net;
 
-#include "../config.h"
-
 #include "cfg.h"
 #include "error.h"
 #include "network.h"
@@ -161,6 +166,7 @@ int can_recv_from_net;
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
 #include "../vbsm/video-mplayer.h"
+#include "../vbsm/video-gstreamer.h"
 #include "../vbsm/menu.h"
 
 #include "../vbsc/vbsc.h"

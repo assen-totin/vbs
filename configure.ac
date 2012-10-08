@@ -28,26 +28,35 @@ AC_SUBST([IMGDIR])
 AC_PROG_CC
 
 # Check for video back-ends
+HAVE_MPLAYER="0"
 AC_CHECK_PROG([CHECK_MPLAYER],[mplayer],[yes],[no])
 if test $CHECK_MPLAYER = "no" ; then
 	AC_MSG_ERROR(["*** MPlayer not found. vbsm Won't be able to use it."])
 else
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
+	HAVE_MPLAYER="1"
 fi
 AC_SUBST([HAVE_MPLAYER])
 
 # FIXME: Find a way to get rid of the GStreamer version in package name?
+HAVE_GSTREAMER="0"
 PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10],
-	[AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])],
+	[HAVE_GSTREAMER="1"],
 	[AC_MSG_ERROR(["*** GStreamer not found. vbsm Won't be able to use it."])]
 
 ])
+if test $HAVE_GSTREAMER = "1" ; then
+	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
+fi
 AC_SUBST([HAVE_GSTREAMER])
 
+PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10])
+
 HAVE_MPLAYER_GSTREAMER="0"
-if test $HAVE_MPLAYER = "1"; then
-	if test $HAVE_GSTREAMER = "1"; then
-	HAVE_MPLAYER_GSTREAMER="1"
+if test $HAVE_MPLAYER = "1" ; then
+	if test $HAVE_GSTREAMER = "1" ; then
+		HAVE_MPLAYER_GSTREAMER="1"
+	fi
 fi
 AC_SUBST([HAVE_MPLAYER_GSTREAMER])
 
