@@ -78,3 +78,38 @@ void gstreamer_sub_set(char[1024] sub) {
 
 }
 
+void gstreamer_init() {
+        config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
+
+        GstElement *videosink = gst_element_factory_make ("ximagesink", "videosink");
+
+        config.vbsm.gstreamer_textoverlay = gst_element_factory_make("textoverlay", "textoverlay");
+
+        GstElement *mybin = gst_bin_new("mybin");
+        gst_bin_add (GST_BIN (mybin), config.vbsm.gstreamer_textoverlay);
+        GstPad *pad = gst_element_get_pad(config.vbsm.gstreamer_textoverlay, "video_sink");
+        gst_element_add_pad(mybin, gst_ghost_pad_new("sink", pad));
+        gst_bin_add (GST_BIN (mybin), videosink);
+
+        g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
+                        "halign", "center",
+                        "valign", "bottom",
+                        "font-desc", "Sans Bold 16",
+                        "text", " ",
+                        NULL);
+
+        GstBus *bus;
+        bus = gst_pipeline_get_bus (GST_PIPELINE (config.vbsm.gstreamer_playbin2));
+        gst_bus_add_watch (bus, bus_cb, NULL);
+        gst_object_unref (bus);
+        
+        if (GST_IS_X_OVERLAY (videosink)) {
+                gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GPOINTER_TO_INT (config.vbsm.gstreamer_widget_player));
+        }
+
+        gst_element_link_pads(config.vbsm.gstreamer_textoverlay, "src", videosink, "sink");
+
+        g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "video-sink", mybin, NULL);
+
+        gst_element_set_state (config.vbsm.gstreamer_playbin2, GST_STATE_PAUSED);
+}

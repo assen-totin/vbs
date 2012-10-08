@@ -10,6 +10,67 @@
 
 #include "../common/common.h"
 
+void format_cell_from(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
+        gint from;
+        gchar res[32];
+        gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
+        convertTimeSrt(from, &res[0], 2);
+        g_object_set(renderer, "text", res, NULL);
+}
+
+
+void format_cell_to(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
+        gint from;
+        gchar res[32];
+        gtk_tree_model_get(model, iter, COL_TO, &from, -1);
+        convertTimeSrt(from, &res[0], 2);
+        g_object_set(renderer, "text", res, NULL);
+}
+
+
+void *create_view_and_model (void){
+        GtkCellRenderer     *renderer;
+        GtkTreeModel        *model;
+        GtkTreeIter    iter;
+        GtkTreeViewColumn *column;
+
+        config.vbsm.mplayer_view = gtk_tree_view_new();
+
+        store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
+
+        /* --- Column #1 --- */
+        renderer = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.mplayer_view), -1, "From", renderer, "text", COL_FROM, NULL);
+        column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.mplayer_view), 0);
+        gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_from, NULL, NULL);
+
+        /* --- Column #2 --- */
+        renderer = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.mplayer_view), -1, "To", renderer, "text", COL_TO, NULL);
+        column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.mplayer_view), 1);
+        gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_to, NULL, NULL);
+
+        /* --- Column #3 --- */
+        renderer = gtk_cell_renderer_text_new();
+        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.mplayer_view), -1, "Text", renderer, "text", COL_LINE, NULL);
+
+        // Editable cells
+        g_object_set(renderer, "editable", TRUE, NULL);
+        g_signal_connect(renderer, "edited", (GCallback) cell_edit, config.vbsm.mplayer_view);
+        
+        gtk_list_store_append (config.vbsm.mplayer_store, &iter);
+        gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+        
+        model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
+        gtk_tree_view_set_model (GTK_TREE_VIEW (config.vbsm.mplayer_view), model);
+
+        /* The tree view has acquired its own reference to the
+         *  model, so we can drop ours. That way the model will
+         *  be freed automatically when the tree view is destroyed 
+         */
+        g_object_unref (model);
+}
+
 int progress_bar_update() {
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
@@ -32,7 +93,7 @@ int progress_bar_update() {
 		GtkTreeIter       iter;
 		gint from, to, local;
 
-		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
 
@@ -60,7 +121,7 @@ int progress_bar_update() {
 
 					// Scroll down
 					GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(config.vbsm.mplayer_view), path, NULL, TRUE, 0.5, 0);
 				}
 			}
 		}

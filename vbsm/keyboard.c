@@ -16,7 +16,7 @@ void on_pressed_b () {
 	GtkTreeIter iter;
 	gint new_from;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
@@ -76,7 +76,7 @@ void on_pressed_m () {
 	GtkTreeIter       iter;
 	gint new_to;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayr_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
@@ -106,7 +106,7 @@ void on_pressed_m () {
 
 				// Scroll down
 				GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(config.vbsm.mplayer_view), path, NULL, TRUE, 0.5, 0);
 			}
 
 			config.common.inside_sub = FALSE;

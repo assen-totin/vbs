@@ -16,13 +16,13 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 	GtkTreeModel     *model;
 	bool flag = TRUE;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
 	switch (callback_action) {
 		case 64:
 			// Zero current
 			if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-				gtk_list_store_set (store, &iter, COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 
@@ -36,7 +36,7 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 					flag = gtk_tree_model_iter_next(model, &iter);
 					if (flag) {
 						gtk_tree_selection_select_iter(selection, &iter);
-						gtk_list_store_set (store, &iter, COL_FROM, 0, COL_TO, 0, -1);
+						gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 					}
 				}
 				gtk_tree_selection_select_iter(selection, &sibling);
@@ -85,27 +85,27 @@ void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *wind
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
 	switch (callback_action) {
 		case 61:
 			// New before current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_before (store, &iter, &sibling);
-				gtk_list_store_set (store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_insert_before (config.vbsm.mplayer_store, &iter, &sibling);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 		case 62:
 			// New after current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_after (store, &iter, &sibling);
-				gtk_list_store_set (store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_insert_after (config.vbsm.mplayer_store, &iter, &sibling);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 		case 63:
 			// Delete current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_remove (store, &sibling);
+				gtk_list_store_remove (config.vbsm.mplayer_store, &sibling);
 			}
 			break;
 	}

@@ -17,7 +17,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 	int subNum;
 
 	if ((config.common.running == FALSE) && (haveLoadedText(window))) {
-		model = gtk_tree_view_get_model(view);
+		model = gtk_tree_view_get_model(config.vbsm.mplayer_view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);

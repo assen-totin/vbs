@@ -68,8 +68,12 @@ struct struct_vbsm {
 	pid_t mplayer_pid;
 	FILE *mplayer_pipe_write;
 	FILE *mplayer_pipe_read;
+	GtkListStore *mplayer_store;
+	GtkWidget *mplayer_view;
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
+
+        GtkWidget *gstreamer_widget_player;
 };
 
 
@@ -133,8 +137,6 @@ static struct encEntry encEntries[] = {
 };
 
 // Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
-GtkListStore *store;
-GtkWidget *view;
 struct configuration config;
 struct cmdl cmdl_config;
 int can_recv_from_net;
