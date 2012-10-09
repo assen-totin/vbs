@@ -20,6 +20,11 @@ INCLUDES=`pkg-config --cflags gtk+-2.0`
 
 TARGET = cfg
 
+HAVE_GSTREAMER = @HAVE_GSTREAMER@
+ifeq ($(HAVE_GSTREAMER),1)
+        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+endif
+
 all: $(TARGET)
 
 clean:
@@ -30,11 +35,11 @@ distclean:
 	rm -f Makefile
 
 $(TARGET): cfg.c error.c network.c util.c menu.c
-	$(CC) $(CFLAGS) $(INCLUDES) error.c
-	$(CC) $(CFLAGS) $(INCLUDES) cfg.c
-	$(CC) $(CFLAGS) $(INCLUDES) network.c
-	$(CC) $(CFLAGS) $(INCLUDES) util.c
-	$(CC) $(CFLAGS) $(INCLUDES) menu.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) error.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) cfg.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) network.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) util.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES) menu.c
 
 install:
 	test -z $(IMGDIR) || mkdir -p $(IMGDIR)

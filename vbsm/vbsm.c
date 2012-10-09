@@ -10,82 +10,10 @@
 
 #include "../common/common.h"
 
-bool mplayerAlive() {
-	if (!config.vbsm.pipeWrite) 
-		return false;
-	if (config.vbsm.mplayer_pid == 0) 
-		return false;
-	int status;
-	pid_t cpid = waitpid(-1, &status, WNOHANG);
-	if (cpid == config.vbsm.mplayer_pid) 
-		return false;
-	return true;
-}
-
-void formatCellFrom(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
-	gint from;
-	gchar res[32];
-	gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
-	convertTimeSrt(from, &res[0], 2);
-	g_object_set(renderer, "text", res, NULL);
-}
-
-
-void formatCellTo(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
-	gint from;
-	gchar res[32];
-	gtk_tree_model_get(model, iter, COL_TO, &from, -1);
-	convertTimeSrt(from, &res[0], 2);
-	g_object_set(renderer, "text", res, NULL);
-}
-
-
-void *create_view_and_model (void){
-	GtkCellRenderer     *renderer;
-	GtkTreeModel        *model;
-	GtkTreeIter    iter;
-	GtkTreeViewColumn *column;
-
-	view = gtk_tree_view_new();
-
-	store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
-
-	/* --- Column #1 --- */
-	renderer = gtk_cell_renderer_text_new();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view), -1, "From", renderer, "text", COL_FROM, NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW (view), 0);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, formatCellFrom, NULL, NULL);
-
-	/* --- Column #2 --- */
-	renderer = gtk_cell_renderer_text_new();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view), -1, "To", renderer, "text", COL_TO, NULL);
-	column = gtk_tree_view_get_column (GTK_TREE_VIEW (view), 1);
-	gtk_tree_view_column_set_cell_data_func(column, renderer, formatCellTo, NULL, NULL);
-
-	/* --- Column #3 --- */
-	renderer = gtk_cell_renderer_text_new();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view), -1, "Text", renderer, "text", COL_LINE, NULL);
-	// Editable cells
-	g_object_set(renderer, "editable", TRUE, NULL);
-	g_signal_connect(renderer, "edited", (GCallback) view_cellEdit, view);
-
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
-
-	model = GTK_TREE_MODEL(store);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (view), model);
-
-	/* The tree view has acquired its own reference to the
-	*  model, so we can drop ours. That way the model will
-	*  be freed automatically when the tree view is destroyed */
-
-	g_object_unref (model);
-}
-
-
 int main (int argc, char **argv){
-	GtkWidget *window, *scroll;
-	GtkWidget *status, *vbox, *progress;
+	GtkWidget *window, *vbox, *status, *progress;
+	GtkWidget *mplayer_scroll;
+	GtkTreeSelection *mplayer_selection;
 
         // Check for alternative config
         get_cmdl_config(argc, argv);
@@ -102,15 +30,17 @@ int main (int argc, char **argv){
 	config.common.init_timestamp = time(NULL);
 
 	// Create log file
-	sprintf(config.vbsm.logFileName, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(config.vbsm.logFileName);
+	sprintf(config.vbsm.log_file_name, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
+	int mkstempRes = mkstemp(config.vbsm.log_file_name);
 	if (mkstempRes == -1) {error_handler("main","failed to create log file name",1 );}
-	config.vbsm.logFile = fopen(config.vbsm.logFileName, "w");
+	config.vbsm.log_file_fp = fopen(config.vbsm.log_file_name, "w");
 
 	// Create tmp subtites file for mplayer
-	sprintf(config.vbsm.mplayerSubFileName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-	mkstempRes = mkstemp(config.vbsm.mplayerSubFileName);
-	if (mkstempRes == -1) {error_handler("main","failed to create temporary sub file name",1 );}
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+		sprintf(config.vbsm.sub_file_name, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
+		mkstempRes = mkstemp(config.vbsm.sub_file_name);
+		if (mkstempRes == -1) {error_handler("main","failed to create temporary sub file name",1 );}
+	}
 
 	// GTK Init
 	gtk_init (&argc, &argv);
@@ -119,13 +49,19 @@ int main (int argc, char **argv){
 	create_view_and_model();
 
 	// Only one row selected
-	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
-	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
+        mplayer_selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+        gtk_tree_selection_set_mode(mplayer_selection, GTK_SELECTION_SINGLE);
 
-	// Scroll, will contain "view", will be packed in the bottom of the vbox
-	scroll = gtk_scrolled_window_new (NULL,NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroll),  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-	gtk_container_add (GTK_CONTAINER (scroll), view);
+	// MPlayer scroll, will contain the mplayer "view", will be packed in the bottom of the vbox
+	mplayer_scroll = gtk_scrolled_window_new (NULL,NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (mplayer_scroll),  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER (mplayer_scroll), config.vbsm.mplayer_view);
+
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+		// Video widget
+		config.vbsm.gstreamer_widget_player = gtk_drawing_area_new();
+		gtk_widget_set_size_request (config.vbsm.gstreamer_widget_player, 0x200, 0x100);
+	}
 
 	// Status, display status, will be packed in the top of the vbox
 	status = gtk_statusbar_new();
@@ -142,17 +78,31 @@ int main (int argc, char **argv){
 	config.vbsm.progress = progress;
 
 	// Root window
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
-	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
-	gtk_widget_set_size_request (window, 500, 400);
-	g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
+	int window_width = 500, window_height = 400;
+        GdkScreen *gdk_screen = gdk_screen_get_default();
+        int screen_width = gdk_screen_get_width(gdk_screen);
+        int screen_height = gdk_screen_get_height(gdk_screen);
+
+        window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
+        gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
+        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+                GdkScreen *gdk_screen = gdk_screen_get_default();
+		if (gdk_screen) {
+	                int screen_width = gdk_screen_get_width(gdk_screen);
+        	        int screen_height = gdk_screen_get_height(gdk_screen);
+	                window_width = (int) (0.8 * screen_width);
+                	window_height = (int) (0.9 * screen_height);
+		}
+        }
+        gtk_widget_set_size_request (window, window_width, window_height);
+        g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
 
 	// Link double-click event
-	g_signal_connect(view, "row-activated", (GCallback) view_onRowActivated, window);
+	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, window);
 
 	// Key events
-	g_signal_connect(view, "key_press_event", (GCallback) view_onKeyPressed, window);
+	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, window);
 
 	// Menu
 	can_recv_from_net = 0;
@@ -165,7 +115,10 @@ int main (int argc, char **argv){
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), scroll, TRUE, TRUE, 0);
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
+	}
+	gtk_box_pack_start(GTK_BOX(vbox), mplayer_scroll, TRUE, TRUE, 0);
 
 	// Add vbox to window
 	gtk_container_add(GTK_CONTAINER (window), vbox);
@@ -173,7 +126,7 @@ int main (int argc, char **argv){
 	gtk_widget_show_all(window);
 
 	// Progress bar check & update function
-	g_timeout_add(1000, (GtkFunction) progressBarUpdate, NULL);
+	g_timeout_add(1000, (GtkFunction) progress_bar_update, NULL);
 
 	gtk_main();
 

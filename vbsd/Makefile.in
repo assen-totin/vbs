@@ -25,6 +25,11 @@ OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/ut
 INCLUDES=`pkg-config --cflags gtk+-2.0`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
 
+HAVE_GSTREAMER = @HAVE_GSTREAMER@
+ifeq ($(HAVE_GSTREAMER),1)
+        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+endif
+
 all: $(TARGET)
 
 clean:
@@ -42,6 +47,6 @@ uninstall:
 	rm -f $(TARGET) $(SBINDIR)/$(TARGET)
 
 $(TARGET): vbsd.c
-	$(CC) $(CFLAGS) $(INCLUDES) vbsd.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(ADD_INCLUDES)  vbsd.c
 	$(CC) -o $@ $(LIBS) $(ADD_FLAGS) $(OBJS_LOCAL) $(OBJS_REMOTE)
 

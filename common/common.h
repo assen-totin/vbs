@@ -34,6 +34,13 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "../config.h"
+
+#ifdef HAVE_GSTREAMER
+        #include <gst/gst.h>
+        #include <gst/interfaces/xoverlay.h>
+#endif
+
 #define VBS_TMP_DIR "/tmp"
 
 enum {
@@ -48,20 +55,32 @@ enum {
         VBS_IMPORT_FILTER_SRT
 };
 
+enum {
+	VBSM_VIDEO_BACKEND_MPLAYER = 0,
+	VBSM_VIDEO_BACKEND_GSTREAMER
+};
+
 struct struct_vbsm {
         bool have_loaded_text;
         guint status_context_id;
-        pid_t mplayer_pid;
         short unsigned progress_seconds;
         GtkWidget *menu_widget;
 	GtkWidget *menu_widget2;
         GtkWidget *status;
         GtkWidget *progress;
-        FILE *pipeWrite;
-        FILE *pipeRead;
-        char logFileName[255];
-	FILE *logFile;
-	char mplayerSubFileName[255];
+        char log_file_name[255];
+	FILE *log_file_fp;
+	char sub_file_name[255];
+	int unsigned video_backend;
+	pid_t mplayer_pid;
+	FILE *mplayer_pipe_write;
+	FILE *mplayer_pipe_read;
+	GtkListStore *mplayer_store;
+	GtkWidget *mplayer_view;
+	GstElement *gstreamer_playbin2;
+	GstElement *gstreamer_textoverlay;
+        GtkWidget *gstreamer_widget_player;
+	char gstreamer_video_sink[1024];
 };
 
 
@@ -125,13 +144,9 @@ static struct encEntry encEntries[] = {
 };
 
 // Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
-GtkListStore *store;
-GtkWidget *view;
 struct configuration config;
 struct cmdl cmdl_config;
 int can_recv_from_net;
-
-#include "../config.h"
 
 #include "cfg.h"
 #include "error.h"
@@ -150,7 +165,8 @@ int can_recv_from_net;
 #include "../vbsm/mouse.h"
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
-#include "../vbsm/video.h"
+#include "../vbsm/video-mplayer.h"
+#include "../vbsm/video-gstreamer.h"
 #include "../vbsm/menu.h"
 
 #include "../vbsc/vbsc.h"

@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-void fixNewline(char *buffer) {
+void fix_new_line(char *buffer) {
         char *partOne, linePrint[config.common.line_size];
 
         char CrLf[3];

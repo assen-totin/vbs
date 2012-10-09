@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* "Define if GStreamer was found" */
+#undef HAVE_GSTREAMER
+
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 

@@ -44,6 +44,14 @@ void default_config() {
         config.vbss.colour_fg_g = VBS_DEFAULT_COLOUR_FG_GREEN;
         config.vbss.colour_fg_b = VBS_DEFAULT_COLOUR_FG_BLUE;
 	config.vbss.font_size = VBS_DEFAULT_FONT_SIZE;
+
+	#ifdef HAVE_MPLAYER
+		config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
+	#endif
+	#ifdef HAVE_GSTREAMER
+		config.vbsm.video_backend = VBSM_VIDEO_BACKEND_GSTREAMER; 
+		strcpy(&config.vbsm.gstreamer_video_sink[0] , VBSM_GS_VIDEO_SINK);
+	#endif
 }
 
 void config_char(char *line, char *param) {
@@ -66,7 +74,6 @@ void write_config() {
                 error_handler("write_config", "could not open config file", 1);
         fprintf(fp_config, "%s", VBS_CONFIG_HEADER);
 
-	fprintf(fp_config, "FULL_SCREEN=%u\n", config.vbss.full_screen);
 	fprintf(fp_config, "MAGIC_KEY=%u\n", config.common.magic_key);
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
         fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
@@ -78,6 +85,7 @@ void write_config() {
 	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
         fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
 
+	fprintf(fp_config, "FULL_SCREEN=%u\n", config.vbss.full_screen);
         fprintf(fp_config, "COLOUR_BG_R=%u\n", config.vbss.colour_bg_r);
         fprintf(fp_config, "COLOUR_BG_G=%u\n", config.vbss.colour_bg_g);
         fprintf(fp_config, "COLOUR_BG_B=%u\n", config.vbss.colour_bg_b);
@@ -85,6 +93,10 @@ void write_config() {
         fprintf(fp_config, "COLOUR_FG_G=%u\n", config.vbss.colour_fg_g);
         fprintf(fp_config, "COLOUR_FG_B=%u\n", config.vbss.colour_fg_b);
 	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
+
+	fprintf(fp_config, "%s\n", VBSM_VIDEO_BACKEND);
+	fprintf(fp_config, "VIDEO_BACKEND=%u\n", config.vbsm.video_backend);
+	fprintf(fp_config, "GSTREAMER_VIDEO_SINK=%s\n", config.vbsm.gstreamer_video_sink);
 
         fclose(fp_config);
 }
@@ -137,6 +149,11 @@ void read_config() {
                                 config.vbss.colour_fg_b = config_int(line);
 			else if (strstr(line, "FONT_SIZE"))
 				config.vbss.font_size = config_int(line);
+
+			else if (strstr(line, "VIDEO_BACKEND"))
+				config.vbsm.video_backend = config_int(line);
+			else if (strstr(line, "GSTREAMER_VIDEO_SINK"))
+				config_char(line, &config.vbsm.gstreamer_video_sink[0]);
 		}
 	}
 	fclose(fp_config);

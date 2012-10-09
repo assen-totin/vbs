@@ -8,11 +8,13 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void *loadVideo(char videoFile[1024]);
+bool mplayer_is_alive();
 
-void writeMPlayer(char *command);
+void *mplayer_load_video(char videoFile[1024]);
 
-int getTimePos(int flag);
+void mplayer_pipe_write(char *command);
+
+int mplayer_get_time_pos(int flag);
 
 #define VBS_MPLAYER_BINARY "mplayer"
 

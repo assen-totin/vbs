@@ -81,7 +81,7 @@ int put_subtitle(char *buffer) {
         sockfd = get_socket();
 
 	strcpy(&request[0], buffer);
-	fixNewline(&request[0]);
+	fix_new_line(&request[0]);
 
 	bzero(buffer2, config.common.line_size + 4);
         memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));

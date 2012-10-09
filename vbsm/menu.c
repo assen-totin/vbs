@@ -16,13 +16,13 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 	GtkTreeModel     *model;
 	bool flag = TRUE;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
 	switch (callback_action) {
 		case 64:
 			// Zero current
 			if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-				gtk_list_store_set (store, &iter, COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 
@@ -36,7 +36,7 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 					flag = gtk_tree_model_iter_next(model, &iter);
 					if (flag) {
 						gtk_tree_selection_select_iter(selection, &iter);
-						gtk_list_store_set (store, &iter, COL_FROM, 0, COL_TO, 0, -1);
+						gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 					}
 				}
 				gtk_tree_selection_select_iter(selection, &sibling);
@@ -65,10 +65,11 @@ void fileDialogOK22( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 
 
 void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	char videoFile[1024];
+	char video_file_name[1024];
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.", 1);}
-	sprintf(videoFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	loadVideo(videoFile);
+	sprintf(video_file_name, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {mplayer_load_video(video_file_name);}
+	else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {gstreamer_init(video_file_name);}
 }
 
 
@@ -84,27 +85,27 @@ void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *wind
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
 	switch (callback_action) {
 		case 61:
 			// New before current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_before (store, &iter, &sibling);
-				gtk_list_store_set (store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_insert_before (config.vbsm.mplayer_store, &iter, &sibling);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 		case 62:
 			// New after current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_after (store, &iter, &sibling);
-				gtk_list_store_set (store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+				gtk_list_store_insert_after (config.vbsm.mplayer_store, &iter, &sibling);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
 			}
 			break;
 		case 63:
 			// Delete current
 			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_remove (store, &sibling);
+				gtk_list_store_remove (config.vbsm.mplayer_store, &sibling);
 			}
 			break;
 	}
@@ -152,16 +153,16 @@ static void quitDialogOK( GtkWidget *widget, gpointer data ){
 	GtkWidget *quitDialog = data;
 	gtk_widget_destroy(quitDialog);
 
-	if (mplayerAlive()) {
-		writeMPlayer("quit");
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive())) {
+		mplayer_pipe_write("quit");
 		int status;
 		waitpid(-1, &status, 0);
 	}
 
-	fclose(config.vbsm.logFile);
-	unlink(config.vbsm.logFileName);
+	fclose(config.vbsm.log_file_fp);
+	unlink(config.vbsm.log_file_name);
 
-        unlink(config.vbsm.mplayerSubFileName);
+        unlink(config.vbsm.sub_file_name);
 
 	gtk_main_quit();
 }
@@ -249,4 +250,115 @@ void fileDialog(gpointer callback_data, guint callback_action, GtkWidget *window
 
 	gtk_widget_show (fileDialogWidget);
 }
+
+void set_video_backend (GtkWidget *window) {
+        GtkWidget *quitDialog, *quitLabel;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_BACKEND_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_video_backend_ok), (gpointer) quitDialog);
+
+        char quitMessage[1024];
+        sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_BACKEND_TEXT);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+        config.vbsm.menu_widget = gtk_combo_box_new_text();
+
+        int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
+        int i;
+        for (i=0; i<n_video_backends; i++) {
+                gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_backends[i].name);
+                if (video_backends[i].num == config.vbsm.video_backend)
+                        gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
+        }
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+
+        gtk_widget_show_all (quitDialog);
+}
+
+
+void set_video_backend_ok(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+	int i;
+	char selected[1024];
+        sprintf(&selected[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
+	for (i=0; i<n_video_backends; i++) {
+		if (strstr(&video_backends[i].name[0], &selected[0])) {
+			config.vbsm.video_backend = video_backends[i].num;
+			break;
+		}
+	}
+        write_config();
+        gtk_widget_destroy(quitDialog);
+}
+
+
+void set_video_output (GtkWidget *window) {
+        GtkWidget *quitDialog, *quitLabel;
+	int i;
+	bool show_menu_output = false;
+	char quitMessage[1024];
+
+	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
+	for (i=0; i<n_video_backends; i++) {
+		if (video_backends[i].num == config.vbsm.video_backend)
+			if (video_backends[i].show_menu_output)
+				show_menu_output = true;
+	}
+
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_OUTPUT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+
+	if (show_menu_output) {
+		GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+		gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK); 
+	        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_video_output_ok), (gpointer) quitDialog);
+	}
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+
+	if (show_menu_output)
+	        sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_OUTPUT_TEXT);
+	else
+		sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_OUTPUT_NOENT);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+	if (show_menu_output) {
+	        config.vbsm.menu_widget = gtk_combo_box_new_text();
+
+        	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
+	        for (i=0; i<n_video_outputs; i++) {
+        	        gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_outputs[i].name);
+                	if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
+                        	gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
+	        }
+        	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+	}
+
+        gtk_widget_show_all (quitDialog);
+}
+
+
+void set_video_output_ok(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+        int i;
+        char selected[1024];
+        sprintf(&selected[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
+        for (i=0; i<n_video_outputs; i++) {
+                if (strstr(video_outputs[i].name, &selected[0])) {
+                        strcpy(&config.vbsm.gstreamer_video_sink[0], &video_outputs[i].code[0]);
+                        break;
+                }
+        }
+        write_config();
+        gtk_widget_destroy(quitDialog);
+}
+
 

@@ -25,10 +25,10 @@ void clearStore() {
 	GtkTreeIter       iter;
 	bool flag = TRUE;
 
-	model = GTK_TREE_MODEL(store);
+	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
 	gtk_tree_model_get_iter_first(model, &iter);
 
-	while (flag) {flag = gtk_list_store_remove (store, &iter);}
+	while (flag) {flag = gtk_list_store_remove (config.vbsm.mplayer_store, &iter);}
 }
 
 
@@ -187,8 +187,8 @@ void importText(char *importTextFile, int importFlag) {
 		}
 
 		// Append row
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, COL_LINE, lineUTF8, COL_FROM, timeFrom, COL_TO, timeTo, -1);
+		gtk_list_store_append (config.vbsm.mplayer_store, &iter);
+		gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, lineUTF8, COL_FROM, timeFrom, COL_TO, timeTo, -1);
 	}
 
 	fclose(fp);
@@ -199,15 +199,15 @@ void importText(char *importTextFile, int importFlag) {
 	
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
-	model = GTK_TREE_MODEL(store);
+	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
 	gtk_tree_model_get_iter_first(model, &iter);
 	gtk_tree_selection_select_iter(selection, &iter);
 
 	config.vbsm.have_loaded_text = true;
-	exportSubtitles();
+	export_subtitles();
 
 }
 

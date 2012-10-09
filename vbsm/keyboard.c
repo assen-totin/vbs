@@ -10,20 +10,29 @@
 
 #include "../common/common.h"
 
-void view_onBPressed () {
+void on_pressed_b () {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gint new_from;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
-			if (mplayerAlive())
-				new_from = getTimePos(2);
-			else {
-				time_t curr_time = time(NULL);
-				new_from = 1000*(curr_time - config.common.init_timestamp);
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+				if (mplayer_is_alive())
+					new_from = mplayer_get_time_pos(2);
+				else {
+					time_t curr_time = time(NULL);
+					new_from = 1000*(curr_time - config.common.init_timestamp);
+				}
+			}
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				new_from = gstreamer_query_position();
+				if (new_from == -1) {
+					time_t curr_time = time(NULL);
+					new_from = 1000*(curr_time - config.common.init_timestamp);
+				}
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
@@ -46,29 +55,47 @@ void view_onBPressed () {
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
+			// If using GStreamer, show the sub
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				char line3[1024];
+				strcpy(&line3[0], line);
+				gstreamer_sub_set(line3);
+			}
+
 			g_free(line);
 
-			fprintf(config.vbsm.logFile, "Processed B key.\n");
+			fprintf(config.vbsm.log_file_fp, "Processed B key.\n");
 		}
 	}
 }
 
 
-void view_onMPressed () {
+void on_pressed_m () {
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
 	gint new_to;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)){
-			if (mplayerAlive())
-				new_to = getTimePos(2);
-			else {
-				time_t curr_time = time(NULL);
-				new_to = 1000*(curr_time - config.common.init_timestamp);
+		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+				if (mplayer_is_alive())
+					new_to = mplayer_get_time_pos(2);
+				else {
+					time_t curr_time = time(NULL);
+					new_to = 1000*(curr_time - config.common.init_timestamp);
+				}
 			}
+                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+                                new_to = gstreamer_query_position();
+                                if (new_to == -1) {
+                                        time_t curr_time = time(NULL);
+                                        new_to = 1000*(curr_time - config.common.init_timestamp);
+                                }
+				// Clear the sub
+				gstreamer_sub_clear();
+                        }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
@@ -79,7 +106,7 @@ void view_onMPressed () {
 
 				// Scroll down
 				GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(view), path, NULL, TRUE, 0.5, 0);
+				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(config.vbsm.mplayer_view), path, NULL, TRUE, 0.5, 0);
 			}
 
 			config.common.inside_sub = FALSE;
@@ -94,7 +121,7 @@ void view_onMPressed () {
 				put_subtitle("\n");
 
 			// Export subtitles
-			exportSubtitles();
+			export_subtitles();
 		}
 		else { 
 			// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
@@ -104,7 +131,7 @@ void view_onMPressed () {
 }
 
 
-void view_onSpacePressed (GtkWidget *window) {
+void on_pressed_space (GtkWidget *window) {
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
@@ -114,8 +141,11 @@ void view_onSpacePressed (GtkWidget *window) {
 		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 
 		// Pause the player
-		if (mplayerAlive()) 
-			writeMPlayer("pause");
+		if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
+			mplayer_pipe_write("pause");
+		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+			gstreamer_pause();
+
 	}
 	else if (config.common.running == FALSE) {
 		if (haveLoadedText(window)) {
@@ -123,31 +153,33 @@ void view_onSpacePressed (GtkWidget *window) {
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 
 			// Start the player
-			if (mplayerAlive())
-				writeMPlayer("pause");
+			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
+				mplayer_pipe_write("pause");
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+				gstreamer_play();
 		}
 	}
 }
 
 
-void view_onKeyPressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
+void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 	GtkWidget *window = userdata;
 	switch ( event->keyval ) {
 		case GDK_b:
-			view_onBPressed();
+			on_pressed_b();
 			break;
 		case GDK_m:
-			view_onMPressed();
+			on_pressed_m();
 			break;
 		case GDK_n:
-			view_onMPressed();
-			view_onBPressed();
+			on_pressed_m();
+			on_pressed_b();
 			break;
 		case GDK_space:
-			view_onSpacePressed(window);
+			on_pressed_space(window);
 			break;
 		case GDK_s:
-			exportSubtitles();
+			export_subtitles();
 			break;
 	}
 }
