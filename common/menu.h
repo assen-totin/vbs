@@ -8,21 +8,21 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries);
-void quitDialogCancel( GtkWidget *widget, gpointer data);
-void helpAbout(GtkWidget *window);
+GtkWidget *make_menu(gchar *ui, GtkActionEntry *menu_entries);
+void quitDialogCancel(GtkWidget *widget, gpointer data);
+void helpAbout(GtkAction *action, gpointer param);
 void setEncodingImportOK(GtkWidget *widget, gpointer data);
 void setEncodingExportOK(GtkWidget *widget, gpointer data);
-void setEncodingImport (GtkWidget *window);
-void setEncodingExport (GtkWidget *window);
+void setEncodingImport (GtkAction *action, gpointer param);
+void setEncodingExport (GtkAction *action, gpointer param);
 void setNewlineOK(GtkWidget *widget, gpointer data);
-void setNewline (GtkWidget *window);
+void setNewline (GtkAction *action, gpointer param);
 void setNetworkPortOK(GtkWidget *widget, gpointer data);
-void setNetworkPort (GtkWidget *window);
+void setNetworkPort (GtkAction *action, gpointer param);
 void setNetworkServerOK(GtkWidget *widget, gpointer data);
-void setNetworkServer (GtkWidget *window);
+void setNetworkServer (GtkAction *action, gpointer param);
 void useNetworkOK(GtkWidget *widget, gpointer data);
-void useNetwork (GtkWidget *window);
+void useNetwork (GtkAction *action, gpointer param);
 
 #define VBS_MENU_DEFAULT_PATH "~/Desktop"
 

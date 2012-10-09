@@ -64,6 +64,7 @@ struct struct_vbsm {
         bool have_loaded_text;
         guint status_context_id;
         short unsigned progress_seconds;
+	GtkWidget *window;
         GtkWidget *menu_widget;
 	GtkWidget *menu_widget2;
         GtkWidget *status;

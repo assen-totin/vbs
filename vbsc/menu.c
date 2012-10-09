@@ -29,10 +29,10 @@ static void quit_dialog_ok( GtkWidget *widget, gpointer data ){
 	gtk_main_quit();
 }
 
-void quit_dialog(GtkWidget *window) {
+void quit_dialog(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -50,37 +50,32 @@ void quit_dialog(GtkWidget *window) {
 }
 
 
-void file_dialog(gpointer callback_data, guint callback_action, GtkWidget *window) {
+void file_dialog(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
 	char fileDialogFile[256];
 
-	switch (callback_action) {
-		case 21:
-			// Import Text-only
-			sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
-		case 41:
-			// Export Dialog
-			sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
+	if (strstr(gtk_action_get_name(action), "EditImportDefault")) {
+		// Import Text-only
+		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
+	}
+	else if (strstr(gtk_action_get_name(action), "EditExportDefault")) {
+		// Export Dialog
+		sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
 	}
 
 	fileDialogWidget = gtk_file_selection_new (fileDialogTitle);
 
 	/* Connect the ok_button to file_ok_sel function */
-	switch (callback_action) {
-		case 21:
-			// Import Text-only
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_21), (gpointer) fileDialogWidget);
-			break;
-		case 41:
-			// Export Dialog
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_41), (gpointer) fileDialogWidget);
-			break;
-	}
+	if (strstr(gtk_action_get_name(action), "EditImportDefault")) 
+		// Import Text-only
+		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_21), (gpointer) fileDialogWidget);
+	else if (strstr(gtk_action_get_name(action), "EditExportDefault"))
+		// Export Dialog
+		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_41), (gpointer) fileDialogWidget);
+
 	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
 
 	/* Connect the cancel_button to destroy the widget */
@@ -100,10 +95,10 @@ void set_magic_key_ok(GtkWidget *widget, gpointer data) {
         gtk_widget_destroy(quitDialog);
 }
 
-void set_magic_key (GtkWidget *window) {
+void set_magic_key (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_MAGIC_KEY_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_MAGIC_KEY_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -132,10 +127,10 @@ void set_font_size_ok(GtkWidget *widget, gpointer data) {
         gtk_widget_destroy(quitDialog);
 }
 
-void set_font_size (GtkWidget *window) {
+void set_font_size (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_FONT_SIZE_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_FONT_SIZE_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -168,10 +163,10 @@ void set_full_screen_ok(GtkWidget *widget, gpointer data) {
 }
 
 
-void set_full_screen (GtkWidget *window) {
+void set_full_screen (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_FULL_SCREEN_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_FULL_SCREEN_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);

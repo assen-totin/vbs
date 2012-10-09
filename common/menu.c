@@ -10,21 +10,17 @@
 
 #include "common.h"
 
-GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries) {
-	GtkAccelGroup *accel_group;
-	GtkItemFactory *item_factory;
+GtkWidget *make_menu(gchar *ui, GtkActionEntry *menu_entries) {
 
-	accel_group = gtk_accel_group_new();
-	item_factory = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<vbsMainMenu>", accel_group);
+	GtkActionGroup *actiongroup = gtk_action_group_new("MainMenuActiongroup");
+	gtk_action_group_add_actions(actiongroup, menu_entries, G_N_ELEMENTS(menu_entries), NULL);
+	
+	GtkUIManager *ui_manager = gtk_ui_manager_new();
+	gtk_ui_manager_insert_action_group(ui_manager, actiongroup, 0);
 
-	// Last argument: callback_data,
-	// gets passed to all the callback functions for all the entries with callback_action != 0
-
-	gtk_item_factory_create_items(item_factory, nmenuEntries, menuEntries, window);
-
-	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-
-	return gtk_item_factory_get_widget (item_factory, "<vbsMainMenu>");
+	gtk_ui_manager_add_ui_from_string(ui_manager, ui, -1, NULL);
+		
+	return gtk_ui_manager_get_widget(ui_manager, "/MainMenu");
 }
 
 void quitDialogCancel( GtkWidget *widget, gpointer data ){
@@ -33,10 +29,10 @@ void quitDialogCancel( GtkWidget *widget, gpointer data ){
 }
 
 
-void helpAbout(GtkWidget *window) {
+void helpAbout(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ABOUT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ABOUT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
@@ -72,10 +68,10 @@ void setEncodingExportOK(GtkWidget *widget, gpointer data) {
 }
 
 
-void setEncodingImport (GtkWidget *window) {
+void setEncodingImport (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_IMPORT, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_IMPORT, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -102,10 +98,10 @@ void setEncodingImport (GtkWidget *window) {
 }
 
 
-void setEncodingExport (GtkWidget *window) {
+void setEncodingExport (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_EXPORT, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_EXPORT, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -143,10 +139,10 @@ void setNewlineOK(GtkWidget *widget, gpointer data) {
 }
 
 
-void setNewline (GtkWidget *window) {
+void setNewline (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NEWLINE_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NEWLINE_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -178,10 +174,10 @@ void setNetworkPortOK(GtkWidget *widget, gpointer data) {
         gtk_widget_destroy(quitDialog);
 }
 
-void setNetworkPort (GtkWidget *window) {
+void setNetworkPort (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_PORT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_PORT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -215,10 +211,10 @@ void setNetworkServerOK(GtkWidget *widget, gpointer data) {
 	}
 }
 
-void setNetworkServer (GtkWidget *window) {
+void setNetworkServer (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_SERVER_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_SERVER_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -254,10 +250,10 @@ void useNetworkOK(GtkWidget *widget, gpointer data) {
 }
 
 
-void useNetwork (GtkWidget *window) {
+void useNetwork (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENABLE_NETWORK_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENABLE_NETWORK_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);

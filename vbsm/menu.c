@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window){
+void zeroTiming(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
@@ -18,30 +18,27 @@ void zeroTiming(gpointer callback_data, guint callback_action, GtkWidget *window
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
-	switch (callback_action) {
-		case 64:
-			// Zero current
-			if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
-			}
-			break;
-
-		case 65:
-			// Zero from current
-			if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
-				sibling = iter;
-				while (flag) {
-					// Move to next line
-					gtk_tree_selection_unselect_iter(selection, &iter);
-					flag = gtk_tree_model_iter_next(model, &iter);
-					if (flag) {
-						gtk_tree_selection_select_iter(selection, &iter);
-						gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
-					}
+	if (strstr(gtk_action_get_name(action), "EditZeroCurent")) {
+		// Zero current
+		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+			gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
+		}
+	}
+	else if (strstr(gtk_action_get_name(action), "EditZeroRest")) {
+		// Zero from current
+		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+			sibling = iter;
+			while (flag) {
+				// Move to next line
+				gtk_tree_selection_unselect_iter(selection, &iter);
+				flag = gtk_tree_model_iter_next(model, &iter);
+				if (flag) {
+					gtk_tree_selection_select_iter(selection, &iter);
+					gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 				}
-				gtk_tree_selection_select_iter(selection, &sibling);
 			}
-			break;
+			gtk_tree_selection_select_iter(selection, &sibling);
+		}
 	}
 }
 
@@ -80,42 +77,40 @@ void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 }
 
 
-void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *window){
+void insertBefore(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
 
-	switch (callback_action) {
-		case 61:
-			// New before current
-			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_before (config.vbsm.mplayer_store, &iter, &sibling);
-				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
-			}
-			break;
-		case 62:
-			// New after current
-			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_insert_after (config.vbsm.mplayer_store, &iter, &sibling);
-				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
-			}
-			break;
-		case 63:
-			// Delete current
-			if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
-				gtk_list_store_remove (config.vbsm.mplayer_store, &sibling);
-			}
-			break;
+	if (strstr(gtk_action_get_name(action), "EditInsertBefore")) {
+		// New before current
+		if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
+			gtk_list_store_insert_before (config.vbsm.mplayer_store, &iter, &sibling);
+			gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+		}
+	}
+	else if (strstr(gtk_action_get_name(action), "EditInsertAfter")) {
+		// New after current
+		if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
+			gtk_list_store_insert_after (config.vbsm.mplayer_store, &iter, &sibling);
+			gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+		}
+	}
+	else if (strstr(gtk_action_get_name(action), "EditDelete")) {
+		// Delete current
+		if (gtk_tree_selection_get_selected(selection, &model, &sibling)) {
+			gtk_list_store_remove (config.vbsm.mplayer_store, &sibling);
+		}
 	}
 }
 
 
-void helpContents(GtkWidget *window) {
+void helpContents(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_HELP_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_HELP_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
@@ -130,12 +125,12 @@ void helpContents(GtkWidget *window) {
 }
 
 
-void setTimer(GtkWidget *window) {
+void setTimer(GtkAction *action, gpointer param) {
 	config.common.init_timestamp = time(NULL);
 
         GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_TIMER_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_TIMER_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
         gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
@@ -167,13 +162,13 @@ static void quitDialogOK( GtkWidget *widget, gpointer data ){
 	gtk_main_quit();
 }
 
-void quitDialog(GtkWidget *window) {
+void quitDialog(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 	char quitMessage[1024];
 
 	sprintf(quitMessage, "%s %s\n", VBS_MENU_QUIT_TEXT, &config.common.export_filename[0]); 
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -191,55 +186,48 @@ void quitDialog(GtkWidget *window) {
 }
 
 
-void fileDialog(gpointer callback_data, guint callback_action, GtkWidget *window) {
+void fileDialog(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
 	char fileDialogFile[256];
 
-	switch (callback_action) {
-		case 21:
-			// Import Text-only
-			sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
-		case 22:
-			// Import SRT
-			sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_SRT_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
-		case 31:
-			// Load Video
-			sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_VIDEO_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
-		case 41:
-			// Export Dialog
-			sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
-			sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-			break;
+	if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
+		// Import Text-only
+		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
+	}
+	else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
+		// Import SRT
+		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_SRT_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
+	}
+	else if (strstr(gtk_action_get_name(action), "VideoImport")) {
+		// Load Video
+		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_VIDEO_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
+	}
+	else if (strstr(gtk_action_get_name(action), "TextExportDestination")) {
+		// Export Dialog
+		sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
+		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
 	}
 
 	fileDialogWidget = gtk_file_selection_new (fileDialogTitle);
 
 	/* Connect the ok_button to file_ok_sel function */
-	switch (callback_action) {
-		case 21:
-			// Import Text-only
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK21), (gpointer) fileDialogWidget);
-			break;
-		case 22:
+	if (strstr(gtk_action_get_name(action), "TextImportPlain"))
+		// Import Text-only
+		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK21), (gpointer) fileDialogWidget);
+	else  if (strstr(gtk_action_get_name(action), "TextImportSubrip"))
 			// Import SRT
 			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK22), (gpointer) fileDialogWidget);
-			break;
-		case 31:
+	else if (strstr(gtk_action_get_name(action), "VideoImport"))
 			// Load Video
 			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK31), (gpointer) fileDialogWidget);
-			break;
-		case 41:
+	else if (strstr(gtk_action_get_name(action), "TextExportDestination"))
 			// Export Dialog
 			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK41), (gpointer) fileDialogWidget);
-			break;
-	}
+
 	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
 
 	/* Connect the cancel_button to destroy the widget */
@@ -251,10 +239,10 @@ void fileDialog(gpointer callback_data, guint callback_action, GtkWidget *window
 	gtk_widget_show (fileDialogWidget);
 }
 
-void set_video_backend (GtkWidget *window) {
+void set_video_backend (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_BACKEND_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_BACKEND_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -299,7 +287,7 @@ void set_video_backend_ok(GtkWidget *widget, gpointer data) {
 }
 
 
-void set_video_output (GtkWidget *window) {
+void set_video_output (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 	int i;
 	bool show_menu_output = false;
@@ -312,7 +300,7 @@ void set_video_output (GtkWidget *window) {
 				show_menu_output = true;
 	}
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_OUTPUT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_OUTPUT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	if (show_menu_output) {
 		GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
@@ -361,4 +349,35 @@ void set_video_output_ok(GtkWidget *widget, gpointer data) {
         gtk_widget_destroy(quitDialog);
 }
 
+void set_magic_key_ok(GtkWidget *widget, gpointer data) {
+        GtkWidget *quitDialog = data;
+        config.common.magic_key = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
+        write_config();
+        gtk_widget_destroy(quitDialog);
+}
+
+void set_magic_key (GtkAction *action, gpointer param) {
+        GtkWidget *quitDialog, *quitLabel;
+
+        quitDialog = gtk_dialog_new_with_buttons (VBSC_MENU_MAGIC_KEY_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+
+        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
+        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
+        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_magic_key_ok), (gpointer) quitDialog);
+
+        char quitMessage[1024];
+        sprintf(&quitMessage[0], "%s\n", VBSC_MENU_MAGIC_KEY_TEXT);
+        quitLabel = gtk_label_new(quitMessage);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+
+        config.vbsm.menu_widget = gtk_entry_new();
+        char tmp1[16];
+        sprintf(&tmp1[0], "%u", config.common.magic_key);
+        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
+        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+
+        gtk_widget_show_all (quitDialog);
+}
 

@@ -10,8 +10,9 @@
 
 #include "../common/common.h"
 
+#include "menu-def.h"
+
 int main (int argc, char **argv){
-	GtkWidget *window, *scroll;
 	GtkWidget *status, *vbox, *progress;
 
         // Check for alternative config
@@ -25,14 +26,14 @@ int main (int argc, char **argv){
 	gtk_init (&argc, &argv);
 
 	// Root window
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler Configurator");
+	config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler Configurator");
 	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
-	gtk_widget_set_size_request (window, 400, 100);
-	g_signal_connect (window, "delete_event", G_CALLBACK(quit_dialog), window);
+	gtk_widget_set_size_request (config.vbsm.window, 400, 100);
+	g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quit_dialog), config.vbsm.window);
 
 	// Menu
-	GtkWidget *menu = makeMenu(window, &menu_entries[0], VBSC_MENU_COUNT);
+	GtkWidget *menu = make_menu(ui1, menu_entries1);
 
 	// Main label
 	GtkWidget *label = gtk_label_new(VBSC_WELCOME_TEXT);
@@ -40,14 +41,14 @@ int main (int argc, char **argv){
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);
 
-	// Pack entry & scroll into vbox
+	// Pack entries into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
 	// Add vbox to window
-	gtk_container_add(GTK_CONTAINER (window), vbox);
+	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);
 
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(config.vbsm.window);
 
 	gtk_main();
 

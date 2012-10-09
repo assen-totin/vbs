@@ -10,8 +10,10 @@
 
 #include "../common/common.h"
 
+#include "menu-def.h"
+
 int main (int argc, char **argv){
-	GtkWidget *window, *vbox, *status, *progress;
+	GtkWidget *vbox, *status, *progress;
 	GtkWidget *mplayer_scroll;
 	GtkTreeSelection *mplayer_selection;
 
@@ -83,8 +85,8 @@ int main (int argc, char **argv){
         int screen_width = gdk_screen_get_width(gdk_screen);
         int screen_height = gdk_screen_get_height(gdk_screen);
 
-        window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
+        config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler");
         gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
         if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
                 GdkScreen *gdk_screen = gdk_screen_get_default();
@@ -95,18 +97,18 @@ int main (int argc, char **argv){
                 	window_height = (int) (0.9 * screen_height);
 		}
         }
-        gtk_widget_set_size_request (window, window_width, window_height);
-        g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
+        gtk_widget_set_size_request (config.vbsm.window, window_width, window_height);
+        g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quitDialog), config.vbsm.window);
 
 	// Link double-click event
-	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, window);
+	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
 
 	// Key events
-	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, window);
+	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
 
 	// Menu
 	can_recv_from_net = 0;
-	GtkWidget *menu = makeMenu(window, &menuEntries[0], VBSM_MENU_COUNT);
+	GtkWidget *menu = make_menu(ui, menu_entries);
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);
@@ -121,9 +123,9 @@ int main (int argc, char **argv){
 	gtk_box_pack_start(GTK_BOX(vbox), mplayer_scroll, TRUE, TRUE, 0);
 
 	// Add vbox to window
-	gtk_container_add(GTK_CONTAINER (window), vbox);
+	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);
 
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(config.vbsm.window);
 
 	// Progress bar check & update function
 	g_timeout_add(1000, (GtkFunction) progress_bar_update, NULL);
