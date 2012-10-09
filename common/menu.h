@@ -8,7 +8,6 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-GtkWidget *make_menu(gchar *ui, GtkActionEntry *menu_entries);
 void quitDialogCancel(GtkWidget *widget, gpointer data);
 void helpAbout(GtkAction *action, gpointer param);
 void setEncodingImportOK(GtkWidget *widget, gpointer data);

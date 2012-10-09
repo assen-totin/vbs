@@ -12,7 +12,6 @@ gchar *ui1 =
         "<ui>"
         "  <menubar name='MainMenu'>"
         "    <menu action='FileMenu'>"
-        "      <menuitem action='FileOpen'/>"
         "      <menuitem action='FileQuit'/>"
         "    </menu>"
         "    <menu action='TextMenu'>"

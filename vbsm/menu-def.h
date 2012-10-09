@@ -12,7 +12,6 @@ gchar *ui =
 	"<ui>"
 	"  <menubar name='MainMenu'>"
 	"    <menu action='FileMenu'>"
-	"      <menuitem action='FileOpen'/>"
         "      <menuitem action='FileQuit'/>"
         "    </menu>"
         "    <menu action='EditMenu'>"
@@ -95,6 +94,6 @@ GtkActionEntry menu_entries[] = {
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
         {"HelpContents", NULL, "Contents...", NULL, NULL, (GCallback)helpContents},
-        {"HelpAbout", NULL, "Contents...", NULL, NULL, (GCallback)helpAbout}
+        {"HelpAbout", NULL, "About...", NULL, NULL, (GCallback)helpAbout}
 };
 

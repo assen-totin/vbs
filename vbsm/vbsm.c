@@ -108,7 +108,14 @@ int main (int argc, char **argv){
 
 	// Menu
 	can_recv_from_net = 0;
-	GtkWidget *menu = make_menu(ui, menu_entries);
+	// Only the GTK+ idiots know why menu cannot be built in a function and returned as a widget -
+	// like the "deprecated" GtkItemFactoryEntry seamlesly did
+	GtkUIManager *p_uiManager = gtk_ui_manager_new ();
+	GtkActionGroup *p_actionGroup = gtk_action_group_new ("menuActionGroup");
+	gtk_action_group_add_actions (p_actionGroup, menu_entries, G_N_ELEMENTS (menu_entries), NULL);
+	gtk_ui_manager_insert_action_group (p_uiManager, p_actionGroup, 0);
+	gtk_ui_manager_add_ui_from_string (p_uiManager, ui, -1, NULL);
+	GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 
 	// Create vbox
 	vbox = gtk_vbox_new (FALSE, 0);

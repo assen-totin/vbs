@@ -10,19 +10,6 @@
 
 #include "common.h"
 
-GtkWidget *make_menu(gchar *ui, GtkActionEntry *menu_entries) {
-
-	GtkActionGroup *actiongroup = gtk_action_group_new("MainMenuActiongroup");
-	gtk_action_group_add_actions(actiongroup, menu_entries, G_N_ELEMENTS(menu_entries), NULL);
-	
-	GtkUIManager *ui_manager = gtk_ui_manager_new();
-	gtk_ui_manager_insert_action_group(ui_manager, actiongroup, 0);
-
-	gtk_ui_manager_add_ui_from_string(ui_manager, ui, -1, NULL);
-		
-	return gtk_ui_manager_get_widget(ui_manager, "/MainMenu");
-}
-
 void quitDialogCancel( GtkWidget *widget, gpointer data ){
         GtkWidget *quitDialog = data;
         gtk_widget_destroy(quitDialog);
