@@ -1,28 +1,17 @@
 REQUIREMENTS
 ============
 
-1. GTK+ 2.2 or above (including header files; for users of RPM, check that *-devel* packages
-   are installed. 
+1. GTK+ 2.2 or above. 
 
-2. pkg-config. (Yes, I also don't like it, but it is much easier to deal will all various
-   GTK layouts). If you don't have it, here is what I get from mine: 
-
-   [root@archimed vbs]# pkg-config --cflags --libs gtk+-2.0
-   -I/usr/include/gtk-2.0 -I/usr/lib/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo 
-   -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  
-   -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangocairo-1.0 -lpango-1.0 
-   -lcairo -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0
-
-   You can tweak the Makefile to make it work without the pkg-config.
+2. pkg-config.  
 
 3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5, 4.5.1 on Fedora 14). 
 
-4. make. This programme does not use autoconf - everything is ready in the Makefiles. 
-   Feel free to modify it according to your own taste. 
+4. make from autoconf tools.  
 
-5. mplayer. The binary of the non-gui version should be installed in your path and should be 
-   named "mplayer". To change the name, edit the video.h file.
-
+5. GStreamer or MPlayer. 
+   - For GStreamer, the follwoing two packages are required: gstreamer-0.10 and gstreamer-interfaces-0.10
+   - For MPlayer, the binary of the non-gui version should be installed in your path and should be  named "mplayer". 
 
 
 INSTALLATION
@@ -34,8 +23,9 @@ INSTALLATION
 
 3. (as root) make install
 
-The binaries are called "vbsm", "vbss" and "vbsd". If you are using Gnome, a menu entry will be installed for you.
+The binaries are called "vbsm", "vbss", "vbsc" and "vbsd". Menu entries will be installed for you.
 
+To build an RPM file: ifter building the sources, in the top-level source directory call "make rpm"
 
 
 UNINSTALL
