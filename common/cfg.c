@@ -151,7 +151,7 @@ void read_config() {
 				config.vbss.font_size = config_int(line);
 
 			else if (strstr(line, "VIDEO_BACKEND"))
-				config_char(line, &config.vbsm.video_backend[0]);
+				config.vbsm.video_backend = config_int(line);
 			else if (strstr(line, "GSTREAMER_VIDEO_SINK"))
 				config_char(line, &config.vbsm.gstreamer_video_sink[0]);
 		}

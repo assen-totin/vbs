@@ -24,7 +24,14 @@ void helpContents(GtkWidget *window);
 
 void insertBefore(gpointer callback_data, guint callback_action, GtkWidget *window);
 
-#define VBSM_MENU_COUNT 31
+void set_video_output (GtkWidget *window);
+void set_video_output_ok(GtkWidget *widget, gpointer data);
+
+void set_video_backend (GtkWidget *window);
+void set_video_backend_ok(GtkWidget *widget, gpointer data);
+
+#define VBSM_MENU_COUNT 33
+
 static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
 	{ "/_File", "<ALT>F", NULL, 0, "<Branch>" },
 	{ "/File/_Quit", "<CTRL>Q", quitDialog,  11, "<Item>" },
@@ -43,9 +50,15 @@ static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
 	{ "/Text/", "", NULL,  0, "<Separator>" },
 	{ "/Text/Set Encoding...", "", setEncodingImport,  23, "<Item>" },
 
-#ifdef HAVE_MPLAYER
+#ifdef HAVE_GSTREAMER
+        { "/_Video",         "<ALT>V",      NULL,         0, "<Branch>" },
+        { "/Video/Load _Video...", "<CTRL>V", fileDialog,  31, "<Item>" },
+        { "/Video/Set Video Backend...", "", set_video_backend,  32, "<Item>" },
+        { "/Video/Set Video Output...", "", set_video_output,  33, "<Item>" },
+#elif HAVE_MPLAYER
 	{ "/_Video",         "<ALT>V",      NULL,         0, "<Branch>" },
 	{ "/Video/Load _Video...", "<CTRL>V", fileDialog,  31, "<Item>" },
+	{ "/Video/Set Video Backend...", "", set_video_backend,  32, "<Item>" },
 #endif
 
 	{ "/_Export",        "<ALT>E",      NULL,         0, "<Branch>" },
@@ -68,6 +81,28 @@ static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
 	{ "/Help/About", "", helpAbout,  52, "<Item>" }
 };
 
+struct video_backend {
+        char name[255];
+	int num;
+	bool show_menu_output;
+        bool dflt;
+};
+
+static struct video_backend video_backends[] = {
+	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, true},
+	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, false}
+};
+
+struct video_output {
+        char name[255];
+	char code[255];
+        bool dflt;
+};
+
+static struct video_output video_outputs[] = {
+	{"X11", "ximagesink", true},
+	{"Xv", "xvimagesink", false}
+};
 
 #define VBS_MENU_IMPORT_TEXTONLY_TITLE "Select Text-only File"
 
@@ -82,6 +117,12 @@ static GtkItemFactoryEntry menuEntries[VBSM_MENU_COUNT] = {
 
 #define VBS_MENU_QUIT_TITLE "Really quit?"
 #define VBS_MENU_QUIT_TEXT "Your subtitles are exported to:"
+
+#define VBS_MENU_VIDEO_BACKEND_TITLE "Video Backend:"
+#define VBS_MENU_VIDEO_BACKEND_TEXT "Select video backend:\n(requires restart)"
+#define VBS_MENU_VIDEO_OUTPUT_TITLE "Video Output for GStreamer"
+#define VBS_MENU_VIDEO_OUTPUT_TEXT "Select video output for GStreamer:\n(requires restart)"
+#define VBS_MENU_VIDEO_OUTPUT_NOENT "Video output selection not available for current backend."
 
 #define VBS_MENU_HELP_TITLE "Using Voody Blue Subtitler"
 #define VBS_MENU_HELP_TEXT "\n1. Use the Text menu to import a text-only or a SubRip file\nand to specify its encoding.\n\n2. Use the Video menu to load video file.\n\n3. Use the Export menu to set an export destination\n(default is /tmp/vbs_export.srt) and to set export encoding\n and newline character.\n\n4. Use the Edit menu to add new subtitle or delete one\n as well as to zero counters.\n\n5. Control keys:\n* spacebar - toggles play/pause\n* b - enter next subtitle\n* m - exit current subtitle\n* n - exit current and enter next\n* s - save immediately\n\n6. Mouse controls:\n* Double click start or end time to go to subtitle\n* Double click text to edit it\n"

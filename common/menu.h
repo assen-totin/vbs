@@ -8,7 +8,6 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-//GtkWidget *makeMenu(GtkWidget *window);
 GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries);
 void quitDialogCancel( GtkWidget *widget, gpointer data);
 void helpAbout(GtkWidget *window);

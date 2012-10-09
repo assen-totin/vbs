@@ -47,10 +47,9 @@ When MPlayer is used, it will always be in a separate window. When GStreamer is 
 it will always be in the main window. GStreamer has the advantage that it can display
 the subtitle which is currently "on", therefore, it is the preferred method if both
 players are available (if only one is, naturally, it will be used). If you have both, 
-but prefer the MPlayer style, you can set so in the preferences. Also, to change the
-viode output used by GStreamer (by default, the highly inefficinent, but safe X11)
-you have to do it manually in the config file: set GSTREAMER_VIDEO_SINK property to 
-what you like (for Xv, use "xvimagesink").
+but prefer the MPlayer style, you can set so in the Video preferences. Also, to change 
+the video output used by GStreamer (by default, the highly inefficinent, but safe X11)
+use the corresponding menu. Changing backend or output requires restart to take effect.
 
 vbsm has a simple interface: 
 

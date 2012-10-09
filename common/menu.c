@@ -8,7 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "../common/common.h"
+#include "common.h"
 
 GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries) {
 	GtkAccelGroup *accel_group;
@@ -283,6 +283,4 @@ void useNetwork (GtkWidget *window) {
 
         gtk_widget_show_all (quitDialog);
 }
-
-
 
