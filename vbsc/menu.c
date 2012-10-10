@@ -160,7 +160,7 @@ void set_font_size (GtkAction *action, gpointer param) {
 
 void set_full_screen_ok(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"ON"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"ON"))
                 config.vbss.full_screen = 1;
         else
                 config.vbss.full_screen = 0;
@@ -186,8 +186,8 @@ void set_full_screen (GtkAction *action, gpointer param) {
         gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_combo_box_text_new();
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "OFF");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "ON");
         int index;
         if(config.vbss.full_screen == 0)
                 index = 0;

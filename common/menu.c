@@ -41,7 +41,7 @@ void helpAbout(GtkAction *action, gpointer param) {
 
 void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
 	write_config();
 	gtk_widget_destroy(quitDialog);
 }
@@ -49,7 +49,7 @@ void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 
 void setEncodingExportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	sprintf(&config.common.export_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	sprintf(&config.common.export_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
 	write_config();
 	gtk_widget_destroy(quitDialog);
 }
@@ -75,7 +75,7 @@ void setEncodingImport (GtkAction *action, gpointer param) {
 	int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
 	int i;
 	for (i=0; i<nencEntries; i++) {
-		gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), encEntries[i].name);
 		if (strstr(encEntries[i].name, config.common.import_encoding)) 
 			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
@@ -105,7 +105,7 @@ void setEncodingExport (GtkAction *action, gpointer param) {
 	int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
 	int i;
 	for (i=0; i<nencEntries; i++) {
-		gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), encEntries[i].name);
 		if (strstr(encEntries[i].name, config.common.export_encoding)) 
 			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
@@ -117,7 +117,7 @@ void setEncodingExport (GtkAction *action, gpointer param) {
 
 void setNewlineOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	if( strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"CR/LF")) 
+	if( strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"CR/LF")) 
 		config.common.export_cr = 1;
 	else 
 		config.common.export_cr = 0;
@@ -143,8 +143,8 @@ void setNewline (GtkAction *action, gpointer param) {
 	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	config.vbsm.menu_widget = gtk_combo_box_text_new();
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "LF");
-	gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "CR/LF");
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "LF");
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "CR/LF");
 	int index;
 	if(config.common.export_cr == 1) {index = 1;}
 	else {index = 0;}
@@ -226,9 +226,9 @@ void setNetworkServer (GtkAction *action, gpointer param) {
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"Off"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Off"))
 		config.common.network_mode = 0;
-        else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"Send"))
+        else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Send"))
 		config.common.network_mode = 1;
 	else
 		config.common.network_mode = 2;
@@ -254,11 +254,11 @@ void useNetwork (GtkAction *action, gpointer param) {
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_combo_box_text_new();
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Network is off");
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Send to network");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Network is off");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Send to network");
 
 	if (can_recv_from_net == 1)
-		gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Receive from network");
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Receive from network");
 
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), config.common.network_mode);
 

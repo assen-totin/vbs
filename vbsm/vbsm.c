@@ -79,7 +79,7 @@ int main (int argc, char **argv){
 #ifdef HAVE_GTK2
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress), GTK_PROGRESS_LEFT_TO_RIGHT);
 #elif HAVE_GTK3
-	gtk_orientable_set_orientation(GTK_PROGRESS_BAR(progress), GTK_ORIENTATION_HORIZONTAL);
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(progress), GTK_ORIENTATION_HORIZONTAL);
 	gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress), FALSE);
 #endif
 	config.vbsm.progress = progress;
@@ -123,7 +123,11 @@ int main (int argc, char **argv){
 	GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 
 	// Create vbox
+#ifdef HAVE_GTK2
 	vbox = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	vbox = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
 
 	// Pack entry & scroll into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);

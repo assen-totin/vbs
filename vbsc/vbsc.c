@@ -46,7 +46,11 @@ int main (int argc, char **argv){
 	GtkWidget *label = gtk_label_new(VBSC_WELCOME_TEXT);
 
 	// Create vbox
-	vbox = gtk_vbox_new (FALSE, 0);
+#ifdef HAVE_GTK2
+        vbox = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+        vbox = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
 
 	// Pack entries into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
