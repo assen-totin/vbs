@@ -78,8 +78,10 @@ struct struct_vbsm {
 	FILE *mplayer_pipe_read;
 	GtkListStore *mplayer_store;
 	GtkWidget *mplayer_view;
+#ifdef HAVE_GSTREAMER
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
+#endif
         GtkWidget *gstreamer_widget_player;
 	char gstreamer_video_sink[1024];
 };
@@ -167,7 +169,11 @@ int can_recv_from_net;
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
 #include "../vbsm/video-mplayer.h"
+
+#ifdef HAVE_GSTREAMER
 #include "../vbsm/video-gstreamer.h"
+#endif
+
 #include "../vbsm/menu.h"
 
 #include "../vbsc/vbsc.h"

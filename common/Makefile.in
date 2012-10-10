@@ -16,7 +16,7 @@ OBJS = cfg.o error.o network.o util.o menu.o
 
 IMGDIR = @IMGDIR@
 
-INCLUDES=`pkg-config --cflags gtk+-3.0`
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
 
 TARGET = cfg
 

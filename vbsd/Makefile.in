@@ -15,22 +15,18 @@ LIBS = -lm
 
 SBINDIR = @SBINDIR@
 
-#ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
-ADD_FLAGS = 
-
 TARGET = vbsd 
 
 OBJS_LOCAL = vbsd.o 
 OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o 
 
-#INCLUDES=`pkg-config --cflags gtk+-@GTK_VERSION@`
-#ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VERSION@`
-INCLUDES =
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 
-#HAVE_GSTREAMER = @HAVE_GSTREAMER@
-#ifeq ($(HAVE_GSTREAMER),1)
-#        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
-#endif
+HAVE_GSTREAMER = @HAVE_GSTREAMER@
+ifeq ($(HAVE_GSTREAMER),1)
+        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+endif
 
 all: $(TARGET)
 
