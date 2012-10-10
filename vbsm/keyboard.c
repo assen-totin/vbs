@@ -28,11 +28,13 @@ void on_pressed_b () {
 				}
 			}
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				new_from = gstreamer_query_position();
 				if (new_from == -1) {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
@@ -57,9 +59,11 @@ void on_pressed_b () {
 
 			// If using GStreamer, show the sub
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				char line3[1024];
 				strcpy(&line3[0], line);
 				gstreamer_sub_set(line3);
+#endif
 			}
 
 			g_free(line);
@@ -88,6 +92,7 @@ void on_pressed_m () {
 				}
 			}
                         else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
                                 new_to = gstreamer_query_position();
                                 if (new_to == -1) {
                                         time_t curr_time = time(NULL);
@@ -95,6 +100,7 @@ void on_pressed_m () {
                                 }
 				// Clear the sub
 				gstreamer_sub_clear();
+#endif
                         }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
@@ -143,8 +149,11 @@ void on_pressed_space (GtkWidget *window) {
 		// Pause the player
 		if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
 			mplayer_pipe_write("pause");
-		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 			gstreamer_pause();
+#endif
+		}
 
 	}
 	else if (config.common.running == FALSE) {
@@ -155,8 +164,11 @@ void on_pressed_space (GtkWidget *window) {
 			// Start the player
 			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
 				mplayer_pipe_write("pause");
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				gstreamer_play();
+#endif
+			}
 		}
 	}
 }

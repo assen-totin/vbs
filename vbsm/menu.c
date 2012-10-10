@@ -66,7 +66,11 @@ void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
 	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.", 1);}
 	sprintf(video_file_name, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {mplayer_load_video(video_file_name);}
-	else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {gstreamer_init(video_file_name);}
+	else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
+		gstreamer_init(video_file_name);
+#endif
+	}
 }
 
 

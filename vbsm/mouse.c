@@ -51,6 +51,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 				}
 
 				else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 					// Put new_time in milliseconds
 					new_time = new_time * 1000;
 					// Clear current sub - if any
@@ -59,6 +60,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 					// Seek to new position, stop
 					gstreamer_seek_absolute(new_time);
 					gstreamer_pause();
+#endif
 				}
 
 			}

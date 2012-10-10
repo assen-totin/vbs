@@ -108,18 +108,23 @@ int progress_bar_update() {
 			}
 
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				local = gstreamer_query_position();
 				if (local == -1) {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			// If using GStreamer, show the sub while inside
                         if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
+#ifdef HAVE_GSTREAMER
+
                                 char line3[1024];
                                 strcpy(&line3[0], line);
                                 gstreamer_sub_set(line3);
+#endif
                          }
 
 			// If out of the sub, move the list to next
@@ -134,7 +139,9 @@ int progress_bar_update() {
 
 				}
 				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 					gstreamer_sub_clear();
+#endif
 				}
 			}
 		}
