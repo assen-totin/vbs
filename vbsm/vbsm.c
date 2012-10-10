@@ -81,6 +81,8 @@ int main (int argc, char **argv){
 #elif HAVE_GTK3
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(progress), GTK_ORIENTATION_HORIZONTAL);
 	gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress), FALSE);
+	gtk_progress_bar_set_show_text(GTK_PROGRESS_BAR(progress), TRUE);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "");
 #endif
 	config.vbsm.progress = progress;
 
