@@ -254,7 +254,7 @@ void set_video_backend (GtkAction *action, gpointer param) {
         for (i=0; i<n_video_backends; i++) {
                 gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), video_backends[i].name);
                 if (video_backends[i].num == config.vbsm.video_backend)
-                        gtk_combo_box_set_active(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), i);
+                        gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
         }
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
@@ -316,7 +316,7 @@ void set_video_output (GtkAction *action, gpointer param) {
 	        for (i=0; i<n_video_outputs; i++) {
         	        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), video_outputs[i].name);
                 	if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
-                        	gtk_combo_box_set_active(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), i);
+                        	gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	        }
         	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 	}
