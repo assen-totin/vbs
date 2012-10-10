@@ -28,44 +28,99 @@ AC_SUBST([IMGDIR])
 AC_PROG_CC
 
 # Check for video back-ends
+ECHO_BACKEND="None"
+FORCE_BACKEND="no"
+AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
+
+# MPLayer
 HAVE_MPLAYER="0"
-AC_CHECK_PROG([CHECK_MPLAYER],[mplayer],[yes],[no])
-if test $CHECK_MPLAYER = "no" ; then
-	AC_MSG_ERROR(["*** MPlayer not found. vbsm Won't be able to use it."])
+AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
+if test $FORCE_BACKEND = "mplayer" ; then
+	if test $FOUND_MPLAYER = "no" ; then
+		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
+	fi	
 else
+	if test $FOUND_MPLAYER = "no" ; then
+		echo "*** MPlayer not found. vbsm Won't be able to use it."
+	fi
+fi
+if test $FOUND_MPLAYER = "yes" ; then
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
 	HAVE_MPLAYER="1"
+	ECHO_BACKEND="MPlayer"
 fi
 AC_SUBST([HAVE_MPLAYER])
 
+# GStreamer
 # FIXME: Find a way to get rid of the GStreamer version in package name?
 HAVE_GSTREAMER="0"
-PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10],
-	[HAVE_GSTREAMER="1"],
-	[AC_MSG_ERROR(["*** GStreamer not found. vbsm Won't be able to use it."])]
-
-])
-if test $HAVE_GSTREAMER = "1" ; then
-	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
+FOUND_GSTREAMER="no"
+FOUND_GSTREAMER_INTERFACES="no"
+PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10], [FOUND_GSTREAMER="yes"], [FOUND_GSTREAMER="no"])
+PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+if test $FORCE_BACKEND = "gstreamer" ; then
+	if test $FOUND_GSTREAMER = "no" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
+	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+	fi
+else
+	if test $FOUND_GSTREAMER = "no" ; then
+		echo "*** GStreamer not found. vbsm Won't be able to use it."
+	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+		echo "*** GStreamer foound, but GStreamer-interfaces not found. Disabling GStreamer."
+	fi
+fi
+if test $FOUND_GSTREAMER = "yes" ; then
+	if test $FOUND_GSTREAMER_INTERFACES = "yes" ; then
+		AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
+		HAVE_GSTREAMER="1"
+		ECHO_BACKEND="GStreamer"
+	fi
 fi
 AC_SUBST([HAVE_GSTREAMER])
 
-PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10])
-
+# Check which back-ends are enabled
 HAVE_MPLAYER_GSTREAMER="0"
 if test $HAVE_MPLAYER = "1" ; then
 	if test $HAVE_GSTREAMER = "1" ; then
 		HAVE_MPLAYER_GSTREAMER="1"
+		ECHO_BACKEND="GStreamer and MPlayer"
 	fi
 fi
 AC_SUBST([HAVE_MPLAYER_GSTREAMER])
 
-# Checks for libraries.
-# FIXME: Replace `main' with a function in `-lm':
-AC_CHECK_LIB([m], [main])
+# Check for GTK and determine version
+GTK_VERSION="0.0"
+FORCE_GTK="no"
+AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
-# Check for packages
-PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+PKG_CHECK_MODULES([GTK3], [gtk+-3.0], [FOUND_GTK3="yes"], [FOUND_GTK3="no"])
+PKG_CHECK_MODULES([GTK2], [gtk+-2.0], [FOUND_GTK2="yes"], [FOUND_GTK2="no"])
+if test $FORCE_GTK = "3" ; then
+        if test $FOUND_GTK3 = "no" ; then
+                AC_MSG_ERROR(["*** GTK2 forced, but not found."])
+        else
+                GTK_VERSION="3.0"
+        fi
+elif test $FORCE_GTK = "2" ; then
+	if test $FOUND_GTK2 = "no" ; then
+		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
+	else
+		GTK_VERSION="2.0"
+	fi
+else
+	if test $FOUND_GTK3 = "yes" ; then
+		GTK_VERSION="3.0"
+	elif test $FOUND_GTK3 = "yes" ; then
+		GTK_VERSION="2.0"
+	else
+		AC_MSG_ERROR(["*** GTK not found."])
+	fi
+fi
+AC_SUBST([GTK_VERSION])
+
+# Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
@@ -88,6 +143,9 @@ AC_OUTPUT
 
 echo
 echo "Configuration complete."
+echo
+echo "* Video backend(s): " $ECHO_BACKEND
+echo "* GTK version: " $GTK_VERSION
 echo
 echo "Now, run make."
 echo
