@@ -84,14 +84,14 @@ AC_SUBST([HAVE_GSTREAMER])
 HAVE_MPLAYER_GSTREAMER="0"
 if test $HAVE_MPLAYER = "1" ; then
 	if test $HAVE_GSTREAMER = "1" ; then
-		HAVE_MPLAYER_GSTREAMER="1"
+		AC_DEFINE([HAVE_MPLAYER_GSTREAMER], [1], ["Define if GStreamer and MPlayer were found"])
 		ECHO_BACKEND="GStreamer and MPlayer"
 	fi
 fi
 AC_SUBST([HAVE_MPLAYER_GSTREAMER])
 
 # Check for GTK and determine version
-GTK_VERSION="0.0"
+GTK_VER="0.0"
 FORCE_GTK="no"
 AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
@@ -101,23 +101,24 @@ if test $FORCE_GTK = "3" ; then
         if test $FOUND_GTK3 = "no" ; then
                 AC_MSG_ERROR(["*** GTK2 forced, but not found."])
         else
-                GTK_VERSION="3.0"
+                GTK_VER="3.0"
         fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
 		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
 	else
-		GTK_VERSION="2.0"
+		GTK_VER="2.0"
 	fi
 else
 	if test $FOUND_GTK3 = "yes" ; then
-		GTK_VERSION="3.0"
+		GTK_VER="3.0"
 	elif test $FOUND_GTK3 = "yes" ; then
-		GTK_VERSION="2.0"
+		GTK_VER="2.0"
 	else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi
 fi
+AC_DEFINE_UNQUOTED([GTK_VERSION], ["$GTK_VER"], ["Define GTK version"])
 AC_SUBST([GTK_VERSION])
 
 # Check for GLib
@@ -145,7 +146,7 @@ echo
 echo "Configuration complete."
 echo
 echo "* Video backend(s): " $ECHO_BACKEND
-echo "* GTK version: " $GTK_VERSION
+echo "* GTK version: " $GTK_VER
 echo
 echo "Now, run make."
 echo
