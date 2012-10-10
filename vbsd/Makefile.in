@@ -15,15 +15,13 @@ LIBS = -lm
 
 SBINDIR = @SBINDIR@
 
-ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
-
 TARGET = vbsd 
 
 OBJS_LOCAL = vbsd.o 
 OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o 
 
-INCLUDES=`pkg-config --cflags gtk+-2.0`
-ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 ifeq ($(HAVE_GSTREAMER),1)

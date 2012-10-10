@@ -264,7 +264,11 @@ int main (int argc, char *argv[]) {
 	/*** Callbacks ***/
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
 
+#ifdef HAVE_GTK2
 	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
+#elif HAVE_GTK3
+	gdk_threads_add_timeout(100, (GSourceFunc) show_subtitle, subtitle);
+#endif
 
 	if (config.common.network_mode == 2)
 		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	

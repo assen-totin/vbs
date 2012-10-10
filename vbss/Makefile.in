@@ -13,8 +13,8 @@ CFLAGS = -c -O2
 
 BINDIR = @BINDIR@ 
 
-INCLUDES=`pkg-config --cflags gtk+-2.0`
-ADD_FLAGS=`pkg-config --cflags --libs gtk+-2.0`
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 ADD_FLAGS2=`pkg-config --libs gthread-2.0`
 
 TARGET = vbss 

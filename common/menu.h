@@ -8,23 +8,20 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries);
-void quitDialogCancel( GtkWidget *widget, gpointer data);
-void helpAbout(GtkWidget *window);
+void quitDialogCancel(GtkWidget *widget, gpointer data);
+void helpAbout(GtkAction *action, gpointer param);
 void setEncodingImportOK(GtkWidget *widget, gpointer data);
 void setEncodingExportOK(GtkWidget *widget, gpointer data);
-void setEncodingImport (GtkWidget *window);
-void setEncodingExport (GtkWidget *window);
+void setEncodingImport (GtkAction *action, gpointer param);
+void setEncodingExport (GtkAction *action, gpointer param);
 void setNewlineOK(GtkWidget *widget, gpointer data);
-void setNewline (GtkWidget *window);
+void setNewline (GtkAction *action, gpointer param);
 void setNetworkPortOK(GtkWidget *widget, gpointer data);
-void setNetworkPort (GtkWidget *window);
+void setNetworkPort (GtkAction *action, gpointer param);
 void setNetworkServerOK(GtkWidget *widget, gpointer data);
-void setNetworkServer (GtkWidget *window);
+void setNetworkServer (GtkAction *action, gpointer param);
 void useNetworkOK(GtkWidget *widget, gpointer data);
-void useNetwork (GtkWidget *window);
-
-#define VBS_MENU_DEFAULT_PATH "~/Desktop"
+void useNetwork (GtkAction *action, gpointer param);
 
 #define VBS_MENU_ABOUT_TITLE "About Voody Blue Subtitler"
 #define VBS_MENU_ABOUT_TEXT "\nVoody Blue Subtitler - Master Client\n\nVersion: 2.0\n\nAuthor: Assen Totin <assen.totin@gmail.com>\n\nProgramme home page: http://bilbo.online.bg/~assen/vbs\n\nThis programme is distributed under GNU General Public License.\nSee the LICENSE file from the distribution or visit\nhttp://www.gnu.org/copyleft/gpl.html for details.\n"

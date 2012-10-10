@@ -10,6 +10,14 @@
 
 #include "../common/common.h"
 
+#ifdef HAVE_GTK3
+	#define GDK_b GDK_KEY_b
+	#define GDK_m GDK_KEY_m
+	#define GDK_n GDK_KEY_n
+	#define GDK_s GDK_KEY_s 
+	#define GDK_space GDK_KEY_space
+#endif
+
 void on_pressed_b () {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
@@ -20,19 +28,23 @@ void on_pressed_b () {
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					new_from = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				new_from = gstreamer_query_position();
 				if (new_from == -1) {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
@@ -57,9 +69,11 @@ void on_pressed_b () {
 
 			// If using GStreamer, show the sub
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				char line3[1024];
 				strcpy(&line3[0], line);
 				gstreamer_sub_set(line3);
+#endif
 			}
 
 			g_free(line);
@@ -80,14 +94,17 @@ void on_pressed_m () {
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					new_to = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					new_to = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
                         else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
                                 new_to = gstreamer_query_position();
                                 if (new_to == -1) {
                                         time_t curr_time = time(NULL);
@@ -95,6 +112,7 @@ void on_pressed_m () {
                                 }
 				// Clear the sub
 				gstreamer_sub_clear();
+#endif
                         }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
@@ -141,10 +159,17 @@ void on_pressed_space (GtkWidget *window) {
 		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 
 		// Pause the player
-		if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
-			mplayer_pipe_write("pause");
-		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+			if (mplayer_is_alive())
+				mplayer_pipe_write("pause");
+#endif
+		}
+		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 			gstreamer_pause();
+#endif
+		}
 
 	}
 	else if (config.common.running == FALSE) {
@@ -153,10 +178,17 @@ void on_pressed_space (GtkWidget *window) {
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 
 			// Start the player
-			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
-				mplayer_pipe_write("pause");
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+				if (mplayer_is_alive())
+					mplayer_pipe_write("pause");
+#endif
+			}
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				gstreamer_play();
+#endif
+			}
 		}
 	}
 }

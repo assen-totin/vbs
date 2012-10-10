@@ -10,33 +10,16 @@
 
 #include "common.h"
 
-GtkWidget *makeMenu(GtkWidget *window, GtkItemFactoryEntry *menuEntries, int nmenuEntries) {
-	GtkAccelGroup *accel_group;
-	GtkItemFactory *item_factory;
-
-	accel_group = gtk_accel_group_new();
-	item_factory = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<vbsMainMenu>", accel_group);
-
-	// Last argument: callback_data,
-	// gets passed to all the callback functions for all the entries with callback_action != 0
-
-	gtk_item_factory_create_items(item_factory, nmenuEntries, menuEntries, window);
-
-	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-
-	return gtk_item_factory_get_widget (item_factory, "<vbsMainMenu>");
-}
-
 void quitDialogCancel( GtkWidget *widget, gpointer data ){
         GtkWidget *quitDialog = data;
         gtk_widget_destroy(quitDialog);
 }
 
 
-void helpAbout(GtkWidget *window) {
+void helpAbout(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ABOUT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ABOUT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
@@ -45,12 +28,12 @@ void helpAbout(GtkWidget *window) {
 	quitFrame = gtk_frame_new("");
 	quitLabel = gtk_label_new(VBS_MENU_ABOUT_TEXT);
 	gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame);
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
 
 	quitFrame = gtk_frame_new("");
 	quitLabel = gtk_label_new(VBS_MENU_ABOUT_TEXT2);
 	gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame);
+	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
 
 	gtk_widget_show_all (quitDialog);
 }
@@ -58,7 +41,7 @@ void helpAbout(GtkWidget *window) {
 
 void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
 	write_config();
 	gtk_widget_destroy(quitDialog);
 }
@@ -66,16 +49,16 @@ void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 
 void setEncodingExportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	sprintf(&config.common.export_encoding[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+	sprintf(&config.common.export_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
 	write_config();
 	gtk_widget_destroy(quitDialog);
 }
 
 
-void setEncodingImport (GtkWidget *window) {
+void setEncodingImport (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_IMPORT, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_IMPORT, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -86,26 +69,26 @@ void setEncodingImport (GtkWidget *window) {
 	char quitMessage[1024];
 	sprintf(quitMessage, "%s\n", VBS_MENU_ENCODING_TITLE);
 	quitLabel = gtk_label_new(quitMessage);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-	config.vbsm.menu_widget = gtk_combo_box_new_text();
+	config.vbsm.menu_widget = gtk_combo_box_text_new();
 	int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
 	int i;
 	for (i=0; i<nencEntries; i++) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), encEntries[i].name);
 		if (strstr(encEntries[i].name, config.common.import_encoding)) 
 			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
 	gtk_widget_show_all (quitDialog);
 }
 
 
-void setEncodingExport (GtkWidget *window) {
+void setEncodingExport (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_EXPORT, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENCODING_EXPORT, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -116,17 +99,17 @@ void setEncodingExport (GtkWidget *window) {
 	char quitMessage[1024];
 	sprintf(quitMessage, "%s\n", VBS_MENU_ENCODING_TITLE);
 	quitLabel = gtk_label_new(quitMessage);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-	config.vbsm.menu_widget = gtk_combo_box_new_text();
+	config.vbsm.menu_widget = gtk_combo_box_text_new();
 	int nencEntries = sizeof (encEntries) / sizeof (encEntries[0]);
 	int i;
 	for (i=0; i<nencEntries; i++) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), encEntries[i].name);
+		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), encEntries[i].name);
 		if (strstr(encEntries[i].name, config.common.export_encoding)) 
 			gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	}
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
 	gtk_widget_show_all (quitDialog);
 }
@@ -134,7 +117,7 @@ void setEncodingExport (GtkWidget *window) {
 
 void setNewlineOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
-	if( strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"CR/LF")) 
+	if( strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"CR/LF")) 
 		config.common.export_cr = 1;
 	else 
 		config.common.export_cr = 0;
@@ -143,10 +126,10 @@ void setNewlineOK(GtkWidget *widget, gpointer data) {
 }
 
 
-void setNewline (GtkWidget *window) {
+void setNewline (GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NEWLINE_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NEWLINE_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -157,16 +140,16 @@ void setNewline (GtkWidget *window) {
 	char quitMessage[1024];
 	sprintf(quitMessage, "%s\n", VBS_MENU_NEWLINE_TEXT);
 	quitLabel = gtk_label_new(quitMessage);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-	config.vbsm.menu_widget = gtk_combo_box_new_text();
-	gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "LF");
-	gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), "CR/LF");
+	config.vbsm.menu_widget = gtk_combo_box_text_new();
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "LF");
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "CR/LF");
 	int index;
 	if(config.common.export_cr == 1) {index = 1;}
 	else {index = 0;}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), index);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
 	gtk_widget_show_all (quitDialog);
 }
@@ -178,10 +161,10 @@ void setNetworkPortOK(GtkWidget *widget, gpointer data) {
         gtk_widget_destroy(quitDialog);
 }
 
-void setNetworkPort (GtkWidget *window) {
+void setNetworkPort (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_PORT_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_PORT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -192,13 +175,13 @@ void setNetworkPort (GtkWidget *window) {
         char quitMessage[1024];
         sprintf(&quitMessage[0], "%s\n", VBS_MENU_NETWORK_PORT_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	config.vbsm.menu_widget = gtk_entry_new();
 	char tmp1[16];
 	sprintf(&tmp1[0], "%u", config.common.tcp_port);
 	gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }
@@ -215,10 +198,10 @@ void setNetworkServerOK(GtkWidget *widget, gpointer data) {
 	}
 }
 
-void setNetworkServer (GtkWidget *window) {
+void setNetworkServer (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_SERVER_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_NETWORK_SERVER_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -229,23 +212,23 @@ void setNetworkServer (GtkWidget *window) {
         char quitMessage[1024];
         sprintf(quitMessage, "%s\n", VBS_MENU_NETWORK_SERVER_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	config.vbsm.menu_widget = gtk_entry_new();
 	gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &config.common.server_name[0]);
-        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         config.vbsm.menu_widget2 = gtk_label_new(VBS_MENU_DNS_WARNING_TITLE);
-        gtk_container_add(GTK_CONTAINER(GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget2);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget2);
 
         gtk_widget_show_all(quitDialog);
 }
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"Off"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Off"))
 		config.common.network_mode = 0;
-        else if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"Send"))
+        else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Send"))
 		config.common.network_mode = 1;
 	else
 		config.common.network_mode = 2;
@@ -254,10 +237,10 @@ void useNetworkOK(GtkWidget *widget, gpointer data) {
 }
 
 
-void useNetwork (GtkWidget *window) {
+void useNetwork (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENABLE_NETWORK_TITLE, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_ENABLE_NETWORK_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -268,18 +251,18 @@ void useNetwork (GtkWidget *window) {
         char quitMessage[1024];
         sprintf(quitMessage, "%s\n", VBS_MENU_ENABLE_NETWORK_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-        config.vbsm.menu_widget = gtk_combo_box_new_text();
-        gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Network is off");
-        gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Send to network");
+        config.vbsm.menu_widget = gtk_combo_box_text_new();
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Network is off");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Send to network");
 
 	if (can_recv_from_net == 1)
-		gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "Receive from network");
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Receive from network");
 
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), config.common.network_mode);
 
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }

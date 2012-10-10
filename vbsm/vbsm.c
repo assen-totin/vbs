@@ -10,8 +10,10 @@
 
 #include "../common/common.h"
 
+#include "menu-def.h"
+
 int main (int argc, char **argv){
-	GtkWidget *window, *vbox, *status, *progress;
+	GtkWidget *vbox, *status, *progress;
 	GtkWidget *mplayer_scroll;
 	GtkTreeSelection *mplayer_selection;
 
@@ -74,7 +76,14 @@ int main (int argc, char **argv){
 
 	// Progress, will be packed in the middle of the vbox
 	progress = gtk_progress_bar_new();
-	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress),GTK_PROGRESS_LEFT_TO_RIGHT);
+#ifdef HAVE_GTK2
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress), GTK_PROGRESS_LEFT_TO_RIGHT);
+#elif HAVE_GTK3
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(progress), GTK_ORIENTATION_HORIZONTAL);
+	gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress), FALSE);
+	gtk_progress_bar_set_show_text(GTK_PROGRESS_BAR(progress), TRUE);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "");
+#endif
 	config.vbsm.progress = progress;
 
 	// Root window
@@ -83,8 +92,8 @@ int main (int argc, char **argv){
         int screen_width = gdk_screen_get_width(gdk_screen);
         int screen_height = gdk_screen_get_height(gdk_screen);
 
-        window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_window_set_title (GTK_WINDOW (window), "Voody Blue Subtitler");
+        config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler");
         gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
         if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
                 GdkScreen *gdk_screen = gdk_screen_get_default();
@@ -95,21 +104,32 @@ int main (int argc, char **argv){
                 	window_height = (int) (0.9 * screen_height);
 		}
         }
-        gtk_widget_set_size_request (window, window_width, window_height);
-        g_signal_connect (window, "delete_event", G_CALLBACK(quitDialog), window);
+        gtk_widget_set_size_request (config.vbsm.window, window_width, window_height);
+        g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quitDialog), config.vbsm.window);
 
 	// Link double-click event
-	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, window);
+	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
 
 	// Key events
-	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, window);
+	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
 
 	// Menu
 	can_recv_from_net = 0;
-	GtkWidget *menu = makeMenu(window, &menuEntries[0], VBSM_MENU_COUNT);
+	// Only the GTK+ idiots know why menu cannot be built in a function and returned as a widget -
+	// like the "deprecated" GtkItemFactoryEntry seamlesly did
+	GtkUIManager *p_uiManager = gtk_ui_manager_new ();
+	GtkActionGroup *p_actionGroup = gtk_action_group_new ("menuActionGroup");
+	gtk_action_group_add_actions (p_actionGroup, menu_entries, G_N_ELEMENTS (menu_entries), NULL);
+	gtk_ui_manager_insert_action_group (p_uiManager, p_actionGroup, 0);
+	gtk_ui_manager_add_ui_from_string (p_uiManager, ui, -1, NULL);
+	GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 
 	// Create vbox
+#ifdef HAVE_GTK2
 	vbox = gtk_vbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	vbox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0);
+#endif
 
 	// Pack entry & scroll into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
@@ -121,12 +141,12 @@ int main (int argc, char **argv){
 	gtk_box_pack_start(GTK_BOX(vbox), mplayer_scroll, TRUE, TRUE, 0);
 
 	// Add vbox to window
-	gtk_container_add(GTK_CONTAINER (window), vbox);
+	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);
 
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(config.vbsm.window);
 
 	// Progress bar check & update function
-	g_timeout_add(1000, (GtkFunction) progress_bar_update, NULL);
+	g_timeout_add(1000, progress_bar_update, NULL);
 
 	gtk_main();
 

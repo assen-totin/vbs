@@ -99,27 +99,34 @@ int progress_bar_update() {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, COL_LINE, &line, -1);
 
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					local = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 				local = gstreamer_query_position();
 				if (local == -1) {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			// If using GStreamer, show the sub while inside
                         if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
+#ifdef HAVE_GSTREAMER
+
                                 char line3[1024];
                                 strcpy(&line3[0], line);
                                 gstreamer_sub_set(line3);
+#endif
                          }
 
 			// If out of the sub, move the list to next
@@ -134,7 +141,9 @@ int progress_bar_update() {
 
 				}
 				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
 					gstreamer_sub_clear();
+#endif
 				}
 			}
 		}
@@ -154,7 +163,7 @@ void warnDialog(GtkWidget *window, char warning[1024]) {
 
 	warnLabel = gtk_label_new(warning);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(warnDialog)->vbox), warnLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(warnDialog))), warnLabel);
 
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) warnDialog);
 
