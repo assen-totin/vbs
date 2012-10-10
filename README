@@ -42,7 +42,7 @@ Encoding" menu.
 By default, the lines in the output file will be <LF> terminated. If you need a 
 <CR><LF> format, set it from the "Expot/Set Newline Char" menu. 
 
-vbsm can use two different players for video, hene the interface will slighty differ. 
+vbsm can use two different players for video, hence the interface will slighty differ. 
 When MPlayer is used, it will always be in a separate window. When GStreamer is used, 
 it will always be in the main window. GStreamer has the advantage that it can display
 the subtitle which is currently "on", therefore, it is the preferred method if both
@@ -90,19 +90,17 @@ vbsm has a simple interface:
   use the entries in the Edit menu. In the same menu you can zero the counters for
   the currently selected subtitle or for all subtitles from current on. 
 
-  To import a plain text or SubRip text file, use the entries in the Text menu.
-  Also use it t specify encoding for the text files.
+  To import a plain text or SubRip text file, use the entries in the Subtiles menu.
+  Also use it t specify encoding for the text files and export path (default is 
+  "/tmp/vbs_export.srt"). Also use it to specify encoding for the exported file and
+  to set the newline character (default <LF>).
 
   To load a video file, use the Video/Load menu.
 
-  To set an export destination, use the Export menu. Default is usually 
-  "/tmp/vbs_export.srt". Also use it to specify encoding for the exported file and
-  to set the newline character (default <LF>).
-
-  To send the subtitles to a vbds server, set the server name and port in the "Network"
+  To send the subtitles to a vbsd server, set the server name and port in the "Network"
   menu; also, there is the entry to enable or disable network. 
 
-  To get some help, use the Help/Contents menu.
+  To get some usage help, use the Help/Contents menu.
 
 B. vbss
 -------
@@ -160,7 +158,7 @@ D. vbsc
 -------
 
 vbsc is a configuration utility. It only has a menu with all the combined settings from
-vbsm and vbss. You can use it to change teh settings in the config file (mostly useful
+vbsm and vbss. You can use it to change the settings in the config file (mostly useful
 for vbss as it does not have a menu).
 
 

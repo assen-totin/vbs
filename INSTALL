@@ -5,19 +5,27 @@ REQUIREMENTS
 
 2. pkg-config.  
 
-3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5, 4.5.1 on Fedora 14). 
+3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5, 4.5.1 
+   on Fedora 14, i4.7.2 on FEdora 17). 
 
-4. make from autoconf tools.  
+4. make from autoconf tools.
 
 5. GStreamer or MPlayer. 
-   - For GStreamer, the follwoing two packages are required: gstreamer-0.10 and gstreamer-interfaces-0.10
-   - For MPlayer, the binary of the non-gui version should be installed in your path and should be  named "mplayer". 
+   - For GStreamer, the follwoing two packages are required: gstreamer-0.10 
+     and gstreamer-interfaces-0.10
+   - For MPlayer, the binary of the non-gui version should be installed in 
+     your path and should be  named "mplayer".
 
 
 INSTALLATION
 ============
 
 1. ./configure
+     --enable-backend=mlayer,gstreamer - compile only MPlayer or GStreamer as 
+       back-end (by default, GStreamer will be compiled if available and 
+       MPlayer will always be compiled).
+     --enable-gtk=2,3 - force GTK version to compile against. If both 2 and 3 
+       are available, 3 will be used by default.
 
 2. make
 
@@ -25,7 +33,7 @@ INSTALLATION
 
 The binaries are called "vbsm", "vbss", "vbsc" and "vbsd". Menu entries will be installed for you.
 
-To build an RPM file: ifter building the sources, in the top-level source directory call "make rpm"
+To build an RPM file: after building the sources, in the top-level source directory call "make rpm"
 
 
 UNINSTALL

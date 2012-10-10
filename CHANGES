@@ -1,3 +1,15 @@
+Oct XX, 2012 - Version 3.0
+==========================
+
+1. Support GTK3 as well as GTK2. Choice will be made at compile time. 
+If both are available, GTK3 will be used unless GTK2 is forced with
+the --enable-gtk=2 confgugure options.
+
+2. Support for GStreamer for video playback. By default, if GStreamer 
+is available, support for it will be built and also for MPlayer. To
+compile only one of them, use the --enable-backend=mplayer,gstreamer 
+configuration option. 
+
 Oct 9, 2012 - Version 2.2
 ==========================
 
