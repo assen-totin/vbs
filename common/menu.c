@@ -226,7 +226,7 @@ void setNetworkServer (GtkAction *action, gpointer param) {
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Off"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"off"))
 		config.common.network_mode = 0;
         else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Send"))
 		config.common.network_mode = 1;
