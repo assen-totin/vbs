@@ -8,11 +8,8 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void fileDialog(GtkAction *action, gpointer param);
-void fileDialogOK21( GtkWidget *fileDialogWidget, GtkFileSelection *fs );
-void fileDialogOK22( GtkWidget *fileDialogWidget, GtkFileSelection *fs );
-void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs );
-void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs );
+void fileDialogOpen(GtkAction *action, gpointer param);
+void fileDialogSave(GtkAction *action, gpointer param);
 
 void quitDialog(GtkAction *action, gpointer param);
 static void quitDialogOK( GtkWidget *widget, gpointer data );

@@ -43,10 +43,10 @@ GtkActionEntry menu_entries1[] = {
         {"FileQuit", NULL, "Quit", "<CTRL>Q", NULL, (GCallback)quit_dialog},
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
-        {"TextImportDefault", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog},
+        {"TextImportDefault", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
         {"TextImportEncoding", NULL, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"TextExportDefault", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog},
+        {"TextExportDefault", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog_save},
         {"TextExportEncoding", NULL, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
         {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
 

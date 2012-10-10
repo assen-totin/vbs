@@ -98,23 +98,26 @@ if test $FORCE_GTK = "3" ; then
                 AC_MSG_ERROR(["*** GTK2 forced, but not found."])
         else
                 GTK_VER="3.0"
+		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK2"])
         fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
 		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
 	else
 		GTK_VER="2.0"
+		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK3"])
 	fi
 else
 	if test $FOUND_GTK3 = "yes" ; then
 		GTK_VER="3.0"
+		AC_DEFINE_UNQUOTED([HAVE_GTK3], [1], ["Define GTK3"])
 	elif test $FOUND_GTK3 = "yes" ; then
 		GTK_VER="2.0"
+		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK2"])
 	else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi
 fi
-AC_DEFINE_UNQUOTED([GTK_VERSION], [$GTK_VER], ["Define GTK version"])
 AC_SUBST([GTK_VER])
 
 # Check for GLib

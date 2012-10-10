@@ -10,19 +10,6 @@
 
 #include "../common/common.h"
 
-void file_dialog_ok_21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_21","Filename too long.", 1);}
-	sprintf(&config.common.import_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	write_config();
-}
-
-
-void file_dialog_ok_41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("file_dialog_ok_41","Filename too long.",1);}
-	sprintf(&config.common.export_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	write_config();
-}
-
 static void quit_dialog_ok( GtkWidget *widget, gpointer data ){
 	GtkWidget *quitDialog = data;
 	gtk_widget_destroy(quitDialog);
@@ -50,41 +37,60 @@ void quit_dialog(GtkAction *action, gpointer param) {
 }
 
 
-void file_dialog(GtkAction *action, gpointer param) {
+void file_dialog_save(GtkAction *action, gpointer param) {
+        GtkWidget *fileDialogWidget;
+        char fileDialogTitle[64];
+        char fileDialogFile[256];
+
+        fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
+                                      GTK_FILE_CHOOSER_ACTION_SAVE,
+                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                      NULL);
+
+        sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
+
+        if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
+                char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
+
+                if (strstr(gtk_action_get_name(action), "EditExportDefault")) {
+                        strcpy(&config.common.export_filename[0], filename);
+                }
+
+                g_free (filename);
+        }
+
+        gtk_widget_destroy (fileDialogWidget);
+
+}
+
+
+void file_dialog_open(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
 	char fileDialogFile[256];
 
-	if (strstr(gtk_action_get_name(action), "EditImportDefault")) {
-		// Import Text-only
-		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
+        fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
+                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                      NULL);
+
+        sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
+
+	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
+		char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
+			if (strstr(gtk_action_get_name(action), "EditImportDefault")) {
+				// Import Text-only
+				strcpy(&config.common.import_filename[0], filename);
+			}
+
+		g_free (filename);
 	}
-	else if (strstr(gtk_action_get_name(action), "EditExportDefault")) {
-		// Export Dialog
-		sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-	}
-
-	fileDialogWidget = gtk_file_selection_new (fileDialogTitle);
-
-	/* Connect the ok_button to file_ok_sel function */
-	if (strstr(gtk_action_get_name(action), "EditImportDefault")) 
-		// Import Text-only
-		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_21), (gpointer) fileDialogWidget);
-	else if (strstr(gtk_action_get_name(action), "EditExportDefault"))
-		// Export Dialog
-		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (file_dialog_ok_41), (gpointer) fileDialogWidget);
-
-	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
-
-	/* Connect the cancel_button to destroy the widget */
-	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->cancel_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
-
-	/* Lets set the filename, as if this were a save dialog, and we are giving a default filename */
-	gtk_file_selection_set_filename (GTK_FILE_SELECTION(fileDialogWidget), fileDialogFile);
-
-	gtk_widget_show (fileDialogWidget);
+        
+	gtk_widget_destroy (fileDialogWidget);
 }
 
 

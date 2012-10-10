@@ -73,16 +73,16 @@ GtkActionEntry menu_entries[] = {
         {"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)setTimer},
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
-        {"TextImportPlain", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialog},
-        {"TextImportSubrip", NULL, "Load SubRip...", "<CTRL>R", NULL, (GCallback)fileDialog},
+        {"TextImportPlain", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialogOpen},
+        {"TextImportSubrip", NULL, "Load SubRip...", "<CTRL>R", NULL, (GCallback)fileDialogOpen},
         {"TextImportEncoding", NULL, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"TextExportDestination", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)fileDialog},
+        {"TextExportDestination", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)fileDialogSave},
         {"TextExportEncoding", NULL, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
         {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
 
         {"VideoMenu", NULL, "Video", NULL, NULL, NULL},
-        {"VideoImport", NULL, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialog},
+        {"VideoImport", NULL, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialogOpen},
         {"VideoBackend", NULL, "Set Video Backend...", NULL, NULL, (GCallback)set_video_backend},
         {"VideoOutput", NULL, "Set Video Output...", NULL, NULL, (GCallback)set_video_output},
 

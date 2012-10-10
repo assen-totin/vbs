@@ -43,48 +43,6 @@ void zeroTiming(GtkAction *action, gpointer param){
 }
 
 
-void fileDialogOK21( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	char importTextFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK21","Filename too long.", 1);}
-	sprintf(importTextFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	clearStore();
-	importText(&importTextFile[0], VBS_IMPORT_FILTER_TEXT);
-}
-
-
-void fileDialogOK22( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	char importTextFile[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK22","Filename too long.",1);}
-	sprintf(importTextFile, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	clearStore();
-	importText(&importTextFile[0], VBS_IMPORT_FILTER_SRT);
-}
-
-
-void fileDialogOK31( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	char video_file_name[1024];
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK31","Filename too long.", 1);}
-	sprintf(video_file_name, "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-#ifdef HAVE_MPLAYER
-		mplayer_load_video(video_file_name);
-#endif
-	}
-	else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-#ifdef HAVE_GSTREAMER
-		gstreamer_init(video_file_name);
-#endif
-	}
-}
-
-
-void fileDialogOK41( GtkWidget *fileDialogWidget, GtkFileSelection *fs ) {
-	// Stupid, but global variables need care.
-	if (strlen(gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs))) > 512) {error_handler("fileDialogOK41","Filename too long.",1);}
-	sprintf(&config.common.export_filename[0], "%s", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
-}
-
-
 void insertBefore(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
@@ -198,57 +156,79 @@ void quitDialog(GtkAction *action, gpointer param) {
 }
 
 
-void fileDialog(GtkAction *action, gpointer param) {
+void fileDialogSave(GtkAction *action, gpointer param) {
+        GtkWidget *fileDialogWidget;
+        char fileDialogTitle[64];
+        char fileDialogFile[256];
+
+        fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
+                                      GTK_FILE_CHOOSER_ACTION_SAVE,
+                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                      NULL);
+
+        sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
+
+        if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
+                char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
+
+		if (strstr(gtk_action_get_name(action), "TextExportDestination")) {
+			strcpy(&config.common.export_filename[0], filename);
+		}
+
+                g_free (filename);
+        }
+
+        gtk_widget_destroy (fileDialogWidget);
+
+}
+
+void fileDialogOpen(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
 	char fileDialogFile[256];
 
-	if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
-		// Import Text-only
-		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_TEXTONLY_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-	}
-	else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
-		// Import SRT
-		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_SRT_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-	}
-	else if (strstr(gtk_action_get_name(action), "VideoImport")) {
-		// Load Video
-		sprintf(fileDialogTitle, "%s", VBS_MENU_IMPORT_VIDEO_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-	}
-	else if (strstr(gtk_action_get_name(action), "TextExportDestination")) {
-		// Export Dialog
-		sprintf(fileDialogTitle, "%s", VBS_MENU_EXPORT_TITLE);
-		sprintf(fileDialogFile, "%s/", VBS_MENU_DEFAULT_PATH);
-	}
+	fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
+				      GTK_FILE_CHOOSER_ACTION_OPEN,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				      NULL);
 
-	fileDialogWidget = gtk_file_selection_new (fileDialogTitle);
+	sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
-	/* Connect the ok_button to file_ok_sel function */
-	if (strstr(gtk_action_get_name(action), "TextImportPlain"))
-		// Import Text-only
-		g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK21), (gpointer) fileDialogWidget);
-	else  if (strstr(gtk_action_get_name(action), "TextImportSubrip"))
+	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
+		char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
+
+		if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
+			// Import Text-only
+		        clearStore();
+		        importText(filename, VBS_IMPORT_FILTER_TEXT);
+		}
+		else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
 			// Import SRT
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK22), (gpointer) fileDialogWidget);
-	else if (strstr(gtk_action_get_name(action), "VideoImport"))
-			// Load Video
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK31), (gpointer) fileDialogWidget);
-	else if (strstr(gtk_action_get_name(action), "TextExportDestination"))
-			// Export Dialog
-			g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (fileDialogOK41), (gpointer) fileDialogWidget);
+		        clearStore();
+			importText(filename, VBS_IMPORT_FILTER_SRT);
+		}
+	        else if (strstr(gtk_action_get_name(action), "VideoImport")) {
+        	        // Load Video
+		        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+		                mplayer_load_video(filename);
+#endif
+		        }
+		        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
+                		gstreamer_init(filename);
+#endif
+		        }                	
+		}
 
-	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->ok_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
+		g_free (filename);
+	}
 
-	/* Connect the cancel_button to destroy the widget */
-	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (fileDialogWidget)->cancel_button), "clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (fileDialogWidget));
-
-	/* Lets set the filename, as if this were a save dialog, and we are giving a default filename */
-	gtk_file_selection_set_filename (GTK_FILE_SELECTION(fileDialogWidget), fileDialogFile);
-
-	gtk_widget_show (fileDialogWidget);
+	gtk_widget_destroy (fileDialogWidget);
 }
 
 void set_video_backend (GtkAction *action, gpointer param) {
