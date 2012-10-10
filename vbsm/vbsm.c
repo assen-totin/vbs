@@ -126,7 +126,7 @@ int main (int argc, char **argv){
 #ifdef HAVE_GTK2
 	vbox = gtk_vbox_new (FALSE, 0);
 #elif HAVE_GTK3
-	vbox = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
+	vbox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0);
 #endif
 
 	// Pack entry & scroll into vbox

@@ -125,7 +125,7 @@ void gstreamer_init(char file_name[1024]) {
 #ifdef HAVE_GTK2
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XWINDOW (config.vbsm.gstreamer_widget_player->window));
 #elif HAVE_GTK3
-		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID (config.vbsm.gstreamer_widget_player));
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID ((gtk_widget_get_window(config.vbsm.gstreamer_widget_player))));
 #endif
         }
 
