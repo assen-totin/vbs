@@ -15,8 +15,8 @@ BINDIR = @BINDIR@
 
 TARGET = vbsm
 
-INCLUDES=`pkg-config --cflags gtk+-@GTK_VERSION@`
-LIBS=`pkg-config --cflags --libs gtk+-@GTK_VERSION@`
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
+LIBS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/util.o ../common/menu.o
 OBJS_LOCAL = gui.o keyboard.o mouse.o export.o edit.o import.o vbsm.o menu.o
 ADD_LIBS = 
@@ -30,7 +30,7 @@ ifeq ($(HAVE_MPLAYER),1)
 endif
 ifeq ($(HAVE_GSTREAMER),1)
 	OBJS_VIDEO = video-gstreamer.o
-	ADD_LIBS = `pkg-config --cflags --libs gstreamer-0.10`
+	ADD_LIBS = `pkg-config --cflags --libs gstreamer-0.10 gstreamer-interfaces-0.10`
 	ADD_INCLUDES = `pkg-config --cflags --libs gstreamer-0.10`
 endif
 ifeq ($(HAVE_MPLAYER_GSTREAMER),1)

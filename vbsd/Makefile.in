@@ -15,7 +15,7 @@ LIBS = -lm
 
 SBINDIR = @SBINDIR@
 
-#ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VERSION@`
+#ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 ADD_FLAGS = 
 
 TARGET = vbsd 

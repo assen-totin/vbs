@@ -118,8 +118,8 @@ else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi
 fi
-AC_DEFINE_UNQUOTED([GTK_VERSION], ["$GTK_VER"], ["Define GTK version"])
-AC_SUBST([GTK_VERSION])
+AC_DEFINE_UNQUOTED([GTK_VERSION], [$GTK_VER], ["Define GTK version"])
+AC_SUBST([GTK_VER])
 
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])

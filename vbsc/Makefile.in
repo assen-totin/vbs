@@ -13,8 +13,8 @@ CFLAGS = -c -O2
 
 BINDIR = @BINDIR@ 
 
-INCLUDES=`pkg-config --cflags gtk+-@GTK_VERSION@`
-ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VERSION@`
+INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
+ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 
 TARGET = vbsc 
 
