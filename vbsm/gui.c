@@ -99,12 +99,14 @@ int progress_bar_update() {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, COL_LINE, &line, -1);
 
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					local = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {

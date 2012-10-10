@@ -30,24 +30,28 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 				if (new_time <= 0)
 					new_time = 1;
 
-				if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive())) {
-					char command[255];
-					sprintf(command, "pausing_keep seek %u 2", new_time);
-					mplayer_pipe_write(command);
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+					if (mplayer_is_alive()) {
+						char command[255];
+						sprintf(command, "pausing_keep seek %u 2", new_time);
+						mplayer_pipe_write(command);
 
-					// Tell mplayer to load subtitles as they exist now
-					mplayer_pipe_write("pausing_keep sub_remove");
-					sprintf(command, "pausing_keep sub_load %s", &config.vbsm.sub_file_name[0]);
-					mplayer_pipe_write(command);
+						// Tell mplayer to load subtitles as they exist now
+						mplayer_pipe_write("pausing_keep sub_remove");
+						sprintf(command, "pausing_keep sub_load %s", &config.vbsm.sub_file_name[0]);
+						mplayer_pipe_write(command);
 
 // This *should* normally work; 
 // However, my mplayer crashes with "signal 11 in sub_find" when executing "sub_select"
 // after getSubNum(). 
 // Since we clear all subs before reloading, the new level should always be 1. 
 //    subNum = getSubNum();
-					subNum = 1;
-					sprintf(command, "pausing_keep sub_select %u", subNum);
-					mplayer_pipe_write(command);
+						subNum = 1;
+						sprintf(command, "pausing_keep sub_select %u", subNum);
+						mplayer_pipe_write(command);
+					}
+#endif
 				}
 
 				else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {

@@ -20,12 +20,14 @@ void on_pressed_b () {
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					new_from = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
@@ -84,12 +86,14 @@ void on_pressed_m () {
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
 				if (mplayer_is_alive())
 					new_to = mplayer_get_time_pos(2);
 				else {
 					time_t curr_time = time(NULL);
 					new_to = 1000*(curr_time - config.common.init_timestamp);
 				}
+#endif
 			}
                         else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
@@ -147,8 +151,12 @@ void on_pressed_space (GtkWidget *window) {
 		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
 
 		// Pause the player
-		if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
-			mplayer_pipe_write("pause");
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+			if (mplayer_is_alive())
+				mplayer_pipe_write("pause");
+#endif
+		}
 		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
 			gstreamer_pause();
@@ -162,8 +170,12 @@ void on_pressed_space (GtkWidget *window) {
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 
 			// Start the player
-			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (mplayer_is_alive()))
-				mplayer_pipe_write("pause");
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+				if (mplayer_is_alive())
+					mplayer_pipe_write("pause");
+#endif
+			}
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
 				gstreamer_play();
