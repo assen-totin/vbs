@@ -28,67 +28,63 @@ AC_SUBST([IMGDIR])
 AC_PROG_CC
 
 # Check for video back-ends
-ECHO_BACKEND="None"
+ECHO_BACKEND_MPLAYER="no"
+ECHO_BACKEND_GSTREAMER="no"
 FORCE_BACKEND="no"
-AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
-
-# MPLayer
 HAVE_MPLAYER="0"
-AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
-if test $FORCE_BACKEND = "mplayer" ; then
-	if test $FOUND_MPLAYER = "no" ; then
-		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
-	fi	
-else
-	if test $FOUND_MPLAYER = "no" ; then
-		echo "*** MPlayer not found. vbsm Won't be able to use it."
-	fi
-fi
-if test $FOUND_MPLAYER = "yes" ; then
-	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
-	HAVE_MPLAYER="1"
-	ECHO_BACKEND="MPlayer"
-fi
-AC_SUBST([HAVE_MPLAYER])
-
-# GStreamer
-# FIXME: Find a way to get rid of the GStreamer version in package name?
 HAVE_GSTREAMER="0"
 FOUND_GSTREAMER="no"
 FOUND_GSTREAMER_INTERFACES="no"
+USE_MPLAYER="no"
+USE_GSTREAMER="no"
+AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
+
+AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
 PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10], [FOUND_GSTREAMER="yes"], [FOUND_GSTREAMER="no"])
 PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
-if test $FORCE_BACKEND = "gstreamer" ; then
-	if test $FOUND_GSTREAMER = "no" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
-	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+
+if test $FORCE_BACKEND = "mplayer" ; then
+	if test $FOUND_MPLAYER = "no" ; then
+		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
+	else
+		USE_MPLAYER="yes"
 	fi
+elif test $FORCE_BACKEND = "gstreamer" ; then
+        if test $FOUND_GSTREAMER = "no" ; then
+                AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
+        elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+                AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+	else
+		USE_GSTREAMER="yes"
+        fi
 else
+	if test $FOUND_MPLAYER = "no" ; then
+		echo "*** MPlayer not found. vbsm Won't be able to use it."
+	else
+		USE_MPLAYER="yes"
+	fi
 	if test $FOUND_GSTREAMER = "no" ; then
 		echo "*** GStreamer not found. vbsm Won't be able to use it."
 	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
 		echo "*** GStreamer foound, but GStreamer-interfaces not found. Disabling GStreamer."
+	else
+		USE_GSTREAMER="yes"
 	fi
 fi
-if test $FOUND_GSTREAMER = "yes" ; then
-	if test $FOUND_GSTREAMER_INTERFACES = "yes" ; then
-		AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
-		HAVE_GSTREAMER="1"
-		ECHO_BACKEND="GStreamer"
-	fi
-fi
-AC_SUBST([HAVE_GSTREAMER])
 
-# Check which back-ends are enabled
-HAVE_MPLAYER_GSTREAMER="0"
-if test $HAVE_MPLAYER = "1" ; then
-	if test $HAVE_GSTREAMER = "1" ; then
-		AC_DEFINE([HAVE_MPLAYER_GSTREAMER], [1], ["Define if GStreamer and MPlayer were found"])
-		ECHO_BACKEND="GStreamer and MPlayer"
-	fi
+if test $USE_MPLAYER = "yes" ; then
+	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
+	HAVE_MPLAYER="1"
+	ECHO_BACKEND_MPLAYER="yes"
 fi
-AC_SUBST([HAVE_MPLAYER_GSTREAMER])
+if test $USE_GSTREAMER = "yes" ; then
+	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
+	HAVE_GSTREAMER="1"
+	ECHO_BACKEND_GSTREAMER="yes"
+fi
+
+AC_SUBST([HAVE_MPLAYER])
+AC_SUBST([HAVE_GSTREAMER])
 
 # Check for GTK and determine version
 GTK_VER="0.0"
@@ -145,7 +141,8 @@ AC_OUTPUT
 echo
 echo "Configuration complete."
 echo
-echo "* Video backend(s): " $ECHO_BACKEND
+echo "* MPlayer: " $ECHO_BACKEND_MPLAYER
+echo "* GStreamer: " $ECHO_BACKEND_GSTREAMER
 echo "* GTK version: " $GTK_VER
 echo
 echo "Now, run make."
