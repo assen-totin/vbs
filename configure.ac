@@ -95,25 +95,25 @@ PKG_CHECK_MODULES([GTK3], [gtk+-3.0], [FOUND_GTK3="yes"], [FOUND_GTK3="no"])
 PKG_CHECK_MODULES([GTK2], [gtk+-2.0], [FOUND_GTK2="yes"], [FOUND_GTK2="no"])
 if test $FORCE_GTK = "3" ; then
         if test $FOUND_GTK3 = "no" ; then
-                AC_MSG_ERROR(["*** GTK2 forced, but not found."])
+                AC_MSG_ERROR(["*** GTK3 forced, but not found."])
         else
                 GTK_VER="3.0"
-		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK2"])
+		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
         fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
 		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
 	else
 		GTK_VER="2.0"
-		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK3"])
+		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
 	fi
 else
 	if test $FOUND_GTK3 = "yes" ; then
 		GTK_VER="3.0"
-		AC_DEFINE_UNQUOTED([HAVE_GTK3], [1], ["Define GTK3"])
-	elif test $FOUND_GTK3 = "yes" ; then
+		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+	elif test $FOUND_GTK2 = "yes" ; then
 		GTK_VER="2.0"
-		AC_DEFINE_UNQUOTED([HAVE_GTK2], [1], ["Define GTK2"])
+		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
 	else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi

@@ -27,7 +27,7 @@ void quit_dialog(GtkAction *action, gpointer param) {
 
 	quitLabel = gtk_label_new(VBS_MENU_QUIT_TITLE);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quit_dialog_ok), (gpointer) quitDialog);
 
@@ -115,13 +115,13 @@ void set_magic_key (GtkAction *action, gpointer param) {
         char quitMessage[1024];
         sprintf(&quitMessage[0], "%s\n", VBSC_MENU_MAGIC_KEY_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_entry_new();
         char tmp1[16];
         sprintf(&tmp1[0], "%u", config.common.magic_key);
         gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }
@@ -147,20 +147,20 @@ void set_font_size (GtkAction *action, gpointer param) {
         char quitMessage[1024];
         sprintf(&quitMessage[0], "%s\n", VBSC_MENU_FONT_SIZE_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_entry_new();
         char tmp1[16];
         sprintf(&tmp1[0], "%u", config.vbss.font_size);
         gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }
 
 void set_full_screen_ok(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"ON"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)),"ON"))
                 config.vbss.full_screen = 1;
         else
                 config.vbss.full_screen = 0;
@@ -183,18 +183,18 @@ void set_full_screen (GtkAction *action, gpointer param) {
         char quitMessage[1024];
         sprintf(quitMessage, "%s\n", VBSC_MENU_FULL_SCREEN_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-        config.vbsm.menu_widget = gtk_combo_box_new_text();
-        gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
-        gtk_combo_box_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
+        config.vbsm.menu_widget = gtk_combo_box_text_new();
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "OFF");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX(config.vbsm.menu_widget), "ON");
         int index;
         if(config.vbss.full_screen == 0)
                 index = 0;
         else
                 index = 1;
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), index);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }

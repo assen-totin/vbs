@@ -122,7 +122,11 @@ void gstreamer_init(char file_name[1024]) {
 
 	// Merge with existing widget
         if (GST_IS_X_OVERLAY (videosink)) {
+#ifdef HAVE_GTK2
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XWINDOW (config.vbsm.gstreamer_widget_player->window));
+#elif HAVE_GTK3
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID (config.vbsm.gstreamer_widget_player));
+#endif
         }
 
         gst_element_link_pads(config.vbsm.gstreamer_textoverlay, "src", videosink, "sink");

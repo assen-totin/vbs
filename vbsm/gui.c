@@ -163,7 +163,7 @@ void warnDialog(GtkWidget *window, char warning[1024]) {
 
 	warnLabel = gtk_label_new(warning);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(warnDialog)->vbox), warnLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(warnDialog))), warnLabel);
 
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) warnDialog);
 

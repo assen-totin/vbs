@@ -10,6 +10,16 @@
 
 #include "../common/common.h"
 
+#ifdef HAVE_GTK3
+        #define GDK_y GDK_KEY_y
+        #define GDK_t GDK_KEY_t
+        #define GDK_r GDK_KEY_r
+	#define GDK_q GDK_KEY_q
+	#define GDK_w GDK_KEY_w
+        #define GDK_e GDK_KEY_e
+        #define GDK_space GDK_KEY_space
+#endif
+
 void on_key_pressed (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
         GtkWidget *window = userdata;
         switch ( event->keyval ) {

@@ -76,7 +76,12 @@ int main (int argc, char **argv){
 
 	// Progress, will be packed in the middle of the vbox
 	progress = gtk_progress_bar_new();
-	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress),GTK_PROGRESS_LEFT_TO_RIGHT);
+#ifdef HAVE_GTK2
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(progress), GTK_PROGRESS_LEFT_TO_RIGHT);
+#elif HAVE_GTK3
+	gtk_orientable_set_orientation(GTK_PROGRESS_BAR(progress), GTK_ORIENTATION_HORIZONTAL);
+	gtk_progress_bar_set_inverted(GTK_PROGRESS_BAR(progress), FALSE);
+#endif
 	config.vbsm.progress = progress;
 
 	// Root window
@@ -135,7 +140,7 @@ int main (int argc, char **argv){
 	gtk_widget_show_all(config.vbsm.window);
 
 	// Progress bar check & update function
-	g_timeout_add(1000, (GtkFunction) progress_bar_update, NULL);
+	g_timeout_add(1000, progress_bar_update, NULL);
 
 	gtk_main();
 

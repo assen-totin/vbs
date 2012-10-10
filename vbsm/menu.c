@@ -84,8 +84,8 @@ void helpContents(GtkAction *action, gpointer param) {
 
 	quitFrame = gtk_frame_new("");
 	quitLabel = gtk_label_new(VBS_MENU_HELP_TEXT);
-	gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame);
+	gtk_container_add(GTK_CONTAINER(quitFrame), quitLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
 
 	gtk_widget_show_all (quitDialog);
 }
@@ -104,8 +104,8 @@ void setTimer(GtkAction *action, gpointer param) {
 
         quitFrame = gtk_frame_new("");
         quitLabel = gtk_label_new(VBS_MENU_TIMER_TEXT);
-        gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitFrame);
+        gtk_container_add(GTK_CONTAINER(quitFrame), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
 
         gtk_widget_show_all (quitDialog);
 }
@@ -146,7 +146,7 @@ void quitDialog(GtkAction *action, gpointer param) {
 
 	quitLabel = gtk_label_new(quitMessage);
 
-	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
 
@@ -245,18 +245,18 @@ void set_video_backend (GtkAction *action, gpointer param) {
         char quitMessage[1024];
         sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_BACKEND_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
-        config.vbsm.menu_widget = gtk_combo_box_new_text();
+        config.vbsm.menu_widget = gtk_combo_box_text_new();
 
         int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
         int i;
         for (i=0; i<n_video_backends; i++) {
-                gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_backends[i].name);
+                gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_backends[i].name);
                 if (video_backends[i].num == config.vbsm.video_backend)
                         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
         }
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }
@@ -266,7 +266,7 @@ void set_video_backend_ok(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
 	int i;
 	char selected[1024];
-        sprintf(&selected[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+        sprintf(&selected[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
 	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
 	for (i=0; i<n_video_backends; i++) {
 		if (strstr(&video_backends[i].name[0], &selected[0])) {
@@ -307,18 +307,18 @@ void set_video_output (GtkAction *action, gpointer param) {
 	else
 		sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_OUTPUT_NOENT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
 	if (show_menu_output) {
-	        config.vbsm.menu_widget = gtk_combo_box_new_text();
+	        config.vbsm.menu_widget = gtk_combo_box_text_new();
 
         	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
 	        for (i=0; i<n_video_outputs; i++) {
-        	        gtk_combo_box_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_outputs[i].name);
+        	        gtk_combo_box_text_append_text (GTK_COMBO_BOX(config.vbsm.menu_widget), video_outputs[i].name);
                 	if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
                         	gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
 	        }
-        	gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 	}
 
         gtk_widget_show_all (quitDialog);
@@ -329,7 +329,7 @@ void set_video_output_ok(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
         int i;
         char selected[1024];
-        sprintf(&selected[0], "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
+        sprintf(&selected[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX(config.vbsm.menu_widget)));
 	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
         for (i=0; i<n_video_outputs; i++) {
                 if (strstr(video_outputs[i].name, &selected[0])) {
@@ -362,13 +362,13 @@ void set_magic_key (GtkAction *action, gpointer param) {
         char quitMessage[1024];
         sprintf(&quitMessage[0], "%s\n", VBSC_MENU_MAGIC_KEY_TEXT);
         quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), quitLabel);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_entry_new();
         char tmp1[16];
         sprintf(&tmp1[0], "%u", config.common.magic_key);
         gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (GTK_DIALOG(quitDialog)->vbox), config.vbsm.menu_widget);
+        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
         gtk_widget_show_all (quitDialog);
 }

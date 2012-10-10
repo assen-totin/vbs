@@ -10,6 +10,14 @@
 
 #include "../common/common.h"
 
+#ifdef HAVE_GTK3
+	#define GDK_b GDK_KEY_b
+	#define GDK_m GDK_KEY_m
+	#define GDK_n GDK_KEY_n
+	#define GDK_s GDK_KEY_s 
+	#define GDK_space GDK_KEY_space
+#endif
+
 void on_pressed_b () {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
