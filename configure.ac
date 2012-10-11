@@ -23,6 +23,9 @@ DATAROOTDIR=$prefix/share
 AC_SUBST([DATAROOTDIR])
 IMGDIR=$DATAROOTDIR/icons
 AC_SUBST([IMGDIR])
+LOCALEDIR=$prefix/share/locale
+AC_SUBST([LOCALEDIR])
+AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
 
 # Checks for programs.
 AC_PROG_CC

@@ -1,0 +1,146 @@
+# English translations for VBS package.
+# Copyright (C) 2012 THE VBS COPYRIGHT HOLDER
+# This file is distributed under the same license as the VBS package.
+# root <assen.totin@gmail.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: VBS 3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-11 17:57+0300\n"
+"PO-Revision-Date: 2012-10-11 18:02+0300\n"
+"Last-Translator: root <assen.totin@gmail.com>\n"
+"Language-Team: English (British)\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: common/menu.c:22
+msgid "About VBS"
+msgstr "About VBS"
+
+#: common/menu.c:141
+msgid "Available Delimiters:"
+msgstr "Available Delimiters:"
+
+#: common/menu.c:70 common/menu.c:100
+msgid "Available Encodings:"
+msgstr "Available Encodings:"
+
+#: common/menu.c:176
+msgid "Current Port:"
+msgstr "Current Port:"
+
+#: common/menu.c:213
+msgid "Current server (FQDN):"
+msgstr "Current server (FQDN):"
+
+#: common/menu.c:193
+msgid "DNS resolving failed."
+msgstr "DNS resolving failed."
+
+#: vbsc/menu.c:148
+msgid "Enter font size (in points):"
+msgstr "Enter font size (in points):"
+
+#: vbsc/menu.c:116
+msgid "Enter magic key (number between 1 and 2147483647):"
+msgstr "Enter magic key (number between 1 and 2147483647):"
+
+#: vbsc/menu.c:184
+msgid "Full-Screen mode:"
+msgstr "Full-Screen mode:"
+
+#: vbsm/menu.c:106
+msgid "Internal timer set to zero."
+msgstr "Internal timer set to zero."
+
+#: common/menu.c:243
+msgid "Network Mode"
+msgstr "Network Mode"
+
+#: common/menu.c:221
+msgid "Press OK to change server."
+msgstr "Press OK to change server."
+
+#: vbsc/menu.c:22 vbsc/menu.c:28 vbsm/menu.c:141
+msgid "Really quit?"
+msgstr "Really quit?"
+
+#: common/menu.c:91
+msgid "Select Export Encoding"
+msgstr "Select Export Encoding"
+
+#: common/menu.c:61
+msgid "Select Import Encoding"
+msgstr "Select Import Encoding"
+
+#: common/menu.c:132
+msgid "Select Newline Delimiter"
+msgstr "Select Newline Delimiter"
+
+#: common/menu.c:252
+msgid "Select network mode:"
+msgstr "Select network mode:"
+
+#: vbsm/menu.c:247
+msgid ""
+"Select video backend:\n"
+"(requires restart)"
+msgstr ""
+"Select video backend:\n"
+"(requires restart)"
+
+#: vbsm/menu.c:307
+msgid ""
+"Select video output for GStreamer:\n"
+"(requires restart)"
+msgstr ""
+"Select video output for GStreamer:\n"
+"(requires restart)"
+
+#: common/menu.c:204
+msgid "Server Name"
+msgstr "Server Name"
+
+#: vbsc/menu.c:139
+msgid "Set Font Size"
+msgstr "Set Font Size"
+
+#: vbsc/menu.c:175
+msgid "Set Full-Screen"
+msgstr "Set Full-Screen"
+
+#: vbsc/menu.c:107
+msgid "Set Magic Key"
+msgstr "Set Magic Key"
+
+#: vbsm/menu.c:99
+msgid "Set Start Time"
+msgstr "Set Start Time"
+
+#: common/menu.c:167
+msgid "TCP Port"
+msgstr "TCP Port"
+
+#: vbsm/menu.c:79
+msgid "Using VBS"
+msgstr "Using VBS"
+
+#: vbsm/menu.c:238
+msgid "Video Backend"
+msgstr "Video Backend"
+
+#: vbsm/menu.c:296
+msgid "Video Output"
+msgstr "Video Output"
+
+#: vbsm/menu.c:309
+msgid "Video output selection not available for current backend."
+msgstr "Video output selection not available for current backend."
+
+#: vbsm/menu.c:139
+msgid "Your subtitles are exported to:"
+msgstr "Your subtitles are exported to:"

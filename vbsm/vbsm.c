@@ -17,6 +17,12 @@ int main (int argc, char **argv){
 	GtkWidget *subtitles_scroll;
 	GtkTreeSelection *subtitles_selection;
 
+	// i18n
+        setlocale (LC_ALL, "");
+        bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+        textdomain (PACKAGE_NAME);
+
         // Check for alternative config
         get_cmdl_config(argc, argv);
 

@@ -21,10 +21,4 @@ void set_magic_key_ok(GtkWidget *widget, gpointer data);
 void set_full_screen (GtkAction *action, gpointer param);
 void set_full_screen_ok(GtkWidget *widget, gpointer data);
 
-#define VBSC_MENU_MAGIC_KEY_TITLE "Set Magic Key"
-#define VBSC_MENU_MAGIC_KEY_TEXT "Enter magic key (a number between 1 and 2147483647):"
-#define VBSC_MENU_FONT_SIZE_TITLE "Set Font Size"
-#define VBSC_MENU_FONT_SIZE_TEXT "Enter font size (in points):"
-#define VBSC_MENU_FULL_SCREEN_TITLE "Set Full-Screen"
-#define VBSC_MENU_FULL_SCREEN_TEXT "Full-Screen mode:"
 

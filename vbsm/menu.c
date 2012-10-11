@@ -76,7 +76,7 @@ void insertBefore(GtkAction *action, gpointer param){
 void helpContents(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_HELP_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (_("Using VBS"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
 	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
@@ -96,14 +96,14 @@ void setTimer(GtkAction *action, gpointer param) {
 
         GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_TIMER_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (_("Set Start Time"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
         gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
         g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
 
         quitFrame = gtk_frame_new("");
-        quitLabel = gtk_label_new(VBS_MENU_TIMER_TEXT);
+        quitLabel = gtk_label_new(_("Internal timer set to zero."));
         gtk_container_add(GTK_CONTAINER(quitFrame), quitLabel);
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
 
@@ -136,9 +136,9 @@ void quitDialog(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel;
 	char quitMessage[1024];
 
-	sprintf(quitMessage, "%s %s\n", VBS_MENU_QUIT_TEXT, &config.common.export_filename[0]); 
+	sprintf(quitMessage, "%s %s\n", _("Your subtitles are exported to:"), &config.common.export_filename[0]); 
 
-	quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_QUIT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+	quitDialog = gtk_dialog_new_with_buttons (_("Really quit?"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
 	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -235,7 +235,7 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 void set_video_backend (GtkAction *action, gpointer param) {
         GtkWidget *quitDialog, *quitLabel;
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_BACKEND_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (_("Video Backend"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
         GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
         GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -244,7 +244,7 @@ void set_video_backend (GtkAction *action, gpointer param) {
         g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_video_backend_ok), (gpointer) quitDialog);
 
         char quitMessage[1024];
-        sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_BACKEND_TEXT);
+        sprintf(quitMessage, "%s\n", _("Select video backend:\n(requires restart)"));
         quitLabel = gtk_label_new(quitMessage);
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
@@ -293,7 +293,7 @@ void set_video_output (GtkAction *action, gpointer param) {
 				show_menu_output = true;
 	}
 
-        quitDialog = gtk_dialog_new_with_buttons (VBS_MENU_VIDEO_OUTPUT_TITLE, GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+        quitDialog = gtk_dialog_new_with_buttons (_("Video Output"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
 
 	if (show_menu_output) {
 		GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
@@ -304,9 +304,9 @@ void set_video_output (GtkAction *action, gpointer param) {
         g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
 
 	if (show_menu_output)
-	        sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_OUTPUT_TEXT);
+	        sprintf(quitMessage, "%s\n", _("Select video output for GStreamer:\n(requires restart)"));
 	else
-		sprintf(quitMessage, "%s\n", VBS_MENU_VIDEO_OUTPUT_NOENT);
+		sprintf(quitMessage, "%s\n", _("Video output selection not available for current backend."));
         quitLabel = gtk_label_new(quitMessage);
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 

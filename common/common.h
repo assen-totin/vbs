@@ -33,6 +33,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+#include <libintl.h>
 
 #include "../config.h"
 
@@ -41,6 +42,7 @@
         #include <gst/interfaces/xoverlay.h>
 #endif
 
+#define _(String) gettext (String)
 #define VBS_TMP_DIR "/tmp"
 
 enum {
