@@ -30,7 +30,13 @@ mkdir -p $RPM_BUILD_ROOT@SBINDIR@
 mkdir -p $RPM_BUILD_ROOT@IMGDIR@
 mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/applications
 
+for DIR in `find po/ -maxdepth 1 -mindepth 1 -type d | sed s/po.//g`; do
+	mkdir -p $RPM_BUILD_ROOT@LOCALEDIR@/$DIR/LC_MESSAGES
+done
+
 make install DESTDIR=$RPM_BUILD_ROOT
+
+%find_lang vbs
 
 %post
 gtk-update-icon-cache -f -t @IMGDIR@
@@ -38,7 +44,7 @@ gtk-update-icon-cache -f -t @IMGDIR@
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f vbs.lang
 %defattr(-,root,root)
 %doc README TODO LICENSE CHANGES AUTHOR BUGS
 

@@ -172,12 +172,10 @@ int can_recv_from_net;
 #include "../vbsm/gui.h"
 #include "../vbsm/edit.h"
 #include "../vbsm/video-mplayer.h"
-
-#ifdef HAVE_GSTREAMER
-#include "../vbsm/video-gstreamer.h"
-#endif
-
 #include "../vbsm/menu.h"
+#ifdef HAVE_GSTREAMER
+	#include "../vbsm/video-gstreamer.h"
+#endif
 
 #include "../vbsc/vbsc.h"
 #include "../vbsc/menu.h"

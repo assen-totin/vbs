@@ -61,7 +61,7 @@ void on_pressed_b () {
 			config.vbsm.progress_seconds = q.quot + 2;
 
 			char line2[255];
-			sprintf(line2,"Suggested Duration: %u seconds", q.quot + 1);
+			sprintf(line2, _("Suggested Duration: %u seconds"), q.quot + 1);
 
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 

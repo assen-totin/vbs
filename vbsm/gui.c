@@ -81,7 +81,7 @@ int progress_bar_update() {
 		}
 		else {
 			char line2[255];
-			sprintf(line2,"Suggested Duration: %u seconds (So far: %u seconds)", config.vbsm.progress_seconds - 1, curr_time - config.common.timestamp);
+			sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, curr_time - config.common.timestamp);
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 		}
 	}

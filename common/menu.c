@@ -226,9 +226,9 @@ void setNetworkServer (GtkAction *action, gpointer param) {
 
 void useNetworkOK(GtkWidget *widget, gpointer data) {
         GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"off"))
+        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"OFF"))
 		config.common.network_mode = 0;
-        else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"Send"))
+        else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"SEND"))
 		config.common.network_mode = 1;
 	else
 		config.common.network_mode = 2;
@@ -254,11 +254,15 @@ void useNetwork (GtkAction *action, gpointer param) {
         gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
 
         config.vbsm.menu_widget = gtk_combo_box_text_new();
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Network is off");
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Send to network");
+	sprintf(quitMessage, "%s %s", "OFF:", _("Network is off"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), &quitMessage[0]);
+	sprintf(quitMessage, "%s %s", "SEND:", _("Send to network"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), &quitMessage[0]);
 
-	if (can_recv_from_net == 1)
-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "Receive from network");
+	if (can_recv_from_net == 1) {
+		sprintf(quitMessage, "%s %s", "RECV:", _("Receive from network"));
+		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), &quitMessage[0]);
+	}
 
         gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), config.common.network_mode);
 

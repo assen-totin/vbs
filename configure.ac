@@ -30,6 +30,15 @@ AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
 # Checks for programs.
 AC_PROG_CC
 
+AC_CHECK_PROG([FOUND_MSGFMT],[msgfmt],["yes"],["no"])
+if test $FOUND_MSGFMT = "no"; then
+        echo "*** msgfmt not found. Cannot continue."
+        exit
+else
+        MSGFMT=`which msgfmt`
+        AC_SUBST([MSGFMT])
+fi
+
 # Check for video back-ends
 ECHO_BACKEND_MPLAYER="no"
 ECHO_BACKEND_GSTREAMER="no"
@@ -142,7 +151,7 @@ PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 # Makefiles
 MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile])
 
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
