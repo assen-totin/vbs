@@ -41,7 +41,8 @@ void on_pressed_b () {
 #ifdef HAVE_GSTREAMER
 				if (config.vbsm.have_loaded_video) 
 					new_from = gstreamer_query_position();
-				else if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
+
+				if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
 					time_t curr_time = time(NULL);
 					new_from = 1000*(curr_time - config.common.init_timestamp);
 				}
@@ -110,12 +111,15 @@ void on_pressed_m () {
 #ifdef HAVE_GSTREAMER
 				if (config.vbsm.have_loaded_video)
 	                                new_to = gstreamer_query_position();
-                                else if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
+
+                                if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
                                         time_t curr_time = time(NULL);
                                         new_to = 1000*(curr_time - config.common.init_timestamp);
                                 }
+
 				// Clear the sub
-				gstreamer_sub_clear();
+				if (config.vbsm.have_loaded_video)
+					gstreamer_sub_clear();
 #endif
                         }
 

@@ -111,8 +111,10 @@ int progress_bar_update() {
 
 			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
-				local = gstreamer_query_position();
-				if (local == -1) {
+				if (config.vbsm.have_loaded_video)
+					local = gstreamer_query_position();
+
+				if ((!config.vbsm.have_loaded_video) || (local == -1)) {
 					time_t curr_time = time(NULL);
 					local = 1000*(curr_time - config.common.init_timestamp);
 				}
@@ -122,10 +124,11 @@ int progress_bar_update() {
 			// If using GStreamer, show the sub while inside
                         if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
 #ifdef HAVE_GSTREAMER
-
-                                char line3[1024];
-                                strcpy(&line3[0], line);
-                                gstreamer_sub_set(line3);
+				if (config.vbsm.have_loaded_video) {
+	                                char line3[1024];
+        	                        strcpy(&line3[0], line);
+                	                gstreamer_sub_set(line3);
+				}
 #endif
                          }
 
@@ -142,7 +145,8 @@ int progress_bar_update() {
 				}
 				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
-					gstreamer_sub_clear();
+					if (config.vbsm.have_loaded_video)
+						gstreamer_sub_clear();
 #endif
 				}
 			}
