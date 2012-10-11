@@ -140,12 +140,12 @@ int main (int argc, char **argv){
 
 	// Pack entry & scroll into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
 	}
+	gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
 
 	// Add vbox to window
 	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);
