@@ -1,12 +1,12 @@
-# Russian translations for PACKAGE package
-# Английские переводы для пакета PACKAGE.
-# Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Russian translations for VBS package
+# Английские переводы для пакета VBS.
+# Copyright (C) 2012 THE VBS' COPYRIGHT HOLDER
+# This file is distributed under the same license as the VBS package.
 # root <assen.totin@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-10-11 18:33+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
@@ -21,146 +21,150 @@ msgstr ""
 
 #: common/menu.c:22
 msgid "About VBS"
-msgstr ""
+msgstr "Информация о VBS"
 
 #: common/menu.c:141
 msgid "Available Delimiters:"
-msgstr ""
+msgstr "Выберите символ:"
 
 #: common/menu.c:70 common/menu.c:100
 msgid "Available Encodings:"
-msgstr ""
+msgstr "Выберите кодировку:"
 
 #: common/menu.c:176
 msgid "Current Port:"
-msgstr ""
+msgstr "Текущий порт:"
 
 #: common/menu.c:213
 msgid "Current server (FQDN):"
-msgstr ""
+msgstr "Текущий сервер:"
 
 #: common/menu.c:193
 msgid "DNS resolving failed."
-msgstr ""
+msgstr "Адрес не найден."
 
 #: vbsc/menu.c:148
 msgid "Enter font size (in points):"
-msgstr ""
+msgstr "Введите размер шрифта (в пунктах):"
 
 #: vbsc/menu.c:116
 msgid "Enter magic key (number between 1 and 2147483647):"
-msgstr ""
+msgstr "Введите серверный ключ доступа (число от 1 до 2147483647):"
 
 #: vbsc/menu.c:184
 msgid "Full-Screen mode:"
-msgstr ""
+msgstr "Полноэкранный режим:"
 
 #: vbsm/menu.c:106
 msgid "Internal timer set to zero."
-msgstr ""
+msgstr "Внутренний таймер обнулен."
 
 #: common/menu.c:243
 msgid "Network Mode"
-msgstr ""
+msgstr "Сетевой режим"
 
 #: common/menu.c:257
 msgid "Network is off"
-msgstr ""
+msgstr "Сеть выключена"
 
 #: common/menu.c:221
 msgid "Press OK to change server."
-msgstr ""
+msgstr "Подтвердите замену сервера."
 
 #: vbsc/menu.c:22 vbsc/menu.c:28 vbsm/menu.c:141
 msgid "Really quit?"
-msgstr ""
+msgstr "Закончить работу?"
 
 #: common/menu.c:263
 msgid "Receive from network"
-msgstr ""
+msgstr "Прием по сети"
 
 #: common/menu.c:91
 msgid "Select Export Encoding"
-msgstr ""
+msgstr "Кодировка для экспорта"
 
 #: common/menu.c:61
 msgid "Select Import Encoding"
-msgstr ""
+msgstr "Кодировка для импорта"
 
 #: common/menu.c:132
 msgid "Select Newline Delimiter"
-msgstr ""
+msgstr "Знак окончания строки"
 
 #: common/menu.c:252
 msgid "Select network mode:"
-msgstr ""
+msgstr "Выберите режим работы сети:"
 
 #: vbsm/menu.c:247
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
 msgstr ""
+"Выберите программу для видео:\n"
+"(перезапуск обязателен)"
 
 #: vbsm/menu.c:307
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
 msgstr ""
+"Выберите выход для GStreamer:\n"
+"(перезапуск обязателен)"
 
 #: common/menu.c:259
 msgid "Send to network"
-msgstr ""
+msgstr "Отправка по сети"
 
 #: common/menu.c:204
 msgid "Server Name"
-msgstr ""
+msgstr "Имя сервера"
 
 #: vbsc/menu.c:139
 msgid "Set Font Size"
-msgstr ""
+msgstr "Размер шрифта"
 
 #: vbsc/menu.c:175
 msgid "Set Full-Screen"
-msgstr ""
+msgstr "Полноэкранный режим"
 
 #: vbsc/menu.c:107
 msgid "Set Magic Key"
-msgstr ""
+msgstr "Ключ сервера"
 
 #: vbsm/menu.c:99
 msgid "Set Start Time"
-msgstr ""
+msgstr "Обнулить таймер"
 
 #: vbsm/keyboard.c:64
 #, c-format
 msgid "Suggested Duration: %u seconds"
-msgstr ""
+msgstr "Рекомендуемая продолжительность: %u секунд"
 
 #: vbsm/gui.c:84
 #, c-format
 msgid "Suggested Duration: %u seconds (So far: %u seconds)"
-msgstr ""
+msgstr "Рекомендуемая продолжительность: %u секунд (уже прошло %u секунд"
 
 #: common/menu.c:167
 msgid "TCP Port"
-msgstr ""
+msgstr "TCP порт"
 
 #: vbsm/menu.c:79
 msgid "Using VBS"
-msgstr ""
+msgstr "Инструкции для работы"
 
 #: vbsm/menu.c:238
 msgid "Video Backend"
-msgstr ""
+msgstr "Программа для видео"
 
 #: vbsm/menu.c:296
 msgid "Video Output"
-msgstr ""
+msgstr "Выход видео"
 
 #: vbsm/menu.c:309
 msgid "Video output selection not available for current backend."
-msgstr ""
+msgstr "Для текущей видео программы эта настройка отсутствует."
 
 #: vbsm/menu.c:139
 msgid "Your subtitles are exported to:"
-msgstr ""
+msgstr "Файл был записан:"

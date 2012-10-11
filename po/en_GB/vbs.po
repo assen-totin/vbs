@@ -1,11 +1,11 @@
-# English translations for PACKAGE package.
-# Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# English translations for VBS package.
+# Copyright (C) 2012 THE VBS' COPYRIGHT HOLDER
+# This file is distributed under the same license as the VBS package.
 # root <assen.totin@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-10-11 18:33+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
