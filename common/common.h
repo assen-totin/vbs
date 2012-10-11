@@ -62,6 +62,7 @@ enum {
 
 struct struct_vbsm {
         bool have_loaded_text;
+	bool have_loaded_video;
         guint status_context_id;
         short unsigned progress_seconds;
 	GtkWidget *window;
@@ -69,6 +70,7 @@ struct struct_vbsm {
 	GtkWidget *menu_widget2;
         GtkWidget *status;
         GtkWidget *progress;
+	GtkWidget *subtitles_view;
         char log_file_name[255];
 	FILE *log_file_fp;
 	char sub_file_name[255];
@@ -77,7 +79,6 @@ struct struct_vbsm {
 	FILE *mplayer_pipe_write;
 	FILE *mplayer_pipe_read;
 	GtkListStore *mplayer_store;
-	GtkWidget *mplayer_view;
 #ifdef HAVE_GSTREAMER
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;

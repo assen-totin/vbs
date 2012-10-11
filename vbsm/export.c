@@ -115,7 +115,7 @@ void export_subtitles() {
 
 	export_sub = &export_sub_val;
 
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	gtk_tree_model_foreach(model, export_subtitles_srt, export_sub);
 
 	int retval = fclose(fp_export);

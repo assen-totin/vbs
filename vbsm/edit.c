@@ -15,7 +15,7 @@ void cell_edit(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, g
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	gtk_tree_selection_get_selected(selection, &model, &iter);
 
 	if (gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {

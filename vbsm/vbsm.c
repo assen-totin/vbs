@@ -14,8 +14,8 @@
 
 int main (int argc, char **argv){
 	GtkWidget *vbox, *status, *progress;
-	GtkWidget *mplayer_scroll;
-	GtkTreeSelection *mplayer_selection;
+	GtkWidget *subtitles_scroll;
+	GtkTreeSelection *subtitles_selection;
 
         // Check for alternative config
         get_cmdl_config(argc, argv);
@@ -28,6 +28,7 @@ int main (int argc, char **argv){
 	// Initalize time-ticks counter, set it to zero
 	config.common.running = FALSE;
 	config.vbsm.have_loaded_text = FALSE;
+	config.vbsm.have_loaded_video = FALSE;
 	config.vbsm.mplayer_pid = 0;
 	config.common.init_timestamp = time(NULL);
 
@@ -51,13 +52,13 @@ int main (int argc, char **argv){
 	create_view_and_model();
 
 	// Only one row selected
-        mplayer_selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
-        gtk_tree_selection_set_mode(mplayer_selection, GTK_SELECTION_SINGLE);
+        subtitles_selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
+        gtk_tree_selection_set_mode(subtitles_selection, GTK_SELECTION_SINGLE);
 
 	// MPlayer scroll, will contain the mplayer "view", will be packed in the bottom of the vbox
-	mplayer_scroll = gtk_scrolled_window_new (NULL,NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (mplayer_scroll),  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-	gtk_container_add (GTK_CONTAINER (mplayer_scroll), config.vbsm.mplayer_view);
+	subtitles_scroll = gtk_scrolled_window_new (NULL,NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (subtitles_scroll),  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+	gtk_container_add (GTK_CONTAINER (subtitles_scroll), config.vbsm.subtitles_view);
 
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		// Video widget
@@ -108,10 +109,10 @@ int main (int argc, char **argv){
         g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quitDialog), config.vbsm.window);
 
 	// Link double-click event
-	g_signal_connect(config.vbsm.mplayer_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
+	g_signal_connect(config.vbsm.subtitles_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
 
 	// Key events
-	g_signal_connect(config.vbsm.mplayer_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
+	g_signal_connect(config.vbsm.subtitles_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
 
 	// Menu
 	can_recv_from_net = 0;
@@ -138,7 +139,7 @@ int main (int argc, char **argv){
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
 	}
-	gtk_box_pack_start(GTK_BOX(vbox), mplayer_scroll, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);
 
 	// Add vbox to window
 	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);

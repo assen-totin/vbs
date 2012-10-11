@@ -16,7 +16,7 @@ void zeroTiming(GtkAction *action, gpointer param){
 	GtkTreeModel     *model;
 	bool flag = TRUE;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 
 	if (strstr(gtk_action_get_name(action), "EditZeroCurent")) {
 		// Zero current
@@ -48,7 +48,7 @@ void insertBefore(GtkAction *action, gpointer param){
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 
 	if (strstr(gtk_action_get_name(action), "EditInsertBefore")) {
 		// New before current
@@ -213,6 +213,7 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 		}
 	        else if (strstr(gtk_action_get_name(action), "VideoImport")) {
         	        // Load Video
+        	        config.vbsm.have_loaded_video = true;
 		        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
 		                mplayer_load_video(filename);

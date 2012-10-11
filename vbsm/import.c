@@ -201,7 +201,7 @@ void importText(char *importTextFile, int importFlag) {
 	GtkTreeModel     *model;
 	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.mplayer_view));
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 
 	gtk_tree_model_get_iter_first(model, &iter);
 	gtk_tree_selection_select_iter(selection, &iter);

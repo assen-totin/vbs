@@ -106,7 +106,7 @@ if test $FORCE_GTK = "3" ; then
         else
                 GTK_VER="3.0"
 		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
-		RPM_REQUIRE_GTK="Require: gtk3 >= 3.4.0"
+		RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
         fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
@@ -114,17 +114,17 @@ elif test $FORCE_GTK = "2" ; then
 	else
 		GTK_VER="2.0"
 		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
-		RPM_REQUIRE_GTK="Require: gtk2 >= 2.24.0"
+		RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
 	fi
 else
 	if test $FOUND_GTK3 = "yes" ; then
 		GTK_VER="3.0"
 		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
-		RPM_REQUIRE_GTK="Require: gtk3 >= 3.4.0"
+		RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
 	elif test $FOUND_GTK2 = "yes" ; then
 		GTK_VER="2.0"
 		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
-		RPM_REQUIRE_GTK="Require: gtk2 >= 2.24.0"
+		RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
 	else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi
