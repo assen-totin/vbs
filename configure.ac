@@ -37,6 +37,8 @@ FOUND_GSTREAMER="no"
 FOUND_GSTREAMER_INTERFACES="no"
 USE_MPLAYER="no"
 USE_GSTREAMER="no"
+RPM_REQUIRE_MPLAYER=" "
+RPM_REQUIRE_GSTREAMER=" "
 AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
 
 AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
@@ -76,19 +78,24 @@ if test $USE_MPLAYER = "yes" ; then
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
 	HAVE_MPLAYER="1"
 	ECHO_BACKEND_MPLAYER="yes"
+	RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
 fi
 if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
 	HAVE_GSTREAMER="1"
 	ECHO_BACKEND_GSTREAMER="yes"
+	RPM_REQUIRE_GSTREAMER="Requires: gstreamer >= 0.10"
 fi
 
 AC_SUBST([HAVE_MPLAYER])
 AC_SUBST([HAVE_GSTREAMER])
+AC_SUBST([RPM_REQUIRE_MPLAYER])
+AC_SUBST([RPM_REQUIRE_GSTREAMER])
 
 # Check for GTK and determine version
 GTK_VER="0.0"
 FORCE_GTK="no"
+RPM_REQUIRE_GTK=" "
 AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0], [FOUND_GTK3="yes"], [FOUND_GTK3="no"])
@@ -99,6 +106,7 @@ if test $FORCE_GTK = "3" ; then
         else
                 GTK_VER="3.0"
 		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+		RPM_REQUIRE_GTK="Require: gtk3 >= 3.4.0"
         fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
@@ -106,19 +114,23 @@ elif test $FORCE_GTK = "2" ; then
 	else
 		GTK_VER="2.0"
 		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
+		RPM_REQUIRE_GTK="Require: gtk2 >= 2.24.0"
 	fi
 else
 	if test $FOUND_GTK3 = "yes" ; then
 		GTK_VER="3.0"
 		AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+		RPM_REQUIRE_GTK="Require: gtk3 >= 3.4.0"
 	elif test $FOUND_GTK2 = "yes" ; then
 		GTK_VER="2.0"
 		AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
+		RPM_REQUIRE_GTK="Require: gtk2 >= 2.24.0"
 	else
 		AC_MSG_ERROR(["*** GTK not found."])
 	fi
 fi
 AC_SUBST([GTK_VER])
+AC_SUBST([RPM_REQUIRE_GTK])
 
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])

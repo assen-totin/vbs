@@ -6,8 +6,9 @@ Group: Applications/Multimedia
 License: GPL
 Source: http://bilbo.online.bg/~assen/vbs/vbs-@PACKAGE_VERSION@.tar.gz
 BuildRoot: /var/tmp/%{name}-buildroot
-Requires: gtk2 >= 2.2.0
-Requires: mplayer >= 1.0
+@RPM_REQUIRE_MPLAYER@
+@RPM_REQUIRE_GSTREAMER@
+@RPM_REQUIRE_GTK@
 
 %description
 Voody Blue Subtitler (aka VBS) is a suit of programmes to manually
@@ -60,6 +61,9 @@ rm -rf $RPM_BUILD_ROOT
 * Thu Mar 8 2012 Assen Totin <assen.totin@gmail.com>
 - Release 2.1
 
-* Thu Oct 9 2012 Assen Totin <assen.totin@gmail.com>
+* Tue Oct 9 2012 Assen Totin <assen.totin@gmail.com>
 - Release 2.2
+
+* Tue Oct 16 2012 Assen Totin <assen.totin@gmail.com>
+- Release 3.0
 
