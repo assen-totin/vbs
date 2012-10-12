@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-11 18:33+0300\n"
+"POT-Creation-Date: 2012-10-12 10:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Enter font size (in points):"
 msgstr ""
 
-#: vbsc/menu.c:116
+#: vbsc/menu.c:116 vbsm/menu.c:364
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr ""
 msgid "Set Full-Screen"
 msgstr ""
 
-#: vbsc/menu.c:107
+#: vbsc/menu.c:107 vbsm/menu.c:355
 msgid "Set Magic Key"
 msgstr ""
 
@@ -141,6 +141,10 @@ msgstr ""
 
 #: common/menu.c:167
 msgid "TCP Port"
+msgstr ""
+
+#: vbsc/vbsc.c:46
+msgid "Use the menu to change default settings."
 msgstr ""
 
 #: vbsm/menu.c:79

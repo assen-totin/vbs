@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-11 18:33+0300\n"
+"POT-Creation-Date: 2012-10-12 10:39+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -47,7 +47,7 @@ msgstr "Адрес не найден."
 msgid "Enter font size (in points):"
 msgstr "Введите размер шрифта (в пунктах):"
 
-#: vbsc/menu.c:116
+#: vbsc/menu.c:116 vbsm/menu.c:364
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Введите серверный ключ доступа (число от 1 до 2147483647):"
 
@@ -127,7 +127,7 @@ msgstr "Размер шрифта"
 msgid "Set Full-Screen"
 msgstr "Полноэкранный режим"
 
-#: vbsc/menu.c:107
+#: vbsc/menu.c:107 vbsm/menu.c:355
 msgid "Set Magic Key"
 msgstr "Ключ сервера"
 
@@ -148,6 +148,10 @@ msgstr "Рекомендуемая продолжительность: %u сек
 #: common/menu.c:167
 msgid "TCP Port"
 msgstr "TCP порт"
+
+#: vbsc/vbsc.c:46
+msgid "Use the menu to change default settings."
+msgstr "Используйте меню дла изменения насроек."
 
 #: vbsm/menu.c:79
 msgid "Using VBS"

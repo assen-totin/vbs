@@ -58,18 +58,19 @@ rm -rf $RPM_BUILD_ROOT
 @DATAROOTDIR@/applications/vbsc.desktop
 
 %changelog
-* Sun Aug 27 2006 Assen Totin <assen@online.bg>
-- Initial release.
-
-* Thu Mar 1 2012 Assen Totin <assen.totin@gmail.com>
-- Release 2.0
-
-* Thu Mar 8 2012 Assen Totin <assen.totin@gmail.com>
-- Release 2.1
+%changelog
+* Thu Oct 11 2012 Assen Totin <assen.totin@gmail.com>
+- Release 3.0
 
 * Tue Oct 9 2012 Assen Totin <assen.totin@gmail.com>
 - Release 2.2
 
-* Tue Oct 16 2012 Assen Totin <assen.totin@gmail.com>
-- Release 3.0
+* Thu Mar 8 2012 Assen Totin <assen.totin@gmail.com>
+- Release 2.1
+
+* Thu Mar 1 2012 Assen Totin <assen.totin@gmail.com>
+- Release 2.0
+
+* Sun Aug 27 2006 Assen Totin <assen@online.bg>
+- Initial release.
 

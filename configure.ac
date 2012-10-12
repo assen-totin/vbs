@@ -26,6 +26,8 @@ AC_SUBST([IMGDIR])
 LOCALEDIR=$prefix/share/locale
 AC_SUBST([LOCALEDIR])
 AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
+TOPLEVELDIR=`pwd`
+AC_SUBST([TOPLEVELDIR])
 
 # Checks for programs.
 AC_PROG_CC

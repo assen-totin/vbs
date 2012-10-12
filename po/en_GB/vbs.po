@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-11 18:33+0300\n"
+"POT-Creation-Date: 2012-10-12 10:39+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English (British)\n"
@@ -45,7 +45,7 @@ msgstr "DNS resolving failed."
 msgid "Enter font size (in points):"
 msgstr "Enter font size (in points):"
 
-#: vbsc/menu.c:116
+#: vbsc/menu.c:116 vbsm/menu.c:364
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Enter magic key (number between 1 and 2147483647):"
 
@@ -125,7 +125,7 @@ msgstr "Set Font Size"
 msgid "Set Full-Screen"
 msgstr "Set Full-Screen"
 
-#: vbsc/menu.c:107
+#: vbsc/menu.c:107 vbsm/menu.c:355
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
@@ -146,6 +146,10 @@ msgstr "Suggested Duration: %u seconds (So far: %u seconds)"
 #: common/menu.c:167
 msgid "TCP Port"
 msgstr "TCP Port"
+
+#: vbsc/vbsc.c:46
+msgid "Use the menu to change default settings."
+msgstr "Use the menu to change default settings."
 
 #: vbsm/menu.c:79
 msgid "Using VBS"

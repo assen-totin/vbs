@@ -12,6 +12,7 @@ CC = @MAKEFILE_CC@
 CFLAGS = -c -O2
 
 BINDIR = @BINDIR@ 
+DATAROOTDIR = @DATAROOTDIR@
 
 INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
@@ -38,7 +39,7 @@ distclean:
 
 install:
 	test -z $(DESTDIR)$(BINDIR) || mkdir -p $(DESTDIR)$(BINDIR)
-	cp -f $(TARGET) $(BINDIR)
+	cp -f $(TARGET) $(DESTDIR)$(BINDIR)
 	test -z $(DESTDIR)$(DATAROOTDIR)/applications || mkdir -p $(DESTDIR)$(DATAROOTDIR)/applications
 	cp -f vbss.desktop $(DESTDIR)$(DATAROOTDIR)/applications
 

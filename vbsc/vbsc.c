@@ -43,7 +43,7 @@ int main (int argc, char **argv){
         GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 
 	// Main label
-	GtkWidget *label = gtk_label_new(VBSC_WELCOME_TEXT);
+	GtkWidget *label = gtk_label_new(_("Use the menu to change default settings."));
 
 	// Create vbox
 #ifdef HAVE_GTK2

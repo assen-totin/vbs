@@ -39,7 +39,7 @@ distclean:
 
 install:
 	test -z $(DESTDIR)$(SBINDIR) || mkdir -p $(DESTDIR)$(SBINDIR)
-	cp -f $(TARGET) $(SBINDIR)
+	cp -f $(TARGET) $(DESTDIR)$(SBINDIR)
 
 uninstall:
 	rm -f $(TARGET) $(SBINDIR)/$(TARGET)
