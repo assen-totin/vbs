@@ -41,6 +41,8 @@ int main (int argc, char **argv){
         gtk_ui_manager_insert_action_group (p_uiManager, p_actionGroup, 0);
         gtk_ui_manager_add_ui_from_string (p_uiManager, ui1, -1, NULL);
         GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
+	GtkAccelGroup *accel_group = gtk_ui_manager_get_accel_group(p_uiManager);
+	gtk_window_add_accel_group(GTK_WINDOW(config.vbsm.window), accel_group);
 
 	// Main label
 	GtkWidget *label = gtk_label_new(_("Use the menu to change default settings."));
