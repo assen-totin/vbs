@@ -53,6 +53,8 @@ naturally, it will be used). If you have both, but prefer the MPlayer style,
 you can set so in the Video preferences. Also, to change the video output used
 by GStreamer (by default, the highly inefficinent, but safe X11) use the 
 corresponding menu. Changing backend or output requires restart to take effect.
+Do note that the SDL video output will, depending on the exact build, sometimes
+put the video in a separate window (in MPlayer style).
 
 vbsm has a simple interface: 
 

@@ -51,7 +51,7 @@ struct video_output {
 
 static struct video_output video_outputs[] = {
 	{"X11", "ximagesink", true},
-	{"Xv", "xvimagesink", false}
+	{"Xv", "xvimagesink", false},
 	{"SDL", "sdlvideosink", false}
 };
 

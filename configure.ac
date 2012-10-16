@@ -49,6 +49,7 @@ HAVE_MPLAYER="0"
 HAVE_GSTREAMER="0"
 FOUND_GSTREAMER="no"
 FOUND_GSTREAMER_INTERFACES="no"
+FOUND_GSTREAMER_PLUGINS_BASE="no"
 USE_MPLAYER="no"
 USE_GSTREAMER="no"
 RPM_REQUIRE_MPLAYER=" "
@@ -58,6 +59,7 @@ AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the
 AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
 PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10], [FOUND_GSTREAMER="yes"], [FOUND_GSTREAMER="no"])
 PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
 
 if test $FORCE_BACKEND = "mplayer" ; then
 	if test $FOUND_MPLAYER = "no" ; then
@@ -70,6 +72,8 @@ elif test $FORCE_BACKEND = "gstreamer" ; then
                 AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
         elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
                 AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+	elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
 	else
 		USE_GSTREAMER="yes"
         fi
@@ -82,7 +86,9 @@ else
 	if test $FOUND_GSTREAMER = "no" ; then
 		echo "*** GStreamer not found. vbsm Won't be able to use it."
 	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
-		echo "*** GStreamer foound, but GStreamer-interfaces not found. Disabling GStreamer."
+		echo "*** GStreamer found, but GStreamer-interfaces not found. Disabling GStreamer."
+	elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+		echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
 	else
 		USE_GSTREAMER="yes"
 	fi
@@ -98,7 +104,7 @@ if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
 	HAVE_GSTREAMER="1"
 	ECHO_BACKEND_GSTREAMER="yes"
-	RPM_REQUIRE_GSTREAMER="Requires: gstreamer >= 0.10"
+	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 fi
 
 AC_SUBST([HAVE_MPLAYER])
