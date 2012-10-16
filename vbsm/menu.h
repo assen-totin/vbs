@@ -52,6 +52,7 @@ struct video_output {
 static struct video_output video_outputs[] = {
 	{"X11", "ximagesink", true},
 	{"Xv", "xvimagesink", false}
+	{"SDL", "sdlvideosink", false}
 };
 
 #define VBS_MENU_HELP_TITLE "Using Voody Blue Subtitler"

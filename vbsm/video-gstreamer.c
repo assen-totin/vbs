@@ -91,21 +91,21 @@ void gstreamer_init(char file_name[1024]) {
 	char uri[2048];
 	sprintf(&uri[0], "file://%s", &file_name[0]);
 
-        config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
+	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 
+        config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", &uri[0], NULL);
 
         GstElement *videosink = gst_element_factory_make (&config.vbsm.gstreamer_video_sink[0], "videosink");
-
         config.vbsm.gstreamer_textoverlay = gst_element_factory_make("textoverlay", "textoverlay");
+	GstElement *timeoverlay = gst_element_factory_make("timeoverlay", "timeoverlay");
 
-        GstElement *mybin = gst_bin_new("mybin");
-        gst_bin_add (GST_BIN (mybin), config.vbsm.gstreamer_textoverlay);
+	gst_bin_add_many (GST_BIN (pipeline), config.vbsm.gstreamer_textoverlay, timeoverlay, videosink, NULL);
 
         GstPad *pad = gst_element_get_pad(config.vbsm.gstreamer_textoverlay, "video_sink");
-        gst_element_add_pad(mybin, gst_ghost_pad_new("sink", pad));
+        gst_element_add_pad(pipeline, gst_ghost_pad_new("sink", pad));
 
-        gst_bin_add (GST_BIN (mybin), videosink);
+	gst_element_link_many(config.vbsm.gstreamer_textoverlay, timeoverlay, videosink);
 
         g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
                         "halign", "center",
@@ -113,12 +113,10 @@ void gstreamer_init(char file_name[1024]) {
                         "font-desc", "Sans Bold 14",
                         "text", " ",
                         NULL);
-	/*
-        GstBus *bus;
-        bus = gst_pipeline_get_bus (GST_PIPELINE (config.vbsm.gstreamer_playbin2));
-        gst_bus_add_watch (bus, bus_cb, NULL);
-        gst_object_unref (bus);
-        */
+
+        g_object_set(G_OBJECT(timeoverlay),
+                        "font-desc", "Sans 12",
+                        NULL);
 
 	// Merge with existing widget
         if (GST_IS_X_OVERLAY (videosink)) {
@@ -129,9 +127,7 @@ void gstreamer_init(char file_name[1024]) {
 #endif
         }
 
-        gst_element_link_pads(config.vbsm.gstreamer_textoverlay, "src", videosink, "sink");
-
-        g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "video-sink", mybin, NULL);
+        g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "video-sink", pipeline, NULL);
 
         gst_element_set_state (config.vbsm.gstreamer_playbin2, GST_STATE_PAUSED);
 }
