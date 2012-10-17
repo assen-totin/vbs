@@ -45,3 +45,4 @@ static GOptionEntry cmdl_entries[] =
 #define VBS_FULL_SCREEN 0
 #define VBSM_VIDEO_BACKEND "# Set video backend to 0 for MPLayer or to 1 for GStreamer"
 #define VBSM_GS_VIDEO_SINK "ximagesink"
+#define VBSM_DEFAULT_PROGRESS_UPDATE 100

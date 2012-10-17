@@ -71,8 +71,9 @@ struct struct_vbsm {
         GtkWidget *menu_widget;
 	GtkWidget *menu_widget2;
         GtkWidget *status;
-        GtkWidget *progress;
 	GtkWidget *subtitles_view;
+	GtkWidget *progress;
+	int progress_update_msec;
         char log_file_name[255];
 	FILE *log_file_fp;
 	char sub_file_name[255];

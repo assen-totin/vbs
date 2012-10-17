@@ -45,13 +45,14 @@ void default_config() {
         config.vbss.colour_fg_b = VBS_DEFAULT_COLOUR_FG_BLUE;
 	config.vbss.font_size = VBS_DEFAULT_FONT_SIZE;
 
-	#ifdef HAVE_MPLAYER
-		config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
-	#endif
-	#ifdef HAVE_GSTREAMER
-		config.vbsm.video_backend = VBSM_VIDEO_BACKEND_GSTREAMER; 
-		strcpy(&config.vbsm.gstreamer_video_sink[0] , VBSM_GS_VIDEO_SINK);
-	#endif
+#ifdef HAVE_MPLAYER
+	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
+#endif
+#ifdef HAVE_GSTREAMER
+	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_GSTREAMER; 
+	strcpy(&config.vbsm.gstreamer_video_sink[0] , VBSM_GS_VIDEO_SINK);
+#endif
+	config.vbsm.progress_update_msec = VBSM_DEFAULT_PROGRESS_UPDATE;
 }
 
 void config_char(char *line, char *param) {
@@ -94,6 +95,7 @@ void write_config() {
         fprintf(fp_config, "COLOUR_FG_B=%u\n", config.vbss.colour_fg_b);
 	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
 
+	fprintf(fp_config, "PROGRESS_BAR_UPDATE=%u\n", config.vbsm.progress_update_msec);
 	fprintf(fp_config, "%s\n", VBSM_VIDEO_BACKEND);
 	fprintf(fp_config, "VIDEO_BACKEND=%u\n", config.vbsm.video_backend);
 	fprintf(fp_config, "GSTREAMER_VIDEO_SINK=%s\n", config.vbsm.gstreamer_video_sink);
@@ -150,6 +152,8 @@ void read_config() {
 			else if (strstr(line, "FONT_SIZE"))
 				config.vbss.font_size = config_int(line);
 
+			else if (strstr(line, "PROGRESS_BAR_UPDATE"))
+				config.vbsm.progress_update_msec = config_int(line);
 			else if (strstr(line, "VIDEO_BACKEND"))
 				config.vbsm.video_backend = config_int(line);
 			else if (strstr(line, "GSTREAMER_VIDEO_SINK"))

@@ -81,7 +81,7 @@ int progress_bar_update() {
 		}
 		else {
 			div_t time_diff = div(curr_time_msec - config.common.timestamp_msec, 1000);
-			if (time_diff.rem < 100) {
+			if (time_diff.rem < config.vbsm.progress_update_msec) {
 				char line2[255];
 				sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, time_diff.quot);
 				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);

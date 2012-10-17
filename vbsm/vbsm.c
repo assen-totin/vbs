@@ -155,7 +155,7 @@ int main (int argc, char **argv){
 	gtk_widget_show_all(config.vbsm.window);
 
 	// Progress bar check & update function
-	g_timeout_add(100, progress_bar_update, NULL);
+	g_timeout_add(config.vbsm.progress_update_msec, progress_bar_update, NULL);
 
 	gtk_main();
 
