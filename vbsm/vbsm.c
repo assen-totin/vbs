@@ -36,7 +36,7 @@ int main (int argc, char **argv){
 	config.vbsm.have_loaded_text = FALSE;
 	config.vbsm.have_loaded_video = FALSE;
 	config.vbsm.mplayer_pid = 0;
-	config.common.init_timestamp = time(NULL);
+	config.common.init_timestamp_msec = get_time_msec();
 
 	// Create log file
 	sprintf(config.vbsm.log_file_name, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
@@ -155,7 +155,7 @@ int main (int argc, char **argv){
 	gtk_widget_show_all(config.vbsm.window);
 
 	// Progress bar check & update function
-	g_timeout_add(1000, progress_bar_update, NULL);
+	g_timeout_add(100, progress_bar_update, NULL);
 
 	gtk_main();
 

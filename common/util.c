@@ -28,6 +28,7 @@ void fix_new_line(char *buffer) {
         strcpy(buffer, &linePrint[0]);
 }
 
+
 void split_path(char *path, char *dir, char *file) {
         char *tmp;
         char tmp_old[100];
@@ -49,3 +50,9 @@ void split_path(char *path, char *dir, char *file) {
         strcpy(file, &tmp_old[0]);
 }
 
+
+long get_time_msec() {
+	struct timeval curr_time;
+	gettimeofday(&curr_time, NULL);
+	return (long) (1000 * curr_time.tv_sec + (int) (curr_time.tv_usec / 1000));
+}

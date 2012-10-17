@@ -92,7 +92,7 @@ void helpContents(GtkAction *action, gpointer param) {
 
 
 void setTimer(GtkAction *action, gpointer param) {
-	config.common.init_timestamp = time(NULL);
+	config.common.init_timestamp_msec = get_time_msec();
 
         GtkWidget *quitDialog, *quitLabel, *quitFrame;
 

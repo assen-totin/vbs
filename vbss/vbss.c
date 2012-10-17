@@ -147,14 +147,14 @@ int proc_subtitle_net() {
 int proc_subtitle_local() {
 	int i;
 
-	config.common.init_timestamp = time(NULL);
+	config.common.init_timestamp_msec = get_time_msec();
 
 	// RENDER SUBS
 	while (1) {
 		if (!config.vbss.paused) {
 			for (i=0; i<config.vbss.local_subs_count; i++) {
-				time_t curr_timestamp = time(NULL);
-				if (((curr_timestamp - config.common.init_timestamp) >= subs[i].time_from)&&((curr_timestamp - config.common.init_timestamp) <= subs[i].time_to)) {
+				long curr_time_msec = get_time_msec();
+				if (((curr_time_msec - config.common.init_timestamp_msec) >= 1000 * subs[i].time_from) && ((curr_time_msec - config.common.init_timestamp_msec) <= 1000 * subs[i].time_to)) {
 					config.common.inside_sub = true;
 					strcpy(&current_sub[0], &subs[i].sub[0]);
 					break;
@@ -163,8 +163,8 @@ int proc_subtitle_local() {
 		
 			if (config.common.inside_sub) {
 				while (1) {
-					time_t curr_timestamp = time(NULL);
-					if ((curr_timestamp - config.common.init_timestamp) >= subs[i].time_to) {
+					long curr_time_msec = get_time_msec();
+					if ((curr_time_msec - config.common.init_timestamp_msec) >= 1000 * subs[i].time_to) {
 						strcpy(&current_sub[0], "\n");
 						config.common.inside_sub = false;
 						break;
@@ -251,7 +251,7 @@ int main (int argc, char *argv[]) {
 		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
 	else {
 		load_srt();
-		config.common.timestamp = time(NULL);
+		config.common.timestamp_msec = get_time_msec();
 		strcpy(&current_sub[0], VBSS_NETWORK_OFF);
 		g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 	}

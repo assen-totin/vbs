@@ -74,15 +74,18 @@ void *create_view_and_model (void){
 int progress_bar_update() {
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
-		time_t curr_time = time(NULL);
-		gdouble frac = (gdouble) (curr_time - config.common.timestamp) / (gdouble) (config.vbsm.progress_seconds - 1);
+		long curr_time_msec = get_time_msec();
+		gdouble frac = (gdouble) (curr_time_msec - config.common.timestamp_msec) / (gdouble) (1000 * (config.vbsm.progress_seconds - 1));
 		if (frac <= 1) {
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), frac);
 		}
 		else {
-			char line2[255];
-			sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, curr_time - config.common.timestamp);
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
+			div_t time_diff = div(curr_time_msec - config.common.timestamp_msec, 1000);
+			if (time_diff.rem < 100) {
+				char line2[255];
+				sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, time_diff.quot);
+				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
+			}
 		}
 	}
 
@@ -103,8 +106,8 @@ int progress_bar_update() {
 				if (mplayer_is_alive())
 					local = mplayer_get_time_pos(2);
 				else {
-					time_t curr_time = time(NULL);
-					local = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+					local = curr_time_msec - config.common.init_timestamp_msec;
 				}
 #endif
 			}
@@ -115,8 +118,8 @@ int progress_bar_update() {
 					local = gstreamer_query_position();
 
 				if ((!config.vbsm.have_loaded_video) || (local == -1)) {
-					time_t curr_time = time(NULL);
-					local = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+					local = curr_time_msec - config.common.init_timestamp_msec;
 				}
 #endif
 			}

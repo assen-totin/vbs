@@ -32,8 +32,8 @@ void on_pressed_b () {
 				if (mplayer_is_alive())
 					new_from = mplayer_get_time_pos(2);
 				else {
-					time_t curr_time = time(NULL);
-					new_from = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+					new_from = curr_time_msec - config.common.init_timestamp_msec;
 				}
 #endif
 			}
@@ -43,15 +43,15 @@ void on_pressed_b () {
 					new_from = gstreamer_query_position();
 
 				if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
-					time_t curr_time = time(NULL);
-					new_from = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+					new_from = curr_time_msec - config.common.init_timestamp_msec;
 				}
 #endif
 			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
-			config.common.timestamp = time(NULL);
+			config.common.timestamp_msec = get_time_msec();
 			config.common.inside_sub = TRUE;
 
 			gchar *line;
@@ -102,8 +102,8 @@ void on_pressed_m () {
 				if (mplayer_is_alive())
 					new_to = mplayer_get_time_pos(2);
 				else {
-					time_t curr_time = time(NULL);
-					new_to = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+					new_to = curr_time_msec - config.common.init_timestamp_msec;
 				}
 #endif
 			}
@@ -113,8 +113,8 @@ void on_pressed_m () {
 	                                new_to = gstreamer_query_position();
 
                                 if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
-                                        time_t curr_time = time(NULL);
-                                        new_to = 1000*(curr_time - config.common.init_timestamp);
+					long curr_time_msec = get_time_msec();
+                                        new_to = curr_time_msec - config.common.init_timestamp_msec;
                                 }
 
 				// Clear the sub

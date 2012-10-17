@@ -51,12 +51,12 @@ void on_space_pressed (GtkWidget *window) {
         if (!config.common.inside_sub) {
                 if (!config.vbss.paused) {
                         config.vbss.paused = true;
-                        config.common.timestamp = time(NULL);
+                        config.common.timestamp_msec = get_time_msec();
                 }
                 else {
                         config.vbss.paused = false;
-                        time_t curr_timestamp = time(NULL);
-                        config.common.init_timestamp += (curr_timestamp - config.common.timestamp);
+                        long curr_time_msec = get_time_msec();
+                        config.common.init_timestamp_msec += (curr_time_msec - config.common.timestamp_msec);
                         strcpy(&current_sub[0], "\n");
                 }
         }
@@ -64,37 +64,37 @@ void on_space_pressed (GtkWidget *window) {
 
 void on_q_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-        	config.common.init_timestamp -= 60;
+        	config.common.init_timestamp_msec -= 60000;
         }
 }
 
 void on_w_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp -= 5;
+                config.common.init_timestamp_msec -= 5000;
         }
 }
 
 void on_e_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp -= 1;
+                config.common.init_timestamp_msec -= 1000;
         }
 }
 
 void on_r_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp += 1;
+                config.common.init_timestamp_msec += 1000;
         }
 }
 
 void on_t_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp += 5;
+                config.common.init_timestamp_msec += 5000;
         }
 }
 
 void on_y_pressed (GtkWidget *window) {
         if ((!config.common.inside_sub) && (!config.vbss.paused)) {
-                config.common.init_timestamp += 60;
+                config.common.init_timestamp_msec += 60000;
         }
 }
 

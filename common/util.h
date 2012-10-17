@@ -12,3 +12,5 @@ void fix_new_line(char *buffer);
 
 void split_path(char *path, char *dir, char *file);
 
+long get_time_msec();
+

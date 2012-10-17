@@ -24,7 +24,7 @@ void get_cmdl_config(int argc, char *argv[]) {
 
 
 void default_config() {
-	config.common.init_timestamp = time(NULL);
+	config.common.init_timestamp_msec = get_time_msec();
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
 	config.common.export_cr = VBS_DEFAULT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");

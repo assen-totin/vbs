@@ -106,8 +106,8 @@ struct struct_vbss {
 struct struct_common {
 	bool running;
 	bool inside_sub;
-	time_t init_timestamp;
-	time_t timestamp;
+	long init_timestamp_msec;
+	long timestamp_msec;
         int magic_key;
 	char config_file_name[1024];
         int export_cr;
