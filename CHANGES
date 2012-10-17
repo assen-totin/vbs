@@ -8,7 +8,13 @@ the --enable-gtk=2 confgugure options.
 2. Support for GStreamer for video playback. By default, if GStreamer 
 is available, support for it will be built and also for MPlayer. To
 compile only one of them, use the --enable-backend=mplayer,gstreamer 
-configuration option. 
+configuration option. Support multiple video output methods for GStreamer -
+X11 (ximagesink), Xv (xvimagesink), SLD (sdlvideosink). 
+
+3. Support i18n via gettext. Provided translations for Bulgarian,
+Russian, English.
+
+4. Progress bar update configuration option.
 
 Oct 9, 2012 - Version 2.2
 ==========================
