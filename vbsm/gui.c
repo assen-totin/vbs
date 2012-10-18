@@ -72,9 +72,10 @@ void *create_view_and_model (void){
 }
 
 int progress_bar_update() {
+	long curr_time_msec = get_time_msec();
+
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
-		long curr_time_msec = get_time_msec();
 		gdouble frac = (gdouble) (curr_time_msec - config.common.timestamp_msec) / (gdouble) (1000 * (config.vbsm.progress_seconds - 1));
 		if (frac <= 1) {
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), frac);
@@ -96,7 +97,9 @@ int progress_bar_update() {
 	gchar *line;
 
 	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
-	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
+	// Because this section queries the player (which is an overhead, especially on MPlayer), limit it to once a second.
+	div_t msec = div(curr_time_msec, 1000);
+	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE) && (msec.rem < config.vbsm.progress_update_msec)) {
 		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, COL_LINE, &line, -1);
