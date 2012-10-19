@@ -16,7 +16,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 	GtkWidget *window = userdata;
 	int subNum;
 
-	if ((config.common.running == FALSE) && (haveLoadedText(window))) {
+	if ((config.common.running == FALSE) && (have_loaded_text(window))) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;

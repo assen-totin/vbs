@@ -182,7 +182,7 @@ void on_pressed_space (GtkWidget *window) {
 
 	}
 	else if (config.common.running == FALSE) {
-		if (haveLoadedText(window)) {
+		if (have_loaded_text(window)) {
 			config.common.running = TRUE;
 			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
 

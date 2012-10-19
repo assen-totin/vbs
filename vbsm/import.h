@@ -8,13 +8,13 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void clearStore();
+void clear_store();
 
-void importText(char *importTextFile, int importFlag);
+void import_text(char *, int);
 
-void importFilterSrt(char *importTextFile);
+void import_filter_srt(char *);
 
-unsigned int convertTime(char *inTime);
+unsigned int convert_time_sec(char *);
 
-bool haveLoadedText(GtkWidget *window);
+bool have_loaded_text(GtkWidget *);
 

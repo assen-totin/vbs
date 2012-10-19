@@ -13,22 +13,17 @@ void fileDialogSave(GtkAction *action, gpointer param);
 
 void quitDialog(GtkWidget *widget, gpointer window);
 
-void zeroTiming(GtkAction *action, gpointer param);
+void zero_timing(GtkAction *action, gpointer param);
 
-void setTimer(GtkAction *action, gpointer param);
+void set_timer(GtkWidget *widget, gpointer window);
 
-void helpContents(GtkAction *action, gpointer param);
+void help_contents(GtkAction *action, gpointer param);
 
-void insertBefore(GtkAction *action, gpointer param);
+void insert_subtitle(GtkAction *action, gpointer param);
 
-void set_video_output (GtkAction *action, gpointer param);
-void set_video_output_ok(GtkWidget *widget, gpointer data);
+void set_video_output (GtkWidget *widget, gpointer window);
 
-void set_video_backend (GtkAction *action, gpointer param);
-void set_video_backend_ok(GtkWidget *widget, gpointer data);
-
-void set_magic_key (GtkAction *action, gpointer param);
-void set_magic_key_ok(GtkWidget *widget, gpointer data);
+void set_video_backend (GtkWidget *widget, gpointer window);
 
 struct video_backend {
         char name[255];
@@ -37,7 +32,7 @@ struct video_backend {
         bool dflt;
 };
 
-static struct video_backend video_backends[] = {
+struct video_backend video_backends[] = {
 	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, true},
 	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, false}
 };
@@ -48,7 +43,7 @@ struct video_output {
         bool dflt;
 };
 
-static struct video_output video_outputs[] = {
+struct video_output video_outputs[] = {
 	{"X11", "ximagesink", true},
 	{"Xv", "xvimagesink", false},
 	{"SDL", "sdlvideosink", false}

@@ -68,8 +68,6 @@ struct struct_vbsm {
         guint status_context_id;
         short unsigned progress_seconds;
 	GtkWidget *window;
-        GtkWidget *menu_widget;
-	GtkWidget *menu_widget2;
         GtkWidget *status;
 	GtkWidget *subtitles_view;
 	GtkWidget *progress;
@@ -101,6 +99,7 @@ struct struct_vbss {
 	int colour_fg_r;
 	int colour_fg_g;
 	int colour_fg_b;
+	char[1024] font_name;
 	int font_size;
 };
 
@@ -135,13 +134,13 @@ struct cmdl {
 	gchar *short_f;
 };
 
-struct encEntry {
+struct enc_entry {
 	char name[255];
 	bool dflt;
 };
 
 
-static struct encEntry encEntries[] = {
+static struct enc_entry enc_entries[] = {
   {"UTF-8", true},
   {"ISO8859-1", false},
   {"WINDOWS-1250", false},

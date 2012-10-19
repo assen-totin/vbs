@@ -44,16 +44,16 @@ GtkActionEntry menu_entries1[] = {
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
         {"TextImportDefault", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
-        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
+        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)set_encoding_import},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
         {"TextExportDefault", GTK_STOCK_OPEN, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog_save},
-        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
-        {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
+        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)set_encoding_export},
+        {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)set_newline},
 
         {"NetworkMenu", NULL, "Network", NULL, NULL, NULL},
-        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
-        {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)setNetworkServer},
-        {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)setNetworkPort},
+        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)use_network},
+        {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)set_network_server},
+        {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)set_network_port},
         {"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"PlayerMenu", NULL, "Player", NULL, NULL, NULL},

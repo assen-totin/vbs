@@ -18,9 +18,6 @@ int proc_subtitle_local();
 
 int show_subtitle(GtkWidget *subtitle);
 
-#define VBSS_EXPECTING_CONNECTION "Expecting network connection..."
-#define VBSS_NETWORK_OFF "Press SPACE to start playback..."
-
 struct vbss_sub {
 	time_t time_from;
 	time_t time_to;

@@ -75,11 +75,11 @@ GtkActionEntry menu_entries[] = {
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
         {"TextImportPlain", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialogOpen},
         {"TextImportSubrip", GTK_STOCK_OPEN, "Load SubRip...", "<CTRL>R", NULL, (GCallback)fileDialogOpen},
-        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
+        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)set_encoding_import},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
         {"TextExportDestination", GTK_STOCK_SAVE_AS, "Export Destination...", "<CTRL>E", NULL, (GCallback)fileDialogSave},
-        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
-        {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
+        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)set_encoding_export},
+        {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)set_newline},
 
         {"VideoMenu", NULL, "Video", NULL, NULL, NULL},
         {"VideoImport", GTK_STOCK_OPEN, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialogOpen},
@@ -87,9 +87,9 @@ GtkActionEntry menu_entries[] = {
         {"VideoOutput", NULL, "Set Video Output...", NULL, NULL, (GCallback)set_video_output},
 
         {"NetworkMenu", NULL, "Network", NULL, NULL, NULL},
-        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
-        {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)setNetworkServer},
-        {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)setNetworkPort},
+        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)use_network},
+        {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)set_network_server},
+        {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)set_network_port},
 	{"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},

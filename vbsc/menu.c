@@ -10,30 +10,22 @@
 
 #include "../common/common.h"
 
-static void quit_dialog_ok( GtkWidget *widget, gpointer data ){
-	GtkWidget *quitDialog = data;
-	gtk_widget_destroy(quitDialog);
-	gtk_main_quit();
-}
+void quit_dialog(GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog;
+        dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_QUESTION,
+                GTK_BUTTONS_OK_CANCEL,
+                _("Really quit?"));
 
-void quit_dialog(GtkAction *action, gpointer param) {
-	GtkWidget *quitDialog, *quitLabel;
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Really quit?"));
 
-	quitDialog = gtk_dialog_new_with_buttons (_("Really quit?"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
-
-	quitLabel = gtk_label_new(_("Really quit?"));
-
-	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quit_dialog_ok), (gpointer) quitDialog);
-
-	g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-
-	gtk_widget_show_all (quitDialog);
+        if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+		gtk_widget_destroy(dialog);
+		gtk_main_quit();
+	}
+	else 
+		gtk_widget_destroy(dialog);
 }
 
 
@@ -43,10 +35,10 @@ void file_dialog_save(GtkAction *action, gpointer param) {
         char fileDialogFile[256];
 
         fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
-                                      GTK_FILE_CHOOSER_ACTION_SAVE,
-                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-                                      NULL);
+        	GTK_FILE_CHOOSER_ACTION_SAVE,
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                NULL);
 
         sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
         gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
@@ -62,7 +54,6 @@ void file_dialog_save(GtkAction *action, gpointer param) {
         }
 
         gtk_widget_destroy (fileDialogWidget);
-
 }
 
 
@@ -94,108 +85,58 @@ void file_dialog_open(GtkAction *action, gpointer param) {
 }
 
 
-void set_magic_key_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        config.common.magic_key = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
-        write_config();
-        gtk_widget_destroy(quitDialog);
-}
+void select_font(GtkWidget *widget, gpointer label) {
+	GtkResponseType result;
 
-void set_magic_key (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
+	GtkWidget *dialog = gtk_font_selection_dialog_new(_("Select Font"));
+	gtk_font_selection_dialog_set_preview_text(dialog, _("Quick brown fox jumps over the lazy dog..."));
+	gtk_font_selection_dialog_set_font_name(dialog, config.vbss.font_name);
+	
 
-        quitDialog = gtk_dialog_new_with_buttons (_("Set Magic Key"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_magic_key_ok), (gpointer) quitDialog);
-
-        char quitMessage[1024];
-        sprintf(&quitMessage[0], "%s\n", _("Enter magic key (number between 1 and 2147483647):"));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-        config.vbsm.menu_widget = gtk_entry_new();
-        char tmp1[16];
-        sprintf(&tmp1[0], "%u", config.common.magic_key);
-        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
-
-        gtk_widget_show_all (quitDialog);
-}
-
-void set_font_size_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        config.vbss.font_size = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
-        write_config();
-        gtk_widget_destroy(quitDialog);
-}
-
-void set_font_size (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
-
-        quitDialog = gtk_dialog_new_with_buttons (_("Set Font Size"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_font_size_ok), (gpointer) quitDialog);
-
-        char quitMessage[1024];
-        sprintf(&quitMessage[0], "%s\n", _("Enter font size (in points):"));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-        config.vbsm.menu_widget = gtk_entry_new();
-        char tmp1[16];
-        sprintf(&tmp1[0], "%u", config.vbss.font_size);
-        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
-
-        gtk_widget_show_all (quitDialog);
-}
-
-void set_full_screen_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)),"ON"))
-                config.vbss.full_screen = 1;
-        else
-                config.vbss.full_screen = 0;
-        write_config();
-        gtk_widget_destroy(quitDialog);
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == (GTK_RESPONSE_OK || GTK_RESPONSE_APPLY)) {
+		PangoFontDescription *font_desc;
+		strcpy(&config.vbss.font_name[0], (char *)gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog)));
+		
+		//config.vbss.font_size = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
+		//
+		//font_desc = pango_font_description_from_string(fontname);
+		//gtk_widget_modify_font(GTK_WIDGET(label), font_desc);
+		g_free(fontname);
+		write_config();
+	}
+	gtk_widget_destroy(dialog);
 }
 
 
-void set_full_screen (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
+void set_full_screen (GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_QUESTION,
+                GTK_BUTTONS_OK_CANCEL,
+                _("Full-Screen mode:"));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Set Full-Screen"));
 
-        quitDialog = gtk_dialog_new_with_buttons (_("Set Full-Screen"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+        GtkWidget *combo = gtk_combo_box_text_new();
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "OFF");
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), "ON");
+	int index;
+	if(config.vbss.full_screen == 0)
+		index = 0;
+	else
+		index = 1;
+	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), index);
 
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_full_screen_ok), (gpointer) quitDialog);
+        gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), combo);
+        gtk_widget_show(combo);
 
-        char quitMessage[1024];
-        sprintf(quitMessage, "%s\n", _("Full-Screen mode:"));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+		if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"ON"))
+			config.vbss.full_screen = 1;
+		else
+			config.vbss.full_screen = 0;
+                write_config();
+        }
 
-        config.vbsm.menu_widget = gtk_combo_box_text_new();
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "OFF");
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), "ON");
-        int index;
-        if(config.vbss.full_screen == 0)
-                index = 0;
-        else
-                index = 1;
-        gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), index);
-        gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
-
-        gtk_widget_show_all (quitDialog);
+        gtk_widget_destroy(dialog);
 }
 

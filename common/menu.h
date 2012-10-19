@@ -8,19 +8,13 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void quitDialogCancel(GtkWidget *widget, gpointer data);
-void help_about();
-void setEncodingImportOK(GtkWidget *widget, gpointer data);
-void setEncodingExportOK(GtkWidget *widget, gpointer data);
-void setEncodingImport (GtkAction *action, gpointer param);
-void setEncodingExport (GtkAction *action, gpointer param);
-void setNewlineOK(GtkWidget *widget, gpointer data);
-void setNewline (GtkAction *action, gpointer param);
-void setNetworkPortOK(GtkWidget *widget, gpointer data);
-void setNetworkPort (GtkAction *action, gpointer param);
-void setNetworkServerOK(GtkWidget *widget, gpointer data);
-void setNetworkServer (GtkAction *action, gpointer param);
-void useNetworkOK(GtkWidget *widget, gpointer data);
-void useNetwork (GtkAction *action, gpointer param);
-
+void help_about(GtkWidget *widget, gpointer window);
+void set_encoding_import (GtkWidget *widget, gpointer window);
+void set_encoding_export (GtkWidget *widget, gpointer window);
+void set_newline (GtkWidget *widget, gpointer window);
+void set_network_port (GtkWidget *widget, gpointer window);
+void set_network_server (GtkWidget *widget, gpointer window);
+void use_network (GtkWidget *widget, gpointer window);
+void show_warning_network (GtkWidget *widget, gpointer window);
+void set_magic_key (GtkWidget *widget, gpointer window);
 

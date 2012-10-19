@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-void zeroTiming(GtkAction *action, gpointer param){
+void zero_timing(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
@@ -43,7 +43,7 @@ void zeroTiming(GtkAction *action, gpointer param){
 }
 
 
-void insertBefore(GtkAction *action, gpointer param){
+void insert_subtitle(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
@@ -73,7 +73,7 @@ void insertBefore(GtkAction *action, gpointer param){
 }
 
 
-void helpContents(GtkAction *action, gpointer param) {
+void help_contents(GtkAction *action, gpointer param) {
 	GtkWidget *quitDialog, *quitLabel, *quitFrame;
 
 	quitDialog = gtk_dialog_new_with_buttons (_("Using VBS"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
@@ -91,25 +91,19 @@ void helpContents(GtkAction *action, gpointer param) {
 }
 
 
-void setTimer(GtkAction *action, gpointer param) {
+void set_timer(GtkWidget *widget, gpointer window) {
 	config.common.init_timestamp_msec = get_time_msec();
 
-        GtkWidget *quitDialog, *quitLabel, *quitFrame;
+	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+		GTK_MESSAGE_INFO,
+		GTK_BUTTONS_OK,
+		_("Internal timer set to zero."), "title");
 
-        quitDialog = gtk_dialog_new_with_buttons (_("Set Start Time"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-
-        quitFrame = gtk_frame_new("");
-        quitLabel = gtk_label_new(_("Internal timer set to zero."));
-        gtk_container_add(GTK_CONTAINER(quitFrame), quitLabel);
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
-
-        gtk_widget_show_all (quitDialog);
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Set Start Time"));
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 }
-
 
 void quitDialog(GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog;
@@ -191,12 +185,12 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 
 		if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
 			// Import Text-only
-		        clearStore();
+		        clear_store();
 		        importText(filename, VBS_IMPORT_FILTER_TEXT);
 		}
 		else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
 			// Import SRT
-		        clearStore();
+		        clear_store();
 			importText(filename, VBS_IMPORT_FILTER_SRT);
 		}
 	        else if (strstr(gtk_action_get_name(action), "VideoImport")) {
@@ -220,145 +214,95 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 	gtk_widget_destroy (fileDialogWidget);
 }
 
-void set_video_backend (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
+void set_video_backend (GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_QUESTION,
+                GTK_BUTTONS_OK_CANCEL,
+                _("Select video backend:\n(requires restart)"));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Video Backend"));
 
-        quitDialog = gtk_dialog_new_with_buttons (_("Video Backend"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_video_backend_ok), (gpointer) quitDialog);
-
-        char quitMessage[1024];
-        sprintf(quitMessage, "%s\n", _("Select video backend:\n(requires restart)"));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-        config.vbsm.menu_widget = gtk_combo_box_text_new();
-
+        GtkWidget *combo = gtk_combo_box_text_new();
         int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
         int i;
         for (i=0; i<n_video_backends; i++) {
-                gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), video_backends[i].name);
+                gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), video_backends[i].name);
                 if (video_backends[i].num == config.vbsm.video_backend)
-                        gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
+                        gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
         }
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
 
-        gtk_widget_show_all (quitDialog);
-}
+        gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), combo);
+        gtk_widget_show(combo);
 
-
-void set_video_backend_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-	int i;
-	char selected[1024];
-        sprintf(&selected[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
-	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
-	for (i=0; i<n_video_backends; i++) {
-		if (strstr(&video_backends[i].name[0], &selected[0])) {
-			config.vbsm.video_backend = video_backends[i].num;
-			break;
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+		for (i=0; i<n_video_backends; i++) {
+			if (strstr(&video_backends[i].name[0], (char *) gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)))) {
+				config.vbsm.video_backend = video_backends[i].num;
+				break;
+			}
 		}
-	}
-        write_config();
-        gtk_widget_destroy(quitDialog);
+                write_config();
+        }
+
+        gtk_widget_destroy(dialog);
 }
 
 
-void set_video_output (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
-	int i;
-	bool show_menu_output = false;
-	char quitMessage[1024];
+void set_video_output (GtkWidget *widget, gpointer window) {
+        int i, dialog_type, buttons;
+        bool show_menu_output = false;
+        char msg[1024];
+	GtkWidget *combo;
 
 	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
-	for (i=0; i<n_video_backends; i++) {
-		if (video_backends[i].num == config.vbsm.video_backend)
-			if (video_backends[i].show_menu_output)
-				show_menu_output = true;
-	}
-
-        quitDialog = gtk_dialog_new_with_buttons (_("Video Output"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-	if (show_menu_output) {
-		GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-		gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK); 
-	        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_video_output_ok), (gpointer) quitDialog);
-	}
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-
-	if (show_menu_output)
-	        sprintf(quitMessage, "%s\n", _("Select video output for GStreamer:\n(requires restart)"));
-	else
-		sprintf(quitMessage, "%s\n", _("Video output selection not available for current backend."));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-	if (show_menu_output) {
-	        config.vbsm.menu_widget = gtk_combo_box_text_new();
-
-        	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
-	        for (i=0; i<n_video_outputs; i++) {
-        	        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget), video_outputs[i].name);
-                	if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
-                        	gtk_combo_box_set_active(GTK_COMBO_BOX(config.vbsm.menu_widget), i);
-	        }
-        	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
-	}
-
-        gtk_widget_show_all (quitDialog);
-}
-
-
-void set_video_output_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        int i;
-        char selected[1024];
-        sprintf(&selected[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(config.vbsm.menu_widget)));
-	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
-        for (i=0; i<n_video_outputs; i++) {
-                if (strstr(video_outputs[i].name, &selected[0])) {
-                        strcpy(&config.vbsm.gstreamer_video_sink[0], &video_outputs[i].code[0]);
-                        break;
-                }
+        for (i=0; i<n_video_backends; i++) {
+                if (video_backends[i].num == config.vbsm.video_backend)
+                        if (video_backends[i].show_menu_output)
+                                show_menu_output = true;
         }
-        write_config();
-        gtk_widget_destroy(quitDialog);
+
+        if (show_menu_output) {
+                strcpy(&msg[0], _("Select video output for GStreamer:\n(requires restart)"));
+		dialog_type = GTK_MESSAGE_QUESTION;
+		buttons = GTK_BUTTONS_OK_CANCEL;
+	}
+        else {
+                strcpy(&msg[0], _("Video output selection not available for current backend."));
+		dialog_type = GTK_MESSAGE_INFO;
+		buttons = GTK_BUTTONS_CANCEL;
+	}
+
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                dialog_type,
+		buttons, 
+		&msg[0]);
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Video Output"));
+
+        if (show_menu_output) {
+		combo = gtk_combo_box_text_new();
+
+	        int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
+                for (i=0; i<n_video_outputs; i++) {
+                        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combot), video_outputs[i].name);
+                        if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
+                                gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
+                }
+		gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), combo);
+		gtk_widget_show(combo);
+        }
+
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+	        for (i=0; i<n_video_outputs; i++) {
+	                if (strstr(video_outputs[i].name, (char *) gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)))) {
+	                        strcpy(&config.vbsm.gstreamer_video_sink[0], &video_outputs[i].code[0]);
+        	                break;
+                	}
+        	}
+                write_config();
+        }
+
+        gtk_widget_destroy(dialog);
 }
 
-void set_magic_key_ok(GtkWidget *widget, gpointer data) {
-        GtkWidget *quitDialog = data;
-        config.common.magic_key = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
-        write_config();
-        gtk_widget_destroy(quitDialog);
-}
-
-void set_magic_key (GtkAction *action, gpointer param) {
-        GtkWidget *quitDialog, *quitLabel;
-
-        quitDialog = gtk_dialog_new_with_buttons (_("Set Magic Key"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-        GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-        GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-        gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_OK) ;
-        g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-        g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (set_magic_key_ok), (gpointer) quitDialog);
-
-        char quitMessage[1024];
-        sprintf(&quitMessage[0], "%s\n", _("Enter magic key (number between 1 and 2147483647):"));
-        quitLabel = gtk_label_new(quitMessage);
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-        config.vbsm.menu_widget = gtk_entry_new();
-        char tmp1[16];
-        sprintf(&tmp1[0], "%u", config.common.magic_key);
-        gtk_entry_set_text(GTK_ENTRY(config.vbsm.menu_widget), &tmp1[0]);
-        gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), config.vbsm.menu_widget);
-
-        gtk_widget_show_all (quitDialog);
-}
 

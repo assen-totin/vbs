@@ -189,6 +189,12 @@ int main (int argc, char *argv[]) {
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_colour_fg, *attr_colour_bg;
 
+        // i18n
+        setlocale (LC_ALL, "");
+        bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+        textdomain (PACKAGE_NAME);
+
 	// Check for alternative config
 	get_cmdl_config(argc, argv);
 
@@ -204,7 +210,7 @@ int main (int argc, char *argv[]) {
 		config.vbss.local_subs_count = 0;
 	}
 
-	/*** Initialize GTK+ ***/
+	// Init GTK
 	if(!g_thread_supported())
 		g_thread_init( NULL );
 	gdk_threads_init();
@@ -212,7 +218,7 @@ int main (int argc, char *argv[]) {
 	gtk_init (&argc, &argv);
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, g_log_default_handler, NULL);
 
-	/*** Make that Window!!! ***/
+	// Window
 	colour.red = 0x0;
 	colour.green = 0x0;
 	colour.blue = 0x0;
@@ -228,7 +234,7 @@ int main (int argc, char *argv[]) {
 	gtk_widget_modify_bg(window, GTK_STATE_NORMAL, &colour);
 	gtk_widget_realize (window);
 
-	/* MAIN TEXT COMES HERE */
+	// Main text
 	attr_list = pango_attr_list_new();
 	attr_size = pango_attr_size_new(config.vbss.font_size * PANGO_SCALE);
 	attr_size->start_index = 0;
@@ -248,11 +254,11 @@ int main (int argc, char *argv[]) {
 	subtitle = gtk_label_new("");
 
 	if (config.common.network_mode == 2) 
-		strcpy(&current_sub[0], VBSS_EXPECTING_CONNECTION);
+		strcpy(&current_sub[0], _("Expecting network connection..."));
 	else {
 		load_srt();
 		config.common.timestamp_msec = get_time_msec();
-		strcpy(&current_sub[0], VBSS_NETWORK_OFF);
+		strcpy(&current_sub[0], _("Press SPACE to start playback..."));
 		g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 	}
 	gtk_label_set_text(GTK_LABEL(subtitle), &current_sub[0]);
@@ -261,7 +267,7 @@ int main (int argc, char *argv[]) {
 
 	gtk_container_add(GTK_CONTAINER(window), subtitle);
 
-	/*** Callbacks ***/
+	// Callbacks
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
 
 #ifdef HAVE_GTK2
@@ -278,11 +284,11 @@ int main (int argc, char *argv[]) {
 	if(!thread)
 		error_handler("main","Failed to create thread",1);
 
-	/*** Enter the main loop ***/
+	// Main loop
 	gtk_widget_show_all(window);
 	gtk_main();
 
-	/* CLEANUP */
+	// Cleanup
 	//pango_attribute_destroy(attr_size);
 	//pango_attribute_destroy(attr_colour);
 	//pango_attr_list_unref(attr_list);

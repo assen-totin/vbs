@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-bool haveLoadedText(GtkWidget *window){
+bool have_loaded_text(GtkWidget *window){
 	if (config.vbsm.have_loaded_text) 
 		return true;
 	else {
@@ -20,7 +20,7 @@ bool haveLoadedText(GtkWidget *window){
 }
 
 
-void clearStore() {
+void clear_store() {
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
 	bool flag = TRUE;
@@ -32,7 +32,7 @@ void clearStore() {
 }
 
 
-unsigned int convertTime(char *inTime) {
+unsigned int convert_time_sec(char *inTime) {
 	char *strHrs, *strMin, *strTmp, *strSec, *strMil;
 	strHrs = strtok(inTime, ":");
 	strMin = strtok(NULL, ":");
@@ -51,27 +51,27 @@ unsigned int convertTime(char *inTime) {
 }
 
 
-void importFilterSrt(char *importTextFile) {
-	if (!importTextFile) 
-		error_handler("importFilterSrt","failed to open subtitles", 1);
+void import_filter_srt(char *import_text_file) {
+	if (!import_tex_fFile) 
+		error_handler("import_filter_srt","failed to open subtitles", 1);
 
-	FILE *fpIn = fopen (importTextFile, "r");
+	FILE *fpIn = fopen (import_text_file, "r");
 
 	char tmpName[32];
 	sprintf(tmpName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
 	int mkstempRes = mkstemp(tmpName);
 	if (mkstempRes == -1) 
-		error_handler("importFilterSrt","failed to create temporary file", 1);
+		error_handler("import_filter_srt","failed to create temporary file", 1);
 
 	FILE *fpOut = fopen (tmpName, "w");
 
 	char *line_in = malloc(config.common.line_size);
 	if (!line_in) 
-		error_handler("importFilterSrt","malloc failed", 1);
+		error_handler("import_filter_srt","malloc failed", 1);
 
         char *line_tmp = malloc(config.common.line_size);
         if (!line_tmp)
-                error_handler("proc_subtitle_local","malloc failed", 1);
+                error_handler("import_filter_srt","malloc failed", 1);
 
 	char *tmp1, *tmp2;
 	char *timeBegin, *timeEnd;
@@ -104,10 +104,10 @@ void importFilterSrt(char *importTextFile) {
                         timeEnd = strtok(NULL, "-->");
 
                         strcpy(line_tmp, timeBegin);
-                        timeBeginVal = convertTime(line_tmp);
+                        timeBeginVal = convert_time_sec(line_tmp);
 
                         strcpy(line_tmp, timeEnd);
-                        timeEndVal = convertTime(line_tmp);
+                        timeEndVal = convert_time_sec(line_tmp);
 
 			fprintf(fpOut, "%u %u ", timeBeginVal, timeEndVal);
 
@@ -135,14 +135,14 @@ void importFilterSrt(char *importTextFile) {
 	free(line_in);
 	free(line_tmp);
 
-	sprintf(importTextFile, "%s", tmpName);
+	sprintf(import_text_file, "%s", tmpName);
 }
 
 
-void importText(char *importTextFile, int importFlag) {
+void import_text(char *import_text_file, int import_flag) {
 	// Set import filter
-	if (importFlag == VBS_IMPORT_FILTER_SRT) 
-		importFilterSrt(importTextFile);
+	if (import_flag == VBS_IMPORT_FILTER_SRT) 
+		import_filter_srt(import_text_file);
 
 	GtkTreeIter iter;
 
@@ -151,8 +151,8 @@ void importText(char *importTextFile, int importFlag) {
 	if (!line) {error_handler("create_and_fill_model","malloc failed",1);}
 
 	FILE *fp;
-	fp = fopen (importTextFile, "r");
-	if (!fp) {error_handler("importText","failed to open subtitles", 1);}
+	fp = fopen (import_text_file, "r");
+	if (!fp) {error_handler("import_text","failed to open subtitles", 1);}
 
 	int unsigned timeFrom = 0, timeTo = 0; 
 	char *timeFromStr, *timeToStr, *lineRest, lineCopy[config.common.line_size];
@@ -167,7 +167,7 @@ void importText(char *importTextFile, int importFlag) {
 		while (CR = strstr(line, "\r")) {strncpy(CR, " ", 1);}
 
 		// STR tmp file parser
-		if (importFlag == VBS_IMPORT_FILTER_SRT) {
+		if (import_flag == VBS_IMPORT_FILTER_SRT) {
 			sprintf(lineCopy, "%s", line);
 			timeFromStr = strtok(&lineCopy[0], " ");
 			timeToStr = strtok(NULL, " ");
@@ -194,8 +194,8 @@ void importText(char *importTextFile, int importFlag) {
 	fclose(fp);
 	free(line);
 
-	if (importFlag == VBS_IMPORT_FILTER_SRT)
-		unlink(importTextFile);
+	if (import_flag == VBS_IMPORT_FILTER_SRT)
+		unlink(import_text_file);
 	
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
