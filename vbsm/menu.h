@@ -11,8 +11,7 @@
 void fileDialogOpen(GtkAction *action, gpointer param);
 void fileDialogSave(GtkAction *action, gpointer param);
 
-void quitDialog(GtkAction *action, gpointer param);
-static void quitDialogOK( GtkWidget *widget, gpointer data );
+void quitDialog(GtkWidget *widget, gpointer window);
 
 void zeroTiming(GtkAction *action, gpointer param);
 

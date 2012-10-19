@@ -94,6 +94,6 @@ GtkActionEntry menu_entries[] = {
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
         {"HelpContents", GTK_STOCK_HELP, "Contents...", NULL, NULL, (GCallback)helpContents},
-        {"HelpAbout", GTK_STOCK_ABOUT, "About...", NULL, NULL, (GCallback)helpAbout}
+        {"HelpAbout", GTK_STOCK_ABOUT, "About...", NULL, NULL, (GCallback)help_about}
 };
 

@@ -110,49 +110,37 @@ void setTimer(GtkAction *action, gpointer param) {
         gtk_widget_show_all (quitDialog);
 }
 
-static void quitDialogOK( GtkWidget *widget, gpointer data ){
-	GtkWidget *quitDialog = data;
-	gtk_widget_destroy(quitDialog);
 
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+void quitDialog(GtkWidget *widget, gpointer window) {
+	GtkWidget *dialog;
+	dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+		GTK_MESSAGE_QUESTION,
+		GTK_BUTTONS_OK_CANCEL,
+		_("Really quit?"));
+
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Really quit?"));
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
-		if (mplayer_is_alive()) {
-			mplayer_pipe_write("quit");
-			int status;
-			waitpid(-1, &status, 0);
-		}
+			if (mplayer_is_alive()) {
+				mplayer_pipe_write("quit");
+				int status;
+				waitpid(-1, &status, 0);
+			}
+			unlink(config.vbsm.sub_file_name);
 #endif
+		}
+		fclose(config.vbsm.log_file_fp);
+		unlink(config.vbsm.log_file_name);
+
+		gtk_widget_destroy(dialog);
+
+		gtk_main_quit();
 	}
-
-	fclose(config.vbsm.log_file_fp);
-	unlink(config.vbsm.log_file_name);
-
-        unlink(config.vbsm.sub_file_name);
-
-	gtk_main_quit();
-}
-
-void quitDialog(GtkAction *action, gpointer param) {
-	GtkWidget *quitDialog, *quitLabel;
-	char quitMessage[1024];
-
-	sprintf(quitMessage, "%s %s\n", _("Your subtitles are exported to:"), &config.common.export_filename[0]); 
-
-	quitDialog = gtk_dialog_new_with_buttons (_("Really quit?"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
-
-	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
-
-	quitLabel = gtk_label_new(quitMessage);
-
-	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitLabel);
-
-	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogOK), (gpointer) quitDialog);
-
-	g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
-
-	gtk_widget_show_all (quitDialog);
+	else
+		gtk_widget_destroy(dialog);
 }
 
 

@@ -61,6 +61,6 @@ GtkActionEntry menu_entries1[] = {
         {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)set_font_size},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
-        {"HelpAbout", GTK_STOCK_ABOUT, "Contents...", NULL, NULL, (GCallback)helpAbout}
+        {"HelpAbout", GTK_STOCK_ABOUT, "Contents...", NULL, NULL, (GCallback)help_about}
 };
 

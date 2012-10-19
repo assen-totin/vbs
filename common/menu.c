@@ -16,28 +16,26 @@ void quitDialogCancel( GtkWidget *widget, gpointer data ){
 }
 
 
-void helpAbout(GtkAction *action, gpointer param) {
-	GtkWidget *quitDialog, *quitLabel, *quitFrame;
+void help_about() {
+	GtkWidget *dialog = gtk_about_dialog_new();
+	gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), "VBS");
+	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), PACKAGE_VERSION); 
+	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), "(c) Assen Totin, 2006-2012");
+	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), "http://www.zavedil.com/software-desktop-vbs/");
 
-	quitDialog = gtk_dialog_new_with_buttons (_("About VBS"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG(dialog), _("This programme is distributed under GNU General Public License.\nSee the LICENSE file from the distribution or visit http://www.gnu.org/copyleft/gpl.html for details."));
 
-	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
-	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
-	g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog),
+	_("If you like this program, send me a postcard from your place to:\n\nBulgaria\n1303 Sofia\n74, Otec Paisi Str.\nAssen Totin\n")
+	);
 
-	quitFrame = gtk_frame_new("");
-	quitLabel = gtk_label_new(VBS_MENU_ABOUT_TEXT);
-	gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(VBS_ICON, NULL);
+	gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
+	g_object_unref(pixbuf), pixbuf = NULL;
 
-	quitFrame = gtk_frame_new("");
-	quitLabel = gtk_label_new(VBS_MENU_ABOUT_TEXT2);
-	gtk_container_add (GTK_CONTAINER (quitFrame), quitLabel);
-	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
-
-	gtk_widget_show_all (quitDialog);
+	gtk_dialog_run(GTK_DIALOG (dialog));
+	gtk_widget_destroy(dialog);
 }
-
 
 void setEncodingImportOK(GtkWidget *widget, gpointer data) {
 	GtkWidget *quitDialog = data;
