@@ -60,40 +60,40 @@ gchar *ui =
 
 GtkActionEntry menu_entries[] = {
 	{"FileMenu", NULL, "File", NULL, NULL, NULL},
-        {"FileQuit", NULL, "Quit", "<CTRL>Q", NULL, (GCallback)quitDialog},
+        {"FileQuit", GTK_STOCK_QUIT, "Quit", "<CTRL>Q", NULL, (GCallback)quitDialog},
 
         {"EditMenu", NULL, "Edit", NULL, NULL, NULL},
-        {"EditInsertBefore", NULL, "Insert Before", "<CTRL>B", NULL, (GCallback)insertBefore},
-        {"EditInsertAfter", NULL, "Insert After", "<CTRL>N", NULL, (GCallback)insertBefore},
-        {"EditDelete", NULL, "Delete", "<CTRL>D", NULL, (GCallback)insertBefore},
+        {"EditInsertBefore", GTK_STOCK_ADD, "Insert Before", "Insert", NULL, (GCallback)insertBefore},
+        {"EditInsertAfter", GTK_STOCK_ADD, "Insert After", "<CTRL>N", NULL, (GCallback)insertBefore},
+        {"EditDelete", GTK_STOCK_DELETE, "Delete", "Delete", NULL, (GCallback)insertBefore},
         {"EditSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"EditZeroCurent", NULL, "Zero Timing for Current", "<CTRL>Z", NULL, (GCallback)zeroTiming},
+        {"EditZeroCurent", NULL, "Zero Timing for Current", "<CTRL>0", NULL, (GCallback)zeroTiming},
         {"EditZeroRest", NULL, "Zero Timing from Current", NULL, NULL, (GCallback)zeroTiming},
         {"EditSeparator2", NULL, NULL, NULL, NULL, NULL},
         {"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)setTimer},
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
-        {"TextImportPlain", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialogOpen},
-        {"TextImportSubrip", NULL, "Load SubRip...", "<CTRL>R", NULL, (GCallback)fileDialogOpen},
-        {"TextImportEncoding", NULL, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
+        {"TextImportPlain", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialogOpen},
+        {"TextImportSubrip", GTK_STOCK_OPEN, "Load SubRip...", "<CTRL>R", NULL, (GCallback)fileDialogOpen},
+        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"TextExportDestination", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)fileDialogSave},
-        {"TextExportEncoding", NULL, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
+        {"TextExportDestination", GTK_STOCK_SAVE_AS, "Export Destination...", "<CTRL>E", NULL, (GCallback)fileDialogSave},
+        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
         {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
 
         {"VideoMenu", NULL, "Video", NULL, NULL, NULL},
-        {"VideoImport", NULL, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialogOpen},
+        {"VideoImport", GTK_STOCK_OPEN, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialogOpen},
         {"VideoBackend", NULL, "Set Video Backend...", NULL, NULL, (GCallback)set_video_backend},
         {"VideoOutput", NULL, "Set Video Output...", NULL, NULL, (GCallback)set_video_output},
 
         {"NetworkMenu", NULL, "Network", NULL, NULL, NULL},
-        {"NetworkMode", NULL, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
+        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
         {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)setNetworkServer},
         {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)setNetworkPort},
 	{"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
-        {"HelpContents", NULL, "Contents...", NULL, NULL, (GCallback)helpContents},
-        {"HelpAbout", NULL, "About...", NULL, NULL, (GCallback)helpAbout}
+        {"HelpContents", GTK_STOCK_HELP, "Contents...", NULL, NULL, (GCallback)helpContents},
+        {"HelpAbout", GTK_STOCK_ABOUT, "About...", NULL, NULL, (GCallback)helpAbout}
 };
 

@@ -40,27 +40,27 @@ gchar *ui1 =
 
 GtkActionEntry menu_entries1[] = {
         {"FileMenu", NULL, "File", NULL, NULL, NULL},
-        {"FileQuit", NULL, "Quit", "<CTRL>Q", NULL, (GCallback)quit_dialog},
+        {"FileQuit", GTK_STOCK_QUIT, "Quit", "<CTRL>Q", NULL, (GCallback)quit_dialog},
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
-        {"TextImportDefault", NULL, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
-        {"TextImportEncoding", NULL, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
+        {"TextImportDefault", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
+        {"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)setEncodingImport},
         {"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"TextExportDefault", NULL, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog_save},
-        {"TextExportEncoding", NULL, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
+        {"TextExportDefault", GTK_STOCK_OPEN, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog_save},
+        {"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)setEncodingExport},
         {"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)setNewline},
 
         {"NetworkMenu", NULL, "Network", NULL, NULL, NULL},
-        {"NetworkMode", NULL, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
+        {"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)useNetwork},
         {"NetworkServer", NULL, "Set Server...", NULL, NULL, (GCallback)setNetworkServer},
         {"NetworkPort", NULL, "Set Port...", NULL, NULL, (GCallback)setNetworkPort},
         {"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"PlayerMenu", NULL, "Player", NULL, NULL, NULL},
-        {"PlayerFullscreen", NULL, "Full Screent...", NULL, NULL, (GCallback)set_full_screen},
+        {"PlayerFullscreen", GTK_STOCK_FULLSCREEN, "Full Screent...", NULL, NULL, (GCallback)set_full_screen},
         {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)set_font_size},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
-        {"HelpAbout", NULL, "Contents...", NULL, NULL, (GCallback)helpAbout}
+        {"HelpAbout", GTK_STOCK_ABOUT, "Contents...", NULL, NULL, (GCallback)helpAbout}
 };
 
