@@ -160,7 +160,7 @@ void set_network_server (GtkWidget *widget, gpointer window) {
 
         GtkWidget *text = gtk_entry_new();
         char tmp1[16];
-        sprintf(&tmp1[0], "%u", config.common.server_name);
+        sprintf(&tmp1[0], "%s", config.common.server_name);
         gtk_entry_set_text(GTK_ENTRY(text), &tmp1[0]);
         gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), text);
         gtk_widget_show(text);
@@ -189,6 +189,7 @@ void show_warning_network (GtkWidget *widget, gpointer window) {
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(window);
 }
 
 

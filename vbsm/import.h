@@ -10,7 +10,7 @@
 
 void clear_store();
 
-int import_subtitles_text(char *, struct subtitle_srt *);
+struct subtitle_srt *import_subtitles_text(char *, int *);
 
 void import_subtitles(char *, int);
 

@@ -161,7 +161,7 @@ int main (int argc, char *argv[]) {
 	if (config.common.network_mode == 2) 
 		strcpy(&config.vbss.current_sub[0], _("Expecting network connection..."));
 	else {
-		config.vbss.total_subtitles = import_subtitles_srt(&config.vbss.import_filename[0], sub_array);
+		sub_array = import_subtitles_srt(&config.vbss.import_filename[0], &config.vbss.total_subtitles);
 		config.common.timestamp_msec = get_time_msec();
 		strcpy(&config.vbss.current_sub[0], _("Press SPACE to start playback..."));
 		g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);

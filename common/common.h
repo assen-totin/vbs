@@ -177,6 +177,7 @@ int can_recv_from_net;
 
 #include "../vbsm/vbsm.h"
 #include "../vbsm/export.h"
+#include "../vbsm/import.h"
 #include "../vbsm/keyboard.h"
 #include "../vbsm/mouse.h"
 #include "../vbsm/gui.h"

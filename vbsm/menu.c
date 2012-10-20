@@ -86,6 +86,8 @@ void help_contents(GtkWidget *widget, gpointer window) {
         gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), label);
         gtk_widget_show(label);
 
+	gtk_dialog_run(GTK_DIALOG(dialog));
+
         gtk_widget_destroy(dialog);
 }
 

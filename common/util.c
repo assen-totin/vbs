@@ -105,7 +105,7 @@ void convert_time_to_srt(unsigned int the_time, char *res, int format) {
 }
 
 
-int import_subtitles_srt(char *filename, struct subtitle_srt *sub_array) {
+struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	char *time_begin, *time_end;
 	char *line_utf8;
 	long time_begin_val, time_end_val;
@@ -124,6 +124,10 @@ int import_subtitles_srt(char *filename, struct subtitle_srt *sub_array) {
 		error_handler("import_subtitles_srt", "malloc failed", 1);
 	bzero(line_out, config.common.line_size);
 
+	struct subtitle_srt *sub_array = malloc(sizeof(struct subtitle_srt));
+	if (!sub_array)
+		error_handler("import_subtitles_srt", "malloc failed", 1);
+
 	while (fgets(line_in, config.common.line_size, fp_in)) {
 		// An empty line closes subtitle
                 if (strlen(line_in) < 3) {
@@ -132,7 +136,7 @@ int import_subtitles_srt(char *filename, struct subtitle_srt *sub_array) {
 		                if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
                 		        line_utf8 = g_convert(line_out, strlen(line_out), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
 		                else
-                		        line_utf8 = line_in;
+                		        line_utf8 = line_out;
 
 				// Add new subtitle to the array
 				void *_tmp = realloc(sub_array, ((counter_array + 1) * sizeof(struct subtitle_srt)));
@@ -190,6 +194,8 @@ int import_subtitles_srt(char *filename, struct subtitle_srt *sub_array) {
         free(line_out);
         free(line_tmp);
 
-	return counter_array;
+	*counter = counter_array;
+
+	return sub_array;
 }
 

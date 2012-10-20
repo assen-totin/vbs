@@ -38,9 +38,9 @@ void import_subtitles(char *filename, int file_format) {
 	int i, total_subs;
 
 	if (file_format == VBS_IMPORT_FILTER_TEXT)
-		total_subs = import_subtitles_text(filename, sub_array);
+		sub_array = import_subtitles_text(filename, &total_subs);
 	else if (file_format == VBS_IMPORT_FILTER_SRT)
-		total_subs = import_subtitles_srt(filename, sub_array);
+		sub_array = import_subtitles_srt(filename, &total_subs);
 
 	for (i=0; i<total_subs; i++) {
 		gtk_list_store_append (config.vbsm.mplayer_store, &iter);
@@ -57,7 +57,7 @@ void import_subtitles(char *filename, int file_format) {
 }
 
 
-int import_subtitles_text(char *filename, struct subtitle_srt *sub_array) {
+struct subtitle_srt *import_subtitles_text(char *filename, int *counter) {
         int counter_array = 0;
 	char *line_utf8;
 	int bytes_written;
@@ -70,6 +70,10 @@ int import_subtitles_text(char *filename, struct subtitle_srt *sub_array) {
         char *line_tmp = malloc(config.common.line_size);
         if (!line_in || !line_tmp)
                 error_handler("import_subtitles_text", "malloc failed", 1);
+
+        struct subtitle_srt *sub_array = malloc(sizeof(struct subtitle_srt));
+        if (!sub_array)
+                error_handler("import_subtitles_srt", "malloc failed", 1);
 
         while (fgets(line_in, config.common.line_size, fp_in)) {
 		// Kill newlines
@@ -102,6 +106,8 @@ int import_subtitles_text(char *filename, struct subtitle_srt *sub_array) {
         free(line_in);
         free(line_tmp);
 
-	return counter_array;
+	*counter = counter_array;
+
+	return sub_array;
 }
 
