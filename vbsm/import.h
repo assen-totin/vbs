@@ -10,11 +10,9 @@
 
 void clear_store();
 
-void import_text(char *, int);
+int import_subtitles_text(char *, struct subtitle_srt *);
 
-void import_filter_srt(char *);
-
-unsigned int convert_time_sec(char *);
+void import_subtitles(char *, int);
 
 bool have_loaded_text(GtkWidget *);
 

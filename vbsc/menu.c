@@ -75,7 +75,7 @@ void file_dialog_open(GtkAction *action, gpointer param) {
 		char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
 			if (strstr(gtk_action_get_name(action), "EditImportDefault")) {
 				// Import Text-only
-				strcpy(&config.common.import_filename[0], filename);
+				strcpy(&config.vbss.import_filename[0], filename);
 			}
 
 		g_free (filename);
@@ -85,22 +85,46 @@ void file_dialog_open(GtkAction *action, gpointer param) {
 }
 
 
-void select_font(GtkWidget *widget, gpointer label) {
-	GtkResponseType result;
+void select_font(GtkWidget *widget, gpointer window) {
+	GtkWidget *dialog;
+	gchar *fontname;
+	PangoFontDescription *font_desc;
+#ifdef GTK2
+	dialog = gtk_font_selection_dialog_new(_("Select Font"));
+#elif GTK3
+        dialog = gtk_font_chooser_dialog_new(_("Select Font"), window);
+#endif
 
-	GtkWidget *dialog = gtk_font_selection_dialog_new(_("Select Font"));
-	gtk_font_selection_dialog_set_preview_text(dialog, _("Quick brown fox jumps over the lazy dog..."));
-	gtk_font_selection_dialog_set_font_name(dialog, config.vbss.font_name);
+	gtk_font_selection_dialog_set_preview_text(GTK_FONT_SELECTION_DIALOG(dialog), _("Quick brown fox jumps over the lazy dog..."));
+	char set_font[128];
+	sprintf(&set_font[0], "%s %s %s", config.vbss.font_name, config.vbss.font_face, config.vbss.font_size);
+	gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(dialog), &set_font[0]);
 	
-
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == (GTK_RESPONSE_OK || GTK_RESPONSE_APPLY)) {
-		PangoFontDescription *font_desc;
-		strcpy(&config.vbss.font_name[0], (char *)gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog)));
-		
-		//config.vbss.font_size = atoi(gtk_entry_get_text(GTK_ENTRY(config.vbsm.menu_widget)));
-		//
-		//font_desc = pango_font_description_from_string(fontname);
-		//gtk_widget_modify_font(GTK_WIDGET(label), font_desc);
+#ifdef GTK2
+		fontname = gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog));
+#elif GTK3
+		fontname = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dialog));
+#endif
+
+		font_desc = pango_font_description_from_string(fontname);
+		sprintf(&config.vbss.font_name[0], "%s", pango_font_description_get_family(font_desc));
+		config.vbss.font_size = pango_font_description_get_size(font_desc) / 1024;
+
+		gint weight = pango_font_description_get_weight(font_desc);
+		if (pango_font_description_get_style(font_desc) ==  PANGO_STYLE_NORMAL) {
+			if (weight <= 500)
+				sprintf(&config.vbss.font_face[0], "%s", "Regular\n");
+			else
+				sprintf(&config.vbss.font_face[0], "%s", "Bold\n");
+		}
+		else {
+			if (weight <= 500)
+				sprintf(&config.vbss.font_face[0], "%s", "Italic\n");
+			else
+				sprintf(&config.vbss.font_face[0], "%s", "Bold Italic\n");
+		}
+
 		g_free(fontname);
 		write_config();
 	}

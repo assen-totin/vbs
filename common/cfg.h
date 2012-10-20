@@ -22,8 +22,6 @@ static GOptionEntry cmdl_entries[] =
 	{ NULL }
 };
 
-#define GETTEXT_PACKAGE "gtk20"
-
 #define VBS_GLOBAL_CONFIG_DIR "vbs"
 #define VBS_LOCAL_CONFIG_DIR ".vbs"
 #define VBS_CONFIG_FILENAME "config"
@@ -41,6 +39,8 @@ static GOptionEntry cmdl_entries[] =
 #define VBS_DEFAULT_COLOUR_FG_GREEN 65535
 #define VBS_DEFAULT_COLOUR_FG_BLUE 65535
 #define VBS_DEFAULT_FONT_SIZE 32
+#define VBS_DEFAULT_FONT_NAME "Sans"
+#define VBS_DEFAULT_FONT_FACE "Regular"
 #define VBS_DEFAULT_CR 0 
 #define VBS_FULL_SCREEN 0
 #define VBSM_VIDEO_BACKEND "# Set video backend to 0 for MPLayer or to 1 for GStreamer"

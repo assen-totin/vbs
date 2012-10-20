@@ -10,58 +10,37 @@
 
 #include "../common/common.h"
 
-void convert_time_srt(unsigned int theTime, char *res, int flag) {
-
-	div_t qH = div(theTime, 3600000);
-	div_t qM = div(qH.rem, 60000);
-	div_t qS = div(qM.rem, 1000);
-
-	char unfM[8], unfS[8], unfMS[8];
-
-	if (qM.quot > 9) {sprintf(unfM, "%u", qM.quot);}
-	else {sprintf(unfM, "0%u", qM.quot);}
-
-	if (qS.quot > 9) {sprintf(unfS, "%u", qS.quot);}
-	else {sprintf(unfS, "0%u", qS.quot);}
-
-	if (qS.rem > 99) {sprintf(unfMS, "%u", qS.rem);}
-	else if (qS.rem > 9) {sprintf(unfMS, "0%u", qS.rem);}
-	else {sprintf(unfMS, "00%u", qS.rem);}
-
-	if (flag == 1) {sprintf(res, "0%u:%s:%s,%s", qH.quot, unfM, unfS, unfMS);}
-	else if (flag == 2) {sprintf(res, "0%u:%s:%s", qH.quot, unfM, unfS);}
-}
-
-
 gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer userdata) {
 	struct exportSub *export_sub = userdata;
 	
 	gchar *line;
-	char *partOne, linePrint[config.common.line_size];
+	char *part_one, line_print[config.common.line_size];
 	guint from, to;
 
-	char CrLf[3];
-	sprintf(CrLf, "\n");
-	if (config.common.export_cr == 1) {sprintf(CrLf, "\r\n");}
+	char cr_lf[3];
+	if (config.common.export_cr == 1) 
+		sprintf(cr_lf, "\r\n");
+	else
+		sprintf(cr_lf, "\n");
 
 	// Get all fields
 	gtk_tree_model_get(model, iter, COL_LINE, &line, COL_FROM, &from, COL_TO, &to, -1);
 
 	// Print next number
 	export_sub->count++;
-	fprintf(export_sub->fp_export, "%u%s", export_sub->count, &CrLf[0]);
+	fprintf(export_sub->fp_export, "%u%s", export_sub->count, &cr_lf[0]);
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
-		fprintf(export_sub->fp_mplayer, "%u%s", export_sub->count, &CrLf[0]);
+		fprintf(export_sub->fp_mplayer, "%u%s", export_sub->count, &cr_lf[0]);
 
 	// Calc & print times
-	char timeFrom[32], timeTo[32], timeLine[64];
-	convert_time_srt(from, &timeFrom[0], 1);
-	convert_time_srt(to, &timeTo[0], 1);
+	char time_from[32], time_to[32], time_line[64];
+	convert_time_to_srt(from, &time_from[0], TIME_MSEC);
+	convert_time_to_srt(to, &time_to[0], TIME_MSEC);
 
-	sprintf(timeLine, "%s --> %s", timeFrom, timeTo);
-	fprintf(export_sub->fp_export, "%s%s", timeLine, &CrLf[0]);
+	sprintf(&time_line[0], "%s --> %s", &time_from[0], &time_to[0]);
+	fprintf(export_sub->fp_export, "%s%s", &time_line[0], &cr_lf[0]);
 	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) && (to > 0))
-		fprintf(export_sub->fp_mplayer, "%s%s", timeLine, &CrLf[0]);
+		fprintf(export_sub->fp_mplayer, "%s%s", &time_line[0], &cr_lf[0]);
 
 	// Convert back to non-UTF-8 encoding
 	gchar *lineCP1251;
@@ -77,13 +56,13 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 	char line_fixed[config.common.line_size];
 	strcpy(&line_fixed[0], lineCP1251);
 	fix_new_line(&line_fixed[0]);
-	fprintf(export_sub->fp_export, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
+	fprintf(export_sub->fp_export, "%s%s%s", &line_fixed[0], &cr_lf[0], &cr_lf[0]);
 
 	// For mplayer, only export subtitles which have been timed
 	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) &&  (to > 0)) {
 		strcpy(&line_fixed[0], line);
 		fix_new_line(&line_fixed[0]);
-		fprintf(export_sub->fp_mplayer, "%s%s%s", &line_fixed[0], &CrLf[0], &CrLf[0]);
+		fprintf(export_sub->fp_mplayer, "%s%s%s", &line_fixed[0], &cr_lf[0], &cr_lf[0]);
 	}
 
 	g_free(line);

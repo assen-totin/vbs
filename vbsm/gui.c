@@ -14,7 +14,7 @@ void format_cell_from(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTree
         gint from;
         gchar res[32];
         gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
-        convert_time_srt(from, &res[0], 2);
+        convert_time_to_srt(from, &res[0], TIME_SEC);
         g_object_set(renderer, "text", res, NULL);
 }
 
@@ -23,34 +23,34 @@ void format_cell_to(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeMo
         gint from;
         gchar res[32];
         gtk_tree_model_get(model, iter, COL_TO, &from, -1);
-        convert_time_srt(from, &res[0], 2);
+        convert_time_to_srt(from, &res[0], TIME_SEC);
         g_object_set(renderer, "text", res, NULL);
 }
 
 
 void *create_view_and_model (void){
-        GtkCellRenderer     *renderer;
-        GtkTreeModel        *model;
-        GtkTreeIter    iter;
+        GtkCellRenderer *renderer;
+        GtkTreeModel *model;
+        GtkTreeIter iter;
         GtkTreeViewColumn *column;
 
         config.vbsm.subtitles_view = gtk_tree_view_new();
 
         config.vbsm.mplayer_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
 
-        /* --- Column #1 --- */
+        // Column 1
         renderer = gtk_cell_renderer_text_new();
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "From", renderer, "text", COL_FROM, NULL);
         column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 0);
         gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_from, NULL, NULL);
 
-        /* --- Column #2 --- */
+        // Column 2
         renderer = gtk_cell_renderer_text_new();
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "To", renderer, "text", COL_TO, NULL);
         column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 1);
         gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_to, NULL, NULL);
 
-        /* --- Column #3 --- */
+        // Column 3 
         renderer = gtk_cell_renderer_text_new();
         gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "Text", renderer, "text", COL_LINE, NULL);
 
@@ -64,10 +64,8 @@ void *create_view_and_model (void){
         model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
         gtk_tree_view_set_model (GTK_TREE_VIEW (config.vbsm.subtitles_view), model);
 
-        /* The tree view has acquired its own reference to the
-         *  model, so we can drop ours. That way the model will
-         *  be freed automatically when the tree view is destroyed 
-         */
+        // The tree view has acquired its own reference to the  model, so we can drop ours. 
+        // That way the model will be freed automatically when the tree view is destroyed 
         g_object_unref (model);
 }
 
@@ -162,22 +160,15 @@ int progress_bar_update() {
 	return 1;
 }
 
-
-void warnDialog(GtkWidget *window, char warning[1024]) {
-	GtkWidget *warnDialog, *warnLabel;
-
-	warnDialog = gtk_dialog_new_with_buttons (VBS_WARNING, GTK_WINDOW(window), GTK_DIALOG_MODAL, NULL);
-
-	GtkWidget *buttonOK = gtk_dialog_add_button (GTK_DIALOG(warnDialog), GTK_STOCK_OK, GTK_RESPONSE_OK);
-	gtk_dialog_set_default_response (GTK_DIALOG (warnDialog), GTK_RESPONSE_OK) ;
-
-	warnLabel = gtk_label_new(warning);
-
-	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(warnDialog))), warnLabel);
-
-	g_signal_connect (G_OBJECT(buttonOK), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) warnDialog);
-
-	gtk_widget_show_all (warnDialog);
+void show_warning_subtitles() {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_ERROR,
+                GTK_BUTTONS_OK,
+                _("Subtitles not loaded."));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
 }
 
 

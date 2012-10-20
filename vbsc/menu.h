@@ -13,8 +13,7 @@ void file_dialog_save(GtkAction *action, gpointer param);
 
 void quit_dialog(GtkWidget *widget, gpointer window);
 
-void set_font_size (GtkAction *action, gpointer param);
-void set_font_size_ok(GtkWidget *widget, gpointer data);
+void select_font(GtkWidget *widget, gpointer window) ;
 
 void set_full_screen (GtkWidget *widget, gpointer window);
 

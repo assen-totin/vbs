@@ -9,7 +9,7 @@
 // for details.
 
 int progress_bar_update();
-void warnDialog(GtkWidget *window, char warning[1024]);
+void show_warning_subtitles();
 void format_cell_from(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data);
 void format_cell_to(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data);
 void *create_view_and_model (void);

@@ -29,13 +29,13 @@ void default_config() {
 	config.common.export_cr = VBS_DEFAULT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
-        strcpy(&config.common.import_filename[0], VBS_IMPORT_FILENAME);
         strcpy(&config.common.export_filename[0], VBS_EXPORT_FILENAME);
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
 	config.common.network_mode = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER);
 	config.common.tcp_port = VBS_DEFAULT_TCP_PORT;
 
+	strcpy(&config.vbss.import_filename[0], VBS_IMPORT_FILENAME);
 	config.vbss.full_screen = VBS_FULL_SCREEN;
 	config.vbss.colour_bg_r = VBS_DEFAULT_COLOUR_BG_RED;
 	config.vbss.colour_bg_g = VBS_DEFAULT_COLOUR_BG_GREEN;
@@ -44,6 +44,8 @@ void default_config() {
         config.vbss.colour_fg_g = VBS_DEFAULT_COLOUR_FG_GREEN;
         config.vbss.colour_fg_b = VBS_DEFAULT_COLOUR_FG_BLUE;
 	config.vbss.font_size = VBS_DEFAULT_FONT_SIZE;
+	strcpy(&config.vbss.font_name[0], VBS_DEFAULT_FONT_NAME);
+	strcpy(&config.vbss.font_face[0], VBS_DEFAULT_FONT_FACE);
 
 #ifdef HAVE_MPLAYER
 	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
@@ -79,13 +81,13 @@ void write_config() {
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
         fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
         fprintf(fp_config, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
-        fprintf(fp_config, "IMPORT_FILENAME=%s\n", &config.common.import_filename[0]);
         fprintf(fp_config, "EXPORT_FILENAME=%s\n", &config.common.export_filename[0]);
 	fprintf(fp_config, "LINE_SIZE=%u\n", config.common.line_size);
 	fprintf(fp_config, "NETWORK_MODE=%u\n", config.common.network_mode);
 	fprintf(fp_config, "SERVER_NAME=%s\n", &config.common.server_name[0]);
         fprintf(fp_config, "TCP_PORT=%u\n", config.common.tcp_port);
 
+	fprintf(fp_config, "IMPORT_FILENAME=%s\n", &config.vbss.import_filename[0]);
 	fprintf(fp_config, "FULL_SCREEN=%u\n", config.vbss.full_screen);
         fprintf(fp_config, "COLOUR_BG_R=%u\n", config.vbss.colour_bg_r);
         fprintf(fp_config, "COLOUR_BG_G=%u\n", config.vbss.colour_bg_g);
@@ -94,6 +96,8 @@ void write_config() {
         fprintf(fp_config, "COLOUR_FG_G=%u\n", config.vbss.colour_fg_g);
         fprintf(fp_config, "COLOUR_FG_B=%u\n", config.vbss.colour_fg_b);
 	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
+	fprintf(fp_config, "FONT_NAME=%u\n", config.vbss.font_name);
+	fprintf(fp_config, "FONT_FACE=%u\n", config.vbss.font_face);
 
 	fprintf(fp_config, "PROGRESS_BAR_UPDATE=%u\n", config.vbsm.progress_update_msec);
 	fprintf(fp_config, "%s\n", VBSM_VIDEO_BACKEND);
@@ -114,9 +118,7 @@ void read_config() {
 		if (!(line[0]=='#')) {
 			line[strlen(line) - 1] = 0;     /* kill '\n' */
 
-			if (strstr(line, "FULL_SCREEN"))
-				config.vbss.full_screen = config_int(line);
-                        else if (strstr(line, "MAGIC_KEY"))
+                        if (strstr(line, "MAGIC_KEY"))
                                 config.common.magic_key = config_int(line);
 			else if (strstr(line, "EXPORT_CR")) 
 				config.common.export_cr = config_int(line);
@@ -126,8 +128,6 @@ void read_config() {
 				config_char(line, &config.common.import_encoding[0]);
                         else if (strstr(line, "EXPORT_FILENAME"))
                                 config_char(line, &config.common.export_filename[0]);
-                        else if (strstr(line, "IMPORT_FILENAME"))
-                                config_char(line, &config.common.import_filename[0]);
                         else if (strstr(line, "LINE_SIZE"))
                                 config.common.line_size = config_int(line);
                         else if (strstr(line, "NETWORK_MODE"))
@@ -137,6 +137,10 @@ void read_config() {
 			else if (strstr(line, "TCP_PORT")) 
 				config.common.tcp_port = config_int(line);
 
+                        else if (strstr(line, "FULL_SCREEN"))
+                                config.vbss.full_screen = config_int(line);
+                        else if (strstr(line, "IMPORT_FILENAME"))
+                                config_char(line, &config.vbss.import_filename[0]);
                         else if (strstr(line, "COLOUR_BG_R"))
                                 config.vbss.colour_bg_r = config_int(line);
                         else if (strstr(line, "COLOUR_BG_G"))
@@ -151,6 +155,10 @@ void read_config() {
                                 config.vbss.colour_fg_b = config_int(line);
 			else if (strstr(line, "FONT_SIZE"))
 				config.vbss.font_size = config_int(line);
+			else if (strstr(line, "FONT_NAME"))
+				config_char(line, &config.vbss.font_name[0]);
+                        else if (strstr(line, "FONT_FACE"))
+                                config_char(line, &config.vbss.font_face[0]);
 
 			else if (strstr(line, "PROGRESS_BAR_UPDATE"))
 				config.vbsm.progress_update_msec = config_int(line);

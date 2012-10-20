@@ -57,7 +57,7 @@ void on_space_pressed (GtkWidget *window) {
                         config.vbss.paused = false;
                         long curr_time_msec = get_time_msec();
                         config.common.init_timestamp_msec += (curr_time_msec - config.common.timestamp_msec);
-                        strcpy(&current_sub[0], "\n");
+                        strcpy(&config.vbss.current_sub[0], "\n");
                 }
         }
 }

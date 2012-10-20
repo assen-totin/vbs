@@ -126,7 +126,7 @@ void set_newline (GtkWidget *widget, gpointer window) {
 }
 
 
-void set_network_port (GtkAction *action, gpointer param) {
+void set_network_port (GtkWidget *widget, gpointer window) {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
                 GTK_MESSAGE_QUESTION,
@@ -150,7 +150,7 @@ void set_network_port (GtkAction *action, gpointer param) {
 }
 
 
-void set_network_server (GtkAction *action, gpointer param) {
+void set_network_server (GtkWidget *widget, gpointer window) {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
                 GTK_MESSAGE_QUESTION,
@@ -167,7 +167,7 @@ void set_network_server (GtkAction *action, gpointer param) {
 
         if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
 		if (get_host_by_name((char *) gtk_entry_get_text(GTK_ENTRY(text))) == 0) {
-			show_warning_network();
+			show_warning_network(NULL, dialog);
 		}
 		else {
 			strcpy(&config.common.server_name[0], (char *) gtk_entry_get_text(GTK_ENTRY(text)));
@@ -192,7 +192,7 @@ void show_warning_network (GtkWidget *widget, gpointer window) {
 }
 
 
-void use_network (GtkAction *action, gpointer param) {
+void use_network (GtkWidget *widget, gpointer window) {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
                 GTK_MESSAGE_QUESTION,
@@ -230,7 +230,7 @@ void use_network (GtkAction *action, gpointer param) {
 }
 
 
-void set_magic_key (GtkAction *action, gpointer param) {
+void set_magic_key (GtkWidget *widget, gpointer window) {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
                 GTK_MESSAGE_QUESTION,

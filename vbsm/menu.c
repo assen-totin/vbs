@@ -73,21 +73,20 @@ void insert_subtitle(GtkAction *action, gpointer param){
 }
 
 
-void help_contents(GtkAction *action, gpointer param) {
-	GtkWidget *quitDialog, *quitLabel, *quitFrame;
+void help_contents(GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_INFO,
+                GTK_BUTTONS_OK,
+                _("Help"));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Help"));
 
-	quitDialog = gtk_dialog_new_with_buttons (_("Using VBS"), GTK_WINDOW(config.vbsm.window), GTK_DIALOG_MODAL, NULL);
+	GtkWidget *label = gtk_label_new(VBS_MENU_HELP_TEXT);
 
-	GtkWidget *buttonCancel = gtk_dialog_add_button (GTK_DIALOG(quitDialog), GTK_STOCK_OK, GTK_RESPONSE_CANCEL);
-	gtk_dialog_set_default_response (GTK_DIALOG (quitDialog), GTK_RESPONSE_CANCEL) ;
-	g_signal_connect (G_OBJECT(buttonCancel), "clicked", G_CALLBACK (quitDialogCancel), (gpointer) quitDialog);
+        gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), label);
+        gtk_widget_show(label);
 
-	quitFrame = gtk_frame_new("");
-	quitLabel = gtk_label_new(VBS_MENU_HELP_TEXT);
-	gtk_container_add(GTK_CONTAINER(quitFrame), quitLabel);
-	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(quitDialog))), quitFrame);
-
-	gtk_widget_show_all (quitDialog);
+        gtk_widget_destroy(dialog);
 }
 
 
@@ -186,12 +185,12 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 		if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
 			// Import Text-only
 		        clear_store();
-		        importText(filename, VBS_IMPORT_FILTER_TEXT);
+		        import_subtitles(filename, VBS_IMPORT_FILTER_TEXT);
 		}
 		else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
 			// Import SRT
 		        clear_store();
-			importText(filename, VBS_IMPORT_FILTER_SRT);
+			import_subtitles(filename, VBS_IMPORT_FILTER_SRT);
 		}
 	        else if (strstr(gtk_action_get_name(action), "VideoImport")) {
         	        // Load Video
@@ -279,12 +278,11 @@ void set_video_output (GtkWidget *widget, gpointer window) {
 		&msg[0]);
         gtk_window_set_title(GTK_WINDOW(dialog), _("Video Output"));
 
+	int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
         if (show_menu_output) {
 		combo = gtk_combo_box_text_new();
-
-	        int n_video_outputs = sizeof (video_outputs) / sizeof (video_outputs[0]);
                 for (i=0; i<n_video_outputs; i++) {
-                        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combot), video_outputs[i].name);
+                        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), video_outputs[i].name);
                         if (strstr(&video_outputs[i].code[0], &config.vbsm.gstreamer_video_sink[0]))
                                 gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
                 }

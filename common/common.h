@@ -58,6 +58,11 @@ enum {
 };
 
 enum {
+	TIME_SEC = 0,
+	TIME_MSEC
+};
+
+enum {
 	VBSM_VIDEO_BACKEND_MPLAYER = 0,
 	VBSM_VIDEO_BACKEND_GSTREAMER
 };
@@ -90,16 +95,19 @@ struct struct_vbsm {
 
 
 struct struct_vbss {
+	char import_filename[1024];
+	char current_sub[1024];
+	int total_subtitles;
 	bool paused;
 	int full_screen;
-	int local_subs_count;
 	int colour_bg_r;
 	int colour_bg_g;
 	int colour_bg_b;
 	int colour_fg_r;
 	int colour_fg_g;
 	int colour_fg_b;
-	char[1024] font_name;
+	char font_name[128];
+	char font_face[128];
 	int font_size;
 };
 
@@ -113,10 +121,7 @@ struct struct_common {
         int export_cr;
         char export_encoding[255];
         char import_encoding[255];
-        char import_filename[1024];
-        FILE *import_fp;
         char export_filename[1024];
-        FILE *export_fp;
         int line_size;
 	int network_mode;
 	char server_name[255];
@@ -139,6 +144,11 @@ struct enc_entry {
 	bool dflt;
 };
 
+struct subtitle_srt {
+	long time_from;
+	long time_to;
+        char sub[1024];
+};
 
 static struct enc_entry enc_entries[] = {
   {"UTF-8", true},

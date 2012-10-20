@@ -58,7 +58,7 @@ GtkActionEntry menu_entries1[] = {
 
         {"PlayerMenu", NULL, "Player", NULL, NULL, NULL},
         {"PlayerFullscreen", GTK_STOCK_FULLSCREEN, "Full Screent...", NULL, NULL, (GCallback)set_full_screen},
-        {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)set_font_size},
+        {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)select_font},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
         {"HelpAbout", GTK_STOCK_ABOUT, "Contents...", NULL, NULL, (GCallback)help_about}

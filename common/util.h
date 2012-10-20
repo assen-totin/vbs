@@ -8,9 +8,15 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-void fix_new_line(char *buffer);
+void fix_new_line(char *);
 
-void split_path(char *path, char *dir, char *file);
+void split_path(char *, char *, char *);
 
 long get_time_msec();
+
+int convert_time_from_srt(char *, int);
+
+void convert_time_to_srt(unsigned int, char *, int);
+
+int import_subtitles_srt(char *, struct subtitle_srt *);
 

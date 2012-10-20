@@ -63,14 +63,14 @@ GtkActionEntry menu_entries[] = {
         {"FileQuit", GTK_STOCK_QUIT, "Quit", "<CTRL>Q", NULL, (GCallback)quitDialog},
 
         {"EditMenu", NULL, "Edit", NULL, NULL, NULL},
-        {"EditInsertBefore", GTK_STOCK_ADD, "Insert Before", "Insert", NULL, (GCallback)insertBefore},
-        {"EditInsertAfter", GTK_STOCK_ADD, "Insert After", "<CTRL>N", NULL, (GCallback)insertBefore},
-        {"EditDelete", GTK_STOCK_DELETE, "Delete", "Delete", NULL, (GCallback)insertBefore},
+        {"EditInsertBefore", GTK_STOCK_ADD, "Insert Before", "Insert", NULL, (GCallback)insert_subtitle},
+        {"EditInsertAfter", GTK_STOCK_ADD, "Insert After", "<CTRL>N", NULL, (GCallback)insert_subtitle},
+        {"EditDelete", GTK_STOCK_DELETE, "Delete", "Delete", NULL, (GCallback)insert_subtitle},
         {"EditSeparator1", NULL, NULL, NULL, NULL, NULL},
-        {"EditZeroCurent", NULL, "Zero Timing for Current", "<CTRL>0", NULL, (GCallback)zeroTiming},
-        {"EditZeroRest", NULL, "Zero Timing from Current", NULL, NULL, (GCallback)zeroTiming},
+        {"EditZeroCurent", NULL, "Zero Timing for Current", "<CTRL>0", NULL, (GCallback)zero_timing},
+        {"EditZeroRest", NULL, "Zero Timing from Current", NULL, NULL, (GCallback)zero_timing},
         {"EditSeparator2", NULL, NULL, NULL, NULL, NULL},
-        {"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)setTimer},
+        {"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)set_timer},
 
         {"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
         {"TextImportPlain", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)fileDialogOpen},
@@ -93,7 +93,7 @@ GtkActionEntry menu_entries[] = {
 	{"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
-        {"HelpContents", GTK_STOCK_HELP, "Contents...", NULL, NULL, (GCallback)helpContents},
+        {"HelpContents", GTK_STOCK_HELP, "Contents...", NULL, NULL, (GCallback)help_contents},
         {"HelpAbout", GTK_STOCK_ABOUT, "About...", NULL, NULL, (GCallback)help_about}
 };
 

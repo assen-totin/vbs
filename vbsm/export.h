@@ -14,7 +14,7 @@ struct exportSub {
 	short unsigned count;
 };
 
-gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer userdata);
+gboolean export_subtitles_srt(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+
 void export_subtitles();
-void convert_time_srt(unsigned int theTime, char *res, int flag);
 

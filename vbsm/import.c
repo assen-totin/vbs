@@ -14,81 +14,65 @@ bool have_loaded_text(GtkWidget *window){
 	if (config.vbsm.have_loaded_text) 
 		return true;
 	else {
-		warnDialog(window, "No text loaded!");
+		show_warning_subtitles();
 		return false;
 	}
 }
 
 
 void clear_store() {
-	GtkTreeModel     *model;
-	GtkTreeIter       iter;
+	GtkTreeIter iter;
 	bool flag = TRUE;
 
-	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
+	GtkTreeModel *model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
 	gtk_tree_model_get_iter_first(model, &iter);
 
-	while (flag) {flag = gtk_list_store_remove (config.vbsm.mplayer_store, &iter);}
+	while (flag) 
+		flag = gtk_list_store_remove (config.vbsm.mplayer_store, &iter);
 }
 
 
-unsigned int convert_time_sec(char *inTime) {
-	char *strHrs, *strMin, *strTmp, *strSec, *strMil;
-	strHrs = strtok(inTime, ":");
-	strMin = strtok(NULL, ":");
-	strTmp = strtok(NULL, ":");
-	strSec = strtok(strTmp, ",");
-	strMil = strtok(NULL, ",");
+void import_subtitles(char *filename, int file_format) {
+	struct subtitle_srt *sub_array;
+	GtkTreeIter iter;
+	int i, total_subs;
 
-	int resHrs = atoi(strHrs);
-	int resMin = atoi(strMin);
-	int resSec = atoi(strSec);
-	int resMil = atoi(strMil);
+	if (file_format == VBS_IMPORT_FILTER_TEXT)
+		total_subs = import_subtitles_text(filename, sub_array);
+	else if (file_format == VBS_IMPORT_FILTER_SRT)
+		total_subs = import_subtitles_srt(filename, sub_array);
 
-	int res = resHrs*3600000 + resMin*60000 + resSec*1000 + resMil;
+	for (i=0; i<total_subs; i++) {
+		gtk_list_store_append (config.vbsm.mplayer_store, &iter);
+        	gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, &sub_array[i].sub[0], COL_FROM, sub_array[i].time_from, COL_TO, sub_array[i].time_to, -1);
+	}
+	
+        GtkTreeModel *model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
+        gtk_tree_model_get_iter_first(model, &iter);
+        gtk_tree_selection_select_iter(selection, &iter);
 
-	return res;
+        config.vbsm.have_loaded_text = true;
+        export_subtitles();
 }
 
 
-void import_filter_srt(char *import_text_file) {
-	if (!import_tex_fFile) 
-		error_handler("import_filter_srt","failed to open subtitles", 1);
+int import_subtitles_text(char *filename, struct subtitle_srt *sub_array) {
+        int counter_array = 0;
+	char *line_utf8;
+	int bytes_written;
 
-	FILE *fpIn = fopen (import_text_file, "r");
+        FILE *fp_in = fopen (filename, "r");
+        if (!fp_in)
+                error_handler("import_subtitles_text", "failed to open subtitles", 1);
 
-	char tmpName[32];
-	sprintf(tmpName, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(tmpName);
-	if (mkstempRes == -1) 
-		error_handler("import_filter_srt","failed to create temporary file", 1);
-
-	FILE *fpOut = fopen (tmpName, "w");
-
-	char *line_in = malloc(config.common.line_size);
-	if (!line_in) 
-		error_handler("import_filter_srt","malloc failed", 1);
-
+        char *line_in = malloc(config.common.line_size);
         char *line_tmp = malloc(config.common.line_size);
-        if (!line_tmp)
-                error_handler("import_filter_srt","malloc failed", 1);
+        if (!line_in || !line_tmp)
+                error_handler("import_subtitles_text", "malloc failed", 1);
 
-	char *tmp1, *tmp2;
-	char *timeBegin, *timeEnd;
-	unsigned int timeBeginVal, timeEndVal;
-	int counter = -1;
-
-	while (fgets(line_in, config.common.line_size, fpIn)) {
-                // An empty line closes subtitle
-                if (strlen(line_in) < 3) {
-                        if (counter > 0) {
-				fprintf(fpOut, "\n");
-                                counter = -1;
-                        }
-                        continue;
-                }
-
-                // Kill newlines
+        while (fgets(line_in, config.common.line_size, fp_in)) {
+		// Kill newlines
                 if (strstr(line_in, "\r"))
                         strcpy(line_tmp, strtok(line_in, "\r"));
                 else
@@ -98,116 +82,26 @@ void import_filter_srt(char *import_text_file) {
                 else
                         strcpy(line_in, line_tmp);
 
-                // Next Line will be a subtitle line only if current line includes timing
-                if (strstr(line_in,"-->")) {
-                        timeBegin = strtok(line_in, "-->");
-                        timeEnd = strtok(NULL, "-->");
+		// UTF-8
+                if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
+                        line_utf8 = g_convert(line_in, strlen(line_in), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
+                else
+                        line_utf8 = line_in;
 
-                        strcpy(line_tmp, timeBegin);
-                        timeBeginVal = convert_time_sec(line_tmp);
-
-                        strcpy(line_tmp, timeEnd);
-                        timeEndVal = convert_time_sec(line_tmp);
-
-			fprintf(fpOut, "%u %u ", timeBeginVal, timeEndVal);
-
-			counter = 0;
-
-                        continue;
-                }
-
-                if (counter == 0) {
-			fprintf(fpOut, "%s", line_in);
-                        counter++;
-                        continue;
-                }
-
-                else if (counter > 0) {
-			fprintf(fpOut, "|%s", line_in);
-                        counter++;
-                        continue;
-                }
+		// Add subtitles to the array		
+		void *_tmp = realloc(sub_array, ((counter_array + 1) * sizeof(struct subtitle_srt)));
+                if (!_tmp)
+                	error_handler("import_subtitles_text", "realloc failed", 1);
+		sub_array = (struct subtitle_srt *)_tmp;
+                sub_array[counter_array].time_from = 0;
+                sub_array[counter_array].time_to = 0;
+                strcpy(&sub_array[counter_array].sub[0], line_utf8);
+                counter_array++;
 	}
 
-	fclose(fpIn);
-	fclose(fpOut);
+        free(line_in);
+        free(line_tmp);
 
-	free(line_in);
-	free(line_tmp);
-
-	sprintf(import_text_file, "%s", tmpName);
-}
-
-
-void import_text(char *import_text_file, int import_flag) {
-	// Set import filter
-	if (import_flag == VBS_IMPORT_FILTER_SRT) 
-		import_filter_srt(import_text_file);
-
-	GtkTreeIter iter;
-
-	char *line;
-	line = malloc(config.common.line_size);
-	if (!line) {error_handler("create_and_fill_model","malloc failed",1);}
-
-	FILE *fp;
-	fp = fopen (import_text_file, "r");
-	if (!fp) {error_handler("import_text","failed to open subtitles", 1);}
-
-	int unsigned timeFrom = 0, timeTo = 0; 
-	char *timeFromStr, *timeToStr, *lineRest, lineCopy[config.common.line_size];
-	gchar *lineUTF8;
-	gsize bytes_written;
-
-	while (fgets(line, config.common.line_size, fp)) {
-		line[strlen(line) - 1] = 0;     /* kill '\n' */
-
-		// Kill any remaining <CR>
-		char *CR;
-		while (CR = strstr(line, "\r")) {strncpy(CR, " ", 1);}
-
-		// STR tmp file parser
-		if (import_flag == VBS_IMPORT_FILTER_SRT) {
-			sprintf(lineCopy, "%s", line);
-			timeFromStr = strtok(&lineCopy[0], " ");
-			timeToStr = strtok(NULL, " ");
-			lineRest = strtok(NULL, "$$$");			/* Just a non-existing delimiter to obtain the rest of the line */
-			timeFrom = atoi(timeFromStr);
-			timeTo = atoi(timeToStr);
-		}
-		else {
-			lineRest = line;
-		}
-
-		if (lineRest) {
-			if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0) 
-				lineUTF8 = g_convert(lineRest, strlen(lineRest), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
-			else
-				lineUTF8 = lineRest;
-		}
-
-		// Append row
-		gtk_list_store_append (config.vbsm.mplayer_store, &iter);
-		gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, lineUTF8, COL_FROM, timeFrom, COL_TO, timeTo, -1);
-	}
-
-	fclose(fp);
-	free(line);
-
-	if (import_flag == VBS_IMPORT_FILTER_SRT)
-		unlink(import_text_file);
-	
-	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
-	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
-
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
-
-	gtk_tree_model_get_iter_first(model, &iter);
-	gtk_tree_selection_select_iter(selection, &iter);
-
-	config.vbsm.have_loaded_text = true;
-	export_subtitles();
-
+	return counter_array;
 }
 
