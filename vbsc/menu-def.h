@@ -57,7 +57,7 @@ GtkActionEntry menu_entries1[] = {
         {"NetworkMagic", NULL, "Set Magic Key...", NULL, NULL, (GCallback)set_magic_key},
 
         {"PlayerMenu", NULL, "Player", NULL, NULL, NULL},
-        {"PlayerFullscreen", GTK_STOCK_FULLSCREEN, "Full Screent...", NULL, NULL, (GCallback)set_full_screen},
+        {"PlayerFullscreen", GTK_STOCK_FULLSCREEN, "Full Screen...", NULL, NULL, (GCallback)set_full_screen},
         {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)select_font},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},

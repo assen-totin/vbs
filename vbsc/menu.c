@@ -89,25 +89,26 @@ void select_font(GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog;
 	gchar *fontname;
 	PangoFontDescription *font_desc;
-#ifdef GTK2
+#ifdef HAVE_GTK2
 	dialog = gtk_font_selection_dialog_new(_("Select Font"));
 	gtk_font_selection_dialog_set_preview_text(GTK_FONT_SELECTION_DIALOG(dialog), _("Quick brown fox jumps over the lazy dog..."));
 	char set_font[128];
-	sprintf(&set_font[0], "%s %s %s", config.vbss.font_name, config.vbss.font_face, config.vbss.font_size);
+	sprintf(&set_font[0], "%s %s %u", config.vbss.font_name, config.vbss.font_face, config.vbss.font_size);
 	gtk_font_selection_dialog_set_font_name(GTK_FONT_SELECTION_DIALOG(dialog), &set_font[0]);
 
-#elif GTK3
+#elif HAVE_GTK3
         dialog = gtk_font_chooser_dialog_new(_("Select Font"), window);
-	gtk_font_chooser_set_preview_text(GTK_FONT_SELECTION_DIALOG(dialog), _("Quick brown fox jumps over the lazy dog..."));
+	gtk_font_chooser_set_preview_text(GTK_FONT_CHOOSER(dialog), _("Quick brown fox jumps over the lazy dog..."));
 	char set_font[128];
-	sprintf(&set_font[0], "%s %s %s", config.vbss.font_name, config.vbss.font_face, config.vbss.font_size);
-	gtk_font_chooser_set_font(GTK_FONT_SELECTION_DIALOG(dialog), &set_font[0]);
+	sprintf(&set_font[0], "%s %s %u", config.vbss.font_name, config.vbss.font_face, config.vbss.font_size);
+	gtk_font_chooser_set_font(GTK_FONT_CHOOSER(dialog), &set_font[0]);
 #endif
-	
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == (GTK_RESPONSE_OK || GTK_RESPONSE_APPLY)) {
-#ifdef GTK2
+
+	int res = gtk_dialog_run(GTK_DIALOG(dialog));
+	if ((res == GTK_RESPONSE_OK) || (res == GTK_RESPONSE_APPLY)) {
+#ifdef HAVE_GTK2
 		fontname = gtk_font_selection_dialog_get_font_name(GTK_FONT_SELECTION_DIALOG(dialog));
-#elif GTK3
+#elif HAVE_GTK3
 		fontname = gtk_font_chooser_get_font(GTK_FONT_CHOOSER(dialog));
 #endif
 

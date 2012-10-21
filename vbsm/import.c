@@ -54,6 +54,8 @@ void import_subtitles(char *filename, int file_format) {
 
         config.vbsm.have_loaded_text = true;
         export_subtitles();
+
+	free(sub_array);
 }
 
 

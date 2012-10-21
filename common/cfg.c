@@ -96,8 +96,8 @@ void write_config() {
         fprintf(fp_config, "COLOUR_FG_G=%u\n", config.vbss.colour_fg_g);
         fprintf(fp_config, "COLOUR_FG_B=%u\n", config.vbss.colour_fg_b);
 	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
-	fprintf(fp_config, "FONT_NAME=%u\n", config.vbss.font_name);
-	fprintf(fp_config, "FONT_FACE=%u\n", config.vbss.font_face);
+	fprintf(fp_config, "FONT_NAME=%s\n", config.vbss.font_name);
+	fprintf(fp_config, "FONT_FACE=%s\n", config.vbss.font_face);
 
 	fprintf(fp_config, "PROGRESS_BAR_UPDATE=%u\n", config.vbsm.progress_update_msec);
 	fprintf(fp_config, "%s\n", VBSM_VIDEO_BACKEND);
