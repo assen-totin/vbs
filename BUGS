@@ -19,3 +19,12 @@ subtitles before current, you'll see them displayed properly.
 program window and opens in a separate one (like MPLayer). If this happens, try 
 another video output. 
 
+4. GTK-3 has a bug which prevents the application to change the main window's 
+background colour when the GTK theme uses umages for background. This means
+that vbss might not be able to set the baclground colour to black (which is 
+required to block the excessivle light when superimposing subtitles by 
+projection). Possible workarounds: 
+- swich to a GTK theme which does not use images for window backgrounds
+- swich to a GTK theme which has black window backgrounds
+- use GTK2. 
+

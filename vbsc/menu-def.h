@@ -31,6 +31,8 @@ gchar *ui1 =
         "    <menu action='PlayerMenu'>"
         "      <menuitem action='PlayerFullscreen'/>"
         "      <menuitem action='PlayerFont'/>"
+	"      <menuitem action='PlayerFontColour'/>"
+	"      <menuitem action='PlayerBgColour'/>"
         "    </menu>"
         "    <menu action='HelpMenu'>"
         "      <menuitem action='HelpAbout'/>"
@@ -59,6 +61,8 @@ GtkActionEntry menu_entries1[] = {
         {"PlayerMenu", NULL, "Player", NULL, NULL, NULL},
         {"PlayerFullscreen", GTK_STOCK_FULLSCREEN, "Full Screen...", NULL, NULL, (GCallback)set_full_screen},
         {"PlayerFont", NULL, "Font Size...", NULL, NULL, (GCallback)select_font},
+        {"PlayerFontColour", NULL, "Font Colour...", NULL, NULL, (GCallback)select_colour},
+        {"PlayerBgColour", NULL, "Background Colour...", NULL, NULL, (GCallback)select_colour},
 
         {"HelpMenu", NULL, "Help", NULL, NULL, NULL},
         {"HelpAbout", GTK_STOCK_ABOUT, "Contents...", NULL, NULL, (GCallback)help_about}
