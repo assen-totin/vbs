@@ -215,6 +215,46 @@ void select_colour(GtkAction *action, gpointer window) {
 }
 
 
+void select_justify (GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_QUESTION,
+                GTK_BUTTONS_OK_CANCEL,
+                _("Text justification:"));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Set Text Justification"));
+
+        GtkWidget *combo = gtk_combo_box_text_new();
+	char text[128];
+	sprintf(&text[0], "%s: %s", "LEFT", _("Left aligned"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &text[0]);
+        sprintf(&text[0], "%s: %s", "RIGHT", _("Right aligned"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &text[0]);
+        sprintf(&text[0], "%s: %s", "CENTER", _("Centered"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &text[0]);
+        sprintf(&text[0], "%s: %s", "FILL", _("Filled"));
+        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &text[0]);
+        gtk_combo_box_set_active(GTK_COMBO_BOX(combo), config.vbss.justify);
+
+        gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), combo);
+        gtk_widget_show(combo);
+
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
+                if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"LEFT"))
+                        config.vbss.justify = VBSS_JUSTIFY_LEFT;
+		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"RIGHT"))
+                        config.vbss.justify = VBSS_JUSTIFY_RIGHT;
+                else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"CENTER"))
+                        config.vbss.justify = VBSS_JUSTIFY_CENTER;
+                else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"FILL"))
+                        config.vbss.justify = VBSS_JUSTIFY_FILL;
+
+                write_config();
+        }
+
+        gtk_widget_destroy(dialog);
+}
+
+
 void set_full_screen (GtkWidget *widget, gpointer window) {
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
                 GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,

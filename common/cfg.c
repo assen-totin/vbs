@@ -43,6 +43,7 @@ void default_config() {
         config.vbss.colour_fg_r = VBS_DEFAULT_COLOUR_FG_RED;
         config.vbss.colour_fg_g = VBS_DEFAULT_COLOUR_FG_GREEN;
         config.vbss.colour_fg_b = VBS_DEFAULT_COLOUR_FG_BLUE;
+	config.vbss.justify = VBSS_DEFAULT_JUSTIFY;
 	config.vbss.font_size = VBS_DEFAULT_FONT_SIZE;
 	strcpy(&config.vbss.font_name[0], VBS_DEFAULT_FONT_NAME);
 	strcpy(&config.vbss.font_face[0], VBS_DEFAULT_FONT_FACE);
@@ -98,6 +99,7 @@ void write_config() {
 	fprintf(fp_config, "FONT_SIZE=%u\n", config.vbss.font_size);
 	fprintf(fp_config, "FONT_NAME=%s\n", config.vbss.font_name);
 	fprintf(fp_config, "FONT_FACE=%s\n", config.vbss.font_face);
+	fprintf(fp_config, "JUSTIFY=%u\n", config.vbss.justify);
 
 	fprintf(fp_config, "PROGRESS_BAR_UPDATE=%u\n", config.vbsm.progress_update_msec);
 	fprintf(fp_config, "%s\n", VBSM_VIDEO_BACKEND);
@@ -159,6 +161,8 @@ void read_config() {
 				config_char(line, &config.vbss.font_name[0]);
                         else if (strstr(line, "FONT_FACE"))
                                 config_char(line, &config.vbss.font_face[0]);
+                        else if (strstr(line, "JUSTIFY"))
+                                config.vbss.justify = config_int(line);
 
 			else if (strstr(line, "PROGRESS_BAR_UPDATE"))
 				config.vbsm.progress_update_msec = config_int(line);

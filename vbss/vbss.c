@@ -210,6 +210,15 @@ int main (int argc, char *argv[]) {
 
 	gtk_label_set_attributes(GTK_LABEL(subtitle), attr_list);
 
+	if (config.vbss.justify == VBSS_JUSTIFY_LEFT)
+		gtk_label_set_justify(GTK_LABEL(subtitle), GTK_JUSTIFY_LEFT);
+	else if (config.vbss.justify == VBSS_JUSTIFY_RIGHT)
+		gtk_label_set_justify(GTK_LABEL(subtitle), GTK_JUSTIFY_RIGHT);
+        else if (config.vbss.justify == VBSS_JUSTIFY_CENTER)
+                gtk_label_set_justify(GTK_LABEL(subtitle), GTK_JUSTIFY_CENTER);
+        else if (config.vbss.justify == VBSS_JUSTIFY_FILL)
+                gtk_label_set_justify(GTK_LABEL(subtitle), GTK_JUSTIFY_FILL);
+
 	gtk_container_add(GTK_CONTAINER(window), subtitle);
 
 	// Callbacks

@@ -18,6 +18,9 @@ Russian, English.
 
 5. autoconf support.
 
+6. vbss improvements: font family & face selection, font colour and background
+selection, font justification selection (all via vbsc).
+
 Oct 9, 2012 - Version 2.2
 ==========================
 

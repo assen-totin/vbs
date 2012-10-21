@@ -17,6 +17,8 @@ void select_font(GtkWidget *widget, gpointer window);
 
 void select_colour(GtkAction *action, gpointer window);
 
+void select_justify(GtkWidget *widget, gpointer window);
+
 void set_full_screen (GtkWidget *widget, gpointer window);
 
 

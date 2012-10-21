@@ -41,6 +41,7 @@ static GOptionEntry cmdl_entries[] =
 #define VBS_DEFAULT_FONT_SIZE 32
 #define VBS_DEFAULT_FONT_NAME "Sans"
 #define VBS_DEFAULT_FONT_FACE "Regular"
+#define VBSS_DEFAULT_JUSTIFY 0
 #define VBS_DEFAULT_CR 0 
 #define VBS_FULL_SCREEN 0
 #define VBSM_VIDEO_BACKEND "# Set video backend to 0 for MPLayer or to 1 for GStreamer"

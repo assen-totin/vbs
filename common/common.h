@@ -67,6 +67,13 @@ enum {
 	VBSM_VIDEO_BACKEND_GSTREAMER
 };
 
+enum {
+	VBSS_JUSTIFY_LEFT = 0,
+	VBSS_JUSTIFY_RIGHT,
+	VBSS_JUSTIFY_CENTER,
+	VBSS_JUSTIFY_FILL
+};
+
 struct struct_vbsm {
         bool have_loaded_text;
 	bool have_loaded_video;
@@ -109,6 +116,7 @@ struct struct_vbss {
 	char font_name[128];
 	char font_face[128];
 	int font_size;
+	int justify;
 };
 
 struct struct_common {
@@ -139,15 +147,15 @@ struct cmdl {
 	gchar *short_f;
 };
 
+struct subtitle_srt {
+        long time_from;
+        long time_to;
+        char sub[1024];
+};
+
 struct enc_entry {
 	char name[255];
 	bool dflt;
-};
-
-struct subtitle_srt {
-	long time_from;
-	long time_to;
-        char sub[1024];
 };
 
 static struct enc_entry enc_entries[] = {

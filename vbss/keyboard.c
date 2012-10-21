@@ -52,6 +52,7 @@ void on_space_pressed (GtkWidget *window) {
                 if (!config.vbss.paused) {
                         config.vbss.paused = true;
                         config.common.timestamp_msec = get_time_msec();
+			strcpy(&config.vbss.current_sub[0], _("Playback paused.\nPress SPACE to continue..."));
                 }
                 else {
                         config.vbss.paused = false;
