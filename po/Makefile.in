@@ -9,7 +9,7 @@ MSGFMT = @MSGFMT@
 TARGET = vbs.mo
 SRC = vbs.po
 
-TARGET_HELP = vbs-help.txt
+TARGET_HELP = vbs-help.mo
 
 LOCALDIRS=`find . -maxdepth 1 -mindepth 1 -type d`
 

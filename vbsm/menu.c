@@ -347,6 +347,7 @@ char *get_help_text() {
 	if (!line || !help_text)
 		error_handler("main","malloc failed", 1);
 
+	bzero(help_text, 1024 * sizeof(char));
 	int cnt = 1;
 	while (fgets(line, 1024, fp_help)) {
 		sprintf(help_text, "%s%s", help_text, line);

@@ -25,6 +25,8 @@ void set_video_output (GtkWidget *widget, gpointer window);
 
 void set_video_backend (GtkWidget *widget, gpointer window);
 
+char *get_help_text();
+
 struct video_backend {
         char name[255];
 	int num;
