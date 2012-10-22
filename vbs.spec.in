@@ -9,6 +9,7 @@ BuildRoot: /var/tmp/%{name}-buildroot
 @RPM_REQUIRE_MPLAYER@
 @RPM_REQUIRE_GSTREAMER@
 @RPM_REQUIRE_GTK@
+BuildRequires: gettext
 
 %description
 Voody Blue Subtitler (aka VBS) is a suit of programmes to manually
@@ -59,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 %changelog
-* Thu Oct 11 2012 Assen Totin <assen.totin@gmail.com>
+* Mon Oct 22 2012 Assen Totin <assen.totin@gmail.com>
 - Release 3.0
 
 * Tue Oct 9 2012 Assen Totin <assen.totin@gmail.com>

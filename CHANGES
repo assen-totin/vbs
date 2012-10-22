@@ -1,4 +1,4 @@
-Oct XX, 2012 - Version 3.0
+Oct 22, 2012 - Version 3.0
 ==========================
 
 1. Support GTK3 as well as GTK2. Choice will be made at compile time. 
