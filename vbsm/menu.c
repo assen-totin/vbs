@@ -74,21 +74,45 @@ void insert_subtitle(GtkAction *action, gpointer param){
 
 
 void help_contents(GtkWidget *widget, gpointer window) {
-        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
-                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-                GTK_MESSAGE_INFO,
-                GTK_BUTTONS_OK,
-                _("Help"));
-        gtk_window_set_title(GTK_WINDOW(dialog), _("Help"));
+        GtkWidget *dialog;
 
-	GtkWidget *label = gtk_label_new(VBS_MENU_HELP_TEXT);
+	char *help_text = get_help_text();
 
-        gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), label);
-        gtk_widget_show(label);
+	if (!help_text) {
+		dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+        	        GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                	GTK_MESSAGE_ERROR,
+	                GTK_BUTTONS_OK,
+        	        _("Help file not found."));
+	        gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
+	}
+	else {
+		dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+	                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+        	        GTK_MESSAGE_INFO,
+                	GTK_BUTTONS_OK,
+	                _("Help")
+		);
+		gtk_window_set_title(GTK_WINDOW(dialog), _("Help"));
+
+		GtkWidget *label = gtk_label_new(help_text);
+		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+
+		GtkWidget *scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+        	gtk_widget_set_size_request(scrolled_window, 480, 320);
+
+		gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), label);
+        	gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), scrolled_window);
+	        gtk_widget_show(label);
+		gtk_widget_show(scrolled_window);
+	}
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 
         gtk_widget_destroy(dialog);
+
+	if (help_text)
+		free(help_text);
 }
 
 
@@ -305,4 +329,34 @@ void set_video_output (GtkWidget *widget, gpointer window) {
         gtk_widget_destroy(dialog);
 }
 
+
+char *get_help_text() {
+	char *locale = setlocale (LC_ALL, NULL);
+	char *lang = strtok(locale, ".");
+	char file[1024];
+	sprintf(&file[0], "%s/%s/vbs-help.txt", LOCALEDIR, lang);
+
+	FILE *fp_help = fopen(&file[0], "r");
+	if (!fp_help) {
+		error_handler("help_contents", "could not open help file", 0);
+		return NULL;
+	}
+
+	char *line = malloc(1024 * sizeof(char));
+	char *help_text = malloc(1024 * sizeof(char));
+	if (!line || !help_text)
+		error_handler("main","malloc failed", 1);
+
+	int cnt = 1;
+	while (fgets(line, 1024, fp_help)) {
+		sprintf(help_text, "%s%s", help_text, line);
+		void *_tmp = realloc(help_text, (cnt + 1) * 1024 * sizeof(char));
+		help_text = (char *) _tmp;
+		cnt++;
+	}
+
+	free(line);
+
+	return help_text;
+}
 

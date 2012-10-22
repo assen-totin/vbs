@@ -15,7 +15,13 @@
 int main (int argc, char **argv){
 	GtkWidget *status, *vbox, *progress;
 
-        // Check for alternative config
+        // i18n
+        setlocale (LC_ALL, "");
+        bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+        textdomain (PACKAGE_NAME);
+        
+	// Check for alternative config
         get_cmdl_config(argc, argv);
 
         // Set up config from defaults
