@@ -5,7 +5,7 @@ Keyboard controls:
 * b - enter next subtitle
 * m - exit current subtitle
 * n - exit current and enter next
-* s - export subtitles to teh preset destinaton (overwrites the file is exists)
+* s - export subtitles to the preset destinaton (overwrites the file is exists)
 
 IMPORTING SUBTITLES
 

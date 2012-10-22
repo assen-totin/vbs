@@ -12,7 +12,7 @@ configuration option. Support multiple video output methods for GStreamer -
 X11 (ximagesink), Xv (xvimagesink), SLD (sdlvideosink). 
 
 3. Support i18n via gettext. Provided translations for Bulgarian,
-Russian, English.
+Russian, English. Also added i18n support for help.
 
 4. Progress bar update configuration option.
 
