@@ -334,7 +334,7 @@ char *get_help_text() {
 	char *locale = setlocale (LC_ALL, NULL);
 	char *lang = strtok(locale, ".");
 	char file[1024];
-	sprintf(&file[0], "%s/%s/vbs-help.txt", LOCALEDIR, lang);
+	sprintf(&file[0], "%s/%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, lang);
 
 	FILE *fp_help = fopen(&file[0], "r");
 	if (!fp_help) {

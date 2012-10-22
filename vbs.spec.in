@@ -38,6 +38,7 @@ done
 make install DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang vbs
+%find_lang vbs-help
 
 %post
 gtk-update-icon-cache -f -t @IMGDIR@
@@ -45,7 +46,7 @@ gtk-update-icon-cache -f -t @IMGDIR@
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f vbs.lang
+%files -f vbs.lang vbs-help.lang
 %defattr(-,root,root)
 %doc README TODO LICENSE CHANGES AUTHOR BUGS
 

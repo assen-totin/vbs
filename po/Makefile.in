@@ -29,7 +29,7 @@ maintainer-clean:
 
 install:
 	for dir in $(LOCALDIRS); do test -z $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/; cp -f $$dir/$(TARGET) $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/; done
-	for dir in $(LOCALDIRS); do test -z $(DESTDIR)$(LOCALEDIR)/$$dir/ || mkdir -p $(DESTDIR)$(LOCALEDIR)/$$dir/; cp -f $$dir/$(TARGET_HELP) $(DESTDIR)$(LOCALEDIR)/$$dir/; done
+	for dir in $(LOCALDIRS); do test -z $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/; cp -f $$dir/$(TARGET_HELP) $(DESTDIR)$(LOCALEDIR)/$$dir/LC_MESSAGES/; done
 
 uninstall:
 	for dir in $(LOCALDIRS); do rm -f $(LOCALEDIR)/$$dir/LC_MESSAGES/$(TARGET); done

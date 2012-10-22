@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 12:37+0300\n"
+"POT-Creation-Date: 2012-10-22 21:57+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English (British)\n"
@@ -50,7 +50,7 @@ msgstr "DNS resolving failed."
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Enter magic key (number between 1 and 2147483647):"
 
-#: common/menu.c:189 vbsm/gui.c:169
+#: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
 msgid "Error"
 msgstr "Error"
 
@@ -70,9 +70,13 @@ msgstr "Font Colour"
 msgid "Full-Screen mode:"
 msgstr "Full-Screen mode:"
 
-#: vbsm/menu.c:81 vbsm/menu.c:82
+#: vbsm/menu.c:94 vbsm/menu.c:96
 msgid "Help"
 msgstr "Help"
+
+#: vbsm/menu.c:86
+msgid "Help file not found."
+msgstr "Help file not found."
 
 #: common/menu.c:23
 msgid ""
@@ -90,7 +94,7 @@ msgstr ""
 "74, Otec Paisi Str.\n"
 "Assen Totin\n"
 
-#: vbsm/menu.c:102
+#: vbsm/menu.c:126
 msgid "Internal timer set to zero."
 msgstr "Internal timer set to zero."
 
@@ -122,7 +126,7 @@ msgstr "Press SPACE to start playback..."
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Quick brown fox jumps over the lazy dog..."
 
-#: vbsm/menu.c:115 vbsm/menu.c:117 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:139 vbsm/menu.c:141 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Really quit?"
 
@@ -155,7 +159,7 @@ msgstr "Select Newline Delimiter"
 msgid "Select network mode:"
 msgstr "Select network mode:"
 
-#: vbsm/menu.c:223
+#: vbsm/menu.c:247
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -163,7 +167,7 @@ msgstr ""
 "Select video backend:\n"
 "(requires restart)"
 
-#: vbsm/menu.c:266
+#: vbsm/menu.c:290
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -187,7 +191,7 @@ msgstr "Set Full-Screen"
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
-#: vbsm/menu.c:104
+#: vbsm/menu.c:128
 msgid "Set Start Time"
 msgstr "Set Start Time"
 
@@ -227,19 +231,19 @@ msgstr ""
 "See the LICENSE file from the distribution or visit http://www.gnu.org/"
 "copyleft/gpl.html for details."
 
-#: vbsc/vbsc.c:48
+#: vbsc/vbsc.c:54
 msgid "Use the menu to change default settings."
 msgstr "Use the menu to change default settings."
 
-#: vbsm/menu.c:224
+#: vbsm/menu.c:248
 msgid "Video Backend"
 msgstr "Video Backend"
 
-#: vbsm/menu.c:281
+#: vbsm/menu.c:305
 msgid "Video Output"
 msgstr "Video Output"
 
-#: vbsm/menu.c:271
+#: vbsm/menu.c:295
 msgid "Video output selection not available for current backend."
 msgstr "Video output selection not available for current backend."
 

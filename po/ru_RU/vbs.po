@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 12:37+0300\n"
+"POT-Creation-Date: 2012-10-22 21:57+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -52,7 +52,7 @@ msgstr "Адрес не найден."
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Введите серверный ключ доступа (число от 1 до 2147483647):"
 
-#: common/menu.c:189 vbsm/gui.c:169
+#: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
 msgid "Error"
 msgstr "Ошибка"
 
@@ -72,9 +72,13 @@ msgstr "Цвет текста"
 msgid "Full-Screen mode:"
 msgstr "Полноэкранный режим:"
 
-#: vbsm/menu.c:81 vbsm/menu.c:82
+#: vbsm/menu.c:94 vbsm/menu.c:96
 msgid "Help"
 msgstr "Помощь"
+
+#: vbsm/menu.c:86
+msgid "Help file not found."
+msgstr "Файл с указаниями не найден."
 
 #: common/menu.c:23
 msgid ""
@@ -92,7 +96,7 @@ msgstr ""
 "ул. Отца Паисия, 74\n"
 "Асен Тотин\n"
 
-#: vbsm/menu.c:102
+#: vbsm/menu.c:126
 msgid "Internal timer set to zero."
 msgstr "Внутренний таймер обнулен."
 
@@ -124,7 +128,7 @@ msgstr "Нажмите ПРОБЕЛ чтобы начать воспроизве
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Съешь еще этих мягких французских булок да выпей же чаю..."
 
-#: vbsm/menu.c:115 vbsm/menu.c:117 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:139 vbsm/menu.c:141 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Закончить работу?"
 
@@ -157,7 +161,7 @@ msgstr "Знак окончания строки"
 msgid "Select network mode:"
 msgstr "Выберите режим работы сети:"
 
-#: vbsm/menu.c:223
+#: vbsm/menu.c:247
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -165,7 +169,7 @@ msgstr ""
 "Выберите программу для видео:\n"
 "(перезапуск обязателен)"
 
-#: vbsm/menu.c:266
+#: vbsm/menu.c:290
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -189,7 +193,7 @@ msgstr "Полноэкранный режим"
 msgid "Set Magic Key"
 msgstr "Ключ сервера"
 
-#: vbsm/menu.c:104
+#: vbsm/menu.c:128
 msgid "Set Start Time"
 msgstr "Обнулить таймер"
 
@@ -226,22 +230,22 @@ msgid ""
 "copyleft/gpl.html for details."
 msgstr ""
 "Эта программа распространяется на условиях GNU General Public License.\n"
-"Прочитайте файл LICENSE или зайдите на http://www.gnu.org/"
-"copyleft/gpl.html для дополнительной информации."
+"Прочитайте файл LICENSE или зайдите на http://www.gnu.org/copyleft/gpl.html "
+"для дополнительной информации."
 
-#: vbsc/vbsc.c:48
+#: vbsc/vbsc.c:54
 msgid "Use the menu to change default settings."
 msgstr "Используйте меню дла изменения насроек."
 
-#: vbsm/menu.c:224
+#: vbsm/menu.c:248
 msgid "Video Backend"
 msgstr "Программа для видео"
 
-#: vbsm/menu.c:281
+#: vbsm/menu.c:305
 msgid "Video Output"
 msgstr "Выход видео"
 
-#: vbsm/menu.c:271
+#: vbsm/menu.c:295
 msgid "Video output selection not available for current backend."
 msgstr "Для текущей видео программы эта настройка отсутствует."
 
