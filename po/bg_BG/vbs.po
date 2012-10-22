@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-12 10:39+0300\n"
+"POT-Creation-Date: 2012-10-22 12:37+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Bulgarian\n"
@@ -18,83 +18,144 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: common/menu.c:22
-msgid "About VBS"
-msgstr "За VBS"
-
-#: common/menu.c:141
+#: common/menu.c:98
 msgid "Available Delimiters:"
 msgstr "Изберете разделител:"
 
-#: common/menu.c:70 common/menu.c:100
+#: common/menu.c:40 common/menu.c:69
 msgid "Available Encodings:"
 msgstr "Изберете кодировка:"
 
-#: common/menu.c:176
+#: vbsc/menu.c:147
+msgid "Background Color"
+msgstr "Цвят на фона"
+
+#: vbsc/menu.c:232
+msgid "Centered"
+msgstr "Центриран"
+
+#: common/menu.c:134
 msgid "Current Port:"
 msgstr "Текущ порт:"
 
-#: common/menu.c:213
-msgid "Current server (FQDN):"
-msgstr "Текущ сървър:"
+#: common/menu.c:158
+#, fuzzy
+msgid "Current Server (FQDN):"
+msgstr "Текущ сървър (FQDN):"
 
-#: common/menu.c:193
+#: common/menu.c:188
 msgid "DNS resolving failed."
 msgstr "Името не беше намерено."
 
-#: vbsc/menu.c:148
-msgid "Enter font size (in points):"
-msgstr "Големина на шрифта (пунктове):"
-
-#: vbsc/menu.c:116 vbsm/menu.c:364
+#: common/menu.c:239
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Код на сървъра (число между 1 и 2147483647):"
 
-#: vbsc/menu.c:184
-msgid "Full-Screen mode:"
-msgstr "Показвай на цял екран:"
+#: common/menu.c:189 vbsm/gui.c:169
+msgid "Error"
+msgstr "Грешка"
 
-#: vbsm/menu.c:106
+#: vbss/vbss.c:202
+msgid "Expecting network connection..."
+msgstr "Очакваме връзка по мрежата..."
+
+#: vbsc/menu.c:234
+msgid "Filled"
+msgstr "Подравнен от двете страни"
+
+#: vbsc/menu.c:145
+msgid "Font Color"
+msgstr "Цвят на текста"
+
+#: vbsc/menu.c:263
+msgid "Full-Screen mode:"
+msgstr "Показване на цял екран:"
+
+#: vbsm/menu.c:81 vbsm/menu.c:82
+msgid "Help"
+msgstr "Помощ"
+
+#: common/menu.c:23
+msgid ""
+"If you like this program, send me a postcard from your place to:\n"
+"\n"
+"Bulgaria\n"
+"1303 Sofia\n"
+"74, Otec Paisi Str.\n"
+"Assen Totin\n"
+msgstr ""
+"Ако тази програма ви харесва, изпратете ми картичка от вашия град на адрес:\n"
+"\n"
+"София 1303,\n"
+"ул. Отец Паисий 74\n"
+"Асен Тотин\n"
+
+#: vbsm/menu.c:102
 msgid "Internal timer set to zero."
 msgstr "Вътрешният таймер нулиран."
 
-#: common/menu.c:243
+#: vbsc/menu.c:228
+msgid "Left aligned"
+msgstr "Подравнен отляво"
+
+#: common/menu.c:202
 msgid "Network Mode"
 msgstr "Работа с мрежата"
 
-#: common/menu.c:257
+#: common/menu.c:206
 msgid "Network is off"
 msgstr "Мрежата е изключена."
 
-#: common/menu.c:221
-msgid "Press OK to change server."
-msgstr "Потвърдете смяната на сървъра."
+#: vbss/keyboard.c:55
+msgid ""
+"Playback paused.\n"
+"Press SPACE to continue..."
+msgstr ""
+"Пауза.\n"
+"Натиснете ИНТЕРВАЛ за да продължите..."
 
-#: vbsc/menu.c:22 vbsc/menu.c:28 vbsm/menu.c:141
+#: vbss/vbss.c:206
+msgid "Press SPACE to start playback..."
+msgstr "Натиснете ИНТЕРВАЛ за начало на прожекцията..."
+
+#: vbsc/menu.c:93 vbsc/menu.c:100
+msgid "Quick brown fox jumps over the lazy dog..."
+msgstr "За миг бях в чужд, скърцащ плюшен фотьойл..."
+
+#: vbsm/menu.c:115 vbsm/menu.c:117 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Приключваме ли работа?"
 
-#: common/menu.c:263
+#: common/menu.c:211
 msgid "Receive from network"
 msgstr "Приемане по мрежата."
 
-#: common/menu.c:91
+#: vbsc/menu.c:230
+msgid "Right aligned"
+msgstr "Подравнен отдясно"
+
+#: common/menu.c:70
 msgid "Select Export Encoding"
 msgstr "Изберете кодировка за експорт"
 
-#: common/menu.c:61
+#: vbsc/menu.c:92 vbsc/menu.c:99
+#, fuzzy
+msgid "Select Font"
+msgstr "Големина на шрифта"
+
+#: common/menu.c:41
 msgid "Select Import Encoding"
 msgstr "Изберете кодировка за импорт"
 
-#: common/menu.c:132
+#: common/menu.c:99
 msgid "Select Newline Delimiter"
 msgstr "Изберете разделител за нов ред"
 
-#: common/menu.c:252
+#: common/menu.c:201
 msgid "Select network mode:"
 msgstr "Режим на мрежата:"
 
-#: vbsm/menu.c:247
+#: vbsm/menu.c:223
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -102,7 +163,7 @@ msgstr ""
 "Изберете програма за видео:\n"
 "(после рестартирайте)"
 
-#: vbsm/menu.c:307
+#: vbsm/menu.c:266
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -110,64 +171,89 @@ msgstr ""
 "Изберете как GStreamer да показва видео:\n"
 "(после рестартирайте)"
 
-#: common/menu.c:259
+#: common/menu.c:208
 msgid "Send to network"
 msgstr "Предаване по мрежата"
 
-#: common/menu.c:204
+#: common/menu.c:159
 msgid "Server Name"
 msgstr "Име на сървъра"
 
-#: vbsc/menu.c:139
-msgid "Set Font Size"
-msgstr "Големина на шрифта"
-
-#: vbsc/menu.c:175
+#: vbsc/menu.c:264
 msgid "Set Full-Screen"
 msgstr "Цял екран"
 
-#: vbsc/menu.c:107 vbsm/menu.c:355
+#: common/menu.c:240
 msgid "Set Magic Key"
 msgstr "Ключ за връзка"
 
-#: vbsm/menu.c:99
+#: vbsm/menu.c:104
 msgid "Set Start Time"
 msgstr "Нулиране таймер"
+
+#: vbsc/menu.c:224
+msgid "Set Text Justification"
+msgstr "Подравняване на текста"
+
+#: vbsm/gui.c:168
+msgid "Subtitles not loaded."
+msgstr "Надписите не са заредени."
 
 #: vbsm/keyboard.c:64
 #, c-format
 msgid "Suggested Duration: %u seconds"
 msgstr "Предлагаме времетраене %u секунди"
 
-#: vbsm/gui.c:84
+#: vbsm/gui.c:85
 #, c-format
 msgid "Suggested Duration: %u seconds (So far: %u seconds)"
 msgstr "Предлагаме времетраене %u секунди (дотук: %u секунди)"
 
-#: common/menu.c:167
+#: common/menu.c:135
 msgid "TCP Port"
 msgstr "TCP порт"
 
-#: vbsc/vbsc.c:46
+#: vbsc/menu.c:223
+msgid "Text justification:"
+msgstr "ИЗберете подравняване:"
+
+#: common/menu.c:20
+msgid ""
+"This programme is distributed under GNU General Public License.\n"
+"See the LICENSE file from the distribution or visit http://www.gnu.org/"
+"copyleft/gpl.html for details."
+msgstr ""
+"Тази програма се разпространява при условията на GNU General Public License.\n"
+"Вижте файла LICENSE или посетете http://www.gnu.org/"
+"copyleft/gpl.html за допълнителна информация."
+
+#: vbsc/vbsc.c:48
 msgid "Use the menu to change default settings."
 msgstr "Изпозвайте менюто, за да промените настройките."
 
-#: vbsm/menu.c:79
-msgid "Using VBS"
-msgstr "Инструкции за работа"
-
-#: vbsm/menu.c:238
+#: vbsm/menu.c:224
 msgid "Video Backend"
 msgstr "Програма за видео"
 
-#: vbsm/menu.c:296
+#: vbsm/menu.c:281
 msgid "Video Output"
 msgstr "Начин на възпроизвеждане"
 
-#: vbsm/menu.c:309
+#: vbsm/menu.c:271
 msgid "Video output selection not available for current backend."
 msgstr "Текущата програма за видео няма тази настройка."
 
-#: vbsm/menu.c:139
-msgid "Your subtitles are exported to:"
-msgstr "Надписите бяха записани във файл:"
+#~ msgid "About VBS"
+#~ msgstr "За VBS"
+
+#~ msgid "Enter font size (in points):"
+#~ msgstr "Големина на шрифта (пунктове):"
+
+#~ msgid "Press OK to change server."
+#~ msgstr "Потвърдете смяната на сървъра."
+
+#~ msgid "Using VBS"
+#~ msgstr "Инструкции за работа"
+
+#~ msgid "Your subtitles are exported to:"
+#~ msgstr "Надписите бяха записани във файл:"

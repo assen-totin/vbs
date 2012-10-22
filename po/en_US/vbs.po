@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-12 10:39+0300\n"
+"POT-Creation-Date: 2012-10-22 12:37+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English\n"
@@ -17,83 +17,145 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: common/menu.c:22
-msgid "About VBS"
-msgstr "About VBS"
-
-#: common/menu.c:141
+#: common/menu.c:98
 msgid "Available Delimiters:"
 msgstr "Available Delimiters:"
 
-#: common/menu.c:70 common/menu.c:100
+#: common/menu.c:40 common/menu.c:69
 msgid "Available Encodings:"
 msgstr "Available Encodings:"
 
-#: common/menu.c:176
+#: vbsc/menu.c:147
+msgid "Background Color"
+msgstr "Background Color"
+
+#: vbsc/menu.c:232
+msgid "Centered"
+msgstr "Centered"
+
+#: common/menu.c:134
 msgid "Current Port:"
 msgstr "Current Port:"
 
-#: common/menu.c:213
-msgid "Current server (FQDN):"
-msgstr "Current server (FQDN):"
+#: common/menu.c:158
+#, fuzzy
+msgid "Current Server (FQDN):"
+msgstr "Current Server (FQDN):"
 
-#: common/menu.c:193
+#: common/menu.c:188
 msgid "DNS resolving failed."
 msgstr "DNS resolving failed."
 
-#: vbsc/menu.c:148
-msgid "Enter font size (in points):"
-msgstr "Enter font size (in points):"
-
-#: vbsc/menu.c:116 vbsm/menu.c:364
+#: common/menu.c:239
 msgid "Enter magic key (number between 1 and 2147483647):"
 msgstr "Enter magic key (number between 1 and 2147483647):"
 
-#: vbsc/menu.c:184
+#: common/menu.c:189 vbsm/gui.c:169
+msgid "Error"
+msgstr "Error"
+
+#: vbss/vbss.c:202
+msgid "Expecting network connection..."
+msgstr "Expecting network connection..."
+
+#: vbsc/menu.c:234
+msgid "Filled"
+msgstr "Filled"
+
+#: vbsc/menu.c:145
+msgid "Font Color"
+msgstr "Font Color"
+
+#: vbsc/menu.c:263
 msgid "Full-Screen mode:"
 msgstr "Full-Screen mode:"
 
-#: vbsm/menu.c:106
+#: vbsm/menu.c:81 vbsm/menu.c:82
+msgid "Help"
+msgstr "Help"
+
+#: common/menu.c:23
+msgid ""
+"If you like this program, send me a postcard from your place to:\n"
+"\n"
+"Bulgaria\n"
+"1303 Sofia\n"
+"74, Otec Paisi Str.\n"
+"Assen Totin\n"
+msgstr ""
+"If you like this program, send me a postcard from your place to:\n"
+"\n"
+"Bulgaria\n"
+"1303 Sofia\n"
+"74, Otec Paisi Str.\n"
+"Assen Totin\n"
+
+#: vbsm/menu.c:102
 msgid "Internal timer set to zero."
 msgstr "Internal timer set to zero."
 
-#: common/menu.c:243
+#: vbsc/menu.c:228
+msgid "Left aligned"
+msgstr "Left aligned"
+
+#: common/menu.c:202
 msgid "Network Mode"
 msgstr "Network Mode"
 
-#: common/menu.c:257
+#: common/menu.c:206
 msgid "Network is off"
 msgstr "Network is off"
 
-#: common/menu.c:221
-msgid "Press OK to change server."
-msgstr "Press OK to change server."
+#: vbss/keyboard.c:55
+msgid ""
+"Playback paused.\n"
+"Press SPACE to continue..."
+msgstr ""
+"Playback paused.\n"
+"Press SPACE to continue..."
 
-#: vbsc/menu.c:22 vbsc/menu.c:28 vbsm/menu.c:141
+#: vbss/vbss.c:206
+msgid "Press SPACE to start playback..."
+msgstr "Press SPACE to start playback..."
+
+#: vbsc/menu.c:93 vbsc/menu.c:100
+msgid "Quick brown fox jumps over the lazy dog..."
+msgstr "Quick brown fox jumps over the lazy dog..."
+
+#: vbsm/menu.c:115 vbsm/menu.c:117 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Really quit?"
 
-#: common/menu.c:263
+#: common/menu.c:211
 msgid "Receive from network"
 msgstr "Receive from network"
 
-#: common/menu.c:91
+#: vbsc/menu.c:230
+msgid "Right aligned"
+msgstr "Right aligned"
+
+#: common/menu.c:70
 msgid "Select Export Encoding"
 msgstr "Select Export Encoding"
 
-#: common/menu.c:61
+#: vbsc/menu.c:92 vbsc/menu.c:99
+#, fuzzy
+msgid "Select Font"
+msgstr "Select Font"
+
+#: common/menu.c:41
 msgid "Select Import Encoding"
 msgstr "Select Import Encoding"
 
-#: common/menu.c:132
+#: common/menu.c:99
 msgid "Select Newline Delimiter"
 msgstr "Select Newline Delimiter"
 
-#: common/menu.c:252
+#: common/menu.c:201
 msgid "Select network mode:"
 msgstr "Select network mode:"
 
-#: vbsm/menu.c:247
+#: vbsm/menu.c:223
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -101,7 +163,7 @@ msgstr ""
 "Select video backend:\n"
 "(requires restart)"
 
-#: vbsm/menu.c:307
+#: vbsm/menu.c:266
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -109,64 +171,89 @@ msgstr ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
 
-#: common/menu.c:259
+#: common/menu.c:208
 msgid "Send to network"
 msgstr "Send to network"
 
-#: common/menu.c:204
+#: common/menu.c:159
 msgid "Server Name"
 msgstr "Server Name"
 
-#: vbsc/menu.c:139
-msgid "Set Font Size"
-msgstr "Set Font Size"
-
-#: vbsc/menu.c:175
+#: vbsc/menu.c:264
 msgid "Set Full-Screen"
 msgstr "Set Full-Screen"
 
-#: vbsc/menu.c:107 vbsm/menu.c:355
+#: common/menu.c:240
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
-#: vbsm/menu.c:99
+#: vbsm/menu.c:104
 msgid "Set Start Time"
 msgstr "Set Start Time"
+
+#: vbsc/menu.c:224
+msgid "Set Text Justification"
+msgstr "Set Text Justification"
+
+#: vbsm/gui.c:168
+msgid "Subtitles not loaded."
+msgstr "Subtitles not loaded."
 
 #: vbsm/keyboard.c:64
 #, c-format
 msgid "Suggested Duration: %u seconds"
 msgstr "Suggested Duration: %u seconds"
 
-#: vbsm/gui.c:84
+#: vbsm/gui.c:85
 #, c-format
 msgid "Suggested Duration: %u seconds (So far: %u seconds)"
 msgstr "Suggested Duration: %u seconds (So far: %u seconds)"
 
-#: common/menu.c:167
+#: common/menu.c:135
 msgid "TCP Port"
 msgstr "TCP Port"
 
-#: vbsc/vbsc.c:46
+#: vbsc/menu.c:223
+msgid "Text justification:"
+msgstr "Text justification:"
+
+#: common/menu.c:20
+msgid ""
+"This programme is distributed under GNU General Public License.\n"
+"See the LICENSE file from the distribution or visit http://www.gnu.org/"
+"copyleft/gpl.html for details."
+msgstr ""
+"This programme is distributed under GNU General Public License.\n"
+"See the LICENSE file from the distribution or visit http://www.gnu.org/"
+"copyleft/gpl.html for details."
+
+#: vbsc/vbsc.c:48
 msgid "Use the menu to change default settings."
 msgstr "Use the menu to change default settings."
 
-#: vbsm/menu.c:79
-msgid "Using VBS"
-msgstr "Using VBS"
-
-#: vbsm/menu.c:238
+#: vbsm/menu.c:224
 msgid "Video Backend"
 msgstr "Video Backend"
 
-#: vbsm/menu.c:296
+#: vbsm/menu.c:281
 msgid "Video Output"
 msgstr "Video Output"
 
-#: vbsm/menu.c:309
+#: vbsm/menu.c:271
 msgid "Video output selection not available for current backend."
 msgstr "Video output selection not available for current backend."
 
-#: vbsm/menu.c:139
-msgid "Your subtitles are exported to:"
-msgstr "Your subtitles are exported to:"
+#~ msgid "About VBS"
+#~ msgstr "About VBS"
+
+#~ msgid "Enter font size (in points):"
+#~ msgstr "Enter font size (in points):"
+
+#~ msgid "Press OK to change server."
+#~ msgstr "Press OK to change server."
+
+#~ msgid "Using VBS"
+#~ msgstr "Using VBS"
+
+#~ msgid "Your subtitles are exported to:"
+#~ msgstr "Your subtitles are exported to:"
