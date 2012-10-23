@@ -1,83 +1,83 @@
-USING VBS
+﻿РАБОТА С VBS
 
-Keyboard controls:
-* spacebar - toggles play/pause
-* b - enter next subtitle
-* m - exit current subtitle
-* n - exit current and enter next
-* s - export subtitles to teh preset destinaton (overwrites the file is exists)
+«Горячие» клавиши:
+* пробел — переключатель режима воспроизведение/пауза
+* b — ввод субтитра
+* m — вывод субтитра
+* n — вывод субттира и ввод  следующего
+* s — запись субтитров
 
-IMPORTING SUBTITLES
+ИМПОРТ СУБТИТРОВ
 
-Use the Subtitles menu to import a text-only or a SubRip file and to specify its encoding.
+Через меню Subtitles можете импортировать субтитры в форматах «текст» и SubRip, а также указать кодировку.
 
-Supported formats:
-* Plain text: one line per subtitle. For long subtitles, use the pipe symbol “|” where you want the subtitle split into several lines
+Форматы:
+* Текст: по одному субтитру на каждой строке. Если субтитры длинные, знаком “|” можно указать, где сделать переход на новую строку. 
 * SubRip
 
-From the same menu section you can set import encoding (default is UTF-8).
+Из того же меню можно указать кодировку для импорта (по умолчанию UTF-8).
 
-EXPORTING SUBTITLES
+ЗАПИСь СУБТИТРОВ
 
-Subtitles are automatically exported each time: 
-* a subtitle goes "out" ("n" or "m" key is pressed)
-* when the "s" key is pressed
-* when the program is terminated
+Субтитры записываются автоматически кажды раз, когда: 
+* выводится субтитр (нажата клавиша "n" или "m")
+* нажата клавиша "s"
+* программа заканчивает работу
 
-Use the Subtitles menu to set the export destination (default is /tmp/vbs_export.srt).
+Через меню Subtitles можно указать куда записывать субтитры (по умолчанию в /tmp/vbs_export.srt).
 
-From the same menu section you can set:
-* Export encoding (default is UTF-8)
-* Export newline character (default is LF).
+Из того же меню можно указать:
+* Кодировку для записи (по умолчанию UTF-8)
+* Символ новой строки (по умолчанию LF).
 
-EDITING SUBTITLES LIST
+РЕДАКТИРОВАНИЕ СПИСАК СУБТИТРОВ
 
-Click a subtitle to highlight it.
+Нажмите на субтитр мышкой чтоб перейти к нему. 
 
-Use the Edit menu to: 
-* Insert blank subtitle before the current (highlighted) one.
-* Insert blank subtitle after the current (highlighted) one.
-* Delete the current (highlighted) one.
-* Clear the timing of the current (highlighted) subtitle.
-* Clear the timing of all subtitles after the current (highlighted) one.
+Через меню Edit можно: 
+* Ввести новый (пустой) субтитр перед текущим
+* Ввести новый (пустой) субтитр после текущего
+* Удалить текущий субтитр
+* Обнулить время для текущего субтитра
+* Обнулить время для всех субтитров после текущего
 
-Double click start or end time to go to that subtitle. If video is loaded, you will be send 5 seconds befoe the beginning of the subtitle. 
+Двойным щелчком мыши на время ввода или вывода субтитра можно перевести видео за 5 секунд до его начала.
 
-Double click text to edit it inline. 
+Двойным щелчком мыши на текст субтитра можно его отредактировать.
 
-LOADING VIDEO
+ВОСПРОИЗВЕДЕНИЕ ВИДЕО
 
-Use the Video menu to load video file.
+Через меню Video можно открыть нужный видо файл. 
 
-Supported formats: any format which your back-end (GStreamer or MPlayer) can play.
+Принимаемые форматы: любые, которые программа для воспроизведения (GStreamer или MPlayer) может показать.
 
-VBS supports two back-ends: 
+VBS умеет работать с двумя видео программами: 
 * MPlayer
-* Gstreamer
+* GStreamer
 
-Support for either or both can be included. If both are included, GStreamer will be default and it can be changed in the Video menu.
+Поддержка мижет быть включена для одного из них или для обоих. Во втором случае по умолчанию будеть выБран Gstreamer. Через меню Video это можно изменить. 
 
-In the same menu you can set the video output method:
-* For GStreamer, chose between X11 (most conservative, CPU-intensive, but most compatible; default), Xv (less CPU intensive, works with all modern video adapters) and SDL (use only as fail-safe).
-* MPlayer video output cannot be changed in VBS; use it's own menu for this.
+В том же меню можно выбрать метод отображения видео:
+* Для Gstreamer работают X11 (самый консервативный с наибольшей нагрузкой на микропроцессор, но работает на всех компьютерах; выБран по умолчанию), Xv (меншая нагрузка на микопроцессор, работает на всех современных видеокартах) и SDL (пользуйтесь только если другие режимы не работают).
+* Для MPlayer метод нужно указать в настройках самого MPlayer, а не через VBS. 
 
-USING VBS WITHOUT VIDEO
+РАБОТА С VSB БЕЗ ВИДЕО
 
-You can use VBS for timing subtitles without loading video (e.g., when watching the video on TV). To set the time to “zero”, use the Edit -> Set Start Time menu when the movie begins. 
+VBS можно пользоваться без просмотра видео (например, если фильм смотреть на ТВ). Чтобы обнулить начальное время субтитров, выберите Edit -> Set Start Time в момент начала фильма. 
 
-USING THE NETWORK
+РАБОТА С СЕТьЮ
 
-Use the Network menu to enable/disable sending subtitle info to a vbsd server. When enabled, the network mode will be shown as “Send”. If not using the network, turn it off to improve performance (default).
+Через меню Network можно подключить или выключить связь с сервером vbsd. Когда связь включена, режим работы — отсылка субтитров на сервер (“Send”). Если не пользуетесь vbsd, отключите сеть для ускорения работы (по умолчанию сеть отключена).
 
-If using the network, in the same menu also set: 
-* Network server (FQDN); will only be accepted if can be resolved to IP address.
-* TCP port on which vbsd is listening (default: 42)
-* Magic key used to communicate with vbsd (default: 1973); must be same on the server side. 
+Если сеть подключена, через то же меню можно указать: 
+* Имя сервера (FQDN); будет принято только после успешной трансляции в IP адрес.
+* Номер порта TCP, на котором работает vbsd (по умолчанию 42)
+* Ключ для работы с сервером vbsd (по умолчанию 1973); ключ должен быть одинаковым на сервере и в настройках программы.
 
-ADDITIONAL TOOLS
+ДОПОЛНИТЕЛьНыЕ ПРОГРАММы
 
-Except the current programme (the master client or vbsm), the VBS also includes: 
-* The relay server or vbsd – used to relay subtitles from vbsm or vbss to vbss,
-* The slave client or vbss – used to project subtitles which are either read from a local SubRip file or received over the network from a vbsd server. 
-* The configuration tool or vbsc – used to configure vbss. 
+Кроме этой программы (основной клиент или vbsm), в комплект VBS входят еще: 
+* Сервер vbsd – транслирует субтитры от vbsm или vbss к vbss,
+* Дополнительный клиент или vbss – для проектирования субтитров поверх другого изображения. Субтитры считываются из локального SubRip файла или получаются по сети от vbsd сервера. 
+* Утилита настройки или vbsc – для настройки параметров vbss. 
 
