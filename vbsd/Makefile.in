@@ -23,6 +23,8 @@ OBJS_REMOTE = ../common/error.o ../common/cfg.o ../common/network.o ../common/ut
 INCLUDES=`pkg-config --cflags gtk+-@GTK_VER@`
 ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 
+HAVE_SYSTEMD = @HAVE_SYSTEMD@
+
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 ifeq ($(HAVE_GSTREAMER),1)
 	ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
@@ -40,6 +42,12 @@ distclean:
 install:
 	test -z $(DESTDIR)$(SBINDIR) || mkdir -p $(DESTDIR)$(SBINDIR)
 	cp -f $(TARGET) $(DESTDIR)$(SBINDIR)
+	test -z $(DESTDIR)/etc/init.d || mkdir -p $(DESTDIR)/etc/init.d
+	cp -f init/vbsd $(DESTDIR)/etc/init.d/vbsd
+ifeq ($(HAVE_SYSTEMD),1)
+	test -z $(DESTDIR)/etc/systemd/system || mkdir -p $(DESTDIR)/etc/systemd/system
+	cp -f init/vbsd.service $(DESTDIR)/etc/systemd/system/vbsd.service
+endif
 
 uninstall:
 	rm -f $(TARGET) $(SBINDIR)/$(TARGET)

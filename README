@@ -167,6 +167,9 @@ config file. The subtitle will be stored only upon match.
 stores. Any request which does nto begin with correct magic key will be treated 
 as "pull" request. 
 
+vbsd can be started by SystemV init or by systemd. Start-up scripts are 
+provided for both.
+
 D. vbsc
 -------
 

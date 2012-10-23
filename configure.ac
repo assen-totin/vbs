@@ -162,10 +162,36 @@ AC_SUBST([RPM_REQUIRE_GTK])
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 
+# systemd
+RPM_SYSTEMD_MKDIR=""
+RPM_SYSTEMD_SCRIPT=""
+RPM_SYSTEMD_POST=""
+AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD=1])
+AC_CHECK_PROG([HAVE_SYSTEMD],[systemctl],["1"],["0"])
+if test $HAVE_SYSTEMD = "0" ; then
+	if test $FORCE_SYSTEMD = "1" ; then
+		HAVE_SYSTEMD = "1"
+		echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
+	else
+		echo "*** systemd not found. Will only install SystemV init script."
+	fi
+else
+	echo "*** systemd found. Will install both systemd and SystemV init scripts."
+fi
+if test $HAVE_SYSTEMD = "1" ; then
+	RPM_SYSTEMD_MKDIR="mkdir -p $RPM_BUILD_ROOT/etc/systemd/system"
+	RPM_SYSTEMD_SCRIPT="/etc/systemd/system/vbsd.service"
+	RPM_SYSTEMD_POST="systemctl enable vbsd.service"
+fi
+AC_SUBST([HAVE_SYSTEMD])
+AC_SUBST([RPM_SYSTEMD_MKDIR])
+AC_SUBST([RPM_SYSTEMD_SCRIPT])
+AC_SUBST([RPM_SYSTEMD_POST])
+
 # Makefiles
 MAKEFILE_CC=`which gcc`
 AC_SUBST([MAKEFILE_CC])
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile vbsd/init/vbsd vbsd/init/vbsd.service])
 
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])

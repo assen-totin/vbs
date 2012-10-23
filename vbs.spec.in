@@ -14,7 +14,7 @@ BuildRequires: gettext
 %description
 Voody Blue Subtitler (aka VBS) is a suit of programmes to manually
 synchronize a text file with a video stream, thus creating a subtitles file, 
-or to play back sucha file, or to stream it over the network.
+or to play back such a file, or to stream it over the network.
 
 %prep
 # Commented out to enable building RPM from local source tree
@@ -30,6 +30,8 @@ mkdir -p $RPM_BUILD_ROOT@BINDIR@
 mkdir -p $RPM_BUILD_ROOT@SBINDIR@
 mkdir -p $RPM_BUILD_ROOT@IMGDIR@
 mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/applications
+mkdir -p $RPM_BUILD_ROOT/etc/init.d
+@RPM_SYSTEMD_MKDIR@
 
 for DIR in `find po/ -maxdepth 1 -mindepth 1 -type d | sed s/po.//g`; do
 	mkdir -p $RPM_BUILD_ROOT@LOCALEDIR@/$DIR/LC_MESSAGES
@@ -42,6 +44,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %post
 gtk-update-icon-cache -f -t @IMGDIR@
+@RPM_SYSTEMD_POST@
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -60,8 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 @DATAROOTDIR@/applications/vbsm.desktop
 @DATAROOTDIR@/applications/vbss.desktop
 @DATAROOTDIR@/applications/vbsc.desktop
+/etc/init.d/vbsd
+@RPM_SYSTEMD_SCRIPT@
 
-%changelog
 %changelog
 * Mon Oct 22 2012 Assen Totin <assen.totin@gmail.com>
 - Release 3.0
