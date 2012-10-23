@@ -23,7 +23,7 @@ another video output.
 background colour when the GTK theme uses umages for background. This means
 that vbss might not be able to set the baclground colour to black (which is 
 required to block the excessivle light when superimposing subtitles by 
-projection). Possible workarounds: 
+projection). A work-around is implemented in the code. Other possible solutions: 
 - swich to a GTK theme which does not use images for window backgrounds
 - swich to a GTK theme which has black window backgrounds
 - use GTK2. 

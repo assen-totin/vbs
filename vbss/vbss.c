@@ -148,6 +148,9 @@ int main (int argc, char *argv[]) {
 #ifdef HAVE_GTK2
 	gtk_widget_modify_bg(window, GTK_STATE_NORMAL, &colour2);
 #elif _HAVE_GTK3
+        // Not working for GTK3 when the theme uses images for background.
+        // https://bugzilla.gnome.org/show_bug.cgi?id=656461
+        // Workraround code added below
 	gtk_widget_override_background_color(window, GTK_STATE_NORMAL, &colour3);
 #endif
 
@@ -238,6 +241,14 @@ int main (int argc, char *argv[]) {
 	if(!thread)
 		error_handler("main","Failed to create thread",1);
 
+#ifdef HAVE_GTK3
+        // Workaround code for gtk_widget_override_background_color() not working on GTK3 when theme uses images for window background.
+        GdkScreen *screen = gdk_screen_get_default();
+        GtkCssProvider *css_provider = gtk_css_provider_get_default();
+        gtk_css_provider_load_from_data(css_provider, "GtkWindow {background-color: #000;}", -1, NULL);
+        gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+#endif
+        
 	// Main loop
 	gtk_widget_show_all(window);
 	gtk_main();
