@@ -4,7 +4,7 @@ Version: @PACKAGE_VERSION@
 Release: 1
 Group: Applications/Multimedia
 License: GPL
-Source: http://bilbo.online.bg/~assen/vbs/vbs-@PACKAGE_VERSION@.tar.gz
+Source: http://www.zavedil.com/software-desktop-vbs/vbs-@PACKAGE_VERSION@.tar.gz
 BuildRoot: /var/tmp/%{name}-buildroot
 @RPM_REQUIRE_MPLAYER@
 @RPM_REQUIRE_GSTREAMER@
