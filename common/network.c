@@ -11,11 +11,11 @@
 #include "common.h"
 
 int get_host_by_name(char *server_name) {
-        struct hostent *host_entry = gethostbyname(server_name);
-        if (host_entry == NULL) {
-                error_handler("get_host_by_name", "No such host", 0);
-                return 0;
-        }
+	struct hostent *host_entry = gethostbyname(server_name);
+	if (host_entry == NULL) {
+		error_handler("get_host_by_name", "No such host", 0);
+		return 0;
+	}
 	else {
 		strcpy(&config.common.server_name[0], server_name);
 		config.common.host_entry = host_entry;
@@ -74,37 +74,37 @@ int get_subtitle(char *buffer) {
 
 
 int put_subtitle(char *buffer) {
-        int sockfd, n;
-        char request[config.common.line_size];
+	int sockfd, n;
+	char request[config.common.line_size];
 	char buffer2[config.common.line_size + 4];
 
-        sockfd = get_socket();
+	sockfd = get_socket();
 
 	strcpy(&request[0], buffer);
 	fix_new_line(&request[0]);
 
 	bzero(buffer2, config.common.line_size + 4);
-        memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));
-        memcpy(&buffer2[4], &request[0], config.common.line_size);
+	memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));
+	memcpy(&buffer2[4], &request[0], config.common.line_size);
 
-        n = write(sockfd, buffer2, config.common.line_size + 4);
+	n = write(sockfd, buffer2, config.common.line_size + 4);
 
-        if (n < 0) {
-                error_handler("put_subtitle", "Could not write to socket", 0);
-                close(sockfd);
-                return 0;
-        }
+	if (n < 0) {
+		error_handler("put_subtitle", "Could not write to socket", 0);
+		close(sockfd);
+		return 0;
+	}
 
-        bzero(buffer2, config.common.line_size + 4);
+	bzero(buffer2, config.common.line_size + 4);
 
-        n = read(sockfd, buffer2, config.common.line_size);
-        if (n < 0) {
-                error_handler("put_subtitle", "Could not read from socket", 0);
-                close(sockfd);
-                return 0;
-        }
+	n = read(sockfd, buffer2, config.common.line_size);
+	if (n < 0) {
+		error_handler("put_subtitle", "Could not read from socket", 0);
+		close(sockfd);
+		return 0;
+	}
 
-        close(sockfd);
-        return 1;
+	close(sockfd);
+	return 1;
 }
 

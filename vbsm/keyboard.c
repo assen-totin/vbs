@@ -107,21 +107,21 @@ void on_pressed_m () {
 				}
 #endif
 			}
-                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
 				if (config.vbsm.have_loaded_video)
-	                                new_to = gstreamer_query_position();
+					new_to = gstreamer_query_position();
 
-                                if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
+				if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
 					long curr_time_msec = get_time_msec();
-                                        new_to = curr_time_msec - config.common.init_timestamp_msec;
-                                }
+					new_to = curr_time_msec - config.common.init_timestamp_msec;
+				}
 
 				// Clear the sub
 				if (config.vbsm.have_loaded_video)
 					gstreamer_sub_clear();
 #endif
-                        }
+			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 

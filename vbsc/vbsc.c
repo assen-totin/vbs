@@ -15,17 +15,17 @@
 int main (int argc, char **argv){
 	GtkWidget *status, *vbox, *progress;
 
-        // i18n
-        setlocale (LC_ALL, "");
-        bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
-        textdomain (PACKAGE_NAME);
-        
+	// i18n
+	setlocale (LC_ALL, "");
+	bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+	textdomain (PACKAGE_NAME);
+	
 	// Check for alternative config
-        get_cmdl_config(argc, argv);
+	get_cmdl_config(argc, argv);
 
-        // Set up config from defaults
-        check_config(0);
+	// Set up config from defaults
+	check_config(0);
 	can_recv_from_net = 1;
 
 	// GTK Init
@@ -41,12 +41,12 @@ int main (int argc, char **argv){
 	// Menu
 	// Only the GTK+ idiots know why menu cannot be built in a function and returned as a widget -
 	// like the "deprecated" GtkItemFactoryEntry seamlesly did
-        GtkUIManager *p_uiManager = gtk_ui_manager_new();
-        GtkActionGroup *p_actionGroup = gtk_action_group_new ("menuActionGroup");
-        gtk_action_group_add_actions (p_actionGroup, menu_entries1, G_N_ELEMENTS (menu_entries1), NULL);
-        gtk_ui_manager_insert_action_group (p_uiManager, p_actionGroup, 0);
-        gtk_ui_manager_add_ui_from_string (p_uiManager, ui1, -1, NULL);
-        GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
+	GtkUIManager *p_uiManager = gtk_ui_manager_new();
+	GtkActionGroup *p_actionGroup = gtk_action_group_new ("menuActionGroup");
+	gtk_action_group_add_actions (p_actionGroup, menu_entries1, G_N_ELEMENTS (menu_entries1), NULL);
+	gtk_ui_manager_insert_action_group (p_uiManager, p_actionGroup, 0);
+	gtk_ui_manager_add_ui_from_string (p_uiManager, ui1, -1, NULL);
+	GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 	GtkAccelGroup *accel_group = gtk_ui_manager_get_accel_group(p_uiManager);
 	gtk_window_add_accel_group(GTK_WINDOW(config.vbsm.window), accel_group);
 
@@ -55,9 +55,9 @@ int main (int argc, char **argv){
 
 	// Create vbox
 #ifdef HAVE_GTK2
-        vbox = gtk_vbox_new (FALSE, 0);
+	vbox = gtk_vbox_new (FALSE, 0);
 #elif HAVE_GTK3
-        vbox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0);
+	vbox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0);
 #endif
 
 	// Pack entries into vbox

@@ -11,45 +11,45 @@
 #include "../common/common.h"
 
 void fix_new_line(char *buffer) {
-        char *part_one, line_print[config.common.line_size];
+	char *part_one, line_print[config.common.line_size];
 
-        char cr_lf[3];
-        if (config.common.export_cr == 1) 
+	char cr_lf[3];
+	if (config.common.export_cr == 1) 
 		sprintf(cr_lf, "\r\n");
 	else
 		sprintf(cr_lf, "\n");
 
-        // Replace | with \n
-        part_one = strtok(buffer, "|");
-        sprintf(&line_print[0], "%s", part_one);
+	// Replace | with \n
+	part_one = strtok(buffer, "|");
+	sprintf(&line_print[0], "%s", part_one);
 
-        while(part_one = strtok(NULL,"|")) {
-                sprintf(&line_print[0], "%s%s%s", &line_print[0], &cr_lf[0], part_one);
-        }
+	while(part_one = strtok(NULL,"|")) {
+		sprintf(&line_print[0], "%s%s%s", &line_print[0], &cr_lf[0], part_one);
+	}
 
-        strcpy(buffer, &line_print[0]);
+	strcpy(buffer, &line_print[0]);
 }
 
 
 void split_path(char *path, char *dir, char *file) {
-        char *tmp;
-        char tmp_old[100];
+	char *tmp;
+	char tmp_old[100];
 
-        strcpy(&tmp_old[0], strtok(path, "/"));
+	strcpy(&tmp_old[0], strtok(path, "/"));
 
 	bzero(dir, sizeof(*dir));
 
-        while(1) {
-                tmp = strtok(NULL, "/");
-                if(tmp) {
-                        sprintf(dir, "%s/%s", dir, &tmp_old[0]);
-                        sprintf(&tmp_old[0], "%s", tmp);
-                }
-                else
-                        break;
-        }
+	while(1) {
+		tmp = strtok(NULL, "/");
+		if(tmp) {
+			sprintf(dir, "%s/%s", dir, &tmp_old[0]);
+			sprintf(&tmp_old[0], "%s", tmp);
+		}
+		else
+			break;
+	}
 
-        strcpy(file, &tmp_old[0]);
+	strcpy(file, &tmp_old[0]);
 }
 
 
@@ -61,11 +61,11 @@ long get_time_msec() {
 
 
 int convert_time_from_srt(char *in_time, int format) {
-        char *str_h = strtok(in_time, ":");
-        int res_h = atoi(str_h);
+	char *str_h = strtok(in_time, ":");
+	int res_h = atoi(str_h);
 
-        char *str_m = strtok(NULL, ":");
-        int res_m = atoi(str_m);
+	char *str_m = strtok(NULL, ":");
+	int res_m = atoi(str_m);
 
 	char *str_s = strtok(NULL, ",");
 	int res_s = atoi(str_s);
@@ -74,34 +74,34 @@ int convert_time_from_srt(char *in_time, int format) {
 	int res_ms = atoi(str_ms);
 
 	if (format == TIME_SEC)
-	        return (res_h*3600 + res_m*60 + res_s);
+		return (res_h*3600 + res_m*60 + res_s);
 	else if (format == TIME_MSEC)
-        	return (res_h*3600000 + res_m*60000 + res_s*1000 + res_ms);
+		return (res_h*3600000 + res_m*60000 + res_s*1000 + res_ms);
 }
 
 
 void convert_time_to_srt(unsigned int the_time, char *res, int format) {
 
-        div_t qH = div(the_time, 3600000);
-        div_t qM = div(qH.rem, 60000);
-        div_t qS = div(qM.rem, 1000);
+	div_t qH = div(the_time, 3600000);
+	div_t qM = div(qH.rem, 60000);
+	div_t qS = div(qM.rem, 1000);
 
-        char unfM[8], unfS[8], unfMS[8];
+	char unfM[8], unfS[8], unfMS[8];
 
-        if (qM.quot > 9) {sprintf(unfM, "%u", qM.quot);}
-        else {sprintf(unfM, "0%u", qM.quot);}
+	if (qM.quot > 9) {sprintf(unfM, "%u", qM.quot);}
+	else {sprintf(unfM, "0%u", qM.quot);}
 
-        if (qS.quot > 9) {sprintf(unfS, "%u", qS.quot);}
-        else {sprintf(unfS, "0%u", qS.quot);}
+	if (qS.quot > 9) {sprintf(unfS, "%u", qS.quot);}
+	else {sprintf(unfS, "0%u", qS.quot);}
 
-        if (qS.rem > 99) {sprintf(unfMS, "%u", qS.rem);}
-        else if (qS.rem > 9) {sprintf(unfMS, "0%u", qS.rem);}
-        else {sprintf(unfMS, "00%u", qS.rem);}
+	if (qS.rem > 99) {sprintf(unfMS, "%u", qS.rem);}
+	else if (qS.rem > 9) {sprintf(unfMS, "0%u", qS.rem);}
+	else {sprintf(unfMS, "00%u", qS.rem);}
 
-        if (format == TIME_MSEC)
-                sprintf(res, "0%u:%s:%s,%s", qH.quot, unfM, unfS, unfMS);
-        else if (format == TIME_SEC)
-                sprintf(res, "0%u:%s:%s", qH.quot, unfM, unfS);
+	if (format == TIME_MSEC)
+		sprintf(res, "0%u:%s:%s,%s", qH.quot, unfM, unfS, unfMS);
+	else if (format == TIME_SEC)
+		sprintf(res, "0%u:%s:%s", qH.quot, unfM, unfS);
 }
 
 
@@ -130,13 +130,13 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 
 	while (fgets(line_in, config.common.line_size, fp_in)) {
 		// An empty line closes subtitle
-                if (strlen(line_in) < 3) {
-                        if (counter_line > 0) {
+		if (strlen(line_in) < 3) {
+			if (counter_line > 0) {
 				// UTF-8
-		                if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
-                		        line_utf8 = g_convert(line_out, strlen(line_out), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
-		                else
-                		        line_utf8 = line_out;
+				if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
+					line_utf8 = g_convert(line_out, strlen(line_out), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
+				else
+					line_utf8 = line_out;
 
 				// Add new subtitle to the array
 				void *_tmp = realloc(sub_array, ((counter_array + 1) * sizeof(struct subtitle_srt)));
@@ -148,51 +148,51 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 				strcpy(&sub_array[counter_array].sub[0], line_utf8);
 				counter_array++;
 				counter_line = -1;
-                        }
-                        continue;
-                }
+			}
+			continue;
+		}
 
 		// Kill newlines
-                if (strstr(line_in, "\r"))
-                        strcpy(line_tmp, strtok(line_in, "\r"));
-                else
-                        strcpy(line_tmp, line_in);
-                if (strstr(line_tmp, "\n"))
-                        strcpy(line_in, strtok(line_tmp, "\n"));
-                else
-                        strcpy(line_in, line_tmp);
+		if (strstr(line_in, "\r"))
+			strcpy(line_tmp, strtok(line_in, "\r"));
+		else
+			strcpy(line_tmp, line_in);
+		if (strstr(line_tmp, "\n"))
+			strcpy(line_in, strtok(line_tmp, "\n"));
+		else
+			strcpy(line_in, line_tmp);
 
 		// Next Line will be a subtitle line only if current line includes timing
-                if (strstr(line_in,"-->")) {
-                        time_begin = strtok(line_in, "-->");
-                        time_end = strtok(NULL, "-->");
+		if (strstr(line_in,"-->")) {
+			time_begin = strtok(line_in, "-->");
+			time_end = strtok(NULL, "-->");
 
-                        strcpy(line_tmp, time_begin);
-                        time_begin_val = convert_time_from_srt(line_tmp, TIME_MSEC);
+			strcpy(line_tmp, time_begin);
+			time_begin_val = convert_time_from_srt(line_tmp, TIME_MSEC);
 
-                        strcpy(line_tmp, time_end);
-                        time_end_val = convert_time_from_srt(line_tmp, TIME_MSEC);
+			strcpy(line_tmp, time_end);
+			time_end_val = convert_time_from_srt(line_tmp, TIME_MSEC);
 
-                        counter_line = 0;
+			counter_line = 0;
 
-                        continue;
-                }
+			continue;
+		}
 
-                if (counter_line == 0) {
-                        strcpy(line_out, line_in);
-                        counter_line++;
-                        continue;
-                }
-                else if (counter_line > 0) {
-                        sprintf(line_out, "%s|%s", line_out, line_in);
-                        counter_line++;
-                        continue;
-                }
+		if (counter_line == 0) {
+			strcpy(line_out, line_in);
+			counter_line++;
+			continue;
+		}
+		else if (counter_line > 0) {
+			sprintf(line_out, "%s|%s", line_out, line_in);
+			counter_line++;
+			continue;
+		}
 	}
 
-        free(line_in);
-        free(line_out);
-        free(line_tmp);
+	free(line_in);
+	free(line_out);
+	free(line_tmp);
 
 	*counter = counter_array;
 

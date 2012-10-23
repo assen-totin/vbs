@@ -11,15 +11,15 @@
 #include "../common/common.h"
 
 bool mplayer_is_alive() {
-        if (!config.vbsm.mplayer_pipe_write)
-                return false;
-        if (config.vbsm.mplayer_pid == 0)
-                return false;
-        int status;
-        pid_t cpid = waitpid(-1, &status, WNOHANG);
-        if (cpid == config.vbsm.mplayer_pid)
-                return false;
-        return true;
+	if (!config.vbsm.mplayer_pipe_write)
+		return false;
+	if (config.vbsm.mplayer_pid == 0)
+		return false;
+	int status;
+	pid_t cpid = waitpid(-1, &status, WNOHANG);
+	if (cpid == config.vbsm.mplayer_pid)
+		return false;
+	return true;
 }
 
 
@@ -114,8 +114,8 @@ void *mplayer_load_video(char fileName[1024]) {
 
 		// Child
 		if (cpid == 0) { 
-			close(readPipeFD[0]);          /* Close unused read end */
-			close(writePipeFD[1]);         /* Close unused write end */
+			close(readPipeFD[0]);	  /* Close unused read end */
+			close(writePipeFD[1]);	 /* Close unused write end */
 	
 			dup2(writePipeFD[0], STDIN_FILENO);
 			dup2(readPipeFD[1], STDOUT_FILENO);
@@ -127,8 +127,8 @@ void *mplayer_load_video(char fileName[1024]) {
 		}
 
 		// Parent
-		close(readPipeFD[1]);          /* Close unused write end */
-		close(writePipeFD[0]);         /* Close unused read end */
+		close(readPipeFD[1]);	  /* Close unused write end */
+		close(writePipeFD[0]);	 /* Close unused read end */
 
 		config.vbsm.mplayer_pipe_read = fdopen(readPipeFD[0], "r");
 		config.vbsm.mplayer_pipe_write = fdopen(writePipeFD[1], "w");

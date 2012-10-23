@@ -25,7 +25,7 @@ ADD_FLAGS=`pkg-config --cflags --libs gtk+-@GTK_VER@`
 
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 ifeq ($(HAVE_GSTREAMER),1)
-        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+	ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
 endif
 
 all: $(TARGET)

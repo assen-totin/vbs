@@ -16,10 +16,10 @@ int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.c
 	int i = 0;
 	unsigned long res = 0;
 
-        for (i=byte_first; i<=byte_last; i++){
-                res += buffer[i] * powf(256,cnt);
-                cnt++;
-        }
+	for (i=byte_first; i<=byte_last; i++){
+		res += buffer[i] * powf(256,cnt);
+		cnt++;
+	}
 
 	if (res == config.common.magic_key)
 		return 1;

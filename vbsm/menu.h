@@ -28,10 +28,10 @@ void set_video_backend (GtkWidget *widget, gpointer window);
 char *get_help_text();
 
 struct video_backend {
-        char name[255];
+	char name[255];
 	int num;
 	bool show_menu_output;
-        bool dflt;
+	bool dflt;
 };
 
 static struct video_backend video_backends[] = {
@@ -40,9 +40,9 @@ static struct video_backend video_backends[] = {
 };
 
 struct video_output {
-        char name[255];
+	char name[255];
 	char code[255];
-        bool dflt;
+	bool dflt;
 };
 
 static struct video_output video_outputs[] = {

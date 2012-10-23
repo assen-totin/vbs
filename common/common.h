@@ -38,23 +38,23 @@
 #include "../config.h"
 
 #ifdef HAVE_GSTREAMER
-        #include <gst/gst.h>
-        #include <gst/interfaces/xoverlay.h>
+	#include <gst/gst.h>
+	#include <gst/interfaces/xoverlay.h>
 #endif
 
 #define _(String) gettext (String)
 #define VBS_TMP_DIR "/tmp"
 
 enum {
-        COL_LINE = 0,
-        COL_FROM,
-        COL_TO,
-        NUM_COLS
+	COL_LINE = 0,
+	COL_FROM,
+	COL_TO,
+	NUM_COLS
 };
 
 enum {
-        VBS_IMPORT_FILTER_TEXT = 0,
-        VBS_IMPORT_FILTER_SRT
+	VBS_IMPORT_FILTER_TEXT = 0,
+	VBS_IMPORT_FILTER_SRT
 };
 
 enum {
@@ -75,16 +75,16 @@ enum {
 };
 
 struct struct_vbsm {
-        bool have_loaded_text;
+	bool have_loaded_text;
 	bool have_loaded_video;
-        guint status_context_id;
-        short unsigned progress_seconds;
+	guint status_context_id;
+	short unsigned progress_seconds;
 	GtkWidget *window;
-        GtkWidget *status;
+	GtkWidget *status;
 	GtkWidget *subtitles_view;
 	GtkWidget *progress;
 	int progress_update_msec;
-        char log_file_name[255];
+	char log_file_name[255];
 	FILE *log_file_fp;
 	char sub_file_name[255];
 	int unsigned video_backend;
@@ -96,7 +96,7 @@ struct struct_vbsm {
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
 #endif
-        GtkWidget *gstreamer_widget_player;
+	GtkWidget *gstreamer_widget_player;
 	char gstreamer_video_sink[1024];
 };
 
@@ -124,17 +124,17 @@ struct struct_common {
 	bool inside_sub;
 	long init_timestamp_msec;
 	long timestamp_msec;
-        int magic_key;
+	int magic_key;
 	char config_file_name[1024];
-        int export_cr;
-        char export_encoding[255];
-        char import_encoding[255];
-        char export_filename[1024];
-        int line_size;
+	int export_cr;
+	char export_encoding[255];
+	char import_encoding[255];
+	char export_filename[1024];
+	int line_size;
 	int network_mode;
 	char server_name[255];
-        int tcp_port;
-        struct hostent *host_entry;
+	int tcp_port;
+	struct hostent *host_entry;
 };
 
 struct configuration {
@@ -148,9 +148,9 @@ struct cmdl {
 };
 
 struct subtitle_srt {
-        long time_from;
-        long time_to;
-        char sub[1024];
+	long time_from;
+	long time_to;
+	char sub[1024];
 };
 
 struct enc_entry {

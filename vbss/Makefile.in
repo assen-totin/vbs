@@ -27,7 +27,7 @@ all: $(TARGET)
 
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 ifeq ($(HAVE_GSTREAMER),1)
-        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+	ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
 endif
 
 clean:

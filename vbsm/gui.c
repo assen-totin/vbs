@@ -11,62 +11,62 @@
 #include "../common/common.h"
 
 void format_cell_from(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
-        gint from;
-        gchar res[32];
-        gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
-        convert_time_to_srt(from, &res[0], TIME_SEC);
-        g_object_set(renderer, "text", res, NULL);
+	gint from;
+	gchar res[32];
+	gtk_tree_model_get(model, iter, COL_FROM, &from, -1);
+	convert_time_to_srt(from, &res[0], TIME_SEC);
+	g_object_set(renderer, "text", res, NULL);
 }
 
 
 void format_cell_to(GtkTreeViewColumn *col, GtkCellRenderer *renderer, GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data){
-        gint from;
-        gchar res[32];
-        gtk_tree_model_get(model, iter, COL_TO, &from, -1);
-        convert_time_to_srt(from, &res[0], TIME_SEC);
-        g_object_set(renderer, "text", res, NULL);
+	gint from;
+	gchar res[32];
+	gtk_tree_model_get(model, iter, COL_TO, &from, -1);
+	convert_time_to_srt(from, &res[0], TIME_SEC);
+	g_object_set(renderer, "text", res, NULL);
 }
 
 
 void *create_view_and_model (void){
-        GtkCellRenderer *renderer;
-        GtkTreeModel *model;
-        GtkTreeIter iter;
-        GtkTreeViewColumn *column;
+	GtkCellRenderer *renderer;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkTreeViewColumn *column;
 
-        config.vbsm.subtitles_view = gtk_tree_view_new();
+	config.vbsm.subtitles_view = gtk_tree_view_new();
 
-        config.vbsm.mplayer_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
+	config.vbsm.mplayer_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
 
-        // Column 1
-        renderer = gtk_cell_renderer_text_new();
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "From", renderer, "text", COL_FROM, NULL);
-        column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 0);
-        gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_from, NULL, NULL);
+	// Column 1
+	renderer = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "From", renderer, "text", COL_FROM, NULL);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 0);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_from, NULL, NULL);
 
-        // Column 2
-        renderer = gtk_cell_renderer_text_new();
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "To", renderer, "text", COL_TO, NULL);
-        column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 1);
-        gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_to, NULL, NULL);
+	// Column 2
+	renderer = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "To", renderer, "text", COL_TO, NULL);
+	column = gtk_tree_view_get_column (GTK_TREE_VIEW (config.vbsm.subtitles_view), 1);
+	gtk_tree_view_column_set_cell_data_func(column, renderer, format_cell_to, NULL, NULL);
 
-        // Column 3 
-        renderer = gtk_cell_renderer_text_new();
-        gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "Text", renderer, "text", COL_LINE, NULL);
+	// Column 3 
+	renderer = gtk_cell_renderer_text_new();
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (config.vbsm.subtitles_view), -1, "Text", renderer, "text", COL_LINE, NULL);
 
-        // Editable cells
-        g_object_set(renderer, "editable", TRUE, NULL);
-        g_signal_connect(renderer, "edited", (GCallback) cell_edit, config.vbsm.subtitles_view);
-        
-        gtk_list_store_append (config.vbsm.mplayer_store, &iter);
-        gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
-        
-        model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
-        gtk_tree_view_set_model (GTK_TREE_VIEW (config.vbsm.subtitles_view), model);
+	// Editable cells
+	g_object_set(renderer, "editable", TRUE, NULL);
+	g_signal_connect(renderer, "edited", (GCallback) cell_edit, config.vbsm.subtitles_view);
+	
+	gtk_list_store_append (config.vbsm.mplayer_store, &iter);
+	gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_LINE, " ", COL_FROM, 0, COL_TO, 0, -1);
+	
+	model = GTK_TREE_MODEL(config.vbsm.mplayer_store);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (config.vbsm.subtitles_view), model);
 
-        // The tree view has acquired its own reference to the  model, so we can drop ours. 
-        // That way the model will be freed automatically when the tree view is destroyed 
-        g_object_unref (model);
+	// The tree view has acquired its own reference to the  model, so we can drop ours. 
+	// That way the model will be freed automatically when the tree view is destroyed 
+	g_object_unref (model);
 }
 
 int progress_bar_update() {
@@ -88,10 +88,10 @@ int progress_bar_update() {
 		}
 	}
 
-        GtkTreeSelection *selection;
-        GtkTreeModel *model;
-        GtkTreeIter iter;
-        gint from, to, local;
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gint from, to, local;
 	gchar *line;
 
 	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
@@ -126,15 +126,15 @@ int progress_bar_update() {
 			}
 
 			// If using GStreamer, show the sub while inside
-                        if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
+			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
 #ifdef HAVE_GSTREAMER
 				if (config.vbsm.have_loaded_video) {
-	                                char line3[1024];
-        	                        strcpy(&line3[0], line);
-                	                gstreamer_sub_set(line3);
+					char line3[1024];
+					strcpy(&line3[0], line);
+					gstreamer_sub_set(line3);
 				}
 #endif
-                         }
+			 }
 
 			// If out of the sub, move the list to next
 			if ((to > from) && (local > to)) {
@@ -161,14 +161,14 @@ int progress_bar_update() {
 }
 
 void show_warning_subtitles() {
-        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
-                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-                GTK_MESSAGE_ERROR,
-                GTK_BUTTONS_OK,
-                _("Subtitles not loaded."));
-        gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+		GTK_MESSAGE_ERROR,
+		GTK_BUTTONS_OK,
+		_("Subtitles not loaded."));
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 }
 
 

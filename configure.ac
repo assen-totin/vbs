@@ -34,11 +34,11 @@ AC_PROG_CC
 
 AC_CHECK_PROG([FOUND_MSGFMT],[msgfmt],["yes"],["no"])
 if test $FOUND_MSGFMT = "no"; then
-        echo "*** msgfmt not found. Cannot continue."
-        exit
+	echo "*** msgfmt not found. Cannot continue."
+	exit
 else
-        MSGFMT=`which msgfmt`
-        AC_SUBST([MSGFMT])
+	MSGFMT=`which msgfmt`
+	AC_SUBST([MSGFMT])
 fi
 
 # Check for video back-ends
@@ -68,15 +68,15 @@ if test $FORCE_BACKEND = "mplayer" ; then
 		USE_MPLAYER="yes"
 	fi
 elif test $FORCE_BACKEND = "gstreamer" ; then
-        if test $FOUND_GSTREAMER = "no" ; then
-                AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
-        elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
-                AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+	if test $FOUND_GSTREAMER = "no" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
+	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
 	elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
 		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
 	else
 		USE_GSTREAMER="yes"
-        fi
+	fi
 else
 	if test $FOUND_MPLAYER = "no" ; then
 		echo "*** MPlayer not found. vbsm Won't be able to use it."
@@ -122,11 +122,11 @@ AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specifi
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0], [FOUND_GTK3="yes"], [FOUND_GTK3="no"])
 PKG_CHECK_MODULES([GTK2], [gtk+-2.0], [FOUND_GTK2="yes"], [FOUND_GTK2="no"])
 if test $FORCE_GTK = "3" ; then
-        if test $FOUND_GTK3 = "no" ; then
-                AC_MSG_ERROR(["*** GTK3 forced, but not found."])
-        else
+	if test $FOUND_GTK3 = "no" ; then
+		AC_MSG_ERROR(["*** GTK3 forced, but not found."])
+	else
 		USE_GTK="3"
-        fi
+	fi
 elif test $FORCE_GTK = "2" ; then
 	if test $FOUND_GTK2 = "no" ; then
 		AC_MSG_ERROR(["*** GTK2 forced, but not found."])

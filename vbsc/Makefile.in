@@ -24,7 +24,7 @@ OBJS_REMOTE = ../common/network.o ../common/error.o ../common/cfg.o ../common/ut
 
 HAVE_GSTREAMER = @HAVE_GSTREAMER@
 ifeq ($(HAVE_GSTREAMER),1)
-        ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
+	ADD_INCLUDES = `pkg-config --cflags gstreamer-0.10`
 endif
 
 all: $(TARGET)

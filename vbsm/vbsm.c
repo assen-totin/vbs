@@ -18,18 +18,18 @@ int main (int argc, char **argv){
 	GtkTreeSelection *subtitles_selection;
 
 	// i18n
-        setlocale (LC_ALL, "");
-        bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
-        textdomain (PACKAGE_NAME);
+	setlocale (LC_ALL, "");
+	bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+	textdomain (PACKAGE_NAME);
 
-        // Check for alternative config
-        get_cmdl_config(argc, argv);
+	// Check for alternative config
+	get_cmdl_config(argc, argv);
 
-        // Set up config from defaults
-        check_config(0);
-        if (config.common.network_mode == 1)
-                get_host_by_name(&config.common.server_name[0]);
+	// Set up config from defaults
+	check_config(0);
+	if (config.common.network_mode == 1)
+		get_host_by_name(&config.common.server_name[0]);
 
 	// Initalize time-ticks counter, set it to zero
 	config.common.running = FALSE;
@@ -58,8 +58,8 @@ int main (int argc, char **argv){
 	create_view_and_model();
 
 	// Only one row selected
-        subtitles_selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
-        gtk_tree_selection_set_mode(subtitles_selection, GTK_SELECTION_SINGLE);
+	subtitles_selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
+	gtk_tree_selection_set_mode(subtitles_selection, GTK_SELECTION_SINGLE);
 
 	// MPlayer scroll, will contain the mplayer "view", will be packed in the bottom of the vbox
 	subtitles_scroll = gtk_scrolled_window_new (NULL,NULL);
@@ -95,24 +95,24 @@ int main (int argc, char **argv){
 
 	// Root window
 	int window_width = 500, window_height = 400;
-        GdkScreen *gdk_screen = gdk_screen_get_default();
-        int screen_width = gdk_screen_get_width(gdk_screen);
-        int screen_height = gdk_screen_get_height(gdk_screen);
+	GdkScreen *gdk_screen = gdk_screen_get_default();
+	int screen_width = gdk_screen_get_width(gdk_screen);
+	int screen_height = gdk_screen_get_height(gdk_screen);
 
-        config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler");
-        gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
-        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-                GdkScreen *gdk_screen = gdk_screen_get_default();
+	config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler");
+	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+		GdkScreen *gdk_screen = gdk_screen_get_default();
 		if (gdk_screen) {
-	                int screen_width = gdk_screen_get_width(gdk_screen);
-        	        int screen_height = gdk_screen_get_height(gdk_screen);
-	                window_width = (int) (0.8 * screen_width);
-                	window_height = (int) (0.9 * screen_height);
+			int screen_width = gdk_screen_get_width(gdk_screen);
+			int screen_height = gdk_screen_get_height(gdk_screen);
+			window_width = (int) (0.8 * screen_width);
+			window_height = (int) (0.9 * screen_height);
 		}
-        }
-        gtk_widget_set_size_request (config.vbsm.window, window_width, window_height);
-        g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quitDialog), config.vbsm.window);
+	}
+	gtk_widget_set_size_request (config.vbsm.window, window_width, window_height);
+	g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quitDialog), config.vbsm.window);
 
 	// Link double-click event
 	g_signal_connect(config.vbsm.subtitles_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
