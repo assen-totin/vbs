@@ -2,8 +2,13 @@
 
 AC_PREREQ([2.66])
 AC_INIT([vbs], [3.0], [assen.totin@gmail.com])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+
 ORIG_CMDLINE_ARGS=$@
 AC_SUBST([ORIG_CMDLINE_ARGS])
+
+AC_PROG_RANLIB
+
 AC_CONFIG_HEADERS([config.h])
 
 # prefix
@@ -31,6 +36,7 @@ AC_SUBST([TOPLEVELDIR])
 
 # Checks for programs.
 AC_PROG_CC
+AC_SUBST([CC])
 
 AC_CHECK_PROG([FOUND_MSGFMT],[msgfmt],["yes"],["no"])
 if test $FOUND_MSGFMT = "no"; then
@@ -102,7 +108,7 @@ if test $USE_MPLAYER = "yes" ; then
 fi
 if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
-	HAVE_GSTREAMER="1"
+	AM_CONDITIONAL(WITH_GSTREAMER, [test 1 = 1])
 	ECHO_BACKEND_GSTREAMER="yes"
 	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 fi
@@ -113,49 +119,31 @@ AC_SUBST([RPM_REQUIRE_MPLAYER])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
 
 # Check for GTK and determine version
-GTK_VER="0.0"
 FORCE_GTK="no"
 RPM_REQUIRE_GTK=" "
 USE_GTK="0"
 AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
-PKG_CHECK_MODULES([GTK3], [gtk+-3.0], [FOUND_GTK3="yes"], [FOUND_GTK3="no"])
-PKG_CHECK_MODULES([GTK2], [gtk+-2.0], [FOUND_GTK2="yes"], [FOUND_GTK2="no"])
 if test $FORCE_GTK = "3" ; then
-	if test $FOUND_GTK3 = "no" ; then
-		AC_MSG_ERROR(["*** GTK3 forced, but not found."])
-	else
-		USE_GTK="3"
-	fi
+	AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [AC_MSG_ERROR(["*** GTK3 forced, but not found."])])
 elif test $FORCE_GTK = "2" ; then
-	if test $FOUND_GTK2 = "no" ; then
-		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
-	else
-		USE_GTK="2"
-	fi
+	AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [AC_MSG_ERROR(["*** GTK2 forced, but not found."])])
 else
-	if test $FOUND_GTK3 = "yes" ; then
-		USE_GTK="3"
-	elif test $FOUND_GTK2 = "yes" ; then
-		USE_GTK="2"
-	else
-		AC_MSG_ERROR(["*** GTK not found."])
-	fi
+	AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [
+		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"])
+	])
 fi
 
 if test $USE_GTK = "3" ; then
-	GTK_VER="3.0"
-	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
-	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
-	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
+        AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+        AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
+        RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
 elif test $USE_GTK = "2" ; then
-	GTK_VER="2.0"
-	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
-	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
-	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
+        AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
+        AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
+        RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
 fi
 
-AC_SUBST([GTK_VER])
 AC_SUBST([RPM_REQUIRE_GTK])
 
 # Check for GLib
@@ -189,8 +177,8 @@ AC_SUBST([RPM_SYSTEMD_SCRIPT])
 AC_SUBST([RPM_SYSTEMD_POST])
 
 # Makefiles
-MAKEFILE_CC=`which gcc`
-AC_SUBST([MAKEFILE_CC])
+#MAKEFILE_CC=`which gcc`
+#AC_SUBST([MAKEFILE_CC])
 AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile vbsd/init/vbsd vbsd/init/vbsd.service])
 
 # Desktop files
@@ -210,7 +198,7 @@ echo "Configuration complete."
 echo
 echo "* MPlayer: " $ECHO_BACKEND_MPLAYER
 echo "* GStreamer: " $ECHO_BACKEND_GSTREAMER
-echo "* GTK version: " $GTK_VER
+echo "* GTK version: " $USE_GTK
 echo
 echo "Now, run make."
 echo
