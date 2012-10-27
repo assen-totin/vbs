@@ -53,7 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f vbs-help.lang
 
 %defattr(-,root,root)
-%doc README TODO LICENSE CHANGES AUTHOR BUGS
+%doc README TODO COPYING ChangeLog AUTHORS BUGS NEWS
 
 @BINDIR@/vbsm
 @BINDIR@/vbss

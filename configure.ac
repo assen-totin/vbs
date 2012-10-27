@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.66])
 AC_INIT([vbs], [3.0], [assen.totin@gmail.com])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror])
 
 ORIG_CMDLINE_ARGS=$@
 AC_SUBST([ORIG_CMDLINE_ARGS])
