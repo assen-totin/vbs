@@ -9,7 +9,7 @@ AC_SUBST([ORIG_CMDLINE_ARGS])
 
 AC_PROG_RANLIB
 
-AC_CONFIG_HEADERS([config.h])
+AM_CONFIG_HEADER([config.h])
 
 # prefix
 if test "x$prefix" = "xNONE" ; then
@@ -155,10 +155,10 @@ RPM_SYSTEMD_MKDIR=""
 RPM_SYSTEMD_SCRIPT=""
 RPM_SYSTEMD_POST=""
 AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD=1])
-AC_CHECK_PROG([HAVE_SYSTEMD],[systemctl],["1"],["0"])
-if test $HAVE_SYSTEMD = "0" ; then
+AC_CHECK_PROG([FOUND_SYSTEMD],[systemctl],["1"],["0"])
+if test $FOUND_SYSTEMD = "0" ; then
 	if test $FORCE_SYSTEMD = "1" ; then
-		HAVE_SYSTEMD = "1"
+		FOUND_SYSTEMD = "1"
 		echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
 	else
 		echo "*** systemd not found. Will only install SystemV init script."
@@ -166,12 +166,12 @@ if test $HAVE_SYSTEMD = "0" ; then
 else
 	echo "*** systemd found. Will install both systemd and SystemV init scripts."
 fi
-if test $HAVE_SYSTEMD = "1" ; then
+if test $FOUND_SYSTEMD = "1" ; then
 	RPM_SYSTEMD_MKDIR="mkdir -p $RPM_BUILD_ROOT/etc/systemd/system"
 	RPM_SYSTEMD_SCRIPT="/etc/systemd/system/vbsd.service"
 	RPM_SYSTEMD_POST="systemctl enable vbsd.service"
+	AM_CONDITIONAL(WITH_SYSTEMD, [test 1 = 1])
 fi
-AC_SUBST([HAVE_SYSTEMD])
 AC_SUBST([RPM_SYSTEMD_MKDIR])
 AC_SUBST([RPM_SYSTEMD_SCRIPT])
 AC_SUBST([RPM_SYSTEMD_POST])
