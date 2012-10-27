@@ -36,7 +36,7 @@ void default_config() {
 	config.common.tcp_port = VBS_DEFAULT_SERVER_PORT;
 
 	strcpy(&config.vbss.import_filename[0], VBS_DEFAULT_IMPORT_FILENAME);
-	config.vbss.full_screen = VBS_DEDAULT_FULL_SCREEN;
+	config.vbss.full_screen = VBSS_DEFAULT_FULL_SCREEN;
 	config.vbss.colour_bg_r = VBSS_DEFAULT_COLOUR_BG_R;
 	config.vbss.colour_bg_g = VBSS_DEFAULT_COLOUR_BG_G;
 	config.vbss.colour_bg_b = VBSS_DEFAULT_COLOUR_BG_B;
