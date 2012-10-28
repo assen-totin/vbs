@@ -102,6 +102,7 @@ fi
 
 if test $USE_MPLAYER = "yes" ; then
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
+	AM_CONDITIONAL(WITH_MPLAYER, [test 1 = 1])
 	HAVE_MPLAYER="1"
 	ECHO_BACKEND_MPLAYER="yes"
 	RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
@@ -113,8 +114,6 @@ if test $USE_GSTREAMER = "yes" ; then
 	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 fi
 
-AC_SUBST([HAVE_MPLAYER])
-AC_SUBST([HAVE_GSTREAMER])
 AC_SUBST([RPM_REQUIRE_MPLAYER])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
 

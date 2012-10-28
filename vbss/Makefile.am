@@ -11,21 +11,15 @@
 AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
-sbin_PROGRAMS = vbsd
-vbsd_SOURCES = vbsd.c
-LDADD += ../common/libvbscommon.a -lm
+bin_PROGRAMS = vbss
+vbss_SOURCES = vbss.c keyboard.c 
+LDADD += ../common/libvbscommon.a
 
 if WITH_GSTREAMER
 AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`
+AM_LDFLAGS = `pkg-config --libs gthread-2.0`
 endif
 
-INSTALL_SYSTEMD = test -z $(DESTDIR)/etc/systemd/system || mkdir -p $(DESTDIR)/etc/systemd/system; cp -f init/vbsd.service $(DESTDIR)/etc/systemd/system/vbsd.service
-
-install-data-hook: 
-if WITH_SYSTEMD
-	$(INSTALL_SYSTEMD)
-endif
-
-uninstall-hook: 
-
+desktopdir = $(datadir)/applications
+desktop_DATA = vbss.desktop
 
