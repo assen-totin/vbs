@@ -48,6 +48,7 @@ AC_PROG_CC
 AC_SUBST([CC])
 
 # gettext
+AM_GNU_GETTEXT_VERSION(0.18.1)
 AM_GNU_GETTEXT([external])
 if test $USE_NLS != "yes" ; then
 	echo "*** gettext not found. You're losing internationalization."

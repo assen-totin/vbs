@@ -1,6 +1,5 @@
 find | grep c$ | sed s/^..//g > po/POTFILES.in
-gettextize -f --no-changelog
-
+autopoint
 aclocal -I m4
 automake --add-missing
 autoconf
