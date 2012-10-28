@@ -19,19 +19,19 @@ if test "x$exec_prefix" = "xNONE" ; then
 	exec_prefix=$prefix
 fi
 BINDIR=$exec_prefix/bin
-if test "x$bindir" != "xNONE" ; then
+if test "x$bindir" != "x\${exec_prefix}/bin" ; then
 	BINDIR=$bindir
 fi
 SBINDIR=$exec_prefix/sbin
-if test "x$sbindir" != "xNONE" ; then
+if test "x$sbindir" != "x\${exec_prefix}/sbin" ; then
         SBINDIR=$sbindir
 fi
 DATAROOTDIR=$prefix/share
-if test "x$datarootdir" != "xNONE" ; then
+if test "x$datarootdir" != "x\${prefix}/share" ; then
         DATAROOTDIR=$datarootdir
 fi
 LOCALEDIR=$DATAROOTDIR/locale
-if test "x$localedir" != "xNONE" ; then
+if test "x$localedir" != "x\${datarootdir}/locale" ; then
         LOCALEDIR=$localedir
 fi
 TOPLEVELDIR=`pwd`
