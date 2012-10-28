@@ -4,47 +4,53 @@ AC_PREREQ([2.66])
 AC_INIT([vbs], [3.0], [assen.totin@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
-ORIG_CMDLINE_ARGS=$@
-AC_SUBST([ORIG_CMDLINE_ARGS])
+#ORIG_CMDLINE_ARGS=$@
+#AC_SUBST([ORIG_CMDLINE_ARGS])
 
 AC_PROG_RANLIB
 
 AM_CONFIG_HEADER([config.h])
 
-# prefix
+# prefix defaults
 if test "x$prefix" = "xNONE" ; then
 	prefix="/usr/local"
 fi
 if test "x$exec_prefix" = "xNONE" ; then
 	exec_prefix=$prefix
 fi
-PREFIX=$prefix
-AC_SUBST([PREFIX])
 BINDIR=$exec_prefix/bin
-AC_SUBST([BINDIR])
+if test "x$bindir" != "xNONE" ; then
+	BINDIR=$bindir
+fi
 SBINDIR=$exec_prefix/sbin
-AC_SUBST([SBINDIR])
+if test "x$sbindir" != "xNONE" ; then
+        SBINDIR=$sbindir
+fi
 DATAROOTDIR=$prefix/share
+if test "x$datarootdir" != "xNONE" ; then
+        DATAROOTDIR=$datarootdir
+fi
+LOCALEDIR=$DATAROOTDIR/locale
+if test "x$localedir" != "xNONE" ; then
+        LOCALEDIR=$localedir
+fi
+TOPLEVELDIR=`pwd`
+
+AC_SUBST([BINDIR])
+AC_SUBST([SBINDIR])
 AC_SUBST([DATAROOTDIR])
-IMGDIR=$DATAROOTDIR/icons
-AC_SUBST([IMGDIR])
-LOCALEDIR=$prefix/share/locale
+AC_SUBST([TOPLEVELDIR])
 AC_SUBST([LOCALEDIR])
 AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
-TOPLEVELDIR=`pwd`
-AC_SUBST([TOPLEVELDIR])
 
-# Checks for programs.
+# CC
 AC_PROG_CC
 AC_SUBST([CC])
 
-AC_CHECK_PROG([FOUND_MSGFMT],[msgfmt],["yes"],["no"])
-if test $FOUND_MSGFMT = "no"; then
-	echo "*** msgfmt not found. Cannot continue."
-	exit
-else
-	MSGFMT=`which msgfmt`
-	AC_SUBST([MSGFMT])
+# gettext
+AM_GNU_GETTEXT([external])
+if test $USE_NLS != "yes" ; then
+	echo "*** gettext not found. You're losing internationalization."
 fi
 
 # Check for video back-ends
@@ -176,9 +182,7 @@ AC_SUBST([RPM_SYSTEMD_SCRIPT])
 AC_SUBST([RPM_SYSTEMD_POST])
 
 # Makefiles
-#MAKEFILE_CC=`which gcc`
-#AC_SUBST([MAKEFILE_CC])
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile vbsd/init/vbsd vbsd/init/vbsd.service])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile vbsd/init/vbsd vbsd/init/vbsd.service po/Makefile.in po/Makefile])
 
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
