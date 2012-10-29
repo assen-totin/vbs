@@ -1,28 +1,29 @@
-Oct 22, 2012 - Version 3.0
+Nov 1, 2012 - Version 3.0
 ==========================
 
-1. Support GTK3 as well as GTK2. Choice will be made at compile time. 
-If both are available, GTK3 will be used unless GTK2 is forced with
-the --enable-gtk=2 confgugure options.
+1. Support GTK3 as well as GTK2. Choice will be made at compile time. If both 
+are available, GTK3 will be used unless GTK2 is forced with the --enable-gtk=2 
+configure options.
 
-2. Support for GStreamer for video playback. By default, if GStreamer 
-is available, support for it will be built and also for MPlayer. To
-compile only one of them, use the --enable-backend=mplayer,gstreamer 
-configuration option. Support multiple video output methods for GStreamer -
-X11 (ximagesink), Xv (xvimagesink), SLD (sdlvideosink). 
+2. Support for GStreamer for video playback. By default, if GStreamer is 
+available, support for it will be built and also for MPlayer. To compile only 
+one of them, use the --enable-backend=mplayer,gstreamer configuration option. 
+Support multiple video output methods for GStreamer - X11 (ximagesink), Xv 
+(xvimagesink), SLD (sdlvideosink). 
 
-3. Support i18n via gettext. Provided translations for Bulgarian,
-Russian, English. Also added i18n support for help.
+3. Support i18n via gettext. Provided translations for Bulgarian, Russian, 
+English. Also added i18n support for help.
 
-4. Progress bar update configuration option.
+4. Full autoconf support.
 
-5. autoconf support.
-
-6. vbss improvements: font family & face selection, font colour and background
+5. vbss improvements: font family & face selection, font colour and background
 selection, font justification selection (all via vbsc).
 
-7. vbsd now can be started by a SystemV init or by systemd. Proper startup
+6. vbsd now can be started by a SystemV init or by systemd. Proper startup 
 scripts are provided. 
+
+7. vbsm now has a progress bar update configuration option (in the config file
+only, not from the GUI).
 
 Oct 9, 2012 - Version 2.2
 ==========================
@@ -34,20 +35,20 @@ Mar 8, 2012 - Version 2.1
 
 1. Added workaround for mplayer not detecting UTF8 in subtitles
 
-2. Fixed mplayer crash due to a negative (or too large) timing occuring 
-when the first subtitle is double-clicked and start time is less than 
-the go-back offset.
+2. Fixed mplayer crash due to a negative (or too large) timing occuring when 
+the first subtitle is double-clicked and start time is less than the go-back 
+offset.
 
 3. Improved handling when last line of text is reached
 
 Mar  1, 2012 - Version 2.0
 ==========================
 
-1. Renamed vbs to vbsm ("master" client). 
-Added networking for sending current subtitle to vbsd daemon.
+1. Renamed vbs to vbsm ("master" client). Added networking for sending current 
+subtitle to vbsd daemon.
 
-2. Added vbsd daemon - simple daemon to store the last subtitle, 
-from where it can be retrieved by the vbss ("slave" client).
+2. Added vbsd daemon - simple daemon to store the last subtitle, from where it 
+can be retrieved by the vbss ("slave" client).
 
 3. Added vbss - client for showing same subtitles in multiple locations.
 
