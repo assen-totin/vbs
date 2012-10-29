@@ -17,18 +17,19 @@ synchronize a text file with a video stream, thus creating a subtitles file,
 or to play back such a file, or to stream it over the network.
 
 %prep
-# Commented out to enable building RPM from local source tree
+# Next line commented out to enable building RPM from local source tree
 #%setup -q
 
 %build
-./configure @ORIG_CMDLINE_ARGS@
-make
+# Newxt two lines commented out to enable building RPM from local source tree
+#./configure @ORIG_CMDLINE_ARGS@
+#make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT@BINDIR@
 mkdir -p $RPM_BUILD_ROOT@SBINDIR@
-mkdir -p $RPM_BUILD_ROOT@IMGDIR@
+mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/icons
 mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/applications
 mkdir -p $RPM_BUILD_ROOT/etc/init.d
 @RPM_SYSTEMD_MKDIR@
@@ -43,7 +44,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang vbs-help
 
 %post
-gtk-update-icon-cache -f -t @IMGDIR@
+gtk-update-icon-cache -f -t @DATAROOTDIR@/icons
 @RPM_SYSTEMD_POST@
 
 %clean
@@ -53,13 +54,20 @@ rm -rf $RPM_BUILD_ROOT
 %files -f vbs-help.lang
 
 %defattr(-,root,root)
-%doc README TODO LICENSE CHANGES AUTHOR BUGS
+%doc @DATAROOTDIR@/doc/%{name}/AUTHORS
+%doc @DATAROOTDIR@/doc/%{name}/BUGS
+%doc @DATAROOTDIR@/doc/%{name}/COPYING
+%doc @DATAROOTDIR@/doc/%{name}/ChangeLog
+%doc @DATAROOTDIR@/doc/%{name}/INSTALL
+%doc @DATAROOTDIR@/doc/%{name}/NEWS
+%doc @DATAROOTDIR@/doc/%{name}/README
+%doc @DATAROOTDIR@/doc/%{name}/TODO
 
 @BINDIR@/vbsm
 @BINDIR@/vbss
 @BINDIR@/vbsc
 @SBINDIR@/vbsd
-@IMGDIR@/vbs.png
+@DATAROOTDIR@/icons/vbs.png
 @DATAROOTDIR@/applications/vbsm.desktop
 @DATAROOTDIR@/applications/vbss.desktop
 @DATAROOTDIR@/applications/vbsc.desktop
@@ -67,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 @RPM_SYSTEMD_SCRIPT@
 
 %changelog
-* Mon Oct 22 2012 Assen Totin <assen.totin@gmail.com>
+* Thu Nov 1 2012 Assen Totin <assen.totin@gmail.com>
 - Release 3.0
 
 * Tue Oct 9 2012 Assen Totin <assen.totin@gmail.com>
