@@ -183,7 +183,7 @@ AC_SUBST([RPM_SYSTEMD_SCRIPT])
 AC_SUBST([RPM_SYSTEMD_POST])
 
 # Makefiles
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile vbsd/init/vbsd vbsd/init/vbsd.service po/Makefile.in po/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile vbsd/init/vbsd vbsd/init/vbsd.service po/Makefile.in po/Makefile help/Makefile])
 
 # Desktop files
 AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])

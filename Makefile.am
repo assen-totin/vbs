@@ -8,10 +8,10 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-SUBDIRS = common vbsm vbss vbsc vbsd po
+SUBDIRS = common vbsm vbss vbsc vbsd po help
 DIST_SUBDIRS = $(SUBDIRS)
 
-dist_doc_DATA = AUTHORS BUGS ChangeLog INSTALL COPYING README TODO
+dist_doc_DATA = AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README TODO
 
 rpm:
 	rpmbuild -bb --define "_builddir @TOPLEVELDIR@" vbs.spec

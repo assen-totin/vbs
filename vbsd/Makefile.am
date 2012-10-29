@@ -19,11 +19,10 @@ if WITH_GSTREAMER
 AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`
 endif
 
-INSTALL_SYSTEMD = test -z $(DESTDIR)/etc/systemd/system || mkdir -p $(DESTDIR)/etc/systemd/system; cp -f init/vbsd.service $(DESTDIR)/etc/systemd/system/vbsd.service
-
-install-data-hook: 
+install-data-hook:
+	test -z $(DESTDIR)/etc/init.d || mkdir -p $(DESTDIR)/etc/init.d; cp -f init/vbsd $(DESTDIR)/etc/init.d/vbsd 
 if WITH_SYSTEMD
-	$(INSTALL_SYSTEMD)
+	test -z $(DESTDIR)/etc/systemd/system || mkdir -p $(DESTDIR)/etc/systemd/system; cp -f init/vbsd.service $(DESTDIR)/etc/systemd/system/vbsd.service
 endif
 
 uninstall-hook: 

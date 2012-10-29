@@ -54,7 +54,14 @@ rm -rf $RPM_BUILD_ROOT
 %files -f vbs-help.lang
 
 %defattr(-,root,root)
-%doc README TODO COPYING ChangeLog AUTHORS BUGS NEWS
+%doc @DATAROOTDIR@/doc/%{name}/AUTHORS
+%doc @DATAROOTDIR@/doc/%{name}/BUGS
+%doc @DATAROOTDIR@/doc/%{name}/COPYING
+%doc @DATAROOTDIR@/doc/%{name}/ChangeLog
+%doc @DATAROOTDIR@/doc/%{name}/INSTALL
+%doc @DATAROOTDIR@/doc/%{name}/NEWS
+%doc @DATAROOTDIR@/doc/%{name}/README
+%doc @DATAROOTDIR@/doc/%{name}/TODO
 
 @BINDIR@/vbsm
 @BINDIR@/vbss
@@ -68,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 @RPM_SYSTEMD_SCRIPT@
 
 %changelog
-* Mon Oct 22 2012 Assen Totin <assen.totin@gmail.com>
+* Thu Nov 1 2012 Assen Totin <assen.totin@gmail.com>
 - Release 3.0
 
 * Tue Oct 9 2012 Assen Totin <assen.totin@gmail.com>
