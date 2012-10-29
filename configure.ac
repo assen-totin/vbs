@@ -26,6 +26,10 @@ SBINDIR=$exec_prefix/sbin
 if test "x$sbindir" != "x\${exec_prefix}/sbin" ; then
         SBINDIR=$sbindir
 fi
+SYSCONFDIR=$prefix/etc
+if test "x$sysconfdir" != "x\${prefix}/etc" ; then
+        SYSCONFDIR=$sysconfdir
+fi
 DATAROOTDIR=$prefix/share
 if test "x$datarootdir" != "x\${prefix}/share" ; then
         DATAROOTDIR=$datarootdir
@@ -38,9 +42,11 @@ TOPLEVELDIR=`pwd`
 
 AC_SUBST([BINDIR])
 AC_SUBST([SBINDIR])
+AC_SUBST([SYSCONFDIR])
 AC_SUBST([DATAROOTDIR])
 AC_SUBST([TOPLEVELDIR])
 AC_SUBST([LOCALEDIR])
+AC_DEFINE_UNQUOTED([SYSCONFDIR],["$SYSCONFDIR"],[System config directory])
 AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
 
 # CC
@@ -173,8 +179,8 @@ else
 	echo "*** systemd found. Will install both systemd and SystemV init scripts."
 fi
 if test $FOUND_SYSTEMD = "1" ; then
-	RPM_SYSTEMD_MKDIR="mkdir -p $RPM_BUILD_ROOT/etc/systemd/system"
-	RPM_SYSTEMD_SCRIPT="/etc/systemd/system/vbsd.service"
+	RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
+	RPM_SYSTEMD_SCRIPT="$SYSCONFDIR/systemd/system/vbsd.service"
 	RPM_SYSTEMD_POST="systemctl enable vbsd.service"
 	AM_CONDITIONAL(WITH_SYSTEMD, [test 1 = 1])
 fi

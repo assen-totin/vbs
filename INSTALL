@@ -42,13 +42,14 @@ RPM
 To build an RPM file, call "make rpm" after "make". 
 
 Also, for rpm you'd probably like to call ./configure this way:
-     ./configure --prefix=/usr
+     ./configure --prefix=/usr --sysconfdir=/etc
 
 In regards to RPM, only the following "./configure" options have effect:
 --prefix
 --exec-prefix
 --bindir
 --sbindir
+--sysconfdir
 --datarootdir
 --localedir
 

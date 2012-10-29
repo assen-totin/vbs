@@ -31,7 +31,7 @@ mkdir -p $RPM_BUILD_ROOT@BINDIR@
 mkdir -p $RPM_BUILD_ROOT@SBINDIR@
 mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/icons
 mkdir -p $RPM_BUILD_ROOT@DATAROOTDIR@/applications
-mkdir -p $RPM_BUILD_ROOT/etc/init.d
+mkdir -p $RPM_BUILD_ROOT@SYSCONFDIR@/init.d
 @RPM_SYSTEMD_MKDIR@
 
 for DIR in `find po/ -maxdepth 1 -mindepth 1 -type d | sed s/po.//g`; do
@@ -71,7 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 @DATAROOTDIR@/applications/vbsm.desktop
 @DATAROOTDIR@/applications/vbss.desktop
 @DATAROOTDIR@/applications/vbsc.desktop
-/etc/init.d/vbsd
+@SYSCONFDIR@/init.d/vbsd
 @RPM_SYSTEMD_SCRIPT@
 
 %changelog

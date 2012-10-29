@@ -193,7 +193,7 @@ void check_config(int mode) {
 		if (mode == 0)
 			sprintf(config.common.config_file_name, "%s/%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
 		else if (mode == 1)
-			sprintf(config.common.config_file_name, "/etc/%s/%s", VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
+			sprintf(config.common.config_file_name, "%s/%s/%s", SYSCONFDIR, VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
 	}
 
 	strcpy(&tmp[0], &config.common.config_file_name[0]);
