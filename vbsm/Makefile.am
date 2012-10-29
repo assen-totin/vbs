@@ -12,17 +12,17 @@ AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
 bin_PROGRAMS = vbsm
-vbsm_SOURCES = gui.c keyboard.c mouse.c export.c import.c edit.c vbsm.c menu.c
+vbsm_SOURCES = gui.c keyboard.c mouse.c export.c import.c edit.c vbsm.c menu.c mouse.h keyboard.h export.h gui.h vbsm.h menu-def.h menu.h import.h edit.h
 LDADD += ../common/libvbscommon.a
 
 if WITH_GSTREAMER
 AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
 AM_LDFLAGS = `pkg-config --libs gstreamer-0.10 gstreamer-interfaces-0.10`
-vbsm_SOURCES += video-gstreamer.c
+vbsm_SOURCES += video-gstreamer.c video-gstreamer.h
 endif
 
 if WITH_MPLAYER
-vbsm_SOURCES += video-mplayer.c
+vbsm_SOURCES += video-mplayer.c video-mplayer.h
 endif
 
 desktopdir = $(datadir)/applications

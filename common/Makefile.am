@@ -12,7 +12,7 @@ AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
 noinst_LIBRARIES = libvbscommon.a
-libvbscommon_a_SOURCES = cfg.c error.c network.c util.c menu.c
+libvbscommon_a_SOURCES = cfg.c error.c network.c util.c menu.c cfg.h menu.h network.h util.h common.h error.h
 
 if WITH_GSTREAMER
 AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`

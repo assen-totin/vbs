@@ -197,15 +197,6 @@ AC_DEFINE_UNQUOTED([VBS_ICON], ["$IMGDIR/vbs.png"], [Define icons location])
 # Grand finale
 AC_OUTPUT
 
-# Do we need to build .mo files?
-MOFILES=`find po | grep mo$ | wc -l`
-if test $MOFILES = "0" ; then
-	if test $USE_NLS = "yes" ; then
-		echo "Building i18 files..."
-		make -C po update-gmo
-	fi
-fi
-
 echo
 echo "Configuration complete."
 echo

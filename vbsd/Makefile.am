@@ -12,7 +12,7 @@ AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
 sbin_PROGRAMS = vbsd
-vbsd_SOURCES = vbsd.c
+vbsd_SOURCES = vbsd.c vbsd.h
 LDADD += ../common/libvbscommon.a -lm
 
 if WITH_GSTREAMER

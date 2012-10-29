@@ -12,7 +12,7 @@ AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
 bin_PROGRAMS = vbss
-vbss_SOURCES = vbss.c keyboard.c 
+vbss_SOURCES = vbss.c keyboard.c keyboard.h vbss.h 
 LDADD += ../common/libvbscommon.a
 
 if WITH_GSTREAMER

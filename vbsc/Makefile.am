@@ -12,7 +12,7 @@ AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
 bin_PROGRAMS = vbsc
-vbsc_SOURCES = vbsc.c menu.c
+vbsc_SOURCES = vbsc.c menu.c vbsc.h menu-def.h menu.h
 LDADD += ../common/libvbscommon.a
 
 if WITH_GSTREAMER

@@ -8,6 +8,9 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
+#dist_pkgdata_DATA = bg_BG.mo en_US.mo en_GB.mo ru_RU.mo 
+noinst_HEADERS = bg_BG.mo en_US.mo en_GB.mo ru_RU.mo
+
 install-data-hook: 
 	echo "Copying help files..."
 	for HELPFILE in `ls *mo | sed s/\.mo$\//g`; do test -z $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/; echo -n "Help file for lang "; echo $$HELPFILE; cp -f $$HELPFILE.mo $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/vbs-help.mo; done
