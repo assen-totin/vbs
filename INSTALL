@@ -21,9 +21,11 @@ INSTALLATION
 ============
 
 1. ./configure
+
      --enable-backend=mlayer,gstreamer - compile only MPlayer or GStreamer as 
        back-end (by default, GStreamer will be compiled if available and 
        MPlayer will always be compiled).
+
      --enable-gtk=2,3 - force GTK version to compile against. If both 2 and 3 
        are available, 3 will be used by default.
 
@@ -33,11 +35,26 @@ INSTALLATION
 
 The binaries are called "vbsm", "vbss", "vbsc" and "vbsd". Menu entries will be installed for you.
 
-To build an RPM file: after building the sources, in the top-level source directory call "make rpm"
+
+RPM
+===
+
+To build an RPM file, call "make rpm" after "make". 
+
+Also, for rpm you'd probably like to call ./configure this way:
+     ./configure --prefix=/usr
+
+In regards to RPM, only the following "./configure" options have effect:
+--prefix
+--exec-prefix
+--bindir
+--sbindir
+--datarootdir
+--localedir
 
 
 UNINSTALL
-========
+=========
 
 make uninstall
 
