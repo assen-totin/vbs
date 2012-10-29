@@ -8,7 +8,6 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-#dist_pkgdata_DATA = bg_BG.mo en_US.mo en_GB.mo ru_RU.mo 
 noinst_HEADERS = bg_BG.mo en_US.mo en_GB.mo ru_RU.mo
 
 install-data-hook: 
