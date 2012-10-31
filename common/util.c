@@ -37,7 +37,7 @@ void split_path(char *path, char *dir, char *file) {
 
 	strcpy(&tmp_old[0], strtok(path, "/"));
 
-	bzero(dir, sizeof(*dir));
+	memset(dir, '\0', sizeof(*dir));
 
 	while(1) {
 		tmp = strtok(NULL, "/");
@@ -122,7 +122,7 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	char *line_tmp = malloc(config.common.line_size);
 	if (!line_in || !line_out || !line_tmp)
 		error_handler("import_subtitles_srt", "malloc failed", 1);
-	bzero(line_out, config.common.line_size);
+	memset(line_out, '\0', config.common.line_size);
 
 	struct subtitle_srt *sub_array = malloc(sizeof(struct subtitle_srt));
 	if (!sub_array)

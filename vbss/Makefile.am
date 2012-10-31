@@ -8,16 +8,21 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
+GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
+
 AM_CPPFLAGS = @GTK_CFLAGS@
-LDADD = @GTK_LIBS@
+LDADD = ../common/libvbscommon.a @GTK_LIBS@ @GTHREAD_LIBS@
 
 bin_PROGRAMS = vbss
 vbss_SOURCES = vbss.c keyboard.c keyboard.h vbss.h 
-LDADD += ../common/libvbscommon.a
 
 if WITH_GSTREAMER
-AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`
-AM_LDFLAGS = `pkg-config --libs gthread-2.0`
+AM_CPPFLAGS += `$(PKG_CONFIG) --cflags gstreamer-0.10`
+LDADD += $(GSTREAMER_LIBS)
+endif
+
+if WITH_WINDOWS
+LDADD += -lwsock32 -lws2_32
 endif
 
 desktopdir = $(datadir)/applications

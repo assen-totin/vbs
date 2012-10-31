@@ -36,8 +36,8 @@ INSTALLATION
 The binaries are called "vbsm", "vbss", "vbsc" and "vbsd". Menu entries will be installed for you.
 
 
-RPM
-===
+BUILDING RPM
+============
 
 To build an RPM file, call "make rpm" after "make". 
 
@@ -52,6 +52,34 @@ In regards to RPM, only the following "./configure" options have effect:
 --sysconfdir
 --datarootdir
 --localedir
+
+
+BUILDING FOR MS WINDOWS
+=======================
+
+To build for MS Windows, run these commands:
+
+    ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux --enable-gtk=2 \
+                --enable-backend=gstreamer
+    make
+    make exe
+
+Notes: 
+
+* Build was tested in MinGW, using cross-compilation under Linux with the Fedora
+  17-supplied packages of w64. Only 32-bit build was tested. 
+
+* Only GTK2 is supported as MinGW has no builds of GTK3 for the moment. 
+  Because under other OS GTK3 is default, here GTK2 has to be forced.
+
+* The .exe file will contain not only the VBS executables, bul all DLLs for
+  GTK, GStreamer et al.
+
+* Because MS Windows is not POSIX compliant, vbsd will not be built. 
+
+* Because MS Windows is not POSIX compliant, MPLayer is not supported as 
+  backend. Because under other OS support for both will be built, here 
+  GStreamer has to be forced as a single backend. 
 
 
 UNINSTALL

@@ -35,8 +35,28 @@ struct video_backend {
 };
 
 static struct video_backend video_backends[] = {
-	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, true},
-	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, false}
+#ifdef HAVE_POSIX
+	#ifdef HAVE_GSTREAMER
+	#ifdef HAVE_MPLAYER
+	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true},
+	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, false}
+	#endif
+	#endif
+
+	#ifdef HAVE_GSTREAMER
+	#ifndef HAVE_MPLAYER
+	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true}
+	#endif
+	#endif
+
+	#ifdef HAVE_MPLAYER
+	#ifndef HAVE_GSTREAMER
+	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, false}
+	#endif
+	#endif
+#elif HAVE_WINDOWS
+	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true}
+#endif
 };
 
 struct video_output {
@@ -46,8 +66,13 @@ struct video_output {
 };
 
 static struct video_output video_outputs[] = {
+#ifdef HAVE_POSIX
 	{"X11", "ximagesink", true},
 	{"Xv", "xvimagesink", false},
-	{"SDL", "sdlvideosink", false}
+	{"SDL", "sdlvideosink", false},
+	{"Auto", "autovideosink", false}
+#elif HAVE_WINDOWS
+	 {"Auto", "autovideosink", true}
+#endif
 };
 

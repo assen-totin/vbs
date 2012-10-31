@@ -8,8 +8,13 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-SUBDIRS = common vbsm vbss vbsc vbsd po help
-DIST_SUBDIRS = $(SUBDIRS)
+SUBDIRS = common vbsm vbss vbsc po help
+
+if WITH_POSIX
+SUBDIRS += vbsd
+endif
+
+DIST_SUBDIRS = common vbsm vbss vbsc vbsd po help 
 
 dist_doc_DATA = AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README TODO
 

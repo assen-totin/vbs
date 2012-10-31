@@ -1,11 +1,6 @@
-# Process this file with autoconf to produce a configure script.
-
 AC_PREREQ([2.66])
 AC_INIT([vbs], [3.0], [assen.totin@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror])
-
-#ORIG_CMDLINE_ARGS=$@
-#AC_SUBST([ORIG_CMDLINE_ARGS])
 
 AC_PROG_RANLIB
 
@@ -48,6 +43,21 @@ AC_SUBST([TOPLEVELDIR])
 AC_SUBST([LOCALEDIR])
 AC_DEFINE_UNQUOTED([SYSCONFDIR],["$SYSCONFDIR"],[System config directory])
 AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
+
+# Platform
+FOUND_WINDOWS="no"
+FOUND_POSIX="no"
+AC_CHECK_HEADERS([windows.h], [FOUND_WINDOWS="yes"], [FOUND_POSIX="yes"])
+if test $FOUND_WINDOWS = "yes" ; then
+	AC_DEFINE([HAVE_WINDOWS],[1],[Windows OS])
+elif test $FOUND_POSIX = "yes" ; then
+	AC_DEFINE([HAVE_POSIX],[1],[POSIX OS])
+fi
+AM_CONDITIONAL([WITH_WINDOWS], [test $FOUND_WINDOWS = "yes"])
+AM_CONDITIONAL([WITH_POSIX], [test $FOUND_POSIX = "yes"])
+
+# PKG - this will define $PKG_CONFIG
+PKG_PROG_PKG_CONFIG
 
 # CC
 AC_PROG_CC
@@ -123,6 +133,9 @@ if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
 	ECHO_BACKEND_GSTREAMER="yes"
 	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
+	# Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
+	GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+	AC_SUBST([GSTREAMER_DASH_LIBS])
 fi
 
 AM_CONDITIONAL(WITH_MPLAYER, [test $USE_MPLAYER = "yes"])
@@ -162,41 +175,53 @@ AC_SUBST([RPM_REQUIRE_GTK])
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
+GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
+AC_SUBST([GTHREAD_LIBS])
 
 # systemd
-RPM_SYSTEMD_MKDIR=""
-RPM_SYSTEMD_SCRIPT=""
-RPM_SYSTEMD_POST=""
-AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD=1])
-AC_CHECK_PROG([FOUND_SYSTEMD],[systemctl],["1"],["0"])
-if test $FOUND_SYSTEMD = "0" ; then
-	if test $FORCE_SYSTEMD = "1" ; then
-		FOUND_SYSTEMD = "1"
-		echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
+FOUND_SYSTEMD="0"
+if test $FOUND_POSIX = "yes" ; then 
+	RPM_SYSTEMD_MKDIR=""
+	RPM_SYSTEMD_SCRIPT=""
+	RPM_SYSTEMD_POST=""
+	AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD=1])
+	AC_CHECK_PROG([FOUND_SYSTEMD],[systemctl],["1"],["0"])
+	if test $FOUND_SYSTEMD = "0" ; then
+		if test $FORCE_SYSTEMD = "1" ; then
+			FOUND_SYSTEMD="1"
+			echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
+		else
+			echo "*** systemd not found. Will only install SystemV init script."
+		fi
 	else
-		echo "*** systemd not found. Will only install SystemV init script."
+		echo "*** systemd found. Will install both systemd and SystemV init scripts."
 	fi
-else
-	echo "*** systemd found. Will install both systemd and SystemV init scripts."
-fi
-if test $FOUND_SYSTEMD = "1" ; then
-	RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
-	RPM_SYSTEMD_SCRIPT="$SYSCONFDIR/systemd/system/vbsd.service"
-	RPM_SYSTEMD_POST="systemctl enable vbsd.service"
+	if test $FOUND_SYSTEMD = "1" ; then
+		RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
+		RPM_SYSTEMD_SCRIPT="$SYSCONFDIR/systemd/system/vbsd.service"
+		RPM_SYSTEMD_POST="systemctl enable vbsd.service"
+	fi
+	AC_SUBST([RPM_SYSTEMD_MKDIR])
+	AC_SUBST([RPM_SYSTEMD_SCRIPT])
+	AC_SUBST([RPM_SYSTEMD_POST])
 fi
 AM_CONDITIONAL(WITH_SYSTEMD, [test $FOUND_SYSTEMD = "1"])
-AC_SUBST([RPM_SYSTEMD_MKDIR])
-AC_SUBST([RPM_SYSTEMD_SCRIPT])
-AC_SUBST([RPM_SYSTEMD_POST])
 
 # Makefiles
-AC_CONFIG_FILES([Makefile common/Makefile vbsd/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile vbsd/init/vbsd vbsd/init/vbsd.service po/Makefile.in po/Makefile help/Makefile])
+AC_CONFIG_FILES([Makefile common/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile.in po/Makefile help/Makefile])
+if test $FOUND_POSIX = "yes" ; then
+	AC_CONFIG_FILES([vbsd/Makefile vbsd/init/vbsd vbsd/init/vbsd.service])
+fi
 
 # Desktop files
-AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
+if test $FOUND_POSIX = "yes" ; then
+	AC_CONFIG_FILES([vbsm/vbsm.desktop vbss/vbss.desktop vbsc/vbsc.desktop])
+fi
 
 # RPM spec file
-AC_CONFIG_FILES([vbs.spec])
+if test $FOUND_POSIX = "yes" ; then
+	AC_CONFIG_FILES([vbs.spec])
+fi
 
 # Icons
 AC_DEFINE_UNQUOTED([VBS_ICON], ["$IMGDIR/vbs.png"], [Define icons location])

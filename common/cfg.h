@@ -22,8 +22,15 @@ static GOptionEntry cmdl_entries[] =
 	{ NULL }
 };
 
+#ifdef HAVE_POSIX
+	#define VBS_LOCAL_CONFIG_DIR ".vbs"
+	#define VBSM_DEFAULT_VIDEO_SINK "autovideosink"
+#elif HAVE_WINDOWS
+	#define VBS_LOCAL_CONFIG_DIR "_vbs"
+	#define VBSM_DEFAULT_VIDEO_SINK "ximagesink"
+#endif
+
 #define VBS_GLOBAL_CONFIG_DIR "vbs"
-#define VBS_LOCAL_CONFIG_DIR ".vbs"
 #define VBS_CONFIG_FILENAME "config"
 #define VBS_CONFIG_HEADER "# VBS Config File\n#\n# Do not edit by hand!\n#\n\n"
 #define VBS_DEFAULT_IMPORT_FILENAME "/tmp/vbs-in.txt"
@@ -44,5 +51,4 @@ static GOptionEntry cmdl_entries[] =
 #define VBSS_DEFAULT_FONT_FACE "Regular"
 #define VBSS_DEFAULT_FONT_JUSTIFY 0
 #define VBSS_DEFAULT_FULL_SCREEN 0
-#define VBSM_DEFAULT_VIDEO_SINK "ximagesink"
 #define VBSM_DEFAULT_PROGRESS_UPDATE 100

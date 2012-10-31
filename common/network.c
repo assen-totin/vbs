@@ -31,9 +31,9 @@ int get_socket() {
 	if (sockfd < 0) 
 		error_handler("get_subtitle", "Could not open socket", 1);
 
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset((char *) &serv_addr, '\0' , sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
-	bcopy((char *)config.common.host_entry->h_addr, (char *)&serv_addr.sin_addr.s_addr, config.common.host_entry->h_length);
+	memcpy((char *)&serv_addr.sin_addr.s_addr, (char *)config.common.host_entry->h_addr, config.common.host_entry->h_length);
 	serv_addr.sin_port = htons(config.common.tcp_port);
 
 	if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
@@ -58,7 +58,7 @@ int get_subtitle(char *buffer) {
 		return 0;
 	}
 
-	bzero(buffer, config.common.line_size);
+	memset(buffer, '\0', config.common.line_size);
 
 	n = read(sockfd, buffer, config.common.line_size - 1);
 	if (n < 0) {
@@ -83,7 +83,7 @@ int put_subtitle(char *buffer) {
 	strcpy(&request[0], buffer);
 	fix_new_line(&request[0]);
 
-	bzero(buffer2, config.common.line_size + 4);
+	memset(buffer2, '\0', config.common.line_size + 4);
 	memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));
 	memcpy(&buffer2[4], &request[0], config.common.line_size);
 
@@ -95,7 +95,7 @@ int put_subtitle(char *buffer) {
 		return 0;
 	}
 
-	bzero(buffer2, config.common.line_size + 4);
+	memset (buffer2, '\0', config.common.line_size + 4);
 
 	n = read(sockfd, buffer2, config.common.line_size);
 	if (n < 0) {
