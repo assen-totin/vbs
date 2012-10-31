@@ -115,17 +115,18 @@ fi
 
 if test $USE_MPLAYER = "yes" ; then
 	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
-	AM_CONDITIONAL(WITH_MPLAYER, [test 1 = 1])
 	HAVE_MPLAYER="1"
 	ECHO_BACKEND_MPLAYER="yes"
 	RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
 fi
 if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
-	AM_CONDITIONAL(WITH_GSTREAMER, [test 1 = 1])
 	ECHO_BACKEND_GSTREAMER="yes"
 	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 fi
+
+AM_CONDITIONAL(WITH_MPLAYER, [test $USE_MPLAYER = "yes"])
+AM_CONDITIONAL(WITH_GSTREAMER, [test $USE_GSTREAMER = "yes"])
 
 AC_SUBST([RPM_REQUIRE_MPLAYER])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
@@ -182,8 +183,8 @@ if test $FOUND_SYSTEMD = "1" ; then
 	RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
 	RPM_SYSTEMD_SCRIPT="$SYSCONFDIR/systemd/system/vbsd.service"
 	RPM_SYSTEMD_POST="systemctl enable vbsd.service"
-	AM_CONDITIONAL(WITH_SYSTEMD, [test 1 = 1])
 fi
+AM_CONDITIONAL(WITH_SYSTEMD, [test $FOUND_SYSTEMD = "1"])
 AC_SUBST([RPM_SYSTEMD_MKDIR])
 AC_SUBST([RPM_SYSTEMD_SCRIPT])
 AC_SUBST([RPM_SYSTEMD_POST])

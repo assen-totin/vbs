@@ -17,7 +17,6 @@
 #include <math.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <pwd.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>

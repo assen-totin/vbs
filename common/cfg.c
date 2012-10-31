@@ -188,10 +188,8 @@ void check_config(int mode) {
 		strcpy(&config.common.config_file_name[0], cmdl_config.short_f);
 	}
 	else {
-		passwd_entry = getpwuid(getuid());
-
 		if (mode == 0)
-			sprintf(config.common.config_file_name, "%s/%s/%s", passwd_entry->pw_dir, VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
+			sprintf(config.common.config_file_name, "%s/%s/%s", g_get_home_dir(), VBS_LOCAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
 		else if (mode == 1)
 			sprintf(config.common.config_file_name, "%s/%s/%s", SYSCONFDIR, VBS_GLOBAL_CONFIG_DIR, VBS_CONFIG_FILENAME);
 	}

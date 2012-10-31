@@ -40,7 +40,7 @@ int proc_subtitle_net() {
 		}
 
 		// Sleep 100 ms
-		usleep(100000);
+		g_usleep(100000);
 	}
 
 	return 1;
@@ -75,12 +75,12 @@ int proc_subtitle_local() {
 					}
 					else
 						// Sleep 100 ms
-						usleep(100000);
+						g_usleep(100000);
 				}
 			}
 		}
 		// Sleep 100 ms
-		usleep(100000);
+		g_usleep(100000);
 	}
 	return 1;
 }
