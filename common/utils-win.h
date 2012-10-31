@@ -8,4 +8,4 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-bool win_get_path(char *win_path, int size)
+bool win_get_path(char *win_path, int size);

@@ -8,11 +8,14 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
+#include "../common/common.h"
+
 bool win_get_path(char *win_path, int size) {
         TCHAR szPath[MAX_PATH];
 
         if(!GetModuleFileName(NULL, szPath, MAX_PATH)) {
-		error_handler("win_get_path", GetLastError(), 0);
+		//error_handler("win_get_path", GetLastError(), 0);
+		error_handler("win_get_path", "VBS_UNKNOWN_ERROR", 0);
 		return false;
         }
 

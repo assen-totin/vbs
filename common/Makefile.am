@@ -19,7 +19,7 @@ AM_CPPFLAGS += `$(PKG_CONFIG) --cflags gstreamer-0.10`
 endif
 
 if WITH_WINDOWS
-libvbscommon_a_SOURCES += windows.c windows.h
+libvbscommon_a_SOURCES += utils-win.c utils-win.h
 endif
 
 icondir = $(datadir)/icons
