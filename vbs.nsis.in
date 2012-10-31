@@ -1,0 +1,163 @@
+#!Nsis Installer Command Script
+#
+# This is an NSIS Installer Command Script generated automatically
+# by the Fedora nsiswrapper program.  For more information see:
+#
+#   http://fedoraproject.org/wiki/MinGW
+#
+# To build an installer from the script you would normally do:
+#
+#   makensis this_script
+#
+# which will generate the output file 'vbs-3.0.exe' which is a Windows
+# installer containing your program.
+
+Name "VBS"
+OutFile "vbs-@PACKAGE_VERSION@.exe"
+InstallDir "$ProgramFiles\VBS"
+InstallDirRegKey HKLM SOFTWARE\VBS "Install_Dir"
+
+ShowInstDetails hide
+ShowUninstDetails hide
+
+# Uncomment this to enable BZip2 compression, which results in
+# slightly smaller files but uses more memory at install time.
+#SetCompressor bzip2
+
+XPStyle on
+
+Page components
+Page directory
+Page instfiles
+
+ComponentText "Select which optional components you want to install."
+
+DirText "Please select the installation folder."
+
+Section "VBS"
+  SectionIn RO
+
+  SetOutPath "$INSTDIR\."
+  File "@MINGW_PREFIX@/bin/iconv.dll"
+  File "@MINGW_PREFIX@/bin/libatk-1.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libcairo-2.dll"
+  File "@MINGW_PREFIX@/bin/libexpat-1.dll"
+  File "@MINGW_PREFIX@/bin/libffi-6.dll"
+  File "@MINGW_PREFIX@/bin/libfontconfig-1.dll"
+  File "@MINGW_PREFIX@/bin/libfreetype-6.dll"
+  File "@MINGW_PREFIX@/bin/libgdk-win32-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libgdk_pixbuf-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libgio-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libglib-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libgmodule-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libgobject-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libgstinterfaces-0.10-0.dll"
+  File "@MINGW_PREFIX@/bin/libgstreamer-0.10-0.dll"
+  File "@MINGW_PREFIX@/bin/libgtk-win32-2.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libintl-8.dll"
+  File "@MINGW_PREFIX@/bin/libpango-1.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libpangocairo-1.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libpangoft2-1.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libpangowin32-1.0-0.dll"
+  File "@MINGW_PREFIX@/bin/libpixman-1-0.dll"
+  File "@MINGW_PREFIX@/bin/libpng15-15.dll"
+  File "@MINGW_PREFIX@/bin/libxml2-2.dll"
+  File "@MINGW_PREFIX@/bin/pango-querymodules.exe"
+  File "@MINGW_PREFIX@/bin/zlib1.dll"
+  File "vbsc/vbsc.exe"
+  File "vbsm/vbsm.exe"
+  File "vbss/vbss.exe"
+
+  SetOutPath "$INSTDIR\etc"
+  File /r "@MINGW_PREFIX@/etc/fonts"
+  File /r "@MINGW_PREFIX@/etc/gtk-2.0"
+  CreateDirectory "$INSTDIR\etc\pango"
+
+  SetOutPath "$INSTDIR\lib"
+  File /r "@MINGW_PREFIX@/lib/gdk-pixbuf-2.0"
+  File /r "@MINGW_PREFIX@/lib/gtk-2.0"
+  File /r "@MINGW_PREFIX@/lib/pango"
+
+  ReadEnvStr $0 COMSPEC
+  SetOutPath "$INSTDIR"
+  nsExec::ExecToLog '$0 /C pango-querymodules.exe > etc\pango\pango.modules'
+SectionEnd
+
+Section "Start Menu Shortcuts"
+  CreateDirectory "$SMPROGRAMS\VBS"
+  CreateShortCut "$SMPROGRAMS\VBS\Uninstall VBS.lnk" "$INSTDIR\Uninstall VBS.exe" "" "$INSTDIR\Uninstall VBS.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS\vbsc.exe.lnk" "$INSTDIR\vbsc.exe" "" "$INSTDIR\vbsc.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS\vbsm.exe.lnk" "$INSTDIR\vbsm.exe" "" "$INSTDIR\vbsm.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS\vbss.exe.lnk" "$INSTDIR\vbss.exe" "" "$INSTDIR\vbss.exe" 0
+SectionEnd
+
+Section "Desktop Icons"
+  CreateShortCut "$DESKTOP\vbsc.exe.lnk" "$INSTDIR\vbsc.exe" "" "$INSTDIR\vbsc.exe" 0
+  CreateShortCut "$DESKTOP\vbsm.exe.lnk" "$INSTDIR\vbsm.exe" "" "$INSTDIR\vbsm.exe" 0
+  CreateShortCut "$DESKTOP\vbss.exe.lnk" "$INSTDIR\vbss.exe" "" "$INSTDIR\vbss.exe" 0
+SectionEnd
+
+Section "Uninstall"
+  Delete /rebootok "$DESKTOP\vbss.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS\vbss.exe.lnk"
+  Delete /rebootok "$DESKTOP\vbsm.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS\vbsm.exe.lnk"
+  Delete /rebootok "$DESKTOP\vbsc.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS\vbsc.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS\Uninstall VBS.lnk"
+  RMDir "$SMPROGRAMS\VBS"
+
+  Delete /rebootok "$INSTDIR\vbss.exe"
+  RMDir "$INSTDIR\vbss"
+
+  Delete /rebootok "$INSTDIR\vbsm.exe"
+  RMDir "$INSTDIR\vbsm"
+
+  Delete /rebootok "$INSTDIR\vbsc.exe"
+  RMDir "$INSTDIR\vbsc"
+
+  RMDir /r "$INSTDIR\lib\pango"
+
+  RMDir /r "$INSTDIR\lib\gtk-2.0"
+
+  RMDir /r "$INSTDIR\lib\gdk-pixbuf-2.0"
+
+  RMDir /r "$INSTDIR\etc\pango"
+
+  RMDir /r "$INSTDIR\etc\gtk-2.0"
+
+  RMDir /r "$INSTDIR\etc\fonts"
+
+  Delete /rebootok "$INSTDIR\.\zlib1.dll"
+  Delete /rebootok "$INSTDIR\.\pango-querymodules.exe"
+  Delete /rebootok "$INSTDIR\.\libxml2-2.dll"
+  Delete /rebootok "$INSTDIR\.\libpng15-15.dll"
+  Delete /rebootok "$INSTDIR\.\libpixman-1-0.dll"
+  Delete /rebootok "$INSTDIR\.\libpangowin32-1.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libpangoft2-1.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libpangocairo-1.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libpango-1.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libintl-8.dll"
+  Delete /rebootok "$INSTDIR\.\libgtk-win32-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgstreamer-0.10-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgstinterfaces-0.10-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgobject-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgmodule-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libglib-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgio-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgdk_pixbuf-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libgdk-win32-2.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\libfreetype-6.dll"
+  Delete /rebootok "$INSTDIR\.\libfontconfig-1.dll"
+  Delete /rebootok "$INSTDIR\.\libffi-6.dll"
+  Delete /rebootok "$INSTDIR\.\libexpat-1.dll"
+  Delete /rebootok "$INSTDIR\.\libcairo-2.dll"
+  Delete /rebootok "$INSTDIR\.\libatk-1.0-0.dll"
+  Delete /rebootok "$INSTDIR\.\iconv.dll"
+  RMDir "$INSTDIR\."
+  RMDir "$INSTDIR"
+SectionEnd
+
+Section -post
+  WriteUninstaller "$INSTDIR\Uninstall VBS.exe"
+SectionEnd

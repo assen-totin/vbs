@@ -67,7 +67,7 @@ To build for MS Windows, run these commands:
 Notes: 
 
 * Build was tested in MinGW, using cross-compilation under Linux with the Fedora
-  17-supplied packages of w64. Only 32-bit build was tested. 
+  17-supplied packages of w64. NSIS installer is required to build the .exe. 
 
 * Only GTK2 is supported as MinGW has no builds of GTK3 for the moment. 
   Because under other OS GTK3 is default, here GTK2 has to be forced.

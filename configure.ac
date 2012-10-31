@@ -223,6 +223,14 @@ if test $FOUND_POSIX = "yes" ; then
 	AC_CONFIG_FILES([vbs.spec])
 fi
 
+# Widows NSIS file
+if test $FOUND_WINDOWS = "yes" ; then
+	# FIXME: this should not be hard-coded!
+	MINGW_PREFIX=/usr/i686-w64-mingw32/sys-root/mingw/bin
+	AC_SUBST([MINGW_PREFIX])
+	AC_CONFIG_FILES([vbs.nsis])
+fi
+
 # Icons
 AC_DEFINE_UNQUOTED([VBS_ICON], ["$IMGDIR/vbs.png"], [Define icons location])
 
