@@ -96,17 +96,10 @@ int main (int argc, char *argv[]) {
 	PangoAttribute *attr_size, *attr_family, *attr_style, *attr_weight, *attr_colour_fg, *attr_colour_bg;
 
         // i18n
-        setlocale (LC_ALL, "");
-#ifdef HAVE_POSIX
-        bindtextdomain(PACKAGE_NAME, LOCALEDIR);
-#elif HAVE_WINDOWS
-        char win_path[MAX_PATH];
         char locale_path[MAX_PATH];
-        if (win_get_path(&win_path[0], sizeof(win_path))) {
-                sprintf(&locale_path[0], "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
-        }
-        bindtextdomain(PACKAGE_NAME, locale_path);
-#endif
+        get_locale_path(&locale_path[0]);
+        setlocale (LC_ALL, "");
+        bindtextdomain(PACKAGE_NAME, &locale_path[0]);
         bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
         textdomain (PACKAGE_NAME);
 

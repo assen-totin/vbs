@@ -199,3 +199,26 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	return sub_array;
 }
 
+
+void get_locale_path(char *res) {
+#ifdef HAVE_POSIX
+	strcpy(res, LOCALEDIR);
+#elif HAVE_WINDOWS
+	char win_path[MAX_PATH];
+	win_get_path(&win_path[0], sizeof(win_path)) 
+	sprintf(res, "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
+#endif
+}
+
+
+void get_icon(char *res) {
+#ifdef HAVE_POSIX
+        strcpy(res, VBS_ICON);
+#elif HAVE_WINDOWS
+        char win_path[MAX_PATH];
+        win_get_path(&win_path[0], sizeof(win_path)) 
+        sprintf(res, "%s%s%s", &win_path[0], SLASH, VBS_ICON);
+#endif
+}
+
+

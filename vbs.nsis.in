@@ -67,6 +67,7 @@ Section "VBS"
   File "vbsc/vbsc.exe"
   File "vbsm/vbsm.exe"
   File "vbss/vbss.exe"
+  File "common/vbs.png"
 
   SetOutPath "$INSTDIR\etc"
   File /r "@MINGW_PREFIX@/etc/fonts"
@@ -112,24 +113,15 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\VBS"
 
   Delete /rebootok "$INSTDIR\vbss.exe"
-  RMDir "$INSTDIR\vbss"
-
   Delete /rebootok "$INSTDIR\vbsm.exe"
-  RMDir "$INSTDIR\vbsm"
-
   Delete /rebootok "$INSTDIR\vbsc.exe"
-  RMDir "$INSTDIR\vbsc"
+  Delete /rebootok "$INSTDIR\vbs.png"
 
   RMDir /r "$INSTDIR\lib\pango"
-
   RMDir /r "$INSTDIR\lib\gtk-2.0"
-
   RMDir /r "$INSTDIR\lib\gdk-pixbuf-2.0"
-
   RMDir /r "$INSTDIR\etc\pango"
-
   RMDir /r "$INSTDIR\etc\gtk-2.0"
-
   RMDir /r "$INSTDIR\etc\fonts"
 
   Delete /rebootok "$INSTDIR\.\zlib1.dll"

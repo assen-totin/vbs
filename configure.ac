@@ -240,8 +240,12 @@ if test $FOUND_WINDOWS = "yes" ; then
 	AC_CONFIG_FILES([vbs.nsis])
 fi
 
-# Icons
-AC_DEFINE_UNQUOTED([VBS_ICON], ["$IMGDIR/vbs.png"], [Define icons location])
+# Icon
+if test $FOUND_WINDOWS = "yes" ; then
+	AC_DEFINE([VBS_ICON], ["vbs.png"], [Define icons location])
+else
+	AC_DEFINE_UNQUOTED([VBS_ICON], ["$DATAROOTDIR/icons/vbs.png"], [Define icons location])
+fi
 
 # Grand finale
 AC_OUTPUT

@@ -55,6 +55,10 @@
 
 #define _(String) gettext (String)
 
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
+
 enum {
 	COL_LINE = 0,
 	COL_FROM,

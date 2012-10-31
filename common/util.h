@@ -20,3 +20,7 @@ void convert_time_to_srt(unsigned int, char *, int);
 
 struct subtitle_srt *import_subtitles_srt(char *, int *);
 
+void get_locale_path(char *res);
+
+void get_icon(char *res);
+
