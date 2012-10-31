@@ -334,7 +334,14 @@ char *get_help_text() {
 	char *locale = setlocale (LC_ALL, NULL);
 	char *lang = strtok(locale, ".");
 	char file[1024];
-	sprintf(&file[0], "%s/%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, lang);
+#ifdef HAVE_POSIX
+	sprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, SLASH, lang);
+#elif HAVE_WINDOWS
+        char win_path[MAX_PATH];
+        if (win_get_path(&win_path[0], sizeof(win_path))) {
+                sprintf(&file[0], "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
+        }
+#endif
 
 	FILE *fp_help = fopen(&file[0], "r");
 	if (!fp_help) {

@@ -24,7 +24,7 @@ int main (int argc, char **argv){
 #elif HAVE_WINDOWS
 	char win_path[MAX_PATH];
 	char locale_path[MAX_PATH];
-	if (win_get_path(char &win_path[0], sizeof(win_path))) {
+	if (win_get_path(&win_path[0], sizeof(win_path))) {
 		sprintf(&locale_path[0], "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
 	}
 	bindtextdomain(PACKAGE_NAME, locale_path);

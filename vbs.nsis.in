@@ -157,6 +157,9 @@ Section "Uninstall"
   Delete /rebootok "$INSTDIR\.\libcairo-2.dll"
   Delete /rebootok "$INSTDIR\.\libatk-1.0-0.dll"
   Delete /rebootok "$INSTDIR\.\iconv.dll"
+
+  RMDir /r "$INSTDIR\locale"
+
   RMDir "$INSTDIR\."
   RMDir "$INSTDIR"
 SectionEnd
