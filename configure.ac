@@ -182,22 +182,21 @@ GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
 AC_SUBST([GTHREAD_LIBS])
 
 # systemd
-FOUND_SYSTEMD="0"
 if test $FOUND_POSIX = "yes" ; then 
 	RPM_SYSTEMD_MKDIR=""
 	RPM_SYSTEMD_SCRIPT=""
 	RPM_SYSTEMD_POST=""
-	AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD=1])
+	AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD="1"])
 	AC_CHECK_PROG([FOUND_SYSTEMD],[systemctl],["1"],["0"])
-	if test $FOUND_SYSTEMD = "0" ; then
+	if test $FOUND_SYSTEMD = "1" ; then
+		echo "*** systemd found. Will install both systemd and SystemV init scripts."
+	else
 		if test $FORCE_SYSTEMD = "1" ; then
 			FOUND_SYSTEMD="1"
 			echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
 		else
 			echo "*** systemd not found. Will only install SystemV init script."
 		fi
-	else
-		echo "*** systemd found. Will install both systemd and SystemV init scripts."
 	fi
 	if test $FOUND_SYSTEMD = "1" ; then
 		RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
