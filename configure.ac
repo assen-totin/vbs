@@ -182,6 +182,7 @@ GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
 AC_SUBST([GTHREAD_LIBS])
 
 # systemd
+USE_SYSTEMD="0"
 if test $FOUND_POSIX = "yes" ; then 
 	RPM_SYSTEMD_MKDIR=""
 	RPM_SYSTEMD_SCRIPT=""
@@ -189,16 +190,17 @@ if test $FOUND_POSIX = "yes" ; then
 	AC_ARG_ENABLE([systemd],[AS_HELP_STRING([--enable-systemd],[install init script for systemd even if systemd is not present (default: autodetect))])],[FORCE_SYSTEMD="1"])
 	AC_CHECK_PROG([FOUND_SYSTEMD],[systemctl],["1"],["0"])
 	if test $FOUND_SYSTEMD = "1" ; then
+		USE_SYSTEMD="1"
 		echo "*** systemd found. Will install both systemd and SystemV init scripts."
 	else
 		if test $FORCE_SYSTEMD = "1" ; then
-			FOUND_SYSTEMD="1"
+			USE_SYSTEMD="1"
 			echo "*** systemd not found, but forced. Will install both systemd and SystemV init scripts."
 		else
 			echo "*** systemd not found. Will only install SystemV init script."
 		fi
 	fi
-	if test $FOUND_SYSTEMD = "1" ; then
+	if test $USE_SYSTEMD = "1" ; then
 		RPM_SYSTEMD_MKDIR="mkdir -p \$RPM_BUILD_ROOT$SYSCONFDIR/systemd/system"
 		RPM_SYSTEMD_SCRIPT="$SYSCONFDIR/systemd/system/vbsd.service"
 		RPM_SYSTEMD_POST="systemctl enable vbsd.service"
@@ -207,7 +209,7 @@ if test $FOUND_POSIX = "yes" ; then
 	AC_SUBST([RPM_SYSTEMD_SCRIPT])
 	AC_SUBST([RPM_SYSTEMD_POST])
 fi
-AM_CONDITIONAL(WITH_SYSTEMD, [test $FOUND_SYSTEMD = "1"])
+AM_CONDITIONAL(WITH_SYSTEMD, [test $USE_SYSTEMD = "1"])
 
 # Makefiles
 AC_CONFIG_FILES([Makefile common/Makefile vbsm/Makefile vbss/Makefile vbsc/Makefile po/Makefile.in po/Makefile help/Makefile])
@@ -227,8 +229,7 @@ fi
 
 # Widows NSIS file
 if test $FOUND_WINDOWS = "yes" ; then
-	# FIXME: this should not be hard-coded!
-	MINGW_PREFIX=/usr/i686-w64-mingw32/sys-root/mingw
+	MINGW_PREFIX=`$CC -print-sysroot`"/mingw"
 	AC_SUBST([MINGW_PREFIX])
 
 	WIN_HELP_FILES="File /r \"help/exe/*\""
