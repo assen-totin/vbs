@@ -6,6 +6,18 @@ AC_PROG_RANLIB
 
 AM_CONFIG_HEADER([config.h])
 
+# Platform
+FOUND_WINDOWS="no"
+FOUND_POSIX="no"
+AC_CHECK_HEADERS([windows.h], [FOUND_WINDOWS="yes"], [FOUND_POSIX="yes"])
+if test $FOUND_WINDOWS = "yes" ; then
+        AC_DEFINE([HAVE_WINDOWS],[1],[Windows OS])
+elif test $FOUND_POSIX = "yes" ; then
+        AC_DEFINE([HAVE_POSIX],[1],[POSIX OS])
+fi
+AM_CONDITIONAL([WITH_WINDOWS], [test $FOUND_WINDOWS = "yes"])
+AM_CONDITIONAL([WITH_POSIX], [test $FOUND_POSIX = "yes"])
+
 # prefix defaults
 if test "x$prefix" = "xNONE" ; then
 	prefix="/usr/local"
@@ -33,6 +45,9 @@ LOCALEDIR=$DATAROOTDIR/locale
 if test "x$localedir" != "x\${datarootdir}/locale" ; then
         LOCALEDIR=$localedir
 fi
+if test $FOUND_WINDOWS = "yes" ; then
+	LOCALEDIR="locale"
+fi
 TOPLEVELDIR=`pwd`
 
 AC_SUBST([BINDIR])
@@ -43,18 +58,6 @@ AC_SUBST([TOPLEVELDIR])
 AC_SUBST([LOCALEDIR])
 AC_DEFINE_UNQUOTED([SYSCONFDIR],["$SYSCONFDIR"],[System config directory])
 AC_DEFINE_UNQUOTED([LOCALEDIR],["$LOCALEDIR"],[Locale files])
-
-# Platform
-FOUND_WINDOWS="no"
-FOUND_POSIX="no"
-AC_CHECK_HEADERS([windows.h], [FOUND_WINDOWS="yes"], [FOUND_POSIX="yes"])
-if test $FOUND_WINDOWS = "yes" ; then
-	AC_DEFINE([HAVE_WINDOWS],[1],[Windows OS])
-elif test $FOUND_POSIX = "yes" ; then
-	AC_DEFINE([HAVE_POSIX],[1],[POSIX OS])
-fi
-AM_CONDITIONAL([WITH_WINDOWS], [test $FOUND_WINDOWS = "yes"])
-AM_CONDITIONAL([WITH_POSIX], [test $FOUND_POSIX = "yes"])
 
 # PKG - this will define $PKG_CONFIG
 PKG_PROG_PKG_CONFIG
@@ -226,8 +229,12 @@ fi
 # Widows NSIS file
 if test $FOUND_WINDOWS = "yes" ; then
 	# FIXME: this should not be hard-coded!
-	MINGW_PREFIX=/usr/i686-w64-mingw32/sys-root/mingw/bin
+	MINGW_PREFIX=/usr/i686-w64-mingw32/sys-root/mingw
 	AC_SUBST([MINGW_PREFIX])
+
+	WIN_LOCALE_FILES="File /r \"help/exe/*\""
+	AC_SUBST([WIN_LOCALE_FILES])
+
 	AC_CONFIG_FILES([vbs.nsis])
 fi
 

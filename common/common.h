@@ -187,6 +187,9 @@ int can_recv_from_net;
 #include "network.h"
 #include "util.h"
 #include "menu.h"
+#ifdef HAVE_WINDOWS
+	#include "windows.h"
+#endif
 
 #include "../vbsd/vbsd.h"
 

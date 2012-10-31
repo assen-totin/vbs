@@ -19,7 +19,16 @@ int main (int argc, char **argv){
 
 	// i18n
 	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+#ifdef HAVE_POSIX
+	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
+#elif HAVE_WINDOWS
+	char win_path[MAX_PATH]
+	char locale_path[MAX_PATH]
+	if (win_get_path(char &win_path[0], sizeof(win_path))) {
+		sprintf(&locale_path[0], "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
+	}
+	bindtextdomain(PACKAGE_NAME, locale_path);
+#endif
 	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
 	textdomain (PACKAGE_NAME);
 

@@ -78,6 +78,9 @@ Section "VBS"
   File /r "@MINGW_PREFIX@/lib/gtk-2.0"
   File /r "@MINGW_PREFIX@/lib/pango"
 
+  SetOutPath "$INSTDIR\locale"
+  @WIN_LOCALE_FILES@
+
   ReadEnvStr $0 COMSPEC
   SetOutPath "$INSTDIR"
   nsExec::ExecToLog '$0 /C pango-querymodules.exe > etc\pango\pango.modules'

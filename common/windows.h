@@ -8,12 +8,4 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
-#include "common.h"
-
-void error_handler(char func[256], char error_text[256], bool exit_flag) {
-	printf("*** VBS Error: %s in function %s\n", error_text, func);
-	fprintf(config.vbsm.log_file_fp, "*** Error: %s in function %s\n", error_text, func);
-	if (exit_flag)
-		exit(1);
-}
-
+bool win_get_path(char *win_path, int size)
