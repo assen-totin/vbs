@@ -25,6 +25,7 @@ rpm:
 
 exe:
 	export PATH=$(PATH):$(MINGW_PREFIX)
+	cd po; make exe_prep; cd ..
 	cd help; make exe_prep; cd ..
 	makensis vbs.nsis
 

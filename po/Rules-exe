@@ -1,0 +1,13 @@
+# This file is a part of Voody Blue Subtitler suit.
+# 
+# Author: Assen Totin <assen.totin@gmail.com>
+#
+# Home page: http://www.zavedil.com/software-desktop-vbs
+#
+# This software is released under GNU General Public License.
+# See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
+# for details.
+
+exe_prep:
+	for HELPDIR in `ls *gmo | sed s/\.gmo$\//g`; do mkdir -p exe/$$HELPDIR/LC_MESSAGES; HELPFILE=$$HELPDIR.gmo; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs.mo; done;
+

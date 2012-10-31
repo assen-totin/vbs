@@ -232,7 +232,10 @@ if test $FOUND_WINDOWS = "yes" ; then
 	MINGW_PREFIX=/usr/i686-w64-mingw32/sys-root/mingw
 	AC_SUBST([MINGW_PREFIX])
 
-	WIN_LOCALE_FILES="File /r \"help/exe/*\""
+	WIN_HELP_FILES="File /r \"help/exe/*\""
+	AC_SUBST([WIN_HELP_FILES])
+
+	WIN_LOCALE_FILES="File /r \"po/exe/*\""
 	AC_SUBST([WIN_LOCALE_FILES])
 
 	AC_CONFIG_FILES([vbs.nsis])
