@@ -222,3 +222,11 @@ void get_icon(char *res) {
 }
 
 
+void get_file_selector_path(char *res) {
+#ifdef HAVE_POSIX
+        sprintf(res, "%s%s%s", g_get_home_dir(), SLASH, "Desktop");
+#elif HAVE_WINDOWS
+        sprintf(res, "%s", g_get_home_dir());
+#endif
+
+}

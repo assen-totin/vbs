@@ -24,3 +24,5 @@ void get_locale_path(char *res);
 
 void get_icon(char *res);
 
+void get_file_selector_path(char *res);
+
