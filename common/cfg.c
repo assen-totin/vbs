@@ -179,7 +179,7 @@ void check_config(int mode) {
 	struct stat stat_buf;
 	int mkdir_res, stat_res, errsv;
 	FILE *fp_config;
-	char dir[1024], file[1024], tmp[1024];
+	char dir[MAX_PATH];
 
 	// Create a default in-memory condiguration
 	default_config();
@@ -194,8 +194,7 @@ void check_config(int mode) {
 			sprintf(config.common.config_file_name, "%s%s%s%s%s", SYSCONFDIR, SLASH, VBS_GLOBAL_CONFIG_DIR, SLASH, VBS_CONFIG_FILENAME);
 	}
 
-	strcpy(&tmp[0], &config.common.config_file_name[0]);
-	split_path(&tmp[0], &dir[0], &file[0]);
+	get_dir_from_filename (&config.common.config_file_name[0], &dir[0]);
 
 	// First, check config directory
 	stat_res = stat(&dir[0], &stat_buf);

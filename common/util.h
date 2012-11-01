@@ -10,8 +10,6 @@
 
 void fix_new_line(char *);
 
-void split_path(char *, char *, char *);
-
 long get_time_msec();
 
 int convert_time_from_srt(char *, int);
@@ -26,3 +24,4 @@ void get_icon(char *res);
 
 void get_file_selector_path(char *res);
 
+void get_dir_from_filename (char *filename, char *dir);

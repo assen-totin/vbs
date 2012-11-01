@@ -31,28 +31,6 @@ void fix_new_line(char *buffer) {
 }
 
 
-void split_path(char *path, char *dir, char *file) {
-	char *tmp;
-	char tmp_old[100];
-
-	strcpy(&tmp_old[0], strtok(path, "/"));
-
-	memset(dir, '\0', sizeof(*dir));
-
-	while(1) {
-		tmp = strtok(NULL, "/");
-		if(tmp) {
-			sprintf(dir, "%s/%s", dir, &tmp_old[0]);
-			sprintf(&tmp_old[0], "%s", tmp);
-		}
-		else
-			break;
-	}
-
-	strcpy(file, &tmp_old[0]);
-}
-
-
 long get_time_msec() {
 	struct timeval curr_time;
 	gettimeofday(&curr_time, NULL);
@@ -230,3 +208,40 @@ void get_file_selector_path(char *res) {
 #endif
 
 }
+
+
+void get_dir_from_filename (char *filename, char *dir) {
+	char filename_in[MAX_PATH];
+	strcpy(&filename_in[0], filename);
+
+        char c0[MAX_PATH];
+        char *p0 = &c0[0];
+        memset(&c0[0], '\0', MAX_PATH);
+
+        char c1[MAX_PATH];
+        char *p1 = &c1[0];
+        memset(&c1[0], '\0', MAX_PATH);
+
+        p0 = strtok(&filename_in[0], SLASH);
+#ifdef HAVE_POSIX
+	sprintf(dir, "/%s", p0);
+#elif HAVE_WINDOWS
+        sprintf(dir, "%s", p0);
+#endif
+
+        while (1) {
+                p0 = strtok(NULL, SLASH);
+                if (p0) {
+                        sprintf(dir, "%s%s%s", dir, p1, SLASH);
+                        p1 = strtok(NULL, SLASH);
+                }
+                else
+                        break;
+
+                if (p0 && p1)
+                        sprintf(dir, "%s%s%s", dir, p0, SLASH);
+                else
+                        break;
+        }
+}
+
