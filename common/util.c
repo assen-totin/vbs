@@ -205,7 +205,7 @@ void get_locale_path(char *res) {
 	strcpy(res, LOCALEDIR);
 #elif HAVE_WINDOWS
 	char win_path[MAX_PATH];
-	win_get_path(&win_path[0], sizeof(win_path)) 
+	win_get_path(&win_path[0], sizeof(win_path)); 
 	sprintf(res, "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
 #endif
 }
@@ -216,7 +216,7 @@ void get_icon(char *res) {
         strcpy(res, VBS_ICON);
 #elif HAVE_WINDOWS
         char win_path[MAX_PATH];
-        win_get_path(&win_path[0], sizeof(win_path)) 
+        win_get_path(&win_path[0], sizeof(win_path));
         sprintf(res, "%s%s%s", &win_path[0], SLASH, VBS_ICON);
 #endif
 }
