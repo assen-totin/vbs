@@ -29,6 +29,7 @@ endif
 
 if WITH_WINDOWS
 LDADD += -lwsock32 -lws2_32
+AM_CFLAGS = -mwindows
 endif
 
 desktopdir = $(datadir)/applications
