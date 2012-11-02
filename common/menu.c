@@ -100,26 +100,22 @@ void set_newline (GtkWidget *widget, gpointer window) {
 		_("Available Delimiters:"));
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Select Newline Delimiter"));
 
+	// 0 is LF, 1 is CR/LF, 2 is CR
 	GtkWidget *combo = gtk_combo_box_text_new();
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), "LF");
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), "CR/LF");
-
-	int index;
-	if (config.common.export_cr == 1)
-		index = 1;
-	else
-		index = 0;
-
-	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), index);
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), "CR");
+	gtk_combo_box_set_active(GTK_COMBO_BOX(combo), config.common.export_cr);
 
 	gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), combo);
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		if( strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"CR/LF"))
+		if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"CR/LF"))
 			config.common.export_cr = 1;
-		else
+		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"LF"))
 			config.common.export_cr = 0;
+		else config.common.export_cr = 2;
 
 		write_config();
 	}

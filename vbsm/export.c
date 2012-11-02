@@ -20,8 +20,10 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 	char cr_lf[3];
 	if (config.common.export_cr == 1) 
 		sprintf(cr_lf, "\r\n");
-	else
+	else if (config.common.export_cr == 0)
 		sprintf(cr_lf, "\n");
+	else 
+		sprintf(cr_lf, "\r");
 
 	// Get all fields
 	gtk_tree_model_get(model, iter, COL_LINE, &line, COL_FROM, &from, COL_TO, &to, -1);
