@@ -21,11 +21,9 @@ int main (int argc, char **argv){
 #ifdef HAVE_WINDOWS
 	char locale[32];
 	win_get_locale(&locale[0]);
-	sprintf(&locale[0], "LANG=%s.utf8", &locale[0]);
-	putenv(&locale[0]);
 #endif
 	char locale_path[MAX_PATH];
-	get_locale_path(&locale_path[0]);
+	get_locale_prefix(&locale_path[0]);
 	setlocale (LC_ALL, "");
 	bindtextdomain(PACKAGE_NAME, &locale_path[0]);
 	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");

@@ -17,7 +17,7 @@ int main (int argc, char **argv){
 
         // i18n
         char locale_path[MAX_PATH];
-        get_locale_path(&locale_path[0]);
+        get_locale_prefix(&locale_path[0]);
         setlocale (LC_ALL, "");
         bindtextdomain(PACKAGE_NAME, &locale_path[0]);
         bind_textdomain_codeset(PACKAGE_NAME, "utf-8");

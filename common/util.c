@@ -178,13 +178,13 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 }
 
 
-void get_locale_path(char *res) {
+void get_locale_prefix(char *res) {
 #ifdef HAVE_POSIX
 	strcpy(res, LOCALEDIR);
 #elif HAVE_WINDOWS
 	char win_path[MAX_PATH];
 	win_get_path(&win_path[0], sizeof(win_path)); 
-	sprintf(res, "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
+	sprintf(res, "%s%s", &win_path[0], LOCALEDIR);
 #endif
 }
 

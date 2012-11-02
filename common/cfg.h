@@ -24,12 +24,12 @@ static GOptionEntry cmdl_entries[] =
 
 #ifdef HAVE_POSIX
 	#define VBS_LOCAL_CONFIG_DIR ".vbs"
-	#define VBSM_DEFAULT_VIDEO_SINK "autovideosink"
+	#define VBSM_DEFAULT_VIDEO_SINK "ximagesink"
 	#define VBS_DEFAULT_IMPORT_FILENAME "/tmp/vbs-in.txt"
 	#define VBS_DEFAULT_EXPORT_FILENAME "/tmp/vbs-out.srt"
 #elif HAVE_WINDOWS
 	#define VBS_LOCAL_CONFIG_DIR "_vbs"
-	#define VBSM_DEFAULT_VIDEO_SINK "ximagesink"
+	#define VBSM_DEFAULT_VIDEO_SINK "autovideosink"
 	#define VBS_DEFAULT_IMPORT_FILENAME "C:\\vbs-in.txt"
 	#define VBS_DEFAULT_EXPORT_FILENAME "C:\\vbs-out.srt"
 #endif
