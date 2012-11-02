@@ -8,6 +8,8 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
+#include "../config.h"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <gdk/gdk.h>
@@ -15,26 +17,36 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <math.h>
-#include <netdb.h>
-#include <netinet/in.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include <sys/ipc.h>
-#include <syslog.h>
-#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/timeb.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 #include <libintl.h>
 
-#include "../config.h"
+#ifdef HAVE_POSIX
+	#include <netdb.h>
+	#include <netinet/in.h>
+	#include <sys/socket.h>
+	#include <sys/ipc.h>
+	#include <syslog.h>
+	#include <sys/wait.h>
+	#define VBS_TMP_DIR "/tmp"
+	#define SLASH "/"
+#endif
+
+#ifdef HAVE_WINDOWS
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+	#define VBS_TMP_DIR "C:\\"
+	#define SLASH "\\"
+#endif
 
 #ifdef HAVE_GSTREAMER
 	#include <gst/gst.h>
@@ -42,7 +54,10 @@
 #endif
 
 #define _(String) gettext (String)
-#define VBS_TMP_DIR "/tmp"
+
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
 
 enum {
 	COL_LINE = 0,
@@ -176,6 +191,9 @@ int can_recv_from_net;
 #include "network.h"
 #include "util.h"
 #include "menu.h"
+#ifdef HAVE_WINDOWS
+	#include "util-win.h"
+#endif
 
 #include "../vbsd/vbsd.h"
 

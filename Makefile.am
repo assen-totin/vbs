@@ -8,11 +8,24 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-SUBDIRS = common vbsm vbss vbsc vbsd po help
-DIST_SUBDIRS = $(SUBDIRS)
+MINGW_PREFIX=@MINGW_PREFIX@
+
+SUBDIRS = common vbsm vbss vbsc po help
+
+if WITH_POSIX
+SUBDIRS += vbsd
+endif
+
+DIST_SUBDIRS = common vbsm vbss vbsc vbsd po help 
 
 dist_doc_DATA = AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README TODO
 
 rpm:
 	rpmbuild -bb --define "_builddir @TOPLEVELDIR@" vbs.spec
+
+exe:
+	export PATH=$(PATH):$(MINGW_PREFIX)
+	cd po; make exe_prep; cd ..
+	cd help; make exe_prep; cd ..
+	makensis vbs.nsis
 

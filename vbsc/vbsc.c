@@ -15,11 +15,13 @@
 int main (int argc, char **argv){
 	GtkWidget *status, *vbox, *progress;
 
-	// i18n
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE_NAME, LOCALEDIR);
-	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
-	textdomain (PACKAGE_NAME);
+        // i18n
+        char locale_path[MAX_PATH];
+        get_locale_prefix(&locale_path[0]);
+        setlocale (LC_ALL, "");
+        bindtextdomain(PACKAGE_NAME, &locale_path[0]);
+        bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+        textdomain (PACKAGE_NAME);
 	
 	// Check for alternative config
 	get_cmdl_config(argc, argv);
@@ -34,7 +36,11 @@ int main (int argc, char **argv){
 	// Root window
 	config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler Configurator");
-	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
+
+        char vbs_icon[1024];
+        get_icon(&vbs_icon[0]);
+        gtk_window_set_default_icon_from_file (&vbs_icon[0], NULL);
+
 	gtk_widget_set_size_request (config.vbsm.window, 400, 100);
 	g_signal_connect (config.vbsm.window, "delete_event", G_CALLBACK(quit_dialog), config.vbsm.window);
 

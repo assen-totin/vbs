@@ -18,8 +18,20 @@ int main (int argc, char **argv){
 	GtkTreeSelection *subtitles_selection;
 
 	// i18n
-	setlocale (LC_ALL, "");
-	bindtextdomain (PACKAGE_NAME, LOCALEDIR);
+#ifdef HAVE_POSIX
+        setlocale (LC_ALL, "");
+#endif
+#ifdef HAVE_WINDOWS
+	char locale[32];
+	win_get_locale(&locale[0]);
+	char locale_env[32];
+	sprintf(&locale_env[0], "LANG=%s.utf8", &locale[0]);
+	putenv(&locale_env[0]);
+	gtk_disable_setlocale();
+#endif
+	char locale_path[MAX_PATH];
+	get_locale_prefix(&locale_path[0]);
+	bindtextdomain(PACKAGE_NAME, &locale_path[0]);
 	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
 	textdomain (PACKAGE_NAME);
 
@@ -39,15 +51,15 @@ int main (int argc, char **argv){
 	config.common.init_timestamp_msec = get_time_msec();
 
 	// Create log file
-	sprintf(config.vbsm.log_file_name, "%s/vbsLogFile.XXXXXX", VBS_TMP_DIR);
-	int mkstempRes = mkstemp(config.vbsm.log_file_name);
+	sprintf(config.vbsm.log_file_name, "%s%svbsLogFile.XXXXXX", VBS_TMP_DIR, SLASH);
+	int mkstempRes = g_mkstemp(config.vbsm.log_file_name);
 	if (mkstempRes == -1) {error_handler("main","failed to create log file name",1 );}
 	config.vbsm.log_file_fp = fopen(config.vbsm.log_file_name, "w");
 
 	// Create tmp subtites file for mplayer
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-		sprintf(config.vbsm.sub_file_name, "%s/vbsTempFile.XXXXXX", VBS_TMP_DIR);
-		mkstempRes = mkstemp(config.vbsm.sub_file_name);
+		sprintf(config.vbsm.sub_file_name, "%s%svbsTempFile.XXXXXX", VBS_TMP_DIR, SLASH);
+		mkstempRes = g_mkstemp(config.vbsm.sub_file_name);
 		if (mkstempRes == -1) {error_handler("main","failed to create temporary sub file name",1 );}
 	}
 
@@ -101,7 +113,11 @@ int main (int argc, char **argv){
 
 	config.vbsm.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (config.vbsm.window), "Voody Blue Subtitler");
-	gtk_window_set_default_icon_from_file (VBS_ICON, NULL);
+
+	char vbs_icon[1024];
+	get_icon(&vbs_icon[0]);
+	gtk_window_set_default_icon_from_file (&vbs_icon[0], NULL);
+
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		GdkScreen *gdk_screen = gdk_screen_get_default();
 		if (gdk_screen) {

@@ -10,7 +10,11 @@
 
 #include "../common/common.h"
 #include "video-gstreamer.h"
-#include <gdk/gdkx.h>
+#ifdef HAVE_POSIX
+	#include <gdk/gdkx.h>
+#elif HAVE_WINDOWS
+	#include <gdk/gdkwin32.h>
+#endif
 
 static GstSeekFlags seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
 
@@ -57,18 +61,6 @@ void gstreamer_play() {
 }
 
 
-/*
-void gstreamer_load_video(char file_name[1024]) {
-	char uri[2048];
-
-	sprintf(&uri[0], "file://%s", &file_name[0]);
-
-	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", uri, NULL);
-
-	gstreamer_pause();
-}
-*/
-
 void gstreamer_sub_clear() {
 	g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
 			"text", " ",
@@ -89,8 +81,13 @@ void gstreamer_init(char file_name[1024]) {
 	gst_init(0, NULL);
 
 	char uri[2048];
+#ifdef HAVE_POSIX
 	sprintf(&uri[0], "file://%s", &file_name[0]);
-
+#elif HAVE_WINDOWS
+        char _tmp[2048];
+        win_filename_to_uri(&file_name[0], &_tmp[0]);
+        sprintf(&uri[0], "file:///%s", &_tmp[0]);
+#endif
 	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 
 	config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
@@ -121,7 +118,11 @@ void gstreamer_init(char file_name[1024]) {
 	// Merge with existing widget
 	if (GST_IS_X_OVERLAY (videosink)) {
 #ifdef HAVE_GTK2
+	#ifdef HAVE_POSIX
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XWINDOW (config.vbsm.gstreamer_widget_player->window));
+	#elif HAVE_WINDOWS
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (config.vbsm.gstreamer_widget_player->window));
+	#endif
 #elif HAVE_GTK3
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID ((gtk_widget_get_window(config.vbsm.gstreamer_widget_player))));
 #endif

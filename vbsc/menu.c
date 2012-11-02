@@ -40,7 +40,7 @@ void file_dialog_save(GtkAction *action, gpointer param) {
 		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 		NULL);
 
-	sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+	get_file_selector_path(&fileDialogFile[0]);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
 	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
@@ -68,7 +68,7 @@ void file_dialog_open(GtkAction *action, gpointer param) {
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-	sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+	get_file_selector_path(&fileDialogFile[0]);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
 	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {

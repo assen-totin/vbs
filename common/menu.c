@@ -23,7 +23,9 @@ void help_about(GtkWidget *widget, gpointer window) {
 	_("If you like this program, send me a postcard from your place to:\n\nBulgaria\n1303 Sofia\n74, Otec Paisi Str.\nAssen Totin\n")
 	);
 
-	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(VBS_ICON, NULL);
+	char vbs_icon[1024];
+	get_icon(&vbs_icon[0]);
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(&vbs_icon[0], NULL);
 	gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog), pixbuf);
 	g_object_unref(pixbuf), pixbuf = NULL;
 

@@ -31,28 +31,6 @@ void fix_new_line(char *buffer) {
 }
 
 
-void split_path(char *path, char *dir, char *file) {
-	char *tmp;
-	char tmp_old[100];
-
-	strcpy(&tmp_old[0], strtok(path, "/"));
-
-	bzero(dir, sizeof(*dir));
-
-	while(1) {
-		tmp = strtok(NULL, "/");
-		if(tmp) {
-			sprintf(dir, "%s/%s", dir, &tmp_old[0]);
-			sprintf(&tmp_old[0], "%s", tmp);
-		}
-		else
-			break;
-	}
-
-	strcpy(file, &tmp_old[0]);
-}
-
-
 long get_time_msec() {
 	struct timeval curr_time;
 	gettimeofday(&curr_time, NULL);
@@ -122,7 +100,7 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	char *line_tmp = malloc(config.common.line_size);
 	if (!line_in || !line_out || !line_tmp)
 		error_handler("import_subtitles_srt", "malloc failed", 1);
-	bzero(line_out, config.common.line_size);
+	memset(line_out, '\0', config.common.line_size);
 
 	struct subtitle_srt *sub_array = malloc(sizeof(struct subtitle_srt));
 	if (!sub_array)
@@ -197,5 +175,73 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	*counter = counter_array;
 
 	return sub_array;
+}
+
+
+void get_locale_prefix(char *res) {
+#ifdef HAVE_POSIX
+	strcpy(res, LOCALEDIR);
+#elif HAVE_WINDOWS
+	char win_path[MAX_PATH];
+	win_get_path(&win_path[0], sizeof(win_path)); 
+	sprintf(res, "%s%s", &win_path[0], LOCALEDIR);
+#endif
+}
+
+
+void get_icon(char *res) {
+#ifdef HAVE_POSIX
+        strcpy(res, VBS_ICON);
+#elif HAVE_WINDOWS
+        char win_path[MAX_PATH];
+        win_get_path(&win_path[0], sizeof(win_path));
+        sprintf(res, "%s%s%s", &win_path[0], SLASH, VBS_ICON);
+#endif
+}
+
+
+void get_file_selector_path(char *res) {
+#ifdef HAVE_POSIX
+        sprintf(res, "%s%s%s", g_get_home_dir(), SLASH, "Desktop");
+#elif HAVE_WINDOWS
+        sprintf(res, "%s", g_get_home_dir());
+#endif
+
+}
+
+
+void get_dir_from_filename (char *filename, char *dir) {
+	char filename_in[MAX_PATH];
+	strcpy(&filename_in[0], filename);
+
+        char c0[MAX_PATH];
+        char *p0 = &c0[0];
+        memset(&c0[0], '\0', MAX_PATH);
+
+        char c1[MAX_PATH];
+        char *p1 = &c1[0];
+        memset(&c1[0], '\0', MAX_PATH);
+
+        p0 = strtok(&filename_in[0], SLASH);
+#ifdef HAVE_POSIX
+	sprintf(dir, "/%s", p0);
+#elif HAVE_WINDOWS
+        sprintf(dir, "%s", p0);
+#endif
+
+        while (1) {
+                p0 = strtok(NULL, SLASH);
+                if (p0) {
+                        sprintf(dir, "%s%s%s", dir, p1, SLASH);
+                        p1 = strtok(NULL, SLASH);
+                }
+                else
+                        break;
+
+                if (p0 && p1)
+                        sprintf(dir, "%s%s%s", dir, p0, SLASH);
+                else
+                        break;
+        }
 }
 

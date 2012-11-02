@@ -174,7 +174,7 @@ void fileDialogSave(GtkAction *action, gpointer param) {
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-	sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+	get_file_selector_path(&fileDialogFile[0]);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
 	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
@@ -202,7 +202,7 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				      NULL);
 
-	sprintf(&fileDialogFile[0], "%s/Desktop", g_get_home_dir());
+	get_file_selector_path(&fileDialogFile[0]);
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
 	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
@@ -331,10 +331,18 @@ void set_video_output (GtkWidget *widget, gpointer window) {
 
 
 char *get_help_text() {
+	char file[1024];
+#ifdef HAVE_POSIX
 	char *locale = setlocale (LC_ALL, NULL);
 	char *lang = strtok(locale, ".");
-	char file[1024];
-	sprintf(&file[0], "%s/%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, lang);
+	sprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, SLASH, lang);
+#elif HAVE_WINDOWS
+	char locale[8];
+	win_get_locale(&locale[0]);
+        char win_path[MAX_PATH];
+        if (win_get_path(&win_path[0], sizeof(win_path))) 
+		sprintf(&file[0], "%s%s%s%s\\LC_MESSAGES\\vbs-help.mo", &win_path[0], LOCALEDIR, SLASH, &locale[0]);
+#endif
 
 	FILE *fp_help = fopen(&file[0], "r");
 	if (!fp_help) {
@@ -347,7 +355,7 @@ char *get_help_text() {
 	if (!line || !help_text)
 		error_handler("main","malloc failed", 1);
 
-	bzero(help_text, 1024 * sizeof(char));
+	memset(help_text, '\0', 1024 * sizeof(char));
 	int cnt = 1;
 	while (fgets(line, 1024, fp_help)) {
 		sprintf(help_text, "%s%s", help_text, line);
