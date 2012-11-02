@@ -57,6 +57,11 @@ Do note that the SDL video output will, depending on the exact build, sometimes
 put the video in a separate window (in MPlayer style). On Windows, only 
 GStreamer is supported.
 
+Supported video and audio codecs: 
+- On Linux: whatever your MPlayer or GStreamer can play
+- On Windows: the following GStreamer plugin packages are provided: base, good,
+  bad, ugly. 
+
 vbsm has a simple interface: 
 
 1. A status bar showing whether the movie is running or paused. When you first 

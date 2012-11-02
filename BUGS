@@ -1,4 +1,4 @@
-Should you find any bug, send an email. See AUTHOR for details. 
+Should you find any bug, send an email. See AUTHORS for details. 
 
 Also, the coding style is far from ideal - be warned.
 
@@ -27,4 +27,8 @@ projection). A work-around is implemented in the code. Other possible solutions:
 - swich to a GTK theme which does not use images for window backgrounds
 - swich to a GTK theme which has black window backgrounds
 - use GTK2. 
+
+5. On Windows Theora codec is missing.  This is an upstream bundling bug - the
+codec is missing the official GStreamer release. Either re-encode with other
+video codec or wait for the next release which will eventually fix it.
 
