@@ -29,7 +29,7 @@ static GOptionEntry cmdl_entries[] =
 	#define VBS_DEFAULT_EXPORT_FILENAME "/tmp/vbs-out.srt"
 #elif HAVE_WINDOWS
 	#define VBS_LOCAL_CONFIG_DIR "_vbs"
-	#define VBSM_DEFAULT_VIDEO_SINK "autovideosink"
+	#define VBSM_DEFAULT_VIDEO_SINK "directdrawsink"
 	#define VBS_DEFAULT_IMPORT_FILENAME "C:\\vbs-in.txt"
 	#define VBS_DEFAULT_EXPORT_FILENAME "C:\\vbs-out.srt"
 #endif
