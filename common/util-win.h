@@ -9,3 +9,6 @@
 // for details.
 
 bool win_get_path(char *win_path, int size);
+
+void win_get_locale(char *locale);
+

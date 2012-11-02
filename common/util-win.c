@@ -48,3 +48,11 @@ bool win_get_path(char *win_path, int size) {
         }
         return true;
 }
+
+void win_get_locale(char *locale) {
+	char country_code[16];
+	GetLocaleInfo(GetUserDefaultLCID(),LOCALE_SISO3166CTRYNAME, &country_code[0], 16);
+	char lang_code[16];
+	GetLocaleInfo(GetUserDefaultLCID(),LOCALE_SISO639LANGNAME, &lang_code[0], 16);
+	sprintf(locale, "%s_%s", &lang_code[0], &country_code[0]);
+}

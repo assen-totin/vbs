@@ -331,16 +331,25 @@ void set_video_output (GtkWidget *widget, gpointer window) {
 
 
 char *get_help_text() {
-	char *locale = setlocale (LC_ALL, NULL);
-	char *lang = strtok(locale, ".");
 	char file[1024];
 #ifdef HAVE_POSIX
+	char *locale = setlocale (LC_ALL, NULL);
+	char *lang = strtok(locale, ".");
 	sprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help.mo", LOCALEDIR, SLASH, lang);
+
 #elif HAVE_WINDOWS
+/*
+	char locale[8];
+	win_get_locale(&locale[0]);
         char win_path[MAX_PATH];
-        if (win_get_path(&win_path[0], sizeof(win_path))) {
-                sprintf(&file[0], "%s%s%s", &win_path[0], SLASH, LOCALEDIR);
-        }
+        if (win_get_path(&win_path[0], sizeof(win_path))) 
+		sprintf(&file[0], "%s%s%s%\\LC_MESSAGES\\vbs-help.mo", &win_path[0], LOCALEDIR, SLASH, &locale[0]);
+*/
+	char *locale = setlocale (LC_ALL, NULL);
+	char *lang = strtok(locale, ".");
+	char win_path[MAX_PATH];
+	if (win_get_path(&win_path[0], sizeof(win_path)))
+		sprintf(&file[0], "%s%s%s%\\LC_MESSAGES\\vbs-help.mo", &win_path[0], LOCALEDIR, SLASH, lang);
 #endif
 
 	FILE *fp_help = fopen(&file[0], "r");
