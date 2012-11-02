@@ -81,8 +81,13 @@ void gstreamer_init(char file_name[1024]) {
 	gst_init(0, NULL);
 
 	char uri[2048];
+#ifdef HAVE_POSI
 	sprintf(&uri[0], "file://%s", &file_name[0]);
-
+#elif HAVE_WINDOWS
+        char tmp_filename[2048];
+        win_filename_to_uri(&file_name[0], &tmp_filename[0]);
+        sprintf(&uri[0], "file:///%s", &tmp_filename[0]);
+#endif
 	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 
 	config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");

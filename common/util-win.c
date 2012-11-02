@@ -56,3 +56,23 @@ void win_get_locale(char *locale) {
 	GetLocaleInfo(GetUserDefaultLCID(),LOCALE_SISO639LANGNAME, &lang_code[0], 16);
 	sprintf(locale, "%s_%s", &lang_code[0], &country_code[0]);
 }
+
+void win_filename_to_uri(char *filename, char *tmp_filename) {
+        char filename_in[2048];
+	strcpy(&filename_in[0], filename);
+
+	char c0[2048];
+	char *p0 = &c0[0];
+	
+	p0 = strtok(&filename_in[0], SLASH);
+	sprintf(tmp_filename, "%s", p0);
+
+	while (1) {
+		p0 = strtok(NULL, SLASH);
+		if (p0) 
+			sprintf(tmp_filename, "%s/%s", tmp_filename, p0);
+		else
+			break;
+	}
+}
+

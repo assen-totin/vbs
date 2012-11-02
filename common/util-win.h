@@ -12,3 +12,5 @@ bool win_get_path(char *win_path, int size);
 
 void win_get_locale(char *locale);
 
+void win_filename_to_uri(char *filename, char *tmp_filename);
+
