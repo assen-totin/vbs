@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article
+  PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article lang="">
+   <articleinfo>
+      <title>VBS GUIDE</title>
+      <subtitle/>
+      <edition/>
+   </articleinfo>
+   <sect1>
+      <title>USING VBS</title>
+      <para>Keyboard controls:</para>
+      <para>* spacebar - toggles play/pause</para>
+      <para>* b - enter next subtitle</para>
+      <para>* m - exit current subtitle</para>
+      <para>* n - exit current and enter next</para>
+      <para>* s - export subtitles to the preset destinaton (overwrites the file is exists)</para>
+   </sect1>
+   <sect1>
+      <title>IMPORTING SUBTITLES</title>
+      <para>Use the Subtitles menu to import a text-only or a SubRip file and to specify its encoding.</para>
+      <para>Supported formats:</para>
+      <para>* Plain text: one line per subtitle. For long subtitles, use the pipe symbol “|” where you want the subtitle split into several lines</para>
+      <para>* SubRip</para>
+      <para>From the same menu section you can set import encoding (default is UTF-8).</para>
+   </sect1>
+   <sect1>
+      <title>EXPORTING SUBTITLES</title>
+      <para>Subtitles are automatically exported each time: </para>
+      <para>* a subtitle goes "out" ("n" or "m" key is pressed)</para>
+      <para>* when the "s" key is pressed</para>
+      <para>* when the programme is terminated</para>
+      <para>Use the Subtitles menu to set the export destination (default is /tmp/vbs_export.srt).</para>
+      <para>From the same menu section you can set:</para>
+      <para>* Export encoding (default is UTF-8)</para>
+      <para>* Export newline character (default is LF on Linux and CR/LF on Windows).</para>
+   </sect1>
+   <sect1>
+      <title>EDITING SUBTITLES LIST</title>
+      <para>Click a subtitle to highlight it.</para>
+      <para>Use the Edit menu to: </para>
+      <para>* Insert blank subtitle before the current (highlighted) one.</para>
+      <para>* Insert blank subtitle after the current (highlighted) one.</para>
+      <para>* Delete the current (highlighted) one.</para>
+      <para>* Clear the timing of the current (highlighted) subtitle.</para>
+      <para>* Clear the timing of all subtitles after the current (highlighted) one.</para>
+      <para>Double click start or end time to go to that subtitle. If video is loaded, you will be send 5 seconds before the beginning of the subtitle. </para>
+      <para>Double click text to edit it inline. </para>
+   </sect1>
+   <sect1>
+      <title>LOADING VIDEO</title>
+      <para>Use the Video menu to load video file.</para>
+      <para>Supported formats: any format which your back-end (GStreamer or MPlayer) can play.</para>
+      <para>VBS supports two back-ends: </para>
+      <para>* MPlayer (on Linux only)</para>
+      <para>* Gstreamer (on Windows and Linux)</para>
+      <para>Support for either or both can be included. If both are included, GStreamer will be default and it can be changed in the Video menu.</para>
+      <para>In the same menu you can set the video output method:</para>
+      <para>* For GStreamer:</para>
+      <para>** On Linux chose between X11 (most conservative, CPU-intensive, but most compatible; default), Xv (less CPU intensive, works with all modern video adapters) SDL (will play the video in a separate window) and Auto (use only as fail-safe, will always play the video in a separate window)</para>
+      <para>** On Windows chose between Direct Draw (most conservative, CPU-intensive, but most compatible; default), Direct Show (less CPU intensive, works with some modern video adapters), Direct 3D (latest, requires Vista or better) и Auto (use only as fail-safe, will always play the video in a separate window).</para>
+      <para>* MPlayer video output cannot be changed in VBS; use it's own menu for this.</para>
+      <para>If the video dose not play back properly, verify that the player has proper codecs installed. On Linux, you should be able to play the video with the same player,  MPlayer or Gstreamer-based one (like Totem) outside VBS. On Windows GStreamer is supplied with the following plugin packs: base, good, bad, ugly. </para>
+   </sect1>
+   <sect1>
+      <title>USING VBS WITHOUT VIDEO</title>
+      <para>You can use VBS for timing subtitles without loading video (e.g., when watching the video on TV). To set the time to “zero”, use the Edit -&gt; Set Start Time menu when the movie begins. </para>
+   </sect1>
+   <sect1>
+      <title>USING THE NETWORK</title>
+      <para>Use the Network menu to enable/disable sending subtitle info to a vbsd server. When enabled, the network mode will be shown as “Send”. If not using the network, turn it off to improve performance (default).</para>
+      <para>If using the network, in the same menu also set: </para>
+      <para>* Network server (FQDN); will only be accepted if can be resolved to IP address.</para>
+      <para>* TCP port on which vbsd is listening (default: 42)</para>
+      <para>* Magic key used to communicate with vbsd (default: 1973); must be same on the server side. </para>
+   </sect1>
+   <sect1>
+      <title>ADDITIONAL TOOLS</title>
+      <para>Except the current programme (the master client or vbsm), the VBS also includes: </para>
+      <para>* The relay server or vbsd – used to relay subtitles from vbsm or vbss to vbss,</para>
+      <para>* The slave client or vbss – used to project subtitles which are either read from a local SubRip file or received over the network from a vbsd server. </para>
+      <para>* The configuration tool or vbsc – used to configure vbss. </para>
+   </sect1>
+</article>

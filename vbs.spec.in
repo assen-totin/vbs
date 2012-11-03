@@ -41,7 +41,7 @@ done
 make install DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang vbs
-%find_lang vbs-help
+%find_lang vbs-help-gtk
 
 %post
 gtk-update-icon-cache -f -t @DATAROOTDIR@/icons
@@ -51,7 +51,7 @@ gtk-update-icon-cache -f -t @DATAROOTDIR@/icons
 rm -rf $RPM_BUILD_ROOT
 
 %files -f vbs.lang
-%files -f vbs-help.lang
+%files -f vbs-help-gtk.lang
 
 %defattr(-,root,root)
 %doc @DATAROOTDIR@/doc/%{name}/AUTHORS

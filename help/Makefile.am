@@ -10,10 +10,16 @@
 
 noinst_HEADERS = bg_BG.mo en_US.mo en_GB.mo ru_RU.mo
 
+XSL_PLAINTEXT = /usr/share/sgml/docbook/xsl-stylesheets-1.76.1/html/docbook.xsl
+
+help_textonly:
+	for HELPFILE in `ls docbook`; do NEWFILE=`echo $$HELPFILE | sed s/\.xml//g`;  echo "Creating plaintext docs for lang " $NEWFILE; xsltproc --nonet $(XSL_PLAINTEXT) docbook/$$HELPFILE > gtk/$$NEWFILE.html; lynx -dump gtk/$$NEWFILE.html > gtk/$$NEWFILE.mo.tmp; grep -v "file://" gtk/$$NEWFILE.mo.tmp > gtk/$$NEWFILE.mo  rm -f gtk/$$NEWFILE.html gtk/$$NEWFILE.mo.tmp; done
+
+help_chm: 
+
 exe_prep:
-	for HELPDIR in `ls *mo | sed s/\.mo$\//g`; do mkdir -p exe/$$HELPDIR/LC_MESSAGES; HELPFILE=$$HELPDIR.mo; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help.mo; done;
+	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`; echo "Installing help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done;
 
 install-data-hook: 
-	echo "Copying help files..."
-	for HELPFILE in `ls *mo | sed s/\.mo$\//g`; do test -z $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/; echo -n "Help file for lang "; echo $$HELPFILE; cp -f $$HELPFILE.mo $(DESTDIR)$(localedir)/$$HELPFILE/LC_MESSAGES/vbs-help.mo; done
+	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`;  echo "Installing help for lang " $$HELPDIR; test -z $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/; cp -f $$HELPFILE $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done
 
