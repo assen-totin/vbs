@@ -98,7 +98,6 @@ void help_contents(GtkWidget *widget, gpointer window) {
 	if (WEXITSTATUS(status) != 42)
 		return;
 #elif HAVE_WINDOWS
-/*
 	char locale[16];
 	win_get_locale(&locale[0]);
 	char win_path[MAX_PATH];
@@ -106,7 +105,6 @@ void help_contents(GtkWidget *widget, gpointer window) {
 		sprintf(&file[0], "%s%s%s%s\\LC_MESSAGES\\vbs-help-win.chm", &win_path[0], LOCALEDIR, SLASH, &locale[0]);	
 		ShellExecute(NULL, "open", &file[0], NULL, NULL, SW_SHOW);
 	}
-*/
 #endif
 
 	// GTK help - fallback for POSIX, primary help for Windows (so far - until CHM generation is resolved)

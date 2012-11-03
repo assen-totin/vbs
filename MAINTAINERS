@@ -1,0 +1,66 @@
+NOTES TO MAINTAINERS OF VBS
+
+Please, read the INSTALL file first. It contains important notes on working with 
+the distributed archives (.tar.gz).
+
+If you are dealing with the very raw source code, read on. 
+
+CHECKING OUT
+============
+Full source tree: svn://svn.online.bg/vbs
+Trunk: svn://svn.online.bg/vbs/TRUNK
+Branches: svn://svn.online.bg/vbs/BRANCHES
+Tags: svn://svn.online.bg/vbs/TAGS
+Browse online: http://www.zavedil.com/svn
+
+
+AUTOCONF
+========
+./autogen.sh
+
+
+TRANSLATIONS
+============
+Standard gettext is used. "make dist" will update the .mo files from
+existing .po files. 
+
+
+HELP
+===
+Help is maintained in DocBook format, one file per language - see help/docbook
+
+Help is distributed in 3 flavours: 
+- For Linux + GNOME users: the docbooks themselves get fed to yelp.
+- For Linux users without yelp: a text-only help (one file per language) that 
+will be displayed in a GTK widget. 
+- For Windows users: CHM files, one file per language.
+
+To produce the text-only help from DocBook help: 
+
+   cd help; make help_textonly
+
+To produce the CHM help from DocBook help: 
+- install the FreePascal compiler, it will give you the chmcmd utility
+- install the preshrinked-cotton Python package, it will give you the tt2chm 
+helper script: http://code.google.com/p/preshrunk-cotton (it depends on 'textile'
+package, install it too).
+- then run
+
+   cd help; make help_chm
+
+When installing on Linux (incl. when building an RPM), both text-only and 
+DocBook help will be both installed. At runtime VBS will attempt to use yelp,
+if it is missing, it will show the text-only help.
+
+
+BUILDING A DISTRIBUTION
+=======================
+You need to have: 
+- all the language files for help (DocBook, text-only, CHM)
+- the .po files for translations.
+
+Then run:
+
+   make dist
+
+
