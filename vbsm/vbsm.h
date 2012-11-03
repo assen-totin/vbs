@@ -8,4 +8,7 @@
 // See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 // for details.
 
+#define VBSM_LOG_FILE "vbsLogFile"
+#define VBSM_MPLAYER_SUB_FILE "vbsSubFile"
+#define VBSM_KEEP_LOGS 3
 

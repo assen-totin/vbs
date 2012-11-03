@@ -245,3 +245,49 @@ void get_dir_from_filename (char *filename, char *dir) {
         }
 }
 
+void del_old_logs() {
+	GStatBuf stat_buf;
+	struct vbs_stat_struct tmp_stat;
+	gchar *filename;
+	int i, j, file_counter = 0;
+
+        struct vbs_stat_struct *file_array = malloc(sizeof(struct vbs_stat_struct));
+        if (!file_array)
+                error_handler("del_old_logs", "malloc failed", 1);
+
+	GDir *dir = g_dir_open(VBS_TMP_DIR, 0, NULL);
+	while (1) {
+		if (filename = g_dir_read_name(dir)) {
+			if (strstr(filename, VBSM_LOG_FILE)) {
+				g_stat(filename, &stat_buf);
+        	                void *_tmp = realloc(file_array, ((file_counter + 1) * sizeof(struct vbs_stat_struct)));
+                	        if (!_tmp)
+	                	        error_handler("del_old_logs", "realloc failed", 1);
+	                        file_array = (struct vbs_stat_struct *)_tmp;
+				file_array[file_counter].mtime = stat_buf.st_mtime;
+        	                sprintf(&file_array[file_counter].filename[0], "%s", filename);
+                	        file_counter++;
+			}
+		}
+		else
+			break;
+	}
+
+	// Sort by mtime desc
+	for (i=0; i<file_counter; i++ ) {
+		for (j=0; j<file_counter; j++) {
+			if (file_array[i].mtime > file_array[j].mtime) {
+				tmp_stat = file_array[i];
+				file_array[i] = file_array[j];
+				file_array[j] = tmp_stat;
+			}
+		}
+	}
+
+	// Remove all but the newest N
+	for (i=VBSM_KEEP_LOGS; i< file_counter; i++)
+		g_remove(&file_array[i].filename[0]);
+
+	g_dir_close(dir);
+}
+

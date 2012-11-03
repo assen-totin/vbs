@@ -10,10 +10,11 @@
 
 noinst_HEADERS = docbook/* gtk/*
 
-XSL_PLAINTEXT = /usr/share/sgml/docbook/xsl-stylesheets-1.76.1/html/docbook.xsl
+XSL_PREFIX = http://docbook.sourceforge.net/release/xsl/current
+XSL_PLAINTEXT = $(XSL_PREFIX)/html/docbook.xsl
 
 help_textonly:
-	for HELPFILE in `ls docbook`; do NEWFILE=`echo $$HELPFILE | sed s/\.xml//g`;  echo "Creating plaintext docs for lang " $$NEWFILE; xsltproc --nonet $(XSL_PLAINTEXT) docbook/$$HELPFILE > gtk/$$NEWFILE.html; lynx -dump gtk/$$NEWFILE.html > gtk/$$NEWFILE.mo.tmp; grep -v "file://" gtk/$$NEWFILE.mo.tmp > gtk/$$NEWFILE.mo; rm -f gtk/$$NEWFILE.html gtk/$$NEWFILE.mo.tmp; done
+	for HELPFILE in `ls docbook`; do NEWFILE=`echo $$HELPFILE | sed s/\.xml//g`;  echo "Creating plaintext docs for lang " $$NEWFILE; xsltproc $(XSL_PLAINTEXT) docbook/$$HELPFILE > gtk/$$NEWFILE.html; lynx -dump gtk/$$NEWFILE.html > gtk/$$NEWFILE.mo.tmp; grep -v "file://" gtk/$$NEWFILE.mo.tmp > gtk/$$NEWFILE.mo; rm -f gtk/$$NEWFILE.html gtk/$$NEWFILE.mo.tmp; done
 
 help_chm: 
 
