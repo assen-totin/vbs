@@ -89,13 +89,13 @@ void help_contents(GtkWidget *widget, gpointer window) {
 	if (cpid == 0) {
 		int retval = execlp(VBSM_YELP_BINARY, VBSM_YELP_BINARY, &file[0], (char *) NULL);
 		if (retval == -1)
-			exit(retval);
+			exit(42);
 	}
 	// Parent - checlk if the child has exited in less than a second (i.e. yelp was not found)
 	sleep(1);
 	int status = 0;
 	waitpid(cpid, &status, WNOHANG);
-	if (status != -1)
+	if (WEXITSTATUS(status) != 42)
 		return;
 #elif HAVE_WINDOWS
 /*

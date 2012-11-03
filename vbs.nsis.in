@@ -14,7 +14,7 @@
 
 Name "VBS"
 OutFile "vbs-@PACKAGE_VERSION@.exe"
-InstallDir "$ProgramFiles\VBS"
+InstallDir "$ProgramFiles\VBS-@PACKAGE_VERSION@"
 InstallDirRegKey HKLM SOFTWARE\VBS "Install_Dir"
 
 ShowInstDetails hide

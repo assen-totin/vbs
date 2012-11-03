@@ -39,6 +39,7 @@ for DIR in `find po/ -maxdepth 1 -mindepth 1 -type d | sed s/po.//g`; do
 done
 
 make install DESTDIR=$RPM_BUILD_ROOT
+cd help; make DESTDIR=$RPM_BUILD_ROOT rpm_prep; cd ..
 
 %find_lang vbs
 %find_lang vbs-help-gtk

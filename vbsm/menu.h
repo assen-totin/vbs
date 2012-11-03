@@ -79,5 +79,5 @@ static struct video_output video_outputs[] = {
 #endif
 };
 
-#define VBSM_YELP_BINARY = "yelp"
+#define VBSM_YELP_BINARY "yelp"
 
