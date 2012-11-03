@@ -1,4 +1,4 @@
-Nov 1, 2012 - Version 3.0
+Nov 6, 2012 - Version 3.0
 ==========================
 
 1. Support GTK3 as well as GTK2. Choice will be made at compile time. If both 
@@ -9,20 +9,25 @@ configure options.
 available, support for it will be built and also for MPlayer. To compile only 
 one of them, use the --enable-backend=mplayer,gstreamer configuration option. 
 Support multiple video output methods for GStreamer - X11 (ximagesink), Xv 
-(xvimagesink), SLD (sdlvideosink). 
+(xvimagesink), SLD (sdlvideosink), Auto (autovideosink). 
 
-3. Support i18n via gettext. Provided translations for Bulgarian, Russian, 
-English. Also added i18n support for help.
+3. Windows support, cross-compiled in Linux using MinGW32. The Windows build
+has few limitations: vbsd is not available; GTK-2 only is supported (no GTK-3 
+yet); GStreamer is the only player supported (no MPLayer).
 
-4. Full autoconf support.
+4. Support for i18n via gettext. Provided translations for Bulgarian, Russian, 
+English. Also added i18n support for help: DocBoox for GNOME (yelp), CHM
+for Windows and plain text for GTK-only. 
 
-5. vbss improvements: font family & face selection, font colour and background
+5. Full autoconf support, automake now also supported.
+
+6. vbss improvements: font family & face selection, font colour and background
 selection, font justification selection (all via vbsc).
 
-6. vbsd now can be started by a SystemV init or by systemd. Proper startup 
+7. vbsd now can be started by a SystemV init or by systemd. Proper startup 
 scripts are provided. 
 
-7. vbsm now has a progress bar update configuration option (in the config file
+8. vbsm now has a progress bar update configuration option (in the config file
 only, not from the GUI).
 
 Oct 9, 2012 - Version 2.2
@@ -52,7 +57,7 @@ can be retrieved by the vbss ("slave" client).
 
 3. Added vbss - client for showing same subtitles in multiple locations.
 
-4. Added autoconf support
+4. Added autoconf support (but no automake).
 
 5. Disabled keyboard controls for mplayer
 
