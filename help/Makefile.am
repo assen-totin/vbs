@@ -8,15 +8,24 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
-noinst_HEADERS = docbook/* gtk/*
+noinst_HEADERS = docbook/* gtk/* win/* 
 
 XSL_PREFIX = http://docbook.sourceforge.net/release/xsl/current
+XSL_COMPILER = xsltproc
 XSL_PLAINTEXT = $(XSL_PREFIX)/html/docbook.xsl
+XSL_CHM = $(XSL_PREFIX)/htmlhelp/htmlhelp.xsl
 
 help_textonly:
-	for HELPFILE in `ls docbook`; do NEWFILE=`echo $$HELPFILE | sed s/\.xml//g`;  echo "Creating plaintext docs for lang " $$NEWFILE; xsltproc $(XSL_PLAINTEXT) docbook/$$HELPFILE > gtk/$$NEWFILE.html; lynx -dump gtk/$$NEWFILE.html > gtk/$$NEWFILE.mo.tmp; grep -v "file://" gtk/$$NEWFILE.mo.tmp > gtk/$$NEWFILE.mo; rm -f gtk/$$NEWFILE.html gtk/$$NEWFILE.mo.tmp; done
+	for HELPFILE in `find docbook | grep xml`; do HELPDIR=`echo $$HELPFILE | sed s/\.xml$\//g | sed s/docbook\\\\///g`;  echo "Creating plaintext docs for lang " $$HELPDIR; $(XSL_COMPILER) $(XSL_PLAINTEXT) $$HELPFILE > gtk/$$HELPDIR.html; lynx -dump gtk/$$HELPDIR.html > gtk/$$HELPDIR.mo.tmp; grep -v "file://" gtk/$$HELPDIR.mo.tmp > gtk/$$HELPDIR.mo; rm -f gtk/$$HELPDIR.html gtk/$$HELPDIR.mo.tmp; done
+
+CHM_COMPILER = tt2chm
+CHM_TITLE = "VBS Guide"
+CHM_INDEX = "index.html"
+CHM_TMP_DIR_1 = "chm_tmp_dir_1"
+CHM_TMP_DIR_2 = "chm_tmp_dir_2"
 
 help_chm: 
+	for HELPFILE in `find docbook | grep xml`; do HELPDIR=`echo $$HELPFILE | sed s/\.xml$\//g | sed s/docbook\\\\///g`;  echo "Creating CHM docs for lang " $$HELPDIR; mkdir $(CHM_TMP_DIR_1); mkdir $(CHM_TMP_DIR_2); cd $(CHM_TMP_DIR_1); $(XSL_COMPILER) $(XSL_CHM) ../$$HELPFILE; rm -f htmlhelp.hhp toc.hhc; cd ..; $(CHM_COMPILER) -t $(CHM_TITLE) -f $(CHM_INDEX) $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); mv $(CHM_TMP_DIR_2)/$(CHM_TMP_DIR_2).chm win/$$HELPDIR.chm; chmod 644 win/$$HELPDIR.chm; rm -rf $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); done
 
 exe_prep:
 	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`; echo "Installing GTK help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done;
