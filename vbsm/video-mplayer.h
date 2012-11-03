@@ -16,5 +16,5 @@ void mplayer_pipe_write(char *command);
 
 int mplayer_get_time_pos(int flag);
 
-#define VBS_MPLAYER_BINARY "mplayer"
+#define VBSM_MPLAYER_BINARY "mplayer"
 

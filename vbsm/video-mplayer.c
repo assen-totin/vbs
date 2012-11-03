@@ -110,7 +110,8 @@ void *mplayer_load_video(char fileName[1024]) {
 		if (pipe(writePipeFD) == -1) { error_handler("mplayer_load_video","write pipe creation failed", 1);}
 
 		cpid = fork();
-		if (cpid == -1) {error_handler("mplayer_load_video","fork failed", 1);}
+		if (cpid == -1) 
+			error_handler("mplayer_load_video","fork failed", 1);
 
 		// Child
 		if (cpid == 0) { 
@@ -123,7 +124,7 @@ void *mplayer_load_video(char fileName[1024]) {
 			close(writePipeFD[0]);
 			close(readPipeFD[1]);
 
-			execlp(VBS_MPLAYER_BINARY, VBS_MPLAYER_BINARY, "-slave", "-quiet", "-input", "nodefault-bindings:file=/dev/null:conf=/dev/null", "-utf8", "-osdlevel", "3", &fileName[0], (char *) NULL);
+			execlp(VBSM_MPLAYER_BINARY, VBSM_MPLAYER_BINARY, "-slave", "-quiet", "-input", "nodefault-bindings:file=/dev/null:conf=/dev/null", "-utf8", "-osdlevel", "3", &fileName[0], (char *) NULL);
 		}
 
 		// Parent

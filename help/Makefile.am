@@ -18,8 +18,10 @@ help_textonly:
 help_chm: 
 
 exe_prep:
-	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`; echo "Installing help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done;
+	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`; echo "Installing GTK help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done;
+	for HELPFILE in `find win | grep chm`; do HELPDIR=`echo $$HELPFILE | sed s/\.chm$\//g | sed s/win\\\\///g`; echo "Installing CHM help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-win.chm; done;
 
 install-data-hook: 
-	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`;  echo "Installing help for lang " $$HELPDIR; test -z $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/; cp -f $$HELPFILE $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done
+	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`;  echo "Installing GTK help for lang " $$HELPDIR; test -z $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/; cp -f $$HELPFILE $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done
+	for HELPFILE in `find docbook | grep xml`; do HELPDIR=`echo $$HELPFILE | sed s/\.xml$\//g | sed s/docbook\\\\///g`;  echo "Installing GNOME help for lang " $$HELPDIR; test -z $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/ || mkdir -p $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/; cp -f $$HELPFILE $(DESTDIR)$(localedir)/$$HELPDIR/LC_MESSAGES/vbs-help-gnome.mo; done
 

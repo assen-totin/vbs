@@ -75,8 +75,42 @@ void insert_subtitle(GtkAction *action, gpointer param){
 
 void help_contents(GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog;
+	char file[1024];
 
-	char *help_text = get_help_text();
+	// GNOME help - docbook files via yelp
+#ifdef HAVE_POSIX
+        char *locale = setlocale (LC_ALL, NULL);
+        char *lang = strtok(locale, ".");
+        sprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help-gnome.mo.xml", LOCALEDIR, SLASH, lang);
+	pid_t cpid = fork();
+	if (cpid == -1) 
+		error_handler("help_contents", "fork failed", 1);
+	// Child
+	if (cpid == 0) {
+		int retval = execlp(VBSM_YELP_BINARY, VBSM_YELP_BINARY, &file[0], (char *) NULL);
+		if (retval == -1)
+			exit(retval);
+	}
+	// Parent - checlk if the child has exited in less than a second (i.e. yelp was not found)
+	sleep(1);
+	int status = 0;
+	waitpid(cpid, &status, WNOHANG);
+	if (status != -1)
+		return;
+#elif HAVE_WINDOWS
+/*
+	char locale[16];
+	win_get_locale(&locale[0]);
+	char win_path[MAX_PATH];
+	if (win_get_path(&win_path[0], sizeof(win_path))) {
+		sprintf(&file[0], "%s%s%s%s\\LC_MESSAGES\\vbs-help-win.chm", &win_path[0], LOCALEDIR, SLASH, &locale[0]);	
+		ShellExecute(NULL, "open", &file[0], NULL, NULL, SW_SHOW);
+	}
+*/
+#endif
+
+	// GTK help - fallback for POSIX, primary help for Windows (so far - until CHM generation is resolved)
+	char *help_text = get_help_gtk();
 
 	if (!help_text) {
 		dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
@@ -330,7 +364,7 @@ void set_video_output (GtkWidget *widget, gpointer window) {
 }
 
 
-char *get_help_text() {
+char *get_help_gtk() {
 	char file[1024];
 #ifdef HAVE_POSIX
 	char *locale = setlocale (LC_ALL, NULL);

@@ -25,7 +25,7 @@ void set_video_output (GtkWidget *widget, gpointer window);
 
 void set_video_backend (GtkWidget *widget, gpointer window);
 
-char *get_help_text();
+char *get_help_gtk();
 
 struct video_backend {
 	char name[255];
@@ -78,4 +78,6 @@ static struct video_output video_outputs[] = {
         {"Auto", "autovideosink", false}
 #endif
 };
+
+#define VBSM_YELP_BINARY = "yelp"
 

@@ -42,9 +42,11 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %find_lang vbs
 %find_lang vbs-help-gtk
+%find_lang vbs-help-gnome
 
 %post
 gtk-update-icon-cache -f -t @DATAROOTDIR@/icons
+for i in `find @DATAROOTDIR@/locale | grep vbs-help-gnome.mo`; do mv $i $i.xml; done
 @RPM_SYSTEMD_POST@
 
 %clean
@@ -52,6 +54,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f vbs.lang
 %files -f vbs-help-gtk.lang
+%files -f vbs-help-gnome.lang
 
 %defattr(-,root,root)
 %doc @DATAROOTDIR@/doc/%{name}/AUTHORS
