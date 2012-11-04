@@ -287,8 +287,11 @@ void del_old_logs() {
 	}
 
 	// Remove all but the newest N
-	for (i=VBSM_KEEP_LOGS; i< file_counter; i++)
-		g_remove(&file_array[i].filename[0]);
+	char file_to_del[1024];
+	for (i=VBSM_KEEP_LOGS; i< file_counter; i++){
+		sprintf(&file_to_del[0], "%s%s%s", &dir_name[0], SLASH, &file_array[i].filename[0]);
+		g_remove(&file_to_del[0]);
+	}
 
 	g_dir_close(dir);
 }
