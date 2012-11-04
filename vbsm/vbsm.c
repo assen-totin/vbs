@@ -19,7 +19,7 @@ int main (int argc, char **argv){
 
 	// i18n
 #ifdef HAVE_POSIX
-        setlocale (LC_ALL, "");
+tsetlocale (LC_ALL, "");
 #endif
 #ifdef HAVE_WINDOWS
 	char locale[32];

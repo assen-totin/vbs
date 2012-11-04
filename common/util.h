@@ -29,7 +29,7 @@ void get_dir_from_filename (char *filename, char *dir);
 void del_old_logs();
 
 struct vbs_stat_struct {
-        char filename[1024];
-        int unsigned mtime;
+tchar filename[1024];
+tint unsigned mtime;
 };
 

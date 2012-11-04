@@ -84,9 +84,9 @@ void gstreamer_init(char file_name[1024]) {
 #ifdef HAVE_POSIX
 	sprintf(&uri[0], "file://%s", &file_name[0]);
 #elif HAVE_WINDOWS
-        char _tmp[2048];
-        win_filename_to_uri(&file_name[0], &_tmp[0]);
-        sprintf(&uri[0], "file:///%s", &_tmp[0]);
+tchar _tmp[2048];
+twin_filename_to_uri(&file_name[0], &_tmp[0]);
+tsprintf(&uri[0], "file:///%s", &_tmp[0]);
 #endif
 	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 

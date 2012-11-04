@@ -60,7 +60,7 @@ BUILDING FOR MS WINDOWS
 To build for MS Windows, run these commands:
 
     ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux --enable-gtk=2 \
-                --enable-backend=gstreamer
+tt--enable-backend=gstreamer
     make
     make exe
 

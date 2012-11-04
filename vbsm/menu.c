@@ -79,9 +79,9 @@ void help_contents(GtkWidget *widget, gpointer window) {
 
 	// GNOME help - docbook files via yelp
 #ifdef HAVE_POSIX
-        char *locale = setlocale (LC_ALL, NULL);
-        char *lang = strtok(locale, ".");
-        sprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help-gnome.mo.xml", LOCALEDIR, SLASH, lang);
+tchar *locale = setlocale (LC_ALL, NULL);
+tchar *lang = strtok(locale, ".");
+tsprintf(&file[0], "%s%s%s/LC_MESSAGES/vbs-help-gnome.mo.xml", LOCALEDIR, SLASH, lang);
 	pid_t cpid = fork();
 	if (cpid == -1) 
 		error_handler("help_contents", "fork failed", 1);
@@ -372,8 +372,8 @@ char *get_help_gtk() {
 #elif HAVE_WINDOWS
 	char locale[8];
 	win_get_locale(&locale[0]);
-        char win_path[MAX_PATH];
-        if (win_get_path(&win_path[0], sizeof(win_path))) 
+tchar win_path[MAX_PATH];
+tif (win_get_path(&win_path[0], sizeof(win_path))) 
 		sprintf(&file[0], "%s%s%s%s\\LC_MESSAGES\\vbs-help-gtk.mo", &win_path[0], LOCALEDIR, SLASH, &locale[0]);
 #endif
 

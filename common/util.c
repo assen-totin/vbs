@@ -191,20 +191,20 @@ void get_locale_prefix(char *res) {
 
 void get_icon(char *res) {
 #ifdef HAVE_POSIX
-        strcpy(res, VBS_ICON);
+tstrcpy(res, VBS_ICON);
 #elif HAVE_WINDOWS
-        char win_path[MAX_PATH];
-        win_get_path(&win_path[0], sizeof(win_path));
-        sprintf(res, "%s%s%s", &win_path[0], SLASH, VBS_ICON);
+tchar win_path[MAX_PATH];
+twin_get_path(&win_path[0], sizeof(win_path));
+tsprintf(res, "%s%s%s", &win_path[0], SLASH, VBS_ICON);
 #endif
 }
 
 
 void get_file_selector_path(char *res) {
 #ifdef HAVE_POSIX
-        sprintf(res, "%s%s%s", g_get_home_dir(), SLASH, "Desktop");
+tsprintf(res, "%s%s%s", g_get_home_dir(), SLASH, "Desktop");
 #elif HAVE_WINDOWS
-        sprintf(res, "%s", g_get_home_dir());
+tsprintf(res, "%s", g_get_home_dir());
 #endif
 
 }
@@ -214,35 +214,35 @@ void get_dir_from_filename (char *filename, char *dir) {
 	char filename_in[MAX_PATH];
 	strcpy(&filename_in[0], filename);
 
-        char c0[MAX_PATH];
-        char *p0 = &c0[0];
-        memset(&c0[0], '\0', MAX_PATH);
+tchar c0[MAX_PATH];
+tchar *p0 = &c0[0];
+tmemset(&c0[0], '\0', MAX_PATH);
 
-        char c1[MAX_PATH];
-        char *p1 = &c1[0];
-        memset(&c1[0], '\0', MAX_PATH);
+tchar c1[MAX_PATH];
+tchar *p1 = &c1[0];
+tmemset(&c1[0], '\0', MAX_PATH);
 
-        p0 = strtok(&filename_in[0], SLASH);
+tp0 = strtok(&filename_in[0], SLASH);
 #ifdef HAVE_POSIX
 	sprintf(dir, "/%s", p0);
 #elif HAVE_WINDOWS
-        sprintf(dir, "%s", p0);
+tsprintf(dir, "%s", p0);
 #endif
 
-        while (1) {
-                p0 = strtok(NULL, SLASH);
-                if (p0) {
-                        sprintf(dir, "%s%s%s", dir, p1, SLASH);
-                        p1 = strtok(NULL, SLASH);
-                }
-                else
-                        break;
+twhile (1) {
+ttp0 = strtok(NULL, SLASH);
+ttif (p0) {
+tttsprintf(dir, "%s%s%s", dir, p1, SLASH);
+tttp1 = strtok(NULL, SLASH);
+tt}
+ttelse
+tttbreak;
 
-                if (p0 && p1)
-                        sprintf(dir, "%s%s%s", dir, p0, SLASH);
-                else
-                        break;
-        }
+ttif (p0 && p1)
+tttsprintf(dir, "%s%s%s", dir, p0, SLASH);
+ttelse
+tttbreak;
+t}
 }
 
 void del_old_logs() {
@@ -251,9 +251,9 @@ void del_old_logs() {
 	gchar *filename;
 	int i, j, file_counter = 0;
 
-        struct vbs_stat_struct *file_array = malloc(sizeof(struct vbs_stat_struct));
-        if (!file_array)
-                error_handler("del_old_logs", "malloc failed", 1);
+tstruct vbs_stat_struct *file_array = malloc(sizeof(struct vbs_stat_struct));
+tif (!file_array)
+tterror_handler("del_old_logs", "malloc failed", 1);
 
 	char dir_name[MAX_PATH];
 	get_dir_from_filename (&config.vbsm.log_file_name[0], &dir_name[0]);
@@ -262,13 +262,13 @@ void del_old_logs() {
 		if (filename = g_dir_read_name(dir)) {
 			if (strstr(filename, VBSM_LOG_FILE)) {
 				g_stat(filename, &stat_buf);
-        	                void *_tmp = realloc(file_array, ((file_counter + 1) * sizeof(struct vbs_stat_struct)));
-                	        if (!_tmp)
-	                	        error_handler("del_old_logs", "realloc failed", 1);
-	                        file_array = (struct vbs_stat_struct *)_tmp;
+t	ttvoid *_tmp = realloc(file_array, ((file_counter + 1) * sizeof(struct vbs_stat_struct)));
+tt	tif (!_tmp)
+	tt	terror_handler("del_old_logs", "realloc failed", 1);
+	tttfile_array = (struct vbs_stat_struct *)_tmp;
 				file_array[file_counter].mtime = stat_buf.st_mtime;
-        	                sprintf(&file_array[file_counter].filename[0], "%s", filename);
-                	        file_counter++;
+t	ttsprintf(&file_array[file_counter].filename[0], "%s", filename);
+tt	tfile_counter++;
 			}
 		}
 		else

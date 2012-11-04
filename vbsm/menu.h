@@ -72,10 +72,10 @@ static struct video_output video_outputs[] = {
 	{"SDL", "sdlvideosink", false},
 	{"Auto", "autovideosink", false}
 #elif HAVE_WINDOWS
-        {"Direct Draw", "directdrawsink", true},
-        {"Direct Show", "dshowvideosink", false},
-        {"Direct 3D", "d3dvideosink", false},
-        {"Auto", "autovideosink", false}
+t{"Direct Draw", "directdrawsink", true},
+t{"Direct Show", "dshowvideosink", false},
+t{"Direct 3D", "d3dvideosink", false},
+t{"Auto", "autovideosink", false}
 #endif
 };
 
