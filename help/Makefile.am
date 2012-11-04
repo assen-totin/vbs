@@ -20,12 +20,14 @@ help_textonly:
 
 CHM_COMPILER = tt2chm
 CHM_TITLE = "VBS Guide"
-CHM_INDEX = "index.html"
+CHM_OLD_INDEX = "index.html"
+CHM_NEW_INDEX = "ar01s02.html"
 CHM_TMP_DIR_1 = "chm_tmp_dir_1"
-CHM_TMP_DIR_2 = "chm_tmp_dir_2"
+CHM_TMP_DIR_2 = "chm_tmp_dir_1"
+CHM_TITLE_FILE = "title.txt"
 
 help_chm: 
-	for HELPFILE in `find docbook | grep xml`; do HELPDIR=`echo $$HELPFILE | sed s/\.xml$\//g | sed s/docbook\\\\///g`;  echo "Creating CHM docs for lang " $$HELPDIR; mkdir $(CHM_TMP_DIR_1); mkdir $(CHM_TMP_DIR_2); cd $(CHM_TMP_DIR_1); $(XSL_COMPILER) $(XSL_CHM) ../$$HELPFILE; rm -f htmlhelp.hhp toc.hhc; cd ..; $(CHM_COMPILER) -t $(CHM_TITLE) -f $(CHM_INDEX) $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); mv $(CHM_TMP_DIR_2)/$(CHM_TMP_DIR_2).chm win/$$HELPDIR.chm; chmod 644 win/$$HELPDIR.chm; rm -rf $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); done
+	for HELPFILE in `find docbook | grep xml`; do HELPDIR=`echo $$HELPFILE | sed s/\.xml$\//g | sed s/docbook\\\\///g`;  echo "Creating CHM docs for lang " $$HELPDIR; mkdir $(CHM_TMP_DIR_1); mkdir $(CHM_TMP_DIR_2); cd $(CHM_TMP_DIR_1); $(XSL_COMPILER) $(XSL_CHM) ../$$HELPFILE; rm -f htmlhelp.hhp toc.hhc; mv $(CHM_OLD_INDEX) $(CHM_NEW_INDEX); cd ..; cp $(CHM_TITLE_FILE) $(CHM_TMP_DIR_2); $(CHM_COMPILER) -t $(CHM_TITLE) -f $(CHM_NEW_INDEX) $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); mv $(CHM_TMP_DIR_2)/$(CHM_TMP_DIR_2).chm win/$$HELPDIR.chm; chmod 644 win/$$HELPDIR.chm; rm -rf $(CHM_TMP_DIR_1) $(CHM_TMP_DIR_2); done
 
 exe_prep:
 	for HELPFILE in `find gtk | grep mo`; do HELPDIR=`echo $$HELPFILE | sed s/\.mo$\//g | sed s/gtk\\\\///g`; echo "Installing GTK help for lang " $$HELPDIR; mkdir -p exe/$$HELPDIR/LC_MESSAGES; cp -f $$HELPFILE exe/$$HELPDIR/LC_MESSAGES/vbs-help-gtk.mo; done;
