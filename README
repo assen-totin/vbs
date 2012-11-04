@@ -24,9 +24,9 @@ vbss share this file; vbsd keeps its own config file (of the same format) in
 $SYSCONFDIR/vbs/config. You can force the usage of a different config file 
 through the -f (or --config) command-line option.
 
-vbsm keeps a log file named vbs-XXXXXXXX.log (in the config directory, ~/.vbs 
-in Linux and %HOME%\_vbs on Windows). Upon each run new log will be generated; 
-VBS will keep the last 3 logs and delete the older ones.  
+vbsm keeps a log file named vbsLogFileXXXXXXXX.log (in the config directory, 
+~/.vbs in Linux and %HOME%\_vbs on Windows). Upon each run new log will be 
+generated;  VBS will keep the last 3 logs and delete the older ones.  
 
 A. vbsm
 -------
@@ -35,7 +35,7 @@ The input file should be ether text-only or SubRip format. VBS can utilize
 either single-byte encoding or UTF-8. The best way to produce a suitable file 
 is to save it from your favourite word processor setting the appropriate 
 encoding. By default, VBS treats the input file as UTF-8 encoded. To change it,
-use the "Subtitle/Set Encoding" menu. The lines of the input file may be either
+use the "Subtitles/Set Encoding" menu. The lines of the input file may be either
 <LF>, <CR><LF> or <CR> terminated, VBS will handle both. 
 
 If you wish to have a subtitle split into two lines at an exact position (not 
@@ -45,12 +45,18 @@ When exporting the subtitles, VBS will replace it with a newline character.
 The output file is in SubRip format. It was chosen because it is frame-rate  
 independent (yes, I agree that these stupid numbers preceding each subtitle are
 just a waste of time) and matches best the way the subtitles list is managed by
-the VBS internally. The default export encoding is UTF-8. To change it, use the
-"Edit/Set Encoding" menu.
+the VBS internally. 
+
+The default export destination is ~/.vbs/vbs-out.srt (on Linux) or 
+%HOME%\_vbs\vbs-out.srt (on Windows). TO change it, use the "Subtitles/Export
+Destination" menu. It will be remembered between restarts. 
+
+The default export encoding is UTF-8. To change it, use the
+"Subtitles/Set Encoding" menu.
 
 By default, the lines in the output file will be <LF> terminated on Linux and 
 <CR><LF> terminated on Windows. If you prefer otherwise, set it from the 
-"Edit/Set Newline Char" menu. 
+"Subtitles/Set Newline Char" menu. 
 
 vbsm can use two different players for video, hence the interface will slighty 
 differ. When MPlayer is used, it will always be in a separate window. When 
@@ -69,7 +75,7 @@ universal DirectDraw. Modern videcards might find DirectShow or Direct3D a
 better option. Again, only use Auto as last resort; will always play the video 
 in a separate window. 
 
-The video output for MPlayer should be selected in itw own config file (or set
+The video output for MPlayer should be selected in its own config file (or set
 via its own GUI).
 
 Any change of the backend or video backend or output requires restart of vbsm 
@@ -139,9 +145,9 @@ vbsm has a simple interface:
 B. vbss
 -------
 
-vbss is a small program which displays subtitles. It is most useful when run in 
-fullscreen with PC/laptop video output using projector to overlay subtitles over
-another motion picture. 
+vbss is a small programme which displays subtitles. It is most useful when run 
+in fullscreen with PC/laptop video output using projector to overlay subtitles 
+over another motion picture. 
 
 vbss has no GUI - it opens in fullscreen, showing white subtitles on a black 
 background. For testing pusposes, an option on the config file called 
@@ -197,9 +203,8 @@ provided for both.
 D. vbsc
 -------
 
-vbsc is a configuration utility. It only has a menu with all the combined 
-settings from vbsm and vbss. You can use it to change the settings in the config
-file (mostly useful for vbss as it does not have a menu).
+vbsc is a configuration utility. You can use it to change some of the settings 
+in the config file (mostly useful for vbss as it does not have a menu).
 
 
 

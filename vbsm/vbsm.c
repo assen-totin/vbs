@@ -51,7 +51,7 @@ int main (int argc, char **argv){
 	config.common.init_timestamp_msec = get_time_msec();
 
 	// Create log file
-	sprintf(config.vbsm.log_file_name, "%s%s%s%s%s.XXXXXX", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBSM_LOG_FILE);
+	sprintf(&config.vbsm.log_file_name[0], "%s%s%s%s%s.XXXXXX", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBSM_LOG_FILE);
 	int mkstempRes = g_mkstemp(config.vbsm.log_file_name);
 	if (mkstempRes == -1) 
 		error_handler("main","failed to create log file name",1 );
@@ -60,7 +60,7 @@ int main (int argc, char **argv){
 
 	// Create tmp subtites file for mplayer
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-		sprintf(config.vbsm.sub_file_name, "%s%s%s%s%s.XXXXXX", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBSM_MPLAYER_SUB_FILE);
+		sprintf(&config.vbsm.sub_file_name[0], "%s%s%s%s%s.XXXXXX", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBSM_MPLAYER_SUB_FILE);
 		mkstempRes = g_mkstemp(config.vbsm.sub_file_name);
 		if (mkstempRes == -1) 
 			error_handler("main","failed to create temporary sub file name",1 );
