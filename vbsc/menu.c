@@ -29,34 +29,6 @@ void quit_dialog(GtkWidget *widget, gpointer window) {
 }
 
 
-void file_dialog_save(GtkAction *action, gpointer param) {
-	GtkWidget *fileDialogWidget;
-	char fileDialogTitle[64];
-	char fileDialogFile[256];
-
-	fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
-		GTK_FILE_CHOOSER_ACTION_SAVE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-		NULL);
-
-	get_file_selector_path(&fileDialogFile[0]);
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
-
-	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
-		char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
-
-		if (strstr(gtk_action_get_name(action), "EditExportDefault")) {
-			strcpy(&config.common.export_filename[0], filename);
-		}
-
-		g_free (filename);
-	}
-
-	gtk_widget_destroy (fileDialogWidget);
-}
-
-
 void file_dialog_open(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
@@ -78,6 +50,7 @@ void file_dialog_open(GtkAction *action, gpointer param) {
 			strcpy(&config.vbss.import_filename[0], filename);
 		}
 		g_free (filename);
+		write_config();
 	}
 	
 	gtk_widget_destroy (fileDialogWidget);

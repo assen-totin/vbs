@@ -38,14 +38,12 @@
 	#include <sys/ipc.h>
 	#include <syslog.h>
 	#include <sys/wait.h>
-	#define VBS_TMP_DIR "/tmp"
 	#define SLASH "/"
 #endif
 
 #ifdef HAVE_WINDOWS
 	#include <winsock2.h>
 	#include <ws2tcpip.h>
-	#define VBS_TMP_DIR "C:\\"
 	#define SLASH "\\"
 #endif
 

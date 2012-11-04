@@ -9,7 +9,6 @@
 // for details.
 
 void file_dialog_open(GtkAction *action, gpointer param);
-void file_dialog_save(GtkAction *action, gpointer param);
 
 void quit_dialog(GtkWidget *widget, gpointer window);
 

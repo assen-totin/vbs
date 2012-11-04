@@ -255,7 +255,9 @@ void del_old_logs() {
         if (!file_array)
                 error_handler("del_old_logs", "malloc failed", 1);
 
-	GDir *dir = g_dir_open(VBS_TMP_DIR, 0, NULL);
+	char dir_name[MAX_PATH];
+	get_dir_from_filename (&config.vbsm.log_file_name[0], &dir_name[0]);
+	GDir *dir = g_dir_open(&dir_name[0], 0, NULL);
 	while (1) {
 		if (filename = g_dir_read_name(dir)) {
 			if (strstr(filename, VBSM_LOG_FILE)) {

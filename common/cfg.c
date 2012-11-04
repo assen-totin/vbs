@@ -29,13 +29,13 @@ void default_config() {
 	config.common.export_cr = VBS_DEFAULT_EXPORT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
-	strcpy(&config.common.export_filename[0], VBS_DEFAULT_EXPORT_FILENAME);
+	sprintf(&config.common.export_filename[0], "%s%s%s%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBS_DEFAULT_EXPORT_FILENAME);
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
 	config.common.network_mode = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER_NAME);
 	config.common.tcp_port = VBS_DEFAULT_SERVER_PORT;
 
-	strcpy(&config.vbss.import_filename[0], VBS_DEFAULT_IMPORT_FILENAME);
+	sprintf(&config.vbss.import_filename[0], "%s%s%s%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBS_DEFAULT_IMPORT_FILENAME);
 	config.vbss.full_screen = VBSS_DEFAULT_FULL_SCREEN;
 	config.vbss.colour_bg_r = VBSS_DEFAULT_COLOUR_BG_R;
 	config.vbss.colour_bg_g = VBSS_DEFAULT_COLOUR_BG_G;

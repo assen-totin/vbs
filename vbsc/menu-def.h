@@ -14,13 +14,9 @@ gchar *ui1 =
 	"    <menu action='FileMenu'>"
 	"      <menuitem action='FileQuit'/>"
 	"    </menu>"
-	"    <menu action='TextMenu'>"
-	"      <menuitem action='TextImportDefault'/>"
-	"      <menuitem action='TextImportEncoding'/>"
-	"      <separator name='TextSeparator1'/>"
-	"      <menuitem action='TextExportDefault'/>"
-	"      <menuitem action='TextExportEncoding'/>"
-	"      <menuitem action='TextExportNewline'/>"
+	"    <menu action='EditMenu'>"
+	"      <menuitem action='EditImportDefault'/>"
+	"      <menuitem action='EditImportEncoding'/>"
 	"    </menu>"
 	"    <menu action='NetworkMenu'>"
 	"      <menuitem action='NetworkMode'/>"
@@ -45,13 +41,9 @@ GtkActionEntry menu_entries1[] = {
 	{"FileMenu", NULL, "File", NULL, NULL, NULL},
 	{"FileQuit", GTK_STOCK_QUIT, "Quit", "<CTRL>Q", NULL, (GCallback)quit_dialog},
 
-	{"TextMenu", NULL, "Subtitles", NULL, NULL, NULL},
-	{"TextImportDefault", GTK_STOCK_OPEN, "Load Plain Text...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
-	{"TextImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)set_encoding_import},
-	{"TextSeparator1", NULL, NULL, NULL, NULL, NULL},
-	{"TextExportDefault", GTK_STOCK_OPEN, "Export Destination...", "<CTRL>E", NULL, (GCallback)file_dialog_save},
-	{"TextExportEncoding", GTK_STOCK_CONVERT, "Set Export Encoding...", NULL, NULL, (GCallback)set_encoding_export},
-	{"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)set_newline},
+	{"EditMenu", NULL, "Subtitles", NULL, NULL, NULL},
+	{"EditImportDefault", GTK_STOCK_OPEN, "Select Subtitles...", "<CTRL>T", NULL, (GCallback)file_dialog_open},
+	{"EditImportEncoding", GTK_STOCK_CONVERT, "Set Import Encoding...", NULL, NULL, (GCallback)set_encoding_import},
 
 	{"NetworkMenu", NULL, "Network", NULL, NULL, NULL},
 	{"NetworkMode", GTK_STOCK_NETWORK, "Enable/Disable...", NULL, NULL, (GCallback)use_network},
