@@ -253,6 +253,8 @@ int main (int argc, char *argv[]) {
 	
 	// Main loop
 	gtk_widget_show_all(window);
+
+	gdk_threads_enter();
 	gtk_main();
 
 	// Cleanup
