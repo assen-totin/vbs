@@ -11,9 +11,9 @@ FOUND_WINDOWS="no"
 FOUND_POSIX="no"
 AC_CHECK_HEADERS([windows.h], [FOUND_WINDOWS="yes"], [FOUND_POSIX="yes"])
 if test $FOUND_WINDOWS = "yes" ; then
-tAC_DEFINE([HAVE_WINDOWS],[1],[Windows OS])
+	AC_DEFINE([HAVE_WINDOWS],[1],[Windows OS])
 elif test $FOUND_POSIX = "yes" ; then
-tAC_DEFINE([HAVE_POSIX],[1],[POSIX OS])
+	AC_DEFINE([HAVE_POSIX],[1],[POSIX OS])
 fi
 AM_CONDITIONAL([WITH_WINDOWS], [test $FOUND_WINDOWS = "yes"])
 AM_CONDITIONAL([WITH_POSIX], [test $FOUND_POSIX = "yes"])
@@ -31,19 +31,19 @@ if test "x$bindir" != "x\${exec_prefix}/bin" ; then
 fi
 SBINDIR=$exec_prefix/sbin
 if test "x$sbindir" != "x\${exec_prefix}/sbin" ; then
-tSBINDIR=$sbindir
+	SBINDIR=$sbindir
 fi
 SYSCONFDIR=$prefix/etc
 if test "x$sysconfdir" != "x\${prefix}/etc" ; then
-tSYSCONFDIR=$sysconfdir
+	SYSCONFDIR=$sysconfdir
 fi
 DATAROOTDIR=$prefix/share
 if test "x$datarootdir" != "x\${prefix}/share" ; then
-tDATAROOTDIR=$datarootdir
+	DATAROOTDIR=$datarootdir
 fi
 LOCALEDIR=$DATAROOTDIR/locale
 if test "x$localedir" != "x\${datarootdir}/locale" ; then
-tLOCALEDIR=$localedir
+	LOCALEDIR=$localedir
 fi
 if test $FOUND_WINDOWS = "yes" ; then
 	LOCALEDIR="locale"
@@ -164,13 +164,13 @@ else
 fi
 
 if test $USE_GTK = "3" ; then
-tAC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
-tAC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
-tRPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
+	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
+	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
+	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
 elif test $USE_GTK = "2" ; then
-tAC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
-tAC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
-tRPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
+	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
+	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
+	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
 fi
 
 AC_SUBST([RPM_REQUIRE_GTK])

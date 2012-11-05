@@ -24,18 +24,21 @@ void get_cmdl_config(int argc, char *argv[]) {
 
 
 void default_config() {
+	char _tmp[MAX_PATH];
+	get_config_dir(&_tmp[0]);
+
 	config.common.init_timestamp_msec = get_time_msec();
 	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
 	config.common.export_cr = VBS_DEFAULT_EXPORT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
-	sprintf(&config.common.export_filename[0], "%s%s%s%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBS_DEFAULT_EXPORT_FILENAME);
+	sprintf(&config.common.export_filename[0], "%s%s", &_tmp[0], VBS_DEFAULT_EXPORT_FILENAME);
 	config.common.line_size = VBS_DEFAULT_LINE_SIZE;
 	config.common.network_mode = 0;
 	strcpy(&config.common.server_name[0], VBS_DEFAULT_SERVER_NAME);
 	config.common.tcp_port = VBS_DEFAULT_SERVER_PORT;
 
-	sprintf(&config.vbss.import_filename[0], "%s%s%s%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBS_DEFAULT_IMPORT_FILENAME);
+	sprintf(&config.vbss.import_filename[0], "%s%s", &_tmp[0], VBS_DEFAULT_IMPORT_FILENAME);
 	config.vbss.full_screen = VBSS_DEFAULT_FULL_SCREEN;
 	config.vbss.colour_bg_r = VBSS_DEFAULT_COLOUR_BG_R;
 	config.vbss.colour_bg_g = VBSS_DEFAULT_COLOUR_BG_G;
@@ -188,8 +191,11 @@ void check_config(int mode) {
 		strcpy(&config.common.config_file_name[0], cmdl_config.short_f);
 	}
 	else {
-		if (mode == 0)
-			sprintf(config.common.config_file_name, "%s%s%s%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, SLASH, VBS_CONFIG_FILENAME);
+		if (mode == 0) {
+			char _tmp[MAX_PATH];
+			get_config_dir(&_tmp[0]);
+			sprintf(config.common.config_file_name, "%s%s%s%s%s", &_tmp[0], VBS_CONFIG_FILENAME);
+		}
 		else if (mode == 1)
 			sprintf(config.common.config_file_name, "%s%s%s%s%s", SYSCONFDIR, SLASH, VBS_GLOBAL_CONFIG_DIR, SLASH, VBS_CONFIG_FILENAME);
 	}

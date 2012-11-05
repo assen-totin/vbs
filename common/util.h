@@ -24,12 +24,14 @@ void get_icon(char *res);
 
 void get_file_selector_path(char *res);
 
+void get_config_dir(char *res);
+
 void get_dir_from_filename (char *filename, char *dir);
 
 void del_old_logs();
 
 struct vbs_stat_struct {
-tchar filename[1024];
-tint unsigned mtime;
+	char filename[1024];
+	int unsigned mtime;
 };
 

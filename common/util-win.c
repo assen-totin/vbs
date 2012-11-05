@@ -11,42 +11,42 @@
 #include "../common/common.h"
 
 bool win_get_path(char *win_path, int size) {
-tTCHAR szPath[MAX_PATH];
+	TCHAR szPath[MAX_PATH];
 
-tif(!GetModuleFileName(NULL, szPath, MAX_PATH)) {
+	if(!GetModuleFileName(NULL, szPath, MAX_PATH)) {
 		//error_handler("win_get_path", GetLastError(), 0);
 		error_handler("win_get_path", "VBS_UNKNOWN_ERROR", 0);
 		return false;
-t}
+	}
 
-tchar c0[MAX_PATH];
-tchar *p0 = &c0[0];
-tmemset(&c0[0], '\0', MAX_PATH);
+	char c0[MAX_PATH];
+	char *p0 = &c0[0];
+	memset(&c0[0], '\0', MAX_PATH);
 
-tchar c1[MAX_PATH];
-tchar *p1 = &c1[0];
-tmemset(&c1[0], '\0', MAX_PATH);
+	char c1[MAX_PATH];
+	char *p1 = &c1[0];
+	memset(&c1[0], '\0', MAX_PATH);
 
-tmemset(win_path, '\0', size);
+	memset(win_path, '\0', size);
 
-tp0 = strtok(&szPath[0], SLASH);
-tsprintf(win_path, "%s", p0);
+	p0 = strtok(&szPath[0], SLASH);
+	sprintf(win_path, "%s", p0);
 
-twhile (1) {
+	while (1) {
 	tp0 = strtok(NULL, SLASH);
-ttif (p0) {
-t	tsprintf(win_path, "%s%s%s", win_path, p1, SLASH);
-tttp1 = strtok(NULL, SLASH);
-tt}
-ttelse
-tttbreak;
+	tif (p0) {
+		tsprintf(win_path, "%s%s%s", win_path, p1, SLASH);
+	ttp1 = strtok(NULL, SLASH);
+	t}
+	telse
+	ttbreak;
 
-ttif (p0 && p1)
-tttsprintf(win_path, "%s%s%s", win_path, p0, SLASH);
-ttelse
-tttbreak;
-t}
-treturn true;
+	tif (p0 && p1)
+	ttsprintf(win_path, "%s%s%s", win_path, p0, SLASH);
+	telse
+	ttbreak;
+	}
+	return true;
 }
 
 void win_get_locale(char *locale) {
@@ -58,7 +58,7 @@ void win_get_locale(char *locale) {
 }
 
 void win_filename_to_uri(char *filename, char *tmp_filename) {
-tchar filename_in[2048];
+	char filename_in[2048];
 	strcpy(&filename_in[0], filename);
 
 	char c0[2048];

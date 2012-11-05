@@ -95,13 +95,13 @@ int main (int argc, char *argv[]) {
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_family, *attr_style, *attr_weight, *attr_colour_fg, *attr_colour_bg;
 
-t// i18n
-tchar locale_path[MAX_PATH];
-tget_locale_prefix(&locale_path[0]);
-tsetlocale (LC_ALL, "");
-tbindtextdomain(PACKAGE_NAME, &locale_path[0]);
-tbind_textdomain_codeset(PACKAGE_NAME, "utf-8");
-ttextdomain (PACKAGE_NAME);
+	// i18n
+	char locale_path[MAX_PATH];
+	get_locale_prefix(&locale_path[0]);
+	setlocale (LC_ALL, "");
+	bindtextdomain(PACKAGE_NAME, &locale_path[0]);
+	bind_textdomain_codeset(PACKAGE_NAME, "utf-8");
+	textdomain (PACKAGE_NAME);
 
 	// Check for alternative config
 	get_cmdl_config(argc, argv);
