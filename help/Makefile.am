@@ -21,9 +21,9 @@ help_textonly:
 CHM_COMPILER = tt2chm
 CHM_TITLE = "VBS Guide"
 CHM_OLD_INDEX = "index.html"
-CHM_NEW_INDEX = "ar01s02.html"
+CHM_NEW_INDEX = "ar01s01.html"
 CHM_TMP_DIR_1 = "chm_tmp_dir_1"
-CHM_TMP_DIR_2 = "chm_tmp_dir_1"
+CHM_TMP_DIR_2 = "chm_tmp_dir_2"
 CHM_TITLE_FILE = "title.txt"
 
 help_chm: 
