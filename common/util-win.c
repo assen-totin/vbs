@@ -33,18 +33,18 @@ bool win_get_path(char *win_path, int size) {
 	sprintf(win_path, "%s", p0);
 
 	while (1) {
-	tp0 = strtok(NULL, SLASH);
-	tif (p0) {
-		tsprintf(win_path, "%s%s%s", win_path, p1, SLASH);
-	ttp1 = strtok(NULL, SLASH);
-	t}
-	telse
-	ttbreak;
+		p0 = strtok(NULL, SLASH);
+		if (p0) {
+			sprintf(win_path, "%s%s%s", win_path, p1, SLASH);
+			p1 = strtok(NULL, SLASH);
+		}
+		else
+			break;
 
-	tif (p0 && p1)
-	ttsprintf(win_path, "%s%s%s", win_path, p0, SLASH);
-	telse
-	ttbreak;
+		if (p0 && p1)
+			sprintf(win_path, "%s%s%s", win_path, p0, SLASH);
+		else
+		break;
 	}
 	return true;
 }

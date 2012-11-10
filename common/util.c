@@ -269,7 +269,7 @@ void del_old_logs() {
 				g_stat(filename, &stat_buf);
 				void *_tmp = realloc(file_array, ((file_counter + 1) * sizeof(struct vbs_stat_struct)));
 				if (!_tmp)
-				terror_handler("del_old_logs", "realloc failed", 1);
+					error_handler("del_old_logs", "realloc failed", 1);
 				file_array = (struct vbs_stat_struct *)_tmp;
 				file_array[file_counter].mtime = stat_buf.st_mtime;
 				sprintf(&file_array[file_counter].filename[0], "%s", filename);

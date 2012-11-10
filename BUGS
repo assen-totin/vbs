@@ -32,3 +32,7 @@ projection). A work-around is implemented in the code. Other possible solutions:
 codec is missing the official GStreamer release. Either re-encode with other
 video codec or wait for the next release which will eventually fix it.
 
+6. On Windows the help files' TOC is often displayed incorrectly for non-Latin
+charsets. This is due to Windows Help viewer not supporting UTF-8 which 
+requires HTML escapes for non-Latin characters. 
+

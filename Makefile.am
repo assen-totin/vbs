@@ -29,3 +29,6 @@ exe:
 	cd help; make exe_prep; cd ..
 	makensis vbs.nsis
 
+dist-hook:
+	cp po/Rules-exe $(distdir)/po
+
