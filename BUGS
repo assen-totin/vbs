@@ -15,9 +15,10 @@ start the playback, the subtitle is not shown by mplayer. This seems to be an
 mplayer issue; the subtitles are actually reloaded. If you double-click 3-4 
 subtitles before current, you'll see them displayed properly.
 
-3. The SDL video output for GStreamer sometimes fails to integrate with the main
-program window and opens in a separate one (like MPLayer). If this happens, try 
-another video output. 
+3. The SDL video output and the "Auto" video output for GStreamer will not 
+integrate with the main program window and open the video in a separate one 
+(like MPLayer). The first is a limitation of SDL, the second is a due to 
+GStreamer's internal design. Use different output if possible.  
 
 4. GTK-3 has a bug which prevents the application to change the main window's 
 background colour when the GTK theme uses umages for background. This means
@@ -26,13 +27,13 @@ required to block the excessivle light when superimposing subtitles by
 projection). A work-around is implemented in the code. Other possible solutions: 
 - swich to a GTK theme which does not use images for window backgrounds
 - swich to a GTK theme which has black window backgrounds
-- use GTK2. 
+- use GTK-2. 
 
 5. On Windows Theora codec is missing.  This is an upstream bundling bug - the
 codec is missing the official GStreamer release. Either re-encode with other
 video codec or wait for the next release which will eventually fix it.
 
-6. On Windows the help files' TOC is often displayed incorrectly for non-Latin
-charsets. This is due to Windows Help viewer not supporting UTF-8 which 
-requires HTML escapes for non-Latin characters. 
+6. On Windows the help files' TOC is displayed incorrectly for non-Latin 
+charsets. This is a Windows Help viewer (hh.exe) limitation which only supports 
+ANSI characters. No workaround possible, complain to Miscrosoft.  
 
