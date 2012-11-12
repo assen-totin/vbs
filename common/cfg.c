@@ -76,7 +76,7 @@ int config_int(char *line) {
 }
 
 void write_config() {
-	FILE *fp_config = fopen(config.common.config_file_name, "w");
+	FILE *fp_config = fopen(&config.common.config_file_name[0], "w");
 	if (!fp_config)
 		error_handler("write_config", "could not open config file", 1);
 	fprintf(fp_config, "%s", VBS_CONFIG_HEADER);
@@ -112,7 +112,7 @@ void write_config() {
 }
 
 void read_config() {
-	FILE *fp_config = fopen(config.common.config_file_name, "r");
+	FILE *fp_config = fopen(&config.common.config_file_name[0], "r");
 	char *line;
 	line = malloc(1024);
 	if (!line) 
@@ -187,17 +187,17 @@ void check_config(int mode) {
 	// Create a default in-memory condiguration
 	default_config();
 
-	if ((cmdl_config.short_f) && (strlen((const char *) cmdl_config.short_f) > 2)) {
+	if ((cmdl_config.short_f) && (strlen((const char *) cmdl_config.short_f) > 2)) 
 		strcpy(&config.common.config_file_name[0], cmdl_config.short_f);
-	}
+	
 	else {
 		if (mode == 0) {
 			char _tmp[MAX_PATH];
 			get_config_dir(&_tmp[0]);
-			sprintf(config.common.config_file_name, "%s%s%s%s%s", &_tmp[0], VBS_CONFIG_FILENAME);
+			sprintf(&config.common.config_file_name[0], "%s%s", &_tmp[0], VBS_CONFIG_FILENAME);
 		}
 		else if (mode == 1)
-			sprintf(config.common.config_file_name, "%s%s%s%s%s", SYSCONFDIR, SLASH, VBS_GLOBAL_CONFIG_DIR, SLASH, VBS_CONFIG_FILENAME);
+			sprintf(&config.common.config_file_name[0], "%s%s%s%s%s", SYSCONFDIR, SLASH, VBS_GLOBAL_CONFIG_DIR, SLASH, VBS_CONFIG_FILENAME);
 	}
 
 	get_dir_from_filename (&config.common.config_file_name[0], &dir[0]);
