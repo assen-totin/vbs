@@ -104,11 +104,11 @@ Section "VBS"
 SectionEnd
 
 Section "Start Menu Shortcuts"
-  CreateDirectory "$SMPROGRAMS\VBS"
-  CreateShortCut "$SMPROGRAMS\VBS\Uninstall VBS.lnk" "$INSTDIR\Uninstall VBS.exe" "" "$INSTDIR\Uninstall VBS.exe" 0
-  CreateShortCut "$SMPROGRAMS\VBS\vbsc.exe.lnk" "$INSTDIR\vbsc.exe" "" "$INSTDIR\vbsc.exe" 0
-  CreateShortCut "$SMPROGRAMS\VBS\vbsm.exe.lnk" "$INSTDIR\vbsm.exe" "" "$INSTDIR\vbsm.exe" 0
-  CreateShortCut "$SMPROGRAMS\VBS\vbss.exe.lnk" "$INSTDIR\vbss.exe" "" "$INSTDIR\vbss.exe" 0
+  CreateDirectory "$SMPROGRAMS\VBS-@PACKAGE_VERSION@"
+  CreateShortCut "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\Uninstall VBS.lnk" "$INSTDIR\Uninstall VBS.exe" "" "$INSTDIR\Uninstall VBS.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbsc.exe.lnk" "$INSTDIR\vbsc.exe" "" "$INSTDIR\vbsc.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbsm.exe.lnk" "$INSTDIR\vbsm.exe" "" "$INSTDIR\vbsm.exe" 0
+  CreateShortCut "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbss.exe.lnk" "$INSTDIR\vbss.exe" "" "$INSTDIR\vbss.exe" 0
 SectionEnd
 
 Section "Desktop Icons"
@@ -119,13 +119,13 @@ SectionEnd
 
 Section "Uninstall"
   Delete /rebootok "$DESKTOP\vbss.exe.lnk"
-  Delete /rebootok "$SMPROGRAMS\VBS\vbss.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbss.exe.lnk"
   Delete /rebootok "$DESKTOP\vbsm.exe.lnk"
-  Delete /rebootok "$SMPROGRAMS\VBS\vbsm.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbsm.exe.lnk"
   Delete /rebootok "$DESKTOP\vbsc.exe.lnk"
-  Delete /rebootok "$SMPROGRAMS\VBS\vbsc.exe.lnk"
-  Delete /rebootok "$SMPROGRAMS\VBS\Uninstall VBS.lnk"
-  RMDir "$SMPROGRAMS\VBS"
+  Delete /rebootok "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\vbsc.exe.lnk"
+  Delete /rebootok "$SMPROGRAMS\VBS-@PACKAGE_VERSION@\Uninstall VBS.lnk"
+  RMDir "$SMPROGRAMS\VBS-@PACKAGE_VERSION@"
 
   Delete /rebootok "$INSTDIR\vbss.exe"
   Delete /rebootok "$INSTDIR\vbsm.exe"

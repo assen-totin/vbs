@@ -53,7 +53,7 @@ int main (int argc, char **argv){
 	// Create log file
 	char _tmp[MAX_PATH];
 	get_config_dir(&_tmp[0]);
-	sprintf(&config.vbsm.log_file_name[0], "%s.XXXXXX", &_tmp[0], VBSM_LOG_FILE);
+	sprintf(&config.vbsm.log_file_name[0], "%s%s.XXXXXX", &_tmp[0], VBSM_LOG_FILE);
 	int mkstempRes = g_mkstemp(config.vbsm.log_file_name);
 	if (mkstempRes == -1) 
 		error_handler("main","failed to create log file name",1 );

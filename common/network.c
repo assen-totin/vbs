@@ -11,6 +11,14 @@
 #include "common.h"
 
 int get_host_by_name(char *server_name) {
+#ifdef HAVE_WINDOWS
+	WSADATA wsaData;
+	int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		error_handler("get_host_by_name", " WSAStartup failed", 0);
+		return 0;
+	}
+#endif
 	struct hostent *host_entry = gethostbyname(server_name);
 	if (host_entry == NULL) {
 		error_handler("get_host_by_name", "No such host", 0);
@@ -50,8 +58,9 @@ int get_subtitle(char *buffer) {
 
 	sockfd = get_socket();
 
-	strcpy(request,"42");
-	n = write(sockfd, request, strlen(request));
+	strcpy(&request[0], "42");
+	//n = write(sockfd, &request[0], strlen(&request[0]));
+	n = send(sockfd, &request[0], strlen(&request[0]), 0);
 	if (n < 0) {
 		error_handler("get_subtitle", "Could not write to socket", 0);
 		close(sockfd);
@@ -60,7 +69,8 @@ int get_subtitle(char *buffer) {
 
 	memset(buffer, '\0', config.common.line_size);
 
-	n = read(sockfd, buffer, config.common.line_size - 1);
+	//n = read(sockfd, buffer, config.common.line_size - 1);
+	n = recv(sockfd, buffer, config.common.line_size - 1, 0);
 	if (n < 0) {
 		error_handler("get_subtitle", "Could not read from socket", 0);
 		close(sockfd);
@@ -83,21 +93,22 @@ int put_subtitle(char *buffer) {
 	strcpy(&request[0], buffer);
 	fix_new_line(&request[0]);
 
-	memset(buffer2, '\0', config.common.line_size + 4);
+	memset(&buffer2[0], '\0', config.common.line_size + 4);
 	memcpy(&buffer2[0], &config.common.magic_key, sizeof(config.common.magic_key));
 	memcpy(&buffer2[4], &request[0], config.common.line_size);
 
-	n = write(sockfd, buffer2, config.common.line_size + 4);
-
+	//n = write(sockfd, &buffer2[0], config.common.line_size + 4);
+	n = write(sockfd, &buffer2[0], config.common.line_size + 4, 0);
 	if (n < 0) {
 		error_handler("put_subtitle", "Could not write to socket", 0);
 		close(sockfd);
 		return 0;
 	}
 
-	memset (buffer2, '\0', config.common.line_size + 4);
+	memset (&buffer2[0], '\0', config.common.line_size + 4);
 
-	n = read(sockfd, buffer2, config.common.line_size);
+	//n = read(sockfd, &buffer2[0], config.common.line_size);
+	n = recv(sockfd, &buffer2[0], config.common.line_size, 0);
 	if (n < 0) {
 		error_handler("put_subtitle", "Could not read from socket", 0);
 		close(sockfd);
