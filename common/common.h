@@ -137,7 +137,7 @@ struct struct_common {
 	bool inside_sub;
 	long init_timestamp_msec;
 	long timestamp_msec;
-	int magic_key;
+	char magic_key[255];
 	char config_file_name[1024];
 	int export_cr;
 	char export_encoding[255];

@@ -28,7 +28,7 @@ void default_config() {
 	get_config_dir(&_tmp[0]);
 
 	config.common.init_timestamp_msec = get_time_msec();
-	config.common.magic_key = VBS_DEFAULT_MAGIC_KEY;
+	strcpy(&config.common.magic_key[0], VBS_DEFAULT_MAGIC_KEY);
 	config.common.export_cr = VBS_DEFAULT_EXPORT_CR;
 	strcpy(&config.common.export_encoding[0], "UTF-8");
 	strcpy(&config.common.import_encoding[0], "UTF-8");
@@ -81,7 +81,7 @@ void write_config() {
 		error_handler("write_config", "could not open config file", 1);
 	fprintf(fp_config, "%s", VBS_CONFIG_HEADER);
 
-	fprintf(fp_config, "MAGIC_KEY=%u\n", config.common.magic_key);
+	fprintf(fp_config, "MAGIC_KEY=%s\n", &config.common.magic_key[0]);
 	fprintf(fp_config, "EXPORT_CR=%u\n", config.common.export_cr);
 	fprintf(fp_config, "EXPORT_ENCODING=%s\n", &config.common.export_encoding[0]);
 	fprintf(fp_config, "IMPORT_ENCODING=%s\n", &config.common.import_encoding[0]);
@@ -123,7 +123,7 @@ void read_config() {
 			line[strlen(line) - 1] = 0;     // kill '\n'
 
 			if (strstr(line, "MAGIC_KEY"))
-				config.common.magic_key = config_int(line);
+				config_char(line, &config.common.magic_key[0]);
 			else if (strstr(line, "EXPORT_CR")) 
 				config.common.export_cr = config_int(line);
 			else if (strstr(line, "EXPORT_ENCODING")) 

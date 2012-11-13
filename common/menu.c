@@ -238,14 +238,12 @@ void set_magic_key (GtkWidget *widget, gpointer window) {
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Set Magic Key"));
 
 	GtkWidget *text = gtk_entry_new();
-	char tmp1[16];
-	sprintf(&tmp1[0], "%u", config.common.magic_key);
-	gtk_entry_set_text(GTK_ENTRY(text), &tmp1[0]);
+	gtk_entry_set_text(GTK_ENTRY(text), &config.common.magic_key[0]);
 	gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), text);
 	gtk_widget_show(text);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		config.common.magic_key = atoi(gtk_entry_get_text(GTK_ENTRY(text)));
+		strcpy(&config.common.magic_key[0], gtk_entry_get_text(GTK_ENTRY(text)));
 		write_config();
 	}
 

@@ -11,20 +11,17 @@
 #include "../common/common.h"
 
 // Check magic key
-int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]) {
-	unsigned int cnt = 0;
-	int i = 0;
-	unsigned long res = 0;
-
-	for (i=byte_first; i<=byte_last; i++){
-		res += buffer[i] * powf(256,cnt);
-		cnt++;
-	}
-
-	if (res == config.common.magic_key)
+int check_magic_key(unsigned char buffer[config.common.line_size]) {
+	if (strstr(&buffer[0], &config.common.magic_key[0]))
 		return 1;
 
 	return 0;
+}
+
+void extract_sub(unsigned char buffer[config.common.line_size], char *new_sub) {
+	char *cp1 = strtok(&buffer[0], &config.common.magic_key[0]);
+	char *cp2 = strtok(cp1, "###");
+	strcpy(new_sub, cp2);
 }
 
 void signal_handler(int sig) {
@@ -116,9 +113,11 @@ int main() {
 				else {
 					// DO SOMETHING WITH 'buffer'
 					//syslog(LOG_CRIT, buffer);
-					if (check_magic_key(0, 3, buffer) == 1) {
+					if (check_magic_key(buffer) == 1) {
 						//syslog(LOG_CRIT, "Got magic!");
-						strcpy(shm_at, buffer + 4);
+						char new_sub[config.common.line_size];
+						extract_sub(buffer, &new_sub[0]);
+						strcpy(shm_at, &new_sub[0]);
 					}
 
 					// WRITE BACK
