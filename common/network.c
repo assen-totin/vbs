@@ -91,20 +91,19 @@ int put_subtitle(char *buffer) {
 	strcpy(&request[0], buffer);
 	fix_new_line(&request[0]);
 
-	memset(&buffer2[0], '\0', config.common.line_size + 4);
+	memset(&buffer2[0], '\0', sizeof(buffer2));
 	sprintf(&buffer2[0], "%s%s", &config.common.magic_key[0], &request[0]);
 
-	n = send(sockfd, &buffer2[0], config.common.line_size + 4, 0);
+	n = send(sockfd, &buffer2[0], sizeof(buffer2), 0);
 	if (n < 0) {
 		error_handler("put_subtitle", "Could not write to socket", 0);
 		close(sockfd);
 		return 0;
 	}
 
-	memset (&buffer2[0], '\0', config.common.line_size + 4);
+	memset (&buffer2[0], '\0', sizeof(buffer2));
 
-	//n = read(sockfd, &buffer2[0], config.common.line_size);
-	n = recv(sockfd, &buffer2[0], config.common.line_size, 0);
+	n = recv(sockfd, &buffer2[0], sizeof(buffer2), 0);
 	if (n < 0) {
 		error_handler("put_subtitle", "Could not read from socket", 0);
 		close(sockfd);

@@ -19,8 +19,8 @@ int check_magic_key(unsigned char buffer[config.common.line_size]) {
 }
 
 void extract_sub(unsigned char buffer[config.common.line_size], char *new_sub) {
-	char *cp1 = strtok(&buffer[0], &config.common.magic_key[0]);
-	char *cp2 = strtok(cp1, "###");
+	char *cp1 = strstr(&buffer[0], &config.common.magic_key[0]);
+	cp1 += strlen(&config.common.magic_key[0]);
 	strcpy(new_sub, cp2);
 }
 

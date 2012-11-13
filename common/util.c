@@ -253,7 +253,7 @@ void get_dir_from_filename (char *filename, char *dir) {
 void del_old_logs() {
 	GStatBuf stat_buf;
 	struct vbs_stat_struct tmp_stat;
-	gchar *filename;
+	const gchar *filename;
 	int i, j, file_counter = 0;
 
 	struct vbs_stat_struct *file_array = malloc(sizeof(struct vbs_stat_struct));
