@@ -234,7 +234,7 @@ void set_magic_key (GtkWidget *widget, gpointer window) {
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
 		GTK_MESSAGE_QUESTION,
 		GTK_BUTTONS_OK_CANCEL,
-		_("Enter magic key (number between 1 and 2147483647):"));
+		_("Enter magic key (up to 32 letters or digits):"));
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Set Magic Key"));
 
 	GtkWidget *text = gtk_entry_new();
