@@ -11,16 +11,9 @@
 #include "../common/common.h"
 
 int show_subtitle(GtkWidget *subtitle) {
-
-	GChecksum *md5_old = g_checksum_new(G_CHECKSUM_MD5);
-	GChecksum *md5_new = g_checksum_new(G_CHECKSUM_MD5);
-
 	const char *buffer_old_p = gtk_label_get_text(GTK_LABEL(subtitle));
 
-	g_checksum_update(md5_old, buffer_old_p, sizeof(*buffer_old_p));
-	g_checksum_update(md5_new, &config.vbss.current_sub[0], sizeof(config.vbss.current_sub));
-
-	if(strcmp(g_checksum_get_string(md5_old),g_checksum_get_string(md5_new)) != 0) {
+	if(strcmp(buffer_old_p, &config.vbss.current_sub[0]) != 0) {
 		gtk_label_set_text(GTK_LABEL(subtitle), &config.vbss.current_sub[0]);
 		if (config.common.network_mode == 1)
 			put_subtitle(&config.vbss.current_sub[0]);

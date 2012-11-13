@@ -12,3 +12,9 @@
 
 int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.common.line_size]);
 
+void signal_handler(int sig);
+
+char *shm_at;
+int sockfd;
+int unix_time;
+

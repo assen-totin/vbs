@@ -27,9 +27,23 @@ int check_magic_key(int byte_first, int byte_last, unsigned char buffer[config.c
 	return 0;
 }
 
+void signal_handler(int sig) {
+	switch(sig){
+		case SIGHUP:
+			break;	
+		case SIGTERM:
+			// Detach and destroy shared memory
+			shmdt(shm_at);
+			shmctl(unix_time, IPC_RMID);
+			// Close original FD
+			close(sockfd);
+			exit(0);
+			break;		
+	}	
+}
+
 int main() {
-	int sockfd, newsockfd, retPID, shm_id, unix_time;
-	char *shm_at;
+	int newsockfd, retPID, shm_id;
 	struct sockaddr_in serv_addr, cli_addr;
 	socklen_t clilen = sizeof(cli_addr);
 
@@ -49,7 +63,7 @@ int main() {
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
-	signal(SIGHUP, SIG_IGN);
+	signal(SIGHUP, signal_handler);
 	umask(0);
 	chdir("/");
 
@@ -95,7 +109,7 @@ int main() {
 
 				bzero(buffer, sizeof(buffer));
 
-				n = read(newsockfd, buffer, sizeof(buffer)-1);
+				n = recv(newsockfd, buffer, sizeof(buffer)-1, 0);
 				if (n < 0) {
 					syslog(LOG_CRIT, "Error reading from socket!");
 				}
@@ -108,7 +122,7 @@ int main() {
 					}
 
 					// WRITE BACK
-					n = write(newsockfd, shm_at, config.common.line_size);
+					n = send(newsockfd, shm_at, config.common.line_size, 0);
 					if (n < 0) {
 						syslog(LOG_CRIT, "Error writing to socket!");
 					}
@@ -118,12 +132,15 @@ int main() {
 				shmdt(shm_at);
 
 				// Close new FD
+				sleep(5);
 				close(newsockfd);
+				close(sockfd);
 
 				exit(0);
 			}
 		}
 
+		close(newsockfd);
 		// Collect dead bones
 		retPID = 1;
 		while(retPID) {
