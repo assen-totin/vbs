@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 12:37+0300\n"
+"POT-Creation-Date: 2012-10-22 21:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,10 +46,10 @@ msgid "DNS resolving failed."
 msgstr ""
 
 #: common/menu.c:239
-msgid "Enter magic key (number between 1 and 2147483647):"
+msgid "Enter magic key (up to 32 letters or digits):"
 msgstr ""
 
-#: common/menu.c:189 vbsm/gui.c:169
+#: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
 msgid "Error"
 msgstr ""
 
@@ -69,8 +69,12 @@ msgstr ""
 msgid "Full-Screen mode:"
 msgstr ""
 
-#: vbsm/menu.c:81 vbsm/menu.c:82
+#: vbsm/menu.c:94 vbsm/menu.c:96
 msgid "Help"
+msgstr ""
+
+#: vbsm/menu.c:86
+msgid "Help file not found."
 msgstr ""
 
 #: common/menu.c:23
@@ -83,7 +87,7 @@ msgid ""
 "Assen Totin\n"
 msgstr ""
 
-#: vbsm/menu.c:102
+#: vbsm/menu.c:126
 msgid "Internal timer set to zero."
 msgstr ""
 
@@ -113,7 +117,7 @@ msgstr ""
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr ""
 
-#: vbsm/menu.c:115 vbsm/menu.c:117 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:139 vbsm/menu.c:141 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr ""
 
@@ -145,13 +149,13 @@ msgstr ""
 msgid "Select network mode:"
 msgstr ""
 
-#: vbsm/menu.c:223
+#: vbsm/menu.c:247
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
 msgstr ""
 
-#: vbsm/menu.c:266
+#: vbsm/menu.c:290
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -173,7 +177,7 @@ msgstr ""
 msgid "Set Magic Key"
 msgstr ""
 
-#: vbsm/menu.c:104
+#: vbsm/menu.c:128
 msgid "Set Start Time"
 msgstr ""
 
@@ -210,18 +214,18 @@ msgid ""
 "copyleft/gpl.html for details."
 msgstr ""
 
-#: vbsc/vbsc.c:48
+#: vbsc/vbsc.c:54
 msgid "Use the menu to change default settings."
 msgstr ""
 
-#: vbsm/menu.c:224
+#: vbsm/menu.c:248
 msgid "Video Backend"
 msgstr ""
 
-#: vbsm/menu.c:281
+#: vbsm/menu.c:305
 msgid "Video Output"
 msgstr ""
 
-#: vbsm/menu.c:271
+#: vbsm/menu.c:295
 msgid "Video output selection not available for current backend."
 msgstr ""
