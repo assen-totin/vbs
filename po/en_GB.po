@@ -47,8 +47,8 @@ msgid "DNS resolving failed."
 msgstr "DNS resolving failed."
 
 #: common/menu.c:239
-msgid "Enter magic key (number between 1 and 2147483647):"
-msgstr "Enter magic key (number between 1 and 2147483647):"
+msgid "Enter magic key (up to 32 letters or digits):"
+msgstr "Enter magic key (up to 32 letters or digits):"
 
 #: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
 msgid "Error"

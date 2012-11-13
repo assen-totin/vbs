@@ -48,8 +48,8 @@ msgid "DNS resolving failed."
 msgstr "Името не беше намерено."
 
 #: common/menu.c:239
-msgid "Enter magic key (number between 1 and 2147483647):"
-msgstr "Код на сървъра (число между 1 и 2147483647):"
+msgid "Enter magic key (up to 32 letters or digits):"
+msgstr "Код на сървъра (до 32 латински букви или цифри):"
 
 #: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
 msgid "Error"
