@@ -37,7 +37,7 @@ int get_socket() {
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) 
-		error_handler("get_subtitle", "Could not open socket", 1);
+		error_handler("get_socket", "Could not open socket", 1);
 
 	memset((char *) &serv_addr, '\0' , sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
@@ -46,38 +46,10 @@ int get_socket() {
 
 	if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
 		close(sockfd);
-		error_handler("get_subtitle", "Could not connect to server", 1);
+		error_handler("get_socket", "Could not connect to server", 1);
 	}
 
 	return sockfd;
-}
-
-int get_subtitle(char *buffer) {
-	int sockfd, n;
-	char request[config.common.line_size];
-
-	sockfd = get_socket();
-
-	strcpy(&request[0], "42");
-	n = send(sockfd, &request[0], strlen(&request[0]), 0);
-	if (n < 0) {
-		error_handler("get_subtitle", "Could not write to socket", 0);
-		close(sockfd);
-		return 0;
-	}
-
-	memset(buffer, '\0', config.common.line_size);
-
-	n = recv(sockfd, buffer, config.common.line_size - 1, 0);
-	if (n < 0) {
-		error_handler("get_subtitle", "Could not read from socket", 0);
-		close(sockfd);
-		return 0;
-	}
-
-	close(sockfd);
-
-	return 1;
 }
 
 

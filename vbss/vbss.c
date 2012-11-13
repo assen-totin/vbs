@@ -25,16 +25,38 @@ int show_subtitle(GtkWidget *subtitle) {
 
 // Fetch a subtitle and process it
 int proc_subtitle_net() {
-	char buffer_new[config.common.line_size];
+	char buffer_new[config.common.line_size + 2];
+	int n;
+
+	int sockfd = get_socket();
+
+	char request[config.common.line_size];
+	strcpy(&request[0], "42");
 
 	while (1) {
-		if (get_subtitle(&buffer_new[0])) {
-			strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
+	n = send(sockfd, &request[0], strlen(&request[0]), 0);
+		if (n < 0) {
+			error_handler("proc_subtitle_net", "Could not write to socket", 0);
+			close(sockfd);
+			sockfd = get_socket();
 		}
+
+		memset(&buffer_new[0], '\0', config.common.line_size + 2);
+
+		n = recv(sockfd, &buffer_new[0], config.common.line_size, 0);
+		if (n < 0) {
+			error_handler("proc_subtitle_net", "Could not read from socket", 0);
+			close(sockfd);
+			sockfd = get_socket();
+		}
+
+		strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
 
 		// Sleep 100 ms
 		g_usleep(100000);
 	}
+
+	close(sockfd);
 
 	return 1;
 }

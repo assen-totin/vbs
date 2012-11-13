@@ -104,26 +104,31 @@ int main() {
 				shm_id = shmget(unix_time, config.common.line_size, IPC_CREAT);
 				shm_at = (char *)shmat(shm_id, 0, 0);
 
-				bzero(buffer, sizeof(buffer));
+				while (1) {
+					memset(buffer, '\0', sizeof(buffer));
 
-				n = recv(newsockfd, buffer, sizeof(buffer)-1, 0);
-				if (n < 0) {
-					syslog(LOG_CRIT, "Error reading from socket!");
-				}
-				else {
-					// DO SOMETHING WITH 'buffer'
-					//syslog(LOG_CRIT, buffer);
-					if (check_magic_key(buffer) == 1) {
-						//syslog(LOG_CRIT, "Got magic!");
-						char new_sub[config.common.line_size];
-						extract_sub(buffer, &new_sub[0]);
-						strcpy(shm_at, &new_sub[0]);
+					n = recv(newsockfd, buffer, sizeof(buffer)-1, 0);
+
+					if (n < 0) {
+						syslog(LOG_CRIT, "Error reading from socket!");
+						break;
 					}
 
-					// WRITE BACK
-					n = send(newsockfd, shm_at, config.common.line_size, 0);
-					if (n < 0) {
-						syslog(LOG_CRIT, "Error writing to socket!");
+					else if (n == 0)
+						break;
+
+					else if (n > 0) {
+						if (check_magic_key(buffer) == 1) {
+							char new_sub[config.common.line_size];
+							extract_sub(buffer, &new_sub[0]);
+							strcpy(shm_at, &new_sub[0]);
+						}
+						n = send(newsockfd, shm_at, config.common.line_size, 0);
+
+						if (n < 0) {
+							syslog(LOG_CRIT, "Error writing to socket!");
+							break;
+						}
 					}
 				}
 

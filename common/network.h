@@ -9,7 +9,9 @@
 // for details.
 
 int get_host_by_name(char *server_name);
+
 int get_socket();
-int get_subtitle(char *buffer);
+
 int put_subtitle(char *buffer);
+
 
