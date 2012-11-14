@@ -245,9 +245,9 @@ int main (int argc, char *argv[]) {
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
 
 #ifdef HAVE_GTK2
-	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
+	gdk_threads_add_timeout(config.vbss.sub_update_msec, (GtkFunction) show_subtitle, subtitle);
 #elif HAVE_GTK3
-	gdk_threads_add_timeout(100, (GSourceFunc) show_subtitle, subtitle);
+	gdk_threads_add_timeout(config.vbss.sub_update_msec, (GSourceFunc) show_subtitle, subtitle);
 #endif
 
 	if (config.common.network_mode == 2)

@@ -225,9 +225,9 @@ int main (int argc, char *argv[]) {
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
 
 #ifdef HAVE_GTK2
-	g_timeout_add(100, (GtkFunction) show_subtitle, subtitle);
+	g_timeout_add(config.vbss.sub_update_msec, (GtkFunction) show_subtitle, subtitle);
 #elif HAVE_GTK3
-	g_timeout_add(100, (GSourceFunc) show_subtitle, subtitle);
+	g_timeout_add(config.vbss.sub_update_msec, (GSourceFunc) show_subtitle, subtitle);
 #endif
 
 #ifdef HAVE_GTK3
