@@ -11,12 +11,6 @@
 #include "../common/common.h"
 
 int show_subtitle(GtkWidget *subtitle) {
-
-	if (config.common.network_mode == 2)
-		proc_subtitle_net();
-	else
-		proc_subtitle_local();
-
 	const char *buffer_old_p = gtk_label_get_text(GTK_LABEL(subtitle));
 
 	if(strcmp(buffer_old_p, &config.vbss.current_sub[0]) != 0) {
@@ -34,26 +28,35 @@ int proc_subtitle_net() {
 	char buffer_new[config.common.line_size + 2];
 	int n;
 
+	int sockfd = get_socket();
+
 	char request[config.common.line_size];
 	strcpy(&request[0], "42");
 
-	n = send(config.vbss.socketfd, &request[0], strlen(&request[0]), 0);
-	if (n < 0) {
-		error_handler("proc_subtitle_net", "Could not write to socket", 0);
-		close(config.vbss.socketfd);
-		config.vbss.socketfd = get_socket();
+	while (1) {
+	n = send(sockfd, &request[0], strlen(&request[0]), 0);
+		if (n < 0) {
+			error_handler("proc_subtitle_net", "Could not write to socket", 0);
+			close(sockfd);
+			sockfd = get_socket();
+		}
+
+		memset(&buffer_new[0], '\0', config.common.line_size + 2);
+
+		n = recv(sockfd, &buffer_new[0], config.common.line_size, 0);
+		if (n < 0) {
+			error_handler("proc_subtitle_net", "Could not read from socket", 0);
+			close(sockfd);
+			sockfd = get_socket();
+		}
+
+		strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
+
+		// Sleep 100 ms
+		g_usleep(config.vbss.sub_update_msec * 1000);
 	}
 
-	memset(&buffer_new[0], '\0', config.common.line_size + 2);
-
-	n = recv(config.vbss.socketfd, &buffer_new[0], config.common.line_size, 0);
-	if (n < 0) {
-		error_handler("proc_subtitle_net", "Could not read from socket", 0);
-		close(config.vbss.socketfd);
-		config.vbss.socketfd = get_socket();
-	}
-
-	strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
+	close(sockfd);
 
 	return 1;
 }
@@ -61,24 +64,38 @@ int proc_subtitle_net() {
 
 int proc_subtitle_local() {
 	int i;
-	if (!config.vbss.paused) {
-		long curr_time_msec = get_time_msec();
-		for (i=0; i<config.vbss.total_subtitles; i++) {
-			if (((curr_time_msec - config.common.init_timestamp_msec) >= sub_array[i].time_from) && ((curr_time_msec - config.common.init_timestamp_msec) <= sub_array[i].time_to)) {
-				if (!config.common.inside_sub) {
+
+	config.common.init_timestamp_msec = get_time_msec();
+
+	// RENDER SUBS
+	while (1) {
+		if (!config.vbss.paused) {
+			long curr_time_msec = get_time_msec();
+			for (i=0; i<config.vbss.total_subtitles; i++) {
+				if (((curr_time_msec - config.common.init_timestamp_msec) >= sub_array[i].time_from) && ((curr_time_msec - config.common.init_timestamp_msec) <= sub_array[i].time_to)) {
 					config.common.inside_sub = true;
 					fix_new_line(&sub_array[i].sub[0]);
 					strcpy(&config.vbss.current_sub[0], &sub_array[i].sub[0]);
+					break;
 				}
-				break;
+			}
+		
+			if (config.common.inside_sub) {
+				while (1) {
+					long curr_time_msec = get_time_msec();
+					if ((curr_time_msec - config.common.init_timestamp_msec) >= sub_array[i].time_to) {
+						strcpy(&config.vbss.current_sub[0], "\n");
+						config.common.inside_sub = false;
+						break;
+					}
+					else
+						// Sleep 100 ms
+						g_usleep(config.vbss.sub_update_msec * 1000);
+				}
 			}
 		}
-		if (config.common.inside_sub) {
-			if (i == config.vbss.total_subtitles) {
-				strcpy(&config.vbss.current_sub[0], "\n");
-				config.common.inside_sub = false;
-			}
-		}
+		// Sleep 100 ms
+		g_usleep(config.vbss.sub_update_msec * 1000);
 	}
 	return 1;
 }
@@ -88,6 +105,7 @@ int proc_subtitle_local() {
 int main (int argc, char *argv[]) {
 	GtkWidget *window = NULL;
 	GtkWidget *subtitle = NULL;
+	GThread *thread;
 	GError *error = NULL;
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_family, *attr_style, *attr_weight, *attr_colour_fg, *attr_colour_bg;
@@ -115,7 +133,12 @@ int main (int argc, char *argv[]) {
 	}
 
 	// Init GTK
+	if(!g_thread_supported())
+		g_thread_init( NULL );
+	gdk_threads_init();
+	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, (GLogFunc) gtk_false, NULL);
 	gtk_init (&argc, &argv);
+	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, g_log_default_handler, NULL);
 
 	// Window
 #ifdef HAVE_GTK2
@@ -195,14 +218,11 @@ int main (int argc, char *argv[]) {
 
 	subtitle = gtk_label_new("");
 
-	if (config.common.network_mode == 2) { 
+	if (config.common.network_mode == 2) 
 		strcpy(&config.vbss.current_sub[0], _("Expecting network connection..."));
-		config.vbss.socketfd = get_socket(); 
-	}
 	else {
 		sub_array = import_subtitles_srt(&config.vbss.import_filename[0], &config.vbss.total_subtitles);
 		config.common.timestamp_msec = get_time_msec();
-		config.common.init_timestamp_msec = config.common.timestamp_msec;
 		strcpy(&config.vbss.current_sub[0], _("Press SPACE to start playback..."));
 		g_signal_connect(window, "key_press_event", (GCallback) on_key_pressed, window);
 	}
@@ -225,10 +245,18 @@ int main (int argc, char *argv[]) {
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);
 
 #ifdef HAVE_GTK2
-	g_timeout_add(100, (GtkFunction) show_subtitle, subtitle);
+	gdk_threads_add_timeout(100, (GtkFunction) show_subtitle, subtitle);
 #elif HAVE_GTK3
-	g_timeout_add(100, (GSourceFunc) show_subtitle, subtitle);
+	gdk_threads_add_timeout(100, (GSourceFunc) show_subtitle, subtitle);
 #endif
+
+	if (config.common.network_mode == 2)
+		thread = g_thread_create((GThreadFunc) proc_subtitle_net, NULL, FALSE, &error);	
+	else
+		thread = g_thread_create((GThreadFunc) proc_subtitle_local, NULL, FALSE, &error);
+
+	if(!thread)
+		error_handler("main","Failed to create thread",1);
 
 #ifdef HAVE_GTK3
 	// Workaround code for gtk_widget_override_background_color() not working on GTK3 when theme uses images for window background.
@@ -241,12 +269,15 @@ int main (int argc, char *argv[]) {
 	// Main loop
 	gtk_widget_show_all(window);
 
+	gdk_threads_enter();
 	gtk_main();
 
 	// Cleanup
 	//pango_attribute_destroy(attr_size);
 	//pango_attribute_destroy(attr_colour);
 	//pango_attr_list_unref(attr_list);
+
+	gdk_threads_leave();
 
 	return 0;
 }

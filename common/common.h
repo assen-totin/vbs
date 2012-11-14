@@ -131,6 +131,7 @@ struct struct_vbss {
 	int font_size;
 	int justify;
 	int sub_update_msec;
+	int socketfd;
 };
 
 struct struct_common {
