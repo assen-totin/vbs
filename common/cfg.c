@@ -50,6 +50,7 @@ void default_config() {
 	config.vbss.font_size = VBSS_DEFAULT_FONT_SIZE;
 	strcpy(&config.vbss.font_name[0], VBSS_DEFAULT_FONT_NAME);
 	strcpy(&config.vbss.font_face[0], VBSS_DEFAULT_FONT_FACE);
+	config.vbss.sub_update_msec = VBSS_DEFAULT_UPDATE_MSEC;
 
 #ifdef HAVE_MPLAYER
 	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
@@ -103,6 +104,7 @@ void write_config() {
 	fprintf(fp_config, "FONT_NAME=%s\n", config.vbss.font_name);
 	fprintf(fp_config, "FONT_FACE=%s\n", config.vbss.font_face);
 	fprintf(fp_config, "FONT_JUSTIFY=%u\n", config.vbss.justify);
+	fprintf(fp_config, "SUB_UPDATE=%u\n", config.vbss.sub_update_msec);
 
 	fprintf(fp_config, "PROGRESS_UPDATE=%u\n", config.vbsm.progress_update_msec);
 	fprintf(fp_config, "VIDEO_BACKEND=%u\n", config.vbsm.video_backend);
@@ -165,6 +167,8 @@ void read_config() {
 				config_char(line, &config.vbss.font_face[0]);
 			else if (strstr(line, "FONT_JUSTIFY"))
 				config.vbss.justify = config_int(line);
+			else if (strstr(line, "SUB_UPDATE"))
+				config.vbss.sub_update_msec = config_int(line);
 
 			else if (strstr(line, "PROGRESS_UPDATE"))
 				config.vbsm.progress_update_msec = config_int(line);

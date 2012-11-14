@@ -150,25 +150,28 @@ in fullscreen with PC/laptop video output using projector to overlay subtitles
 over another motion picture. 
 
 vbss has no GUI - it opens in fullscreen, showing white subtitles on a black 
-background. For testing pusposes, an option on the config file called 
-FULL_SCREEN exists; if set to 0, vbss will start in windowed mode and will use 
-smaller font size. 
+background. Use vbsc to configure it. For testing pusposes you can set the 
+"Full Screen" option to "OFF" in "Player" menu. When full screen is "off", a
+hard-coded font name and size is used.  
 
-The font size can be changed specified in the config file, as well as the 
-background and foreground colours (not very useful in practice).
+For full-screen mode the font size can be changed using vbsc. Same for the  
+background and foreground colours.
 
-vbss can operate in three modes depending on a config setting. 
+vbss can operate in three modes depending on a menu setting. 
 
-- If NETWORK_MODE is 0, vbss will try to load the file specified in 
-IMPORT_FILENAME (it should be in SubRip format) and play it back. 
+- If network mode is "OFF", vbss will try to load a local file and play it 
+back. The file should be SubRip format. Specify it using vbsc, "Subtitles" menu.
 
-- If NETWORK_MODE is 1, vbss will try to load the file specified in 
-IMPORT_FILENAME (it should be in SubRip format), play it back and send the 
-subtitles to the specified server and port.
+- If network mode is "SEND", vbss will do the same as with "OFF", but will 
+also send the subtitles to a vbsd server in real time. To set proper vbsd
+server, port and magic key, use teh vbsc "Player" menu. 
 
-- If NETWORK_MODE is 2, vbss will try to contact a vbsd server set in 
-SERVER_NAME at the specified TCP_PORT. It will poll the server each second, 
-displaying whatever the server is streaming wight now. 
+- If network mode is "RECV", vbss will poll a vbsd server and display the 
+subtitles it fetches. Same settings as with "SEND" mode apply here, use vbsc.
+By default, vbsd will be polled each 100 ms. If this is too fast for your
+server or network, increase the value of "SUB_UPDATE" parameter in the VBS
+config file - the value is in ms. (do it manually, no vbsc menu is provided for
+this). 
 
 When playing back a local file, the playbak will not start until you press once 
 the space bar (a prompt will be shown on screen). Once the playback begins, the

@@ -53,7 +53,7 @@ int proc_subtitle_net() {
 		strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
 
 		// Sleep 100 ms
-		g_usleep(100000);
+		g_usleep(config.vbss.sub_update_msec * 1000);
 	}
 
 	close(sockfd);
@@ -90,12 +90,12 @@ int proc_subtitle_local() {
 					}
 					else
 						// Sleep 100 ms
-						g_usleep(100000);
+						g_usleep(config.vbss.sub_update_msec * 1000);
 				}
 			}
 		}
 		// Sleep 100 ms
-		g_usleep(100000);
+		g_usleep(config.vbss.sub_update_msec * 1000);
 	}
 	return 1;
 }

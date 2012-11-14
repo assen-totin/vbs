@@ -130,6 +130,7 @@ struct struct_vbss {
 	char font_face[128];
 	int font_size;
 	int justify;
+	int sub_update_msec;
 };
 
 struct struct_common {
