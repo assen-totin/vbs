@@ -27,8 +27,11 @@ selection, font justification selection (all via vbsc).
 7. vbsd now can be started by a SystemV init or by systemd. Proper startup 
 scripts are provided. 
 
-8. vbsm now has a progress bar update configuration option (in the config file
-only, not from the GUI).
+8. vbsm now has a progress bar update configuration option.
+
+9. vbss now has subtitle update configuration option (config file only, not via
+vbsc).
+
 
 Oct 9, 2012 - Version 2.2
 ==========================
