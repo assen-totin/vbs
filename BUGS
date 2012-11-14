@@ -37,7 +37,3 @@ video codec or wait for the next release which will eventually fix it.
 charsets. This is a Windows Help viewer (hh.exe) limitation which only supports 
 ANSI characters. No workaround possible, complain to Miscrosoft.  
 
-7. On Windows, is using vbss in regular window, don't try to move it - it will
-hang. This seems to be a Windows-related bug in GTK. Use vbss on full-screen,
-this is the intended mode anyway.
-
