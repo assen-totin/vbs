@@ -150,6 +150,7 @@ struct struct_common {
 	char server_name[255];
 	int tcp_port;
 	struct hostent *host_entry;
+	bool can_recv_from_net;
 };
 
 struct configuration {
@@ -182,10 +183,9 @@ static struct enc_entry enc_entries[] = {
   {"KOI8U", false}
 };
 
-// Global variables really sux; is there a way to pass a pointer to file selector clicked callback function?
+// Global variables
 struct configuration config;
 struct cmdl cmdl_config;
-int can_recv_from_net;
 
 #include "cfg.h"
 #include "error.h"
