@@ -20,9 +20,9 @@ AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`
 endif
 
 install-data-hook:
-	test -z $(DESTDIR)$(sysconfdir)/init.d || mkdir -p $(DESTDIR)$(sysconfdir)/init.d; cp -f init/vbsd $(DESTDIR)$(sysconfdir)/init.d/vbsd 
+	test -z $(DESTDIR)$(sysconfdir)/init.d || mkdir -p $(DESTDIR)$(sysconfdir)/init.d; chmod 755 init/vbsd; cp -f init/vbsd $(DESTDIR)$(sysconfdir)/init.d/vbsd
 if WITH_SYSTEMD
-	test -z $(DESTDIR)$(sysconfdir)/systemd/system || mkdir -p $(DESTDIR)$(sysconfdir)/systemd/system; cp -f init/vbsd.service $(DESTDIR)$(sysconfdir)/systemd/system/vbsd.service
+	test -z $(DESTDIR)$(sysconfdir)/systemd/system || mkdir -p $(DESTDIR)$(sysconfdir)/systemd/system; chmod 755 init/vbsd.service; cp -f init/vbsd.service $(DESTDIR)$(sysconfdir)/systemd/system/vbsd.service
 endif
 
 uninstall-hook: 

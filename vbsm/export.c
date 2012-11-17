@@ -106,6 +106,7 @@ void export_subtitles() {
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
 	fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
+	fflush(config.vbsm.log_file_fp);
 }
 
 
