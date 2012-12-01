@@ -185,7 +185,6 @@ void quitDialog(GtkWidget *widget, gpointer window) {
 #endif
 		}
 		fclose(config.vbsm.log_file_fp);
-		unlink(config.vbsm.log_file_name);
 
 		gtk_widget_destroy(dialog);
 
