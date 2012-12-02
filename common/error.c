@@ -13,6 +13,7 @@
 void error_handler(char func[256], char error_text[256], bool exit_flag) {
 	printf("*** VBS Error: %s in function %s\n", error_text, func);
 	fprintf(config.vbsm.log_file_fp, "*** Error: %s in function %s\n", error_text, func);
+	fflush(config.vbsm.log_file_fp);
 	if (exit_flag)
 		exit(1);
 }

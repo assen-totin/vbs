@@ -142,7 +142,7 @@ int main (int argc, char **argv){
 	g_signal_connect(config.vbsm.subtitles_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
 
 	// Menu
-	can_recv_from_net = 0;
+	config.common.can_recv_from_net = false;
 	// Only the GTK+ idiots know why menu cannot be built in a function and returned as a widget -
 	// like the "deprecated" GtkItemFactoryEntry seamlesly did
 	GtkUIManager *p_uiManager = gtk_ui_manager_new ();

@@ -205,7 +205,7 @@ void use_network (GtkWidget *widget, gpointer window) {
 	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &msg[0]);
 	sprintf(&msg[0], "%s %s", "SEND:", _("Send to network"));
 	gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &msg[0]);
-	if (can_recv_from_net == 1) {
+	if (config.common.can_recv_from_net) {
 		sprintf(&msg[0], "%s %s", "RECV:", _("Receive from network"));
 		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), &msg[0]);
 	}
@@ -217,10 +217,18 @@ void use_network (GtkWidget *widget, gpointer window) {
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
 		if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"OFF"))
 			config.common.network_mode = 0;
-		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"SEND"))
-			config.common.network_mode = 1;
-		else
-			config.common.network_mode = 2;
+		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"SEND")) {
+			if (get_host_by_name(&config.common.server_name[0]) == 0) 
+				show_warning_network(NULL, dialog);
+			else 
+				config.common.network_mode = 1;
+		}
+		else {
+			if (get_host_by_name(&config.common.server_name[0]) == 0) 
+				show_warning_network(NULL, dialog);
+			else
+				config.common.network_mode = 2;
+		}
 
 		write_config();
 	}

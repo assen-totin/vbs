@@ -81,8 +81,6 @@ void on_pressed_b () {
 			}
 
 			g_free(line);
-
-			fprintf(config.vbsm.log_file_fp, "Processed B key.\n");
 		}
 	}
 }
