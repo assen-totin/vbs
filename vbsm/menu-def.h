@@ -65,10 +65,10 @@ GtkActionEntry menu_entries[] = {
 	{"EditMenu", NULL, "Edit", NULL, NULL, NULL},
 	{"EditInsertBefore", GTK_STOCK_ADD, "Insert Before", "Insert", NULL, (GCallback)insert_subtitle},
 	{"EditInsertAfter", GTK_STOCK_ADD, "Insert After", "<CTRL>N", NULL, (GCallback)insert_subtitle},
-	{"EditDelete", GTK_STOCK_DELETE, "Delete", "Delete", NULL, (GCallback)insert_subtitle},
+	{"EditDelete", GTK_STOCK_DELETE, "Delete", NULL, NULL, (GCallback)insert_subtitle},
 	{"EditSeparator1", NULL, NULL, NULL, NULL, NULL},
-	{"EditZeroCurent", NULL, "Zero Timing for Current", "<CTRL>0", NULL, (GCallback)zero_timing},
-	{"EditZeroRest", NULL, "Zero Timing from Current", NULL, NULL, (GCallback)zero_timing},
+	{"EditZeroCurent", NULL, "Zero Timing for Current", NULL, NULL, (GCallback)zero_timing},
+	{"EditZeroRest", NULL, "Zero Timing from Current", "<CTRL>0", NULL, (GCallback)zero_timing},
 	{"EditSeparator2", NULL, NULL, NULL, NULL, NULL},
 	{"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)set_timer},
 
@@ -82,7 +82,7 @@ GtkActionEntry menu_entries[] = {
 	{"TextExportNewline", NULL, "Set Export Newline...", NULL, NULL, (GCallback)set_newline},
 
 	{"VideoMenu", NULL, "Video", NULL, NULL, NULL},
-	{"VideoImport", GTK_STOCK_OPEN, "Load Video...", "<CTRL>V", NULL, (GCallback)fileDialogOpen},
+	{"VideoImport", GTK_STOCK_OPEN, "Load Video...", NULL, NULL, (GCallback)fileDialogOpen},
 	{"VideoBackend", NULL, "Set Video Backend...", NULL, NULL, (GCallback)set_video_backend},
 	{"VideoOutput", NULL, "Set Video Output...", NULL, NULL, (GCallback)set_video_output},
 

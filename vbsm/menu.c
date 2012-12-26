@@ -31,11 +31,9 @@ void zero_timing(GtkAction *action, gpointer param){
 			while (flag) {
 				// Move to next line
 				gtk_tree_selection_unselect_iter(selection, &iter);
+				gtk_tree_selection_select_iter(selection, &iter);
+				gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
 				flag = gtk_tree_model_iter_next(model, &iter);
-				if (flag) {
-					gtk_tree_selection_select_iter(selection, &iter);
-					gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, 0, COL_TO, 0, -1);
-				}
 			}
 			gtk_tree_selection_select_iter(selection, &sibling);
 		}
