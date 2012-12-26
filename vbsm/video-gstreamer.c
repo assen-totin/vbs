@@ -94,6 +94,8 @@ void gstreamer_init(char file_name[1024]) {
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", &uri[0], NULL);
 
 	GstElement *videosink = gst_element_factory_make (&config.vbsm.gstreamer_video_sink[0], "videosink");
+	// Preserve original size of video
+	g_object_set(G_OBJECT(videosink), "force-aspect-ratio", "true");
 	config.vbsm.gstreamer_textoverlay = gst_element_factory_make("textoverlay", "textoverlay");
 	GstElement *timeoverlay = gst_element_factory_make("timeoverlay", "timeoverlay");
 

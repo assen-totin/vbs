@@ -8,6 +8,7 @@ latter is more often used.
 2. Behaviour changes: "Zero timing from current" will now also zero the timing
 for the current subtitle.
 
+3. Changed the GUI when using GStreamer to preserve the original video size.
 
 
 Nov 14, 2012 - Version 3.0
