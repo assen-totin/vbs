@@ -24,6 +24,12 @@ TRANSLATIONS
 Standard gettext is used. "make dist" will update the .mo files from
 existing .po files. 
 
+If adding new strings:
+- generate new template, from root directory
+     xgettext -d vbs -s -k_ -o po/vbs.new `find | grep \\\\.c$`
+- run "make" in po directory to update the .po files
+- update the strings for each language
+- run "make dist" to build the sources.
 
 HELP
 ===

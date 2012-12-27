@@ -13,6 +13,8 @@ void fileDialogSave(GtkAction *action, gpointer param);
 
 void quitDialog(GtkWidget *widget, gpointer window);
 
+void shift_timing(GtkAction *action, gpointer param);
+
 void zero_timing(GtkAction *action, gpointer param);
 
 void set_timer(GtkWidget *widget, gpointer window);

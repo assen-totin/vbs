@@ -8,74 +8,82 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 21:57+0300\n"
+"POT-Creation-Date: 2012-12-27 21:05+0200\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Bulgarian\n"
-"Language: bg\n"
+"Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: common/menu.c:98
+#: common/menu.c:100
 msgid "Available Delimiters:"
 msgstr "Изберете разделител:"
 
-#: common/menu.c:40 common/menu.c:69
+#: common/menu.c:42 common/menu.c:71
 msgid "Available Encodings:"
 msgstr "Изберете кодировка:"
 
-#: vbsc/menu.c:147
+#: vbsc/menu.c:120
 msgid "Background Color"
 msgstr "Цвят на фона"
 
-#: vbsc/menu.c:232
+#: vbsc/menu.c:205
 msgid "Centered"
 msgstr "Центриран"
 
-#: common/menu.c:134
+#: common/menu.c:132
 msgid "Current Port:"
 msgstr "Текущ порт:"
 
-#: common/menu.c:158
+#: common/menu.c:156
 #, fuzzy
 msgid "Current Server (FQDN):"
 msgstr "Текущ сървър (FQDN):"
 
-#: common/menu.c:188
+#: common/menu.c:186
 msgid "DNS resolving failed."
 msgstr "Името не беше намерено."
 
-#: common/menu.c:239
+#: vbsm/menu.c:25
+msgid "Enter Offset"
+msgstr "Въведете време"
+
+#: common/menu.c:245
 msgid "Enter magic key (up to 32 letters or digits):"
 msgstr "Код на сървъра (до 32 латински букви или цифри):"
 
-#: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
+#: vbsm/menu.c:24
+msgid "Enter offset in milliseconds:"
+msgstr "Въведете време в милисекунди:"
+
+#: vbsm/menu.c:175 vbsm/gui.c:169 common/menu.c:187
 msgid "Error"
 msgstr "Грешка"
 
-#: vbss/vbss.c:202
+#: vbss/vbss.c:199 vbss/vbss-threaded.c:222
 msgid "Expecting network connection..."
 msgstr "Очакваме връзка по мрежата..."
 
-#: vbsc/menu.c:234
+#: vbsc/menu.c:207
 msgid "Filled"
 msgstr "Подравнен от двете страни"
 
-#: vbsc/menu.c:145
+#: vbsc/menu.c:118
 msgid "Font Color"
 msgstr "Цвят на текста"
 
-#: vbsc/menu.c:263
+#: vbsc/menu.c:236
 msgid "Full-Screen mode:"
 msgstr "Показване на цял екран:"
 
-#: vbsm/menu.c:94 vbsm/menu.c:96
+#: vbsm/menu.c:182 vbsm/menu.c:184
 msgid "Help"
 msgstr "Помощ"
 
-#: vbsm/menu.c:86
+#: vbsm/menu.c:174
 msgid "Help file not found."
 msgstr "Файлът с инструкции не беше намерен."
 
@@ -94,19 +102,19 @@ msgstr ""
 "ул. Отец Паисий 74\n"
 "Асен Тотин\n"
 
-#: vbsm/menu.c:126
+#: vbsm/menu.c:214
 msgid "Internal timer set to zero."
 msgstr "Вътрешният таймер нулиран."
 
-#: vbsc/menu.c:228
+#: vbsc/menu.c:201
 msgid "Left aligned"
 msgstr "Подравнен отляво"
 
-#: common/menu.c:202
+#: common/menu.c:200
 msgid "Network Mode"
 msgstr "Работа с мрежата"
 
-#: common/menu.c:206
+#: common/menu.c:204
 msgid "Network is off"
 msgstr "Мрежата е изключена."
 
@@ -118,48 +126,48 @@ msgstr ""
 "Пауза.\n"
 "Натиснете ИНТЕРВАЛ за да продължите..."
 
-#: vbss/vbss.c:206
+#: vbss/vbss.c:206 vbss/vbss-threaded.c:226
 msgid "Press SPACE to start playback..."
 msgstr "Натиснете ИНТЕРВАЛ за начало на прожекцията..."
 
-#: vbsc/menu.c:93 vbsc/menu.c:100
+#: vbsc/menu.c:66 vbsc/menu.c:73
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "За миг бях в чужд, скърцащ плюшен фотьойл..."
 
-#: vbsm/menu.c:139 vbsm/menu.c:141 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:227 vbsm/menu.c:229 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Приключваме ли работа?"
 
-#: common/menu.c:211
+#: common/menu.c:209
 msgid "Receive from network"
 msgstr "Приемане по мрежата."
 
-#: vbsc/menu.c:230
+#: vbsc/menu.c:203
 msgid "Right aligned"
 msgstr "Подравнен отдясно"
 
-#: common/menu.c:70
+#: common/menu.c:72
 msgid "Select Export Encoding"
 msgstr "Изберете кодировка за експорт"
 
-#: vbsc/menu.c:92 vbsc/menu.c:99
+#: vbsc/menu.c:65 vbsc/menu.c:72
 #, fuzzy
 msgid "Select Font"
 msgstr "Големина на шрифта"
 
-#: common/menu.c:41
+#: common/menu.c:43
 msgid "Select Import Encoding"
 msgstr "Изберете кодировка за импорт"
 
-#: common/menu.c:99
+#: common/menu.c:101
 msgid "Select Newline Delimiter"
 msgstr "Изберете разделител за нов ред"
 
-#: common/menu.c:201
+#: common/menu.c:199
 msgid "Select network mode:"
 msgstr "Режим на мрежата:"
 
-#: vbsm/menu.c:247
+#: vbsm/menu.c:334
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -167,7 +175,7 @@ msgstr ""
 "Изберете програма за видео:\n"
 "(после рестартирайте)"
 
-#: vbsm/menu.c:290
+#: vbsm/menu.c:377
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -175,27 +183,27 @@ msgstr ""
 "Изберете как GStreamer да показва видео:\n"
 "(после рестартирайте)"
 
-#: common/menu.c:208
+#: common/menu.c:206
 msgid "Send to network"
 msgstr "Предаване по мрежата"
 
-#: common/menu.c:159
+#: common/menu.c:157
 msgid "Server Name"
 msgstr "Име на сървъра"
 
-#: vbsc/menu.c:264
+#: vbsc/menu.c:237
 msgid "Set Full-Screen"
 msgstr "Цял екран"
 
-#: common/menu.c:240
+#: common/menu.c:246
 msgid "Set Magic Key"
 msgstr "Ключ за връзка"
 
-#: vbsm/menu.c:128
+#: vbsm/menu.c:216
 msgid "Set Start Time"
 msgstr "Нулиране таймер"
 
-#: vbsc/menu.c:224
+#: vbsc/menu.c:197
 msgid "Set Text Justification"
 msgstr "Подравняване на текста"
 
@@ -213,11 +221,11 @@ msgstr "Предлагаме времетраене %u секунди"
 msgid "Suggested Duration: %u seconds (So far: %u seconds)"
 msgstr "Предлагаме времетраене %u секунди (дотук: %u секунди)"
 
-#: common/menu.c:135
+#: common/menu.c:133
 msgid "TCP Port"
 msgstr "TCP порт"
 
-#: vbsc/menu.c:223
+#: vbsc/menu.c:196
 msgid "Text justification:"
 msgstr "ИЗберете подравняване:"
 
@@ -232,19 +240,19 @@ msgstr ""
 "Вижте файла LICENSE или посетете http://www.gnu.org/copyleft/gpl.html за "
 "допълнителна информация."
 
-#: vbsc/vbsc.c:54
+#: vbsc/vbsc.c:60
 msgid "Use the menu to change default settings."
 msgstr "Изпозвайте менюто, за да промените настройките."
 
-#: vbsm/menu.c:248
+#: vbsm/menu.c:335
 msgid "Video Backend"
 msgstr "Програма за видео"
 
-#: vbsm/menu.c:305
+#: vbsm/menu.c:392
 msgid "Video Output"
 msgstr "Начин на възпроизвеждане"
 
-#: vbsm/menu.c:295
+#: vbsm/menu.c:382
 msgid "Video output selection not available for current backend."
 msgstr "Текущата програма за видео няма тази настройка."
 

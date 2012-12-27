@@ -13,7 +13,7 @@
 void shift_timing(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
+	GtkTreeModel *model;
 	bool flag = TRUE;
 	int from, to, time_shift = 0, counter = 1;
 
@@ -45,7 +45,6 @@ void shift_timing(GtkAction *action, gpointer param){
 		sibling = iter;
 		while (flag) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
-
 			from +=	counter * time_shift;
 			if (from < 0)
 				from = 0;
@@ -53,13 +52,12 @@ void shift_timing(GtkAction *action, gpointer param){
 			to += counter * time_shift;
 			if (to < 0)
 				to = 0;
-
-			gtk_list_store_set (config.vbsm.mplayer_store, &iter, COL_FROM, &from, COL_TO, &to, -1);
+			gtk_list_store_set(config.vbsm.mplayer_store, &iter, COL_FROM, from, COL_TO, to, -1);
 			gtk_tree_selection_unselect_iter(selection, &iter);
 			flag = gtk_tree_model_iter_next(model, &iter);
-			if (flag)
+			if (flag) 
 				gtk_tree_selection_select_iter(selection, &iter);
-
+			
 			if (strstr(gtk_action_get_name(action), "EditShiftExpand"))
 				counter++;
 		}
@@ -71,7 +69,7 @@ void shift_timing(GtkAction *action, gpointer param){
 void zero_timing(GtkAction *action, gpointer param){
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
+	GtkTreeModel *model;
 	bool flag = TRUE;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));

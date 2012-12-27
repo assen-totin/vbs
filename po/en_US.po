@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-22 21:57+0300\n"
+"POT-Creation-Date: 2012-12-27 21:05+0200\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English\n"
@@ -17,64 +17,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: common/menu.c:98
+#: common/menu.c:100
 msgid "Available Delimiters:"
 msgstr "Available Delimiters:"
 
-#: common/menu.c:40 common/menu.c:69
+#: common/menu.c:42 common/menu.c:71
 msgid "Available Encodings:"
 msgstr "Available Encodings:"
 
-#: vbsc/menu.c:147
+#: vbsc/menu.c:120
 msgid "Background Color"
 msgstr "Background Color"
 
-#: vbsc/menu.c:232
+#: vbsc/menu.c:205
 msgid "Centered"
 msgstr "Centered"
 
-#: common/menu.c:134
+#: common/menu.c:132
 msgid "Current Port:"
 msgstr "Current Port:"
 
-#: common/menu.c:158
+#: common/menu.c:156
 #, fuzzy
 msgid "Current Server (FQDN):"
 msgstr "Current Server (FQDN):"
 
-#: common/menu.c:188
+#: common/menu.c:186
 msgid "DNS resolving failed."
 msgstr "DNS resolving failed."
 
-#: common/menu.c:239
+#: vbsm/menu.c:25
+msgid "Enter Offset"
+msgstr "Enter Offset"
+
+#: common/menu.c:245
 msgid "Enter magic key (up to 32 letters or digits):"
 msgstr "Enter magic key (up to 32 letters or digits):"
 
-#: common/menu.c:189 vbsm/gui.c:169 vbsm/menu.c:87
+#: vbsm/menu.c:24
+msgid "Enter offset in milliseconds:"
+msgstr "Enter offset in milliseconds:"
+
+#: vbsm/menu.c:175 vbsm/gui.c:169 common/menu.c:187
 msgid "Error"
 msgstr "Error"
 
-#: vbss/vbss.c:202
+#: vbss/vbss.c:199 vbss/vbss-threaded.c:222
 msgid "Expecting network connection..."
 msgstr "Expecting network connection..."
 
-#: vbsc/menu.c:234
+#: vbsc/menu.c:207
 msgid "Filled"
 msgstr "Filled"
 
-#: vbsc/menu.c:145
+#: vbsc/menu.c:118
 msgid "Font Color"
 msgstr "Font Color"
 
-#: vbsc/menu.c:263
+#: vbsc/menu.c:236
 msgid "Full-Screen mode:"
 msgstr "Full-Screen mode:"
 
-#: vbsm/menu.c:94 vbsm/menu.c:96
+#: vbsm/menu.c:182 vbsm/menu.c:184
 msgid "Help"
 msgstr "Help"
 
-#: vbsm/menu.c:86
+#: vbsm/menu.c:174
 msgid "Help file not found."
 msgstr "Help file not found."
 
@@ -94,19 +102,19 @@ msgstr ""
 "74, Otec Paisi Str.\n"
 "Assen Totin\n"
 
-#: vbsm/menu.c:126
+#: vbsm/menu.c:214
 msgid "Internal timer set to zero."
 msgstr "Internal timer set to zero."
 
-#: vbsc/menu.c:228
+#: vbsc/menu.c:201
 msgid "Left aligned"
 msgstr "Left aligned"
 
-#: common/menu.c:202
+#: common/menu.c:200
 msgid "Network Mode"
 msgstr "Network Mode"
 
-#: common/menu.c:206
+#: common/menu.c:204
 msgid "Network is off"
 msgstr "Network is off"
 
@@ -118,48 +126,48 @@ msgstr ""
 "Playback paused.\n"
 "Press SPACE to continue..."
 
-#: vbss/vbss.c:206
+#: vbss/vbss.c:206 vbss/vbss-threaded.c:226
 msgid "Press SPACE to start playback..."
 msgstr "Press SPACE to start playback..."
 
-#: vbsc/menu.c:93 vbsc/menu.c:100
+#: vbsc/menu.c:66 vbsc/menu.c:73
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Quick brown fox jumps over the lazy dog..."
 
-#: vbsm/menu.c:139 vbsm/menu.c:141 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:227 vbsm/menu.c:229 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Really quit?"
 
-#: common/menu.c:211
+#: common/menu.c:209
 msgid "Receive from network"
 msgstr "Receive from network"
 
-#: vbsc/menu.c:230
+#: vbsc/menu.c:203
 msgid "Right aligned"
 msgstr "Right aligned"
 
-#: common/menu.c:70
+#: common/menu.c:72
 msgid "Select Export Encoding"
 msgstr "Select Export Encoding"
 
-#: vbsc/menu.c:92 vbsc/menu.c:99
+#: vbsc/menu.c:65 vbsc/menu.c:72
 #, fuzzy
 msgid "Select Font"
 msgstr "Select Font"
 
-#: common/menu.c:41
+#: common/menu.c:43
 msgid "Select Import Encoding"
 msgstr "Select Import Encoding"
 
-#: common/menu.c:99
+#: common/menu.c:101
 msgid "Select Newline Delimiter"
 msgstr "Select Newline Delimiter"
 
-#: common/menu.c:201
+#: common/menu.c:199
 msgid "Select network mode:"
 msgstr "Select network mode:"
 
-#: vbsm/menu.c:247
+#: vbsm/menu.c:334
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -167,7 +175,7 @@ msgstr ""
 "Select video backend:\n"
 "(requires restart)"
 
-#: vbsm/menu.c:290
+#: vbsm/menu.c:377
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -175,27 +183,27 @@ msgstr ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
 
-#: common/menu.c:208
+#: common/menu.c:206
 msgid "Send to network"
 msgstr "Send to network"
 
-#: common/menu.c:159
+#: common/menu.c:157
 msgid "Server Name"
 msgstr "Server Name"
 
-#: vbsc/menu.c:264
+#: vbsc/menu.c:237
 msgid "Set Full-Screen"
 msgstr "Set Full-Screen"
 
-#: common/menu.c:240
+#: common/menu.c:246
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
-#: vbsm/menu.c:128
+#: vbsm/menu.c:216
 msgid "Set Start Time"
 msgstr "Set Start Time"
 
-#: vbsc/menu.c:224
+#: vbsc/menu.c:197
 msgid "Set Text Justification"
 msgstr "Set Text Justification"
 
@@ -213,11 +221,11 @@ msgstr "Suggested Duration: %u seconds"
 msgid "Suggested Duration: %u seconds (So far: %u seconds)"
 msgstr "Suggested Duration: %u seconds (So far: %u seconds)"
 
-#: common/menu.c:135
+#: common/menu.c:133
 msgid "TCP Port"
 msgstr "TCP Port"
 
-#: vbsc/menu.c:223
+#: vbsc/menu.c:196
 msgid "Text justification:"
 msgstr "Text justification:"
 
@@ -231,19 +239,19 @@ msgstr ""
 "See the LICENSE file from the distribution or visit http://www.gnu.org/"
 "copyleft/gpl.html for details."
 
-#: vbsc/vbsc.c:54
+#: vbsc/vbsc.c:60
 msgid "Use the menu to change default settings."
 msgstr "Use the menu to change default settings."
 
-#: vbsm/menu.c:248
+#: vbsm/menu.c:335
 msgid "Video Backend"
 msgstr "Video Backend"
 
-#: vbsm/menu.c:305
+#: vbsm/menu.c:392
 msgid "Video Output"
 msgstr "Video Output"
 
-#: vbsm/menu.c:295
+#: vbsm/menu.c:382
 msgid "Video output selection not available for current backend."
 msgstr "Video output selection not available for current backend."
 

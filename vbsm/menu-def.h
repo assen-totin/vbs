@@ -74,7 +74,7 @@ GtkActionEntry menu_entries[] = {
 	{"EditZeroRest", NULL, "Zero Timing from Current", "<CTRL>0", NULL, (GCallback)zero_timing},
 	{"EditSeparator2", NULL, NULL, NULL, NULL, NULL},
 	{"EditShiftSame", NULL, "Shift Timing for Current", NULL, NULL, (GCallback)shift_timing},
-	{"EditShiftExpand", NULL, "Expand Timing from Current", NULL, NULL, (GCallback)shitf_timing},
+	{"EditShiftExpand", NULL, "Expand Timing from Current", NULL, NULL, (GCallback)shift_timing},
 	{"EditSeparator3", NULL, NULL, NULL, NULL, NULL},
 	{"EditStartTime", NULL, "Set Start Time", NULL, NULL, (GCallback)set_timer},
 

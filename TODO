@@ -3,18 +3,7 @@ PENDING:
 1. Make the TreeView (the subtitle list) non-clickable when the status is 
 RUNNING (requires a deeper dig in GTK+; might not be possible at all).
 
-2. Have a nicer help. There are several ways, each with some drawbacks: 
-
-* use yelp as help browser: yelp is usually tightly connected to GNOME, but I
-  would like to keep VBS a GTK-only application.
-
-* use GTK-webkit: webkit only recently became available and is a hefty 
-requirement for showing a few pages of help. In addition, it is not always
-available in GTK2.
-
-* use GtkHTML: it is deprecated and only available in GTK2.
-
-3. Fix the network server dialog, which closes if the server name cannot be
-resolved. It si better to keep it open and allow re-eentry of server name, 
+2. Fix the network server dialog, which closes if the server name cannot be
+resolved. It is better to keep it open and allow re-eentry of server name, 
 but probably requries too much coding. 
 
