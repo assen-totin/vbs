@@ -1,5 +1,5 @@
 AC_PREREQ([2.66])
-AC_INIT([vbs], [3.0], [assen.totin@gmail.com])
+AC_INIT([vbs], [3.1], [assen.totin@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 AC_PROG_RANLIB

@@ -1,4 +1,6 @@
-TRUNK
+Dec 31, 2012 - Version 3.1
+==========================
+
 1. Shortcut changes: removed Ctrl+V for "Load Video" to avoid conflict with 
 system "paste" command; removed "Del" for "Delete current subtitle" to allow
 the "Del" key to be used when editing the text of a subtitle; moved "Ctrl+0"
