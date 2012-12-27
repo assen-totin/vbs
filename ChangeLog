@@ -10,6 +10,14 @@ for the current subtitle.
 
 3. Changed the GUI when using GStreamer to preserve the original video size.
 
+4. Added menu option "Edit -> Shift Timing from Current". All subtitles from
+currently selected one will be shifted with the specified offset (in 
+milliseconds). If a timing becomes negative, it will be set to zero.
+
+5. Added menu option "Edit -> Expand Timing from Current". All subtitles from 
+the curent one will be expanded with the specified offset (in milliseconds), 
+i.e. the first will be shifted with the offset, the second with twice the 
+offset etc. If a timing becomes negative, it will be set to zero. 
 
 Nov 14, 2012 - Version 3.0
 ==========================

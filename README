@@ -109,11 +109,13 @@ vbsm has a simple interface:
    subtitles displayed by the player and will also see the the current subtitle 
    being highlighted. 
 
-   To edit the text of a subtitle on the spot, double click the column containg 
-   the text. With MPEG files this works pretty OK (they usually have a keyframe 
-   every 1/2 second or so). However, with AVI files seek precision often lies 
-   somewhere around 5 seconds meaning with AVI files you may have to go back 1-2 
-   subtitles earlier - or re-encode it in a more suitable fashion.
+   To edit the text of a subtitle on the spot, double click the column 
+   containing the text. 
+   
+   To move the movie to a subtitle, double click the column, containing the 
+   start or end time of the subtitle. Different codecs insert keyframes at 
+   different intervals. To cope with this, the movie actually be will be set
+   5 seconds before the entry time of the subtitle.     
 
    Whenever you press the "m" or "n" key, VBS automatically exports the 
    subtitles list. Therefore you don't have to save anything on exit. You can 
@@ -132,8 +134,16 @@ vbsm has a simple interface:
 
    To import a plain text or SubRip text file, use the entries in the Subtiles 
    menu. Also use it t specify encoding for the text files and export path 
-   (default is "/tmp/vbs_export.srt"). Also use it to specify encoding for the 
-   exported file and to set the newline character (default <LF>).
+   (default is "vbs-out.srt" in your settings directory). Also use it to 
+   specify encoding for the exported file and to set the newline character 
+   (default is <LF>).
+   
+   From the same menu you can zero the timing of currently highlighted subtitle
+   or of all subtitles, beginning from current one. 
+   
+   From the same menu you can shift all subtitles with a specified offset or
+   you can expand them (i.e. first will be shifted with the offset, next with 
+   twice the offset etc.).
 
    To load a video file, use the Video/Load menu.
 
