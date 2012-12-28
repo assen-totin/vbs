@@ -139,3 +139,24 @@ void *mplayer_load_video(char fileName[1024]) {
 	mplayer_pipe_write("pause");
 }
 
+void mplayer_goto(int new_time) {
+	if (mplayer_is_alive()) {
+		char command[255];
+		sprintf(command, "pausing_keep seek %u 2", new_time);
+		mplayer_pipe_write(command);
+
+		// Tell mplayer to load subtitles as they exist now
+		mplayer_pipe_write("pausing_keep sub_remove");
+		sprintf(command, "pausing_keep sub_load %s", &config.vbsm.sub_file_name[0]);
+		mplayer_pipe_write(command);
+
+// This *should* normally work;
+// However, my mplayer crashes with "signal 11 in sub_find" when executing "sub_select"
+// after getSubNum().
+// Since we clear all subs before reloading, the new level should always be 1.
+//    subNum = getSubNum();
+		subNum = 1;
+		sprintf(command, "pausing_keep sub_select %u", subNum);
+		mplayer_pipe_write(command);
+	}
+}

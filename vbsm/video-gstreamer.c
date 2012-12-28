@@ -159,3 +159,14 @@ static gboolean bus_cb (GstBus *bus, GstMessage *msg, gpointer data) {
 	return TRUE;
 }
 
+void gstreamer_goto (long new_time) {
+	// Put new_time in milliseconds
+	new_time = new_time * 1000;
+	// Clear current sub - if any
+	gstreamer_sub_clear();
+
+	// Seek to new position, stop
+	gstreamer_seek_absolute(new_time);
+	gstreamer_pause();
+}
+

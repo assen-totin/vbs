@@ -13,7 +13,7 @@
 #include "menu-def.h"
 
 int main (int argc, char **argv){
-	GtkWidget *vbox, *status, *progress;
+	GtkWidget *vbox, *hbox1, *status, *progress;
 	GtkWidget *subtitles_scroll;
 	GtkTreeSelection *subtitles_selection;
 
@@ -144,7 +144,7 @@ int main (int argc, char **argv){
 	// Menu
 	config.common.can_recv_from_net = false;
 	// Only the GTK+ idiots know why menu cannot be built in a function and returned as a widget -
-	// like the "deprecated" GtkItemFactoryEntry seamlesly did
+	// like the "deprecated" GtkItemFactoryEntry seamlessly did
 	GtkUIManager *p_uiManager = gtk_ui_manager_new ();
 	GtkActionGroup *p_actionGroup = gtk_action_group_new ("menuActionGroup");
 	gtk_action_group_add_actions (p_actionGroup, menu_entries, G_N_ELEMENTS (menu_entries), NULL);
@@ -153,6 +153,35 @@ int main (int argc, char **argv){
 	GtkWidget *menu = gtk_ui_manager_get_widget(p_uiManager, "/MainMenu");
 	GtkAccelGroup *accel_group = gtk_ui_manager_get_accel_group(p_uiManager);
 	gtk_window_add_accel_group(GTK_WINDOW(config.vbsm.window), accel_group);
+
+	// Create hbox
+#ifdef HAVE_GTK2
+	hbox1 = gtk_hbox_new (FALSE, 0);
+#elif HAVE_GTK3
+	hbox1 = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
+
+	// Video buttons
+	GtkWidget *butt_video_beginning = gtk_button_new_with_label(_("Beginning"));
+	GtkWidget *butt_video_fwd1min = gtk_button_new_with_label(_(">"));
+	GtkWidget *butt_video_fwd10min = gtk_button_new_with_label(_(">>"));
+	GtkWidget *butt_video_rew1min = gtk_button_new_with_label(_("<"));
+	GtkWidget *butt_video_rew10min = gtk_button_new_with_label(_("<<"));
+
+	g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_pressed_key, 0);
+	g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_pressed_key, 60);
+	g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_pressed_key, 600);
+	g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_pressed_key, -60);
+	g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_pressed_key, -600);
+
+	// Pack hbox1
+	gtk_box_pack_start(GTK_BOX(hbox1), progress, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), status, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_beginning, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd1min, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd10min, FALSE, FALSE, 0);
 
 	// Create vbox
 #ifdef HAVE_GTK2
@@ -166,9 +195,10 @@ int main (int argc, char **argv){
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
 	}
-	gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
+	//gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox1, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
+	//gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
 
 	// Add vbox to window
 	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);

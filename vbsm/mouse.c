@@ -12,7 +12,7 @@
 
 void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata) {
 	GtkTreeModel *model;
-	GtkTreeIter   iter;
+	GtkTreeIter iter;
 	GtkWidget *window = userdata;
 	int subNum;
 
@@ -24,7 +24,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 			if (from > 0) {
 				// Move the player -  seeking actually needs some time to complete,
 				// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
-				// If seeking to first row, we might net a negative time (will crash mplayer) - be carefull
+				// If seeking to first row, we might get a negative time (will crash mplayer) - be careful
 				// new_time is in seconds!
 				int new_time = (int) from/1000 - 5;
 				if (new_time <= 0)
@@ -32,38 +32,13 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 
 				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
-					if (mplayer_is_alive()) {
-						char command[255];
-						sprintf(command, "pausing_keep seek %u 2", new_time);
-						mplayer_pipe_write(command);
-
-						// Tell mplayer to load subtitles as they exist now
-						mplayer_pipe_write("pausing_keep sub_remove");
-						sprintf(command, "pausing_keep sub_load %s", &config.vbsm.sub_file_name[0]);
-						mplayer_pipe_write(command);
-
-// This *should* normally work; 
-// However, my mplayer crashes with "signal 11 in sub_find" when executing "sub_select"
-// after getSubNum(). 
-// Since we clear all subs before reloading, the new level should always be 1. 
-//    subNum = getSubNum();
-						subNum = 1;
-						sprintf(command, "pausing_keep sub_select %u", subNum);
-						mplayer_pipe_write(command);
-					}
+					mplayer_goto(new_time);
 #endif
 				}
 
 				else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
-					// Put new_time in milliseconds
-					new_time = new_time * 1000;
-					// Clear current sub - if any
-					gstreamer_sub_clear();					
-
-					// Seek to new position, stop
-					gstreamer_seek_absolute(new_time);
-					gstreamer_pause();
+					gstreamer_goto(new_time);
 #endif
 				}
 
@@ -72,3 +47,33 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 	}
 }
 
+
+void on_clicked_button (GtkButton *button, gpointer user_data) {
+	long new_time = (int) user_data;
+	long curr_time;
+
+	if ((config.common.running == FALSE) && (config.vbsm.have_loaded_video)) {
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+#ifdef HAVE_MPLAYER
+			if (mplayer_is_alive()) {
+				curr_time = mplayer_get_time_pos(2);
+				new_time += curr_time;
+				if (new_time < 1000)
+					new_time = 1000;
+				mplayer_goto(new_time);
+			}
+#endif
+		}
+		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#ifdef HAVE_GSTREAMER
+			curr_time = gstreamer_query_position();
+			if (curr_time > 0) {
+				new_time += curr_time;
+				if (new_time < 1000)
+					new_time = 1000;
+				gstreamer_goto(new_time);
+			}
+#endif
+		}
+	}
+}

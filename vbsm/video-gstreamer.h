@@ -20,4 +20,4 @@ void gstreamer_sub_clear();
 void gstreamer_set_clear(char sub[1024]);
 static gboolean bus_cb (GstBus *bus, GstMessage *msg, gpointer data);
 void gstreamer_init(char file_name[1024]);
-
+void gstreamer_goto (long new_time);
