@@ -135,9 +135,7 @@ void on_pressed_m () {
 
 			config.common.inside_sub = FALSE;
 
-			char line[16];
-			sprintf(line," ");
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line);
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: RUNNING");
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
 
 			// If networking is enabled, drop the line from server
@@ -162,7 +160,8 @@ void on_pressed_space (GtkWidget *window) {
 
 	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
 		config.common.running = FALSE;
-		gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: PAUSED");
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: PAUSED");
 
 		// Pause the player
 		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
@@ -182,7 +181,8 @@ void on_pressed_space (GtkWidget *window) {
 	else if (config.common.running == FALSE) {
 		if (have_loaded_text(window)) {
 			config.common.running = TRUE;
-			gtk_statusbar_push(GTK_STATUSBAR(config.vbsm.status), config.vbsm.status_context_id, "Status: RUNNING");
+	                gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
+	                gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: RUNNING");
 
 			// Start the player
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {

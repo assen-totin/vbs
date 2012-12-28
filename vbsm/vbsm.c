@@ -13,7 +13,8 @@
 #include "menu-def.h"
 
 int main (int argc, char **argv){
-	GtkWidget *vbox, *hbox1, *status, *progress;
+	GtkWidget *vbox, *hbox1, *progress;
+	GtkWidget *butt_video_beginning, *butt_video_fwd1min, *butt_video_fwd10min, *butt_video_rew1min, *butt_video_rew10min;
 	GtkWidget *subtitles_scroll;
 	GtkTreeSelection *subtitles_selection;
 
@@ -47,6 +48,7 @@ int main (int argc, char **argv){
 	config.common.running = FALSE;
 	config.vbsm.have_loaded_text = FALSE;
 	config.vbsm.have_loaded_video = FALSE;
+	config.vbsm.film_duration = 0;
 	config.vbsm.mplayer_pid = 0;
 	config.common.init_timestamp_msec = get_time_msec();
 
@@ -89,13 +91,6 @@ int main (int argc, char **argv){
 		gtk_widget_set_size_request (config.vbsm.gstreamer_widget_player, 0x200, 0x100);
 	}
 
-	// Status, display status, will be packed in the top of the vbox
-	status = gtk_statusbar_new();
-	guint status_context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR(status), "Current status: ");
-	gtk_statusbar_push(GTK_STATUSBAR(status), status_context_id, "Status: PAUSED");
-
-	config.vbsm.status = status;
-	config.vbsm.status_context_id = status_context_id;
 	config.common.inside_sub = FALSE;
 
 	// Progress, will be packed in the middle of the vbox
@@ -162,26 +157,29 @@ int main (int argc, char **argv){
 #endif
 
 	// Video buttons
-	GtkWidget *butt_video_beginning = gtk_button_new_with_label(_("Beginning"));
-	GtkWidget *butt_video_fwd1min = gtk_button_new_with_label(_(">"));
-	GtkWidget *butt_video_fwd10min = gtk_button_new_with_label(_(">>"));
-	GtkWidget *butt_video_rew1min = gtk_button_new_with_label(_("<"));
-	GtkWidget *butt_video_rew10min = gtk_button_new_with_label(_("<<"));
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+		butt_video_beginning = gtk_button_new_with_label("0.0");
+		butt_video_fwd1min = gtk_button_new_with_label(_("+1'"));
+		butt_video_fwd10min = gtk_button_new_with_label(_("+10'"));
+		butt_video_rew1min = gtk_button_new_with_label(_("-1'"));
+		butt_video_rew10min = gtk_button_new_with_label(_("-10'"));
 
-	g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_pressed_key, 0);
-	g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_pressed_key, 60);
-	g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_pressed_key, 600);
-	g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_pressed_key, -60);
-	g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_pressed_key, -600);
+		g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_clicked_button, (gpointer) 0);
+		g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_clicked_button, (gpointer) 60);
+		g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_clicked_button, (gpointer) 600);
+		g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_clicked_button, (gpointer) -60);
+		g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_clicked_button, (gpointer) -600);
+	}
 
 	// Pack hbox1
-	gtk_box_pack_start(GTK_BOX(hbox1), progress, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), status, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_beginning, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd1min, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd10min, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), progress, TRUE, TRUE, 1);
+	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 1);
+		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 1);
+		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_beginning, FALSE, FALSE, 1);
+		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd1min, FALSE, FALSE, 1);
+		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd10min, FALSE, FALSE, 1);
+	}
 
 	// Create vbox
 #ifdef HAVE_GTK2
@@ -195,10 +193,8 @@ int main (int argc, char **argv){
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
 	}
-	//gtk_box_pack_start(GTK_BOX(vbox), progress, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox1, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);
-	//gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
 
 	// Add vbox to window
 	gtk_container_add(GTK_CONTAINER (config.vbsm.window), vbox);

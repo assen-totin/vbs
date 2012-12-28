@@ -56,6 +56,8 @@ void import_subtitles(char *filename, int file_format) {
 	export_subtitles();
 
 	free(sub_array);
+
+        gtk_widget_grab_focus(config.vbsm.subtitles_view);
 }
 
 

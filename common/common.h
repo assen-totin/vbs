@@ -90,10 +90,9 @@ enum {
 struct struct_vbsm {
 	bool have_loaded_text;
 	bool have_loaded_video;
-	guint status_context_id;
+	unsigned int film_duration;
 	short unsigned progress_seconds;
 	GtkWidget *window;
-	GtkWidget *status;
 	GtkWidget *subtitles_view;
 	GtkWidget *progress;
 	int progress_update_msec;

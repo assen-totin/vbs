@@ -155,7 +155,7 @@ void mplayer_goto(int new_time) {
 // after getSubNum().
 // Since we clear all subs before reloading, the new level should always be 1.
 //    subNum = getSubNum();
-		subNum = 1;
+		int subNum = 1;
 		sprintf(command, "pausing_keep sub_select %u", subNum);
 		mplayer_pipe_write(command);
 	}

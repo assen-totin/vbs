@@ -9,4 +9,5 @@
 // for details.
 
 void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
+void on_clicked_button (GtkButton *button, gpointer user_data);
 

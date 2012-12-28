@@ -86,19 +86,26 @@ Supported video and audio codecs:
 - On Windows: the following GStreamer plugin packages are provided: base, good,
   bad, ugly. 
 
-vbsm has a simple interface: 
+vbsm has a relatively simple interface: 
 
-1. A status bar showing whether the movie is running or paused. When you first 
-   start it, it pauses at the beginning of the movie. Press spacebar to start 
-   playing. You can pause the playback at any time by againg pressing spacebar; 
-   however, you can only pause the playback between subtitles and not when one 
-   is inserted and not yet retrieved. 
+1. When you load a movie, it will pause pauses at the beginning. Press spacebar
+   to start playing. You can pause the playback at any time by againg pressing 
+   spacebar; however, you can only pause the playback between subtitles and not 
+   when one has been inserted, but has not yet been retrieved. 
 
 2. A progress bar showing a recommended duration for each subtitle. If the 
    subtitle is not retrieved after the suggested time, a counter of the total 
    duration of the subtitle is also displayed. 
 
-3. A list of lines, read from the input file together with their entry and exit 
+   The progress bar also shows whether the movie is running or paused.
+
+3. Movie control buttons. They allow to jump 1 or 10 minutes forward or back. 
+   If the jump leads you ourside the movie boundaries, you'll be sent to the 
+   beginning or end of it. The middle button willl send  you to the beginning 
+   of the movie (at time 0.0 or as close as possible). Buttons work only when 
+   the movie is paused.
+
+4. A list of lines, read from the input file together with their entry and exit 
    times (initially all zeroes). The subtitle which is ready to be entered is 
    highlighted. To insert the subtitle, press "b". To retrieve it and prepare 
    the next, press "m". To retrieve it and insert the next, press "n".  
@@ -122,7 +129,7 @@ vbsm has a simple interface:
    still force exporting by pressing the "s" key. Each export overwrites the 
    previous one. 
 
-4. Menu bar. 
+5. Menu bar. 
 
    The File/Quit exits the programme.
 

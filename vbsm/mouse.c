@@ -57,9 +57,15 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 #ifdef HAVE_MPLAYER
 			if (mplayer_is_alive()) {
 				curr_time = mplayer_get_time_pos(2);
-				new_time += curr_time;
-				if (new_time < 1000)
-					new_time = 1000;
+				if (new_time != 0) {
+					new_time += curr_time;
+					if (new_time < 1)
+						new_time = 1;
+					else if (new_time > config.vbsm.film_duration)
+						new_time = config.vbsm.film_duration - 5;
+				}
+				else 
+					new_time = 1;
 				mplayer_goto(new_time);
 			}
 #endif
@@ -68,12 +74,22 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 #ifdef HAVE_GSTREAMER
 			curr_time = gstreamer_query_position();
 			if (curr_time > 0) {
-				new_time += curr_time;
-				if (new_time < 1000)
-					new_time = 1000;
+				curr_time = (int) curr_time/1000;
+				if (new_time != 0) {
+					new_time += curr_time;
+					if (new_time < 1)
+						new_time = 1;
+					else if (new_time > config.vbsm.film_duration)
+						new_time = config.vbsm.film_duration - 5;
+				}
+				else
+					new_time = 1;
 				gstreamer_goto(new_time);
 			}
 #endif
 		}
 	}
+
+	// Restore focus to subtitles widget
+	gtk_widget_grab_focus(config.vbsm.subtitles_view);
 }
