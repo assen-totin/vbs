@@ -45,7 +45,7 @@ int mplayer_get_time_pos(int flag) {
 	while (go_on && (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read))) {
 		if (strstr(&line[0],"ANS_TIME_POSITION")) {
 			// This is our line!
-			line[strlen(line) - 1] = 0;     /* kill '\n' */
+			line[strlen(line) - 1] = 0;     // kill '\n'
 			// Split by the "=" sign
 			part_one = strtok(&line[0], "=");
 			part_two = strtok(NULL,"=");
@@ -53,6 +53,23 @@ int mplayer_get_time_pos(int flag) {
 			double_two = 1000 * double_two;
 			res = (int)double_two;
 			go_on = false;
+		}
+	}
+	return res;
+}
+
+int mplayer_get_time_length() {
+	char line[256], *part_one, *part_two;
+	double double_two;
+	int res;
+	mplayer_pipe_write("get_time_length");
+	while (fgets(&line[0], 255, config.vbsm.mplayer_pipe_read)) {
+		if (strstr(&line[0],"ANS_LENGTH")) {
+			line[strlen(line) - 1] = 0;     // kill '\n'
+			part_one = strtok(&line[0], "=");
+			part_two = strtok(NULL,"=");
+			double_two = strtod(part_two, NULL);
+			res = (int)double_two;
 		}
 	}
 	return res;
@@ -115,8 +132,8 @@ void *mplayer_load_video(char fileName[1024]) {
 
 		// Child
 		if (cpid == 0) { 
-			close(readPipeFD[0]);	  /* Close unused read end */
-			close(writePipeFD[1]);	 /* Close unused write end */
+			close(readPipeFD[0]);	  // Close unused read end 
+			close(writePipeFD[1]);	 // Close unused write end
 	
 			dup2(writePipeFD[0], STDIN_FILENO);
 			dup2(readPipeFD[1], STDOUT_FILENO);
@@ -128,14 +145,15 @@ void *mplayer_load_video(char fileName[1024]) {
 		}
 
 		// Parent
-		close(readPipeFD[1]);	  /* Close unused write end */
-		close(writePipeFD[0]);	 /* Close unused read end */
+		close(readPipeFD[1]);	  //
+		close(writePipeFD[0]);	 // 
 
 		config.vbsm.mplayer_pipe_read = fdopen(readPipeFD[0], "r");
 		config.vbsm.mplayer_pipe_write = fdopen(writePipeFD[1], "w");
 		config.vbsm.mplayer_pid = cpid;
 	}
 
+	config.vbsm.film_duration = mplayer_get_time_length();
 	mplayer_pipe_write("pause");
 }
 
