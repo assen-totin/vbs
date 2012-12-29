@@ -70,6 +70,7 @@ int mplayer_get_time_length() {
 			part_two = strtok(NULL,"=");
 			double_two = strtod(part_two, NULL);
 			res = (int)double_two;
+			break;
 		}
 	}
 	return res;
@@ -101,7 +102,7 @@ int getSubNum() {
 */
 
 
-void *mplayer_load_video(char fileName[1024]) {
+void mplayer_load_video(char fileName[1024]) {
 	char popenCmd[2048];
 	memset(&popenCmd[0],'\0', sizeof(popenCmd));
 
@@ -123,8 +124,10 @@ void *mplayer_load_video(char fileName[1024]) {
 		pid_t cpid;
 
 		// Pipes
-		if (pipe(readPipeFD) == -1) { error_handler("mplayer_load_video","read pipe creation failed", 1);}
-		if (pipe(writePipeFD) == -1) { error_handler("mplayer_load_video","write pipe creation failed", 1);}
+		if (pipe(readPipeFD) == -1) 
+			error_handler("mplayer_load_video","read pipe creation failed", 1);
+		if (pipe(writePipeFD) == -1) 
+			error_handler("mplayer_load_video","write pipe creation failed", 1);
 
 		cpid = fork();
 		if (cpid == -1) 
@@ -145,8 +148,8 @@ void *mplayer_load_video(char fileName[1024]) {
 		}
 
 		// Parent
-		close(readPipeFD[1]);	  //
-		close(writePipeFD[0]);	 // 
+		close(readPipeFD[1]);	  // Close unused write end
+		close(writePipeFD[0]);	 // Close unused read end
 
 		config.vbsm.mplayer_pipe_read = fdopen(readPipeFD[0], "r");
 		config.vbsm.mplayer_pipe_write = fdopen(writePipeFD[1], "w");
@@ -157,7 +160,7 @@ void *mplayer_load_video(char fileName[1024]) {
 	mplayer_pipe_write("pause");
 }
 
-void mplayer_goto(int new_time) {
+void mplayer_goto(int new_time, bool pause) {
 	if (mplayer_is_alive()) {
 		char command[255];
 		sprintf(command, "pausing_keep seek %u 2", new_time);
@@ -176,5 +179,8 @@ void mplayer_goto(int new_time) {
 		int subNum = 1;
 		sprintf(command, "pausing_keep sub_select %u", subNum);
 		mplayer_pipe_write(command);
+
+		if (pause)
+			mplayer_pipe_write("pause");
 	}
 }

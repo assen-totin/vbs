@@ -14,76 +14,55 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GtkWidget *window = userdata;
-	int subNum;
 
 	if ((config.common.running == FALSE) && (have_loaded_text(window))) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
-			if (from > 0) {
-				// Move the player -  seeking actually needs some time to complete,
-				// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
-				// If seeking to first row, we might get a negative time (will crash mplayer) - be careful
-				// new_time is in seconds!
-				int new_time = (int) from/1000 - 5;
-				if (new_time <= 0)
-					new_time = 1;
 
-				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+			// Move the player -  seeking actually needs some time to complete,
+			// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
+			// If seeking to first row, we might get a negative time (will crash mplayer) - be careful
+			// new_time is in seconds!
+			int new_time = (int) from/1000 - 5;
+			if (new_time <= 0)
+				new_time = 1;
+
 #ifdef HAVE_MPLAYER
-					mplayer_goto(new_time);
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
+				mplayer_goto(new_time, false);
 #endif
-				}
 
-				else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
-					gstreamer_goto(new_time);
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
+				gstreamer_goto(new_time);
 #endif
-				}
-
-			}
 		}
 	}
 }
 
 
 void on_clicked_button (GtkButton *button, gpointer user_data) {
-	long new_time = (int) user_data;
+	long offset = (int) user_data;
 	long curr_time;
+	int new_time;
 
 	if ((config.common.running == FALSE) && (config.vbsm.have_loaded_video)) {
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 			if (mplayer_is_alive()) {
 				curr_time = mplayer_get_time_pos(2);
-				if (new_time != 0) {
-					new_time += curr_time;
-					if (new_time < 1)
-						new_time = 1;
-					else if (new_time > config.vbsm.film_duration)
-						new_time = config.vbsm.film_duration - 5;
-				}
-				else 
-					new_time = 1;
-				mplayer_goto(new_time);
+				new_time = calc_new_time(curr_time, offset);
+				mplayer_goto(new_time, true);
 			}
 #endif
 		}
-		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 			curr_time = gstreamer_query_position();
 			if (curr_time > 0) {
-				curr_time = (int) curr_time/1000;
-				if (new_time != 0) {
-					new_time += curr_time;
-					if (new_time < 1)
-						new_time = 1;
-					else if (new_time > config.vbsm.film_duration)
-						new_time = config.vbsm.film_duration - 5;
-				}
-				else
-					new_time = 1;
+				new_time = calc_new_time(curr_time, offset);
 				gstreamer_goto(new_time);
 			}
 #endif
@@ -92,4 +71,22 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 
 	// Restore focus to subtitles widget
 	gtk_widget_grab_focus(config.vbsm.subtitles_view);
+}
+
+
+int calc_new_time(long curr_time, int offset) {
+	int new_time;
+
+	curr_time = (int) (curr_time/1000);
+	if (offset == 0) 
+		new_time = 1;
+	else {
+		new_time = curr_time + offset;
+		if (new_time < 1)
+			new_time = 1;
+		else if (new_time > config.vbsm.film_duration)
+			new_time = config.vbsm.film_duration - 5;
+	}
+
+	return new_time;
 }

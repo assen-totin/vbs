@@ -10,7 +10,7 @@
 
 bool mplayer_is_alive();
 
-void *mplayer_load_video(char videoFile[1024]);
+void mplayer_load_video(char videoFile[1024]);
 
 void mplayer_pipe_write(char *command);
 
@@ -18,7 +18,7 @@ int mplayer_get_time_pos(int flag);
 
 int mplayer_get_time_length();
 
-void mplayer_goto(int new_time);
+void mplayer_goto(int new_time, bool pause);
 
 #define VBSM_MPLAYER_BINARY "mplayer"
 

@@ -157,29 +157,25 @@ int main (int argc, char **argv){
 #endif
 
 	// Video buttons
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-		butt_video_beginning = gtk_button_new_with_label("0.0");
-		butt_video_fwd1min = gtk_button_new_with_label(_("+1'"));
-		butt_video_fwd10min = gtk_button_new_with_label(_("+10'"));
-		butt_video_rew1min = gtk_button_new_with_label(_("-1'"));
-		butt_video_rew10min = gtk_button_new_with_label(_("-10'"));
+	butt_video_beginning = gtk_button_new_with_label("0.0");
+	butt_video_fwd1min = gtk_button_new_with_label(_("+1'"));
+	butt_video_fwd10min = gtk_button_new_with_label(_("+10'"));
+	butt_video_rew1min = gtk_button_new_with_label(_("-1'"));
+	butt_video_rew10min = gtk_button_new_with_label(_("-10'"));
 
-		g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_clicked_button, (gpointer) 0);
-		g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_clicked_button, (gpointer) 60);
-		g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_clicked_button, (gpointer) 600);
-		g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_clicked_button, (gpointer) -60);
-		g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_clicked_button, (gpointer) -600);
-	}
+	g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_clicked_button, (gpointer) 0);
+	g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_clicked_button, (gpointer) 60);
+	g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_clicked_button, (gpointer) 600);
+	g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_clicked_button, (gpointer) -60);
+	g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_clicked_button, (gpointer) -600);
 
 	// Pack hbox1
 	gtk_box_pack_start(GTK_BOX(hbox1), progress, TRUE, TRUE, 1);
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 1);
-		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 1);
-		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_beginning, FALSE, FALSE, 1);
-		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd1min, FALSE, FALSE, 1);
-		gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd10min, FALSE, FALSE, 1);
-	}
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_beginning, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd1min, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_fwd10min, FALSE, FALSE, 1);
 
 	// Create vbox
 #ifdef HAVE_GTK2
