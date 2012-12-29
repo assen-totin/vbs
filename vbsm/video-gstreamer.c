@@ -147,7 +147,6 @@ void gstreamer_init(char file_name[1024]) {
 		gst_query_parse_duration (query, NULL, &duration);
 		config.vbsm.film_duration = (int) (duration/1000000000);
 		sprintf(&err_msg[0], "Film duration in seconds: %u for filename %s", config.vbsm.film_duration, &file_name[0]);
-		error_handler("gstreamer_init()", &err_msg[0], 0);
 	}
 	else {
 		sprintf(&err_msg[0], "Failed to get duration for filename %s", &file_name[0]);

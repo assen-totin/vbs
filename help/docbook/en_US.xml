@@ -63,6 +63,7 @@
       <para>** On Windows chose between Direct Draw (most conservative, CPU-intensive, but most compatible; default), Direct Show (less CPU intensive, works with some modern video adapters), Direct 3D (latest, requires Vista or better) и Auto (use only as fail-safe, will always play the video in a separate window).</para>
       <para>* MPlayer video output cannot be changed in VBS; use it's own menu for this.</para>
       <para>If the video dose not play back properly, verify that the player has proper codecs installed. On Linux, you should be able to play the video with the same player,  MPlayer or Gstreamer-based one (like Totem) outside VBS. On Windows GStreamer is supplied with the following plugin packs: base, good, bad, ugly. </para>
+      <para>When the video is paused, you can use the buttons to navigate through it (forward or backward, 1 or 10 minutes) or go back to the beginning. </para>
    </sect1>
    <sect1>
       <title>USING VBS WITHOUT VIDEO</title>
