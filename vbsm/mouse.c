@@ -56,8 +56,8 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 				new_time = calc_new_time(curr_time, offset);
 				mplayer_goto(new_time, true);
 			}
-#endif
 		}
+#endif
 #ifdef HAVE_GSTREAMER
 		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 			curr_time = gstreamer_query_position();
@@ -65,8 +65,8 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 				new_time = calc_new_time(curr_time, offset);
 				gstreamer_goto(new_time);
 			}
-#endif
 		}
+#endif
 	}
 
 	// Restore focus to subtitles widget
