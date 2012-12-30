@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 21:05+0200\n"
+"POT-Creation-Date: 2012-12-30 19:12+0200\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -18,6 +18,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: vbsm/vbsm.c:161
+msgid "+1'"
+msgstr ""
+
+#: vbsm/vbsm.c:162
+msgid "+10'"
+msgstr ""
+
+#: vbsm/vbsm.c:163
+msgid "-1'"
+msgstr ""
+
+#: vbsm/vbsm.c:164
+msgid "-10'"
+msgstr ""
 
 #: common/menu.c:100
 msgid "Available Delimiters:"
@@ -48,19 +64,28 @@ msgstr "Текущий сервер:"
 msgid "DNS resolving failed."
 msgstr "Адрес не найден."
 
-#: vbsm/menu.c:25
+#: vbsm/menu.c:39
+msgid "Enter Factor"
+msgstr "Введите коэффициент"
+
+#: vbsm/menu.c:30
 msgid "Enter Offset"
 msgstr "Введите время"
+
+#: vbsm/menu.c:38
+#, fuzzy
+msgid "Enter factor:"
+msgstr "Введите коэффициент:"
 
 #: common/menu.c:245
 msgid "Enter magic key (up to 32 letters or digits):"
 msgstr "Введите серверный ключ доступа (до 32 латинских букв или цифр):"
 
-#: vbsm/menu.c:24
+#: vbsm/menu.c:29
 msgid "Enter offset in milliseconds:"
 msgstr "Введите время в миллисекундах:"
 
-#: vbsm/menu.c:175 vbsm/gui.c:169 common/menu.c:187
+#: vbsm/menu.c:200 vbsm/gui.c:169 common/menu.c:187
 msgid "Error"
 msgstr "Ошибка"
 
@@ -80,11 +105,11 @@ msgstr "Цвет текста"
 msgid "Full-Screen mode:"
 msgstr "Полноэкранный режим:"
 
-#: vbsm/menu.c:182 vbsm/menu.c:184
+#: vbsm/menu.c:207 vbsm/menu.c:209
 msgid "Help"
 msgstr "Помощь"
 
-#: vbsm/menu.c:174
+#: vbsm/menu.c:199
 msgid "Help file not found."
 msgstr "Файл с указаниями не найден."
 
@@ -104,7 +129,7 @@ msgstr ""
 "ул. Отца Паисия, 74\n"
 "Асен Тотин\n"
 
-#: vbsm/menu.c:214
+#: vbsm/menu.c:239
 msgid "Internal timer set to zero."
 msgstr "Внутренний таймер обнулен."
 
@@ -136,7 +161,7 @@ msgstr "Нажмите ПРОБЕЛ чтобы начать воспроизве
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Съешь еще этих мягких французских булок да выпей же чаю..."
 
-#: vbsm/menu.c:227 vbsm/menu.c:229 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:252 vbsm/menu.c:254 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Закончить работу?"
 
@@ -169,7 +194,7 @@ msgstr "Знак окончания строки"
 msgid "Select network mode:"
 msgstr "Выберите режим работы сети:"
 
-#: vbsm/menu.c:334
+#: vbsm/menu.c:359
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -177,7 +202,7 @@ msgstr ""
 "Выберите программу для видео:\n"
 "(перезапуск обязателен)"
 
-#: vbsm/menu.c:377
+#: vbsm/menu.c:402
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -201,7 +226,7 @@ msgstr "Полноэкранный режим"
 msgid "Set Magic Key"
 msgstr "Ключ сервера"
 
-#: vbsm/menu.c:216
+#: vbsm/menu.c:241
 msgid "Set Start Time"
 msgstr "Обнулить таймер"
 
@@ -245,15 +270,15 @@ msgstr ""
 msgid "Use the menu to change default settings."
 msgstr "Используйте меню дла изменения насроек."
 
-#: vbsm/menu.c:335
+#: vbsm/menu.c:360
 msgid "Video Backend"
 msgstr "Программа для видео"
 
-#: vbsm/menu.c:392
+#: vbsm/menu.c:417
 msgid "Video Output"
 msgstr "Выход видео"
 
-#: vbsm/menu.c:382
+#: vbsm/menu.c:407
 msgid "Video output selection not available for current backend."
 msgstr "Для текущей видео программы эта настройка отсутствует."
 

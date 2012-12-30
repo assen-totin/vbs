@@ -45,7 +45,7 @@
       <para>* Clear the timing of the current (highlighted) subtitle.</para>
       <para>* Clear the timing of all subtitles starting from the current (highlighted) one.</para>
       <para>* Shift the subtitles with a specified offset, staring from the current (highlighted) one.</para>
-      <para>* Expand the subtitles with a specified offset, staring from the current (highlighted) one (i.e. the current will be shifted with the offset, the next with twice the offset etc.).</para>
+      <para>* Expand the subtitles with a specified factor, staring from the current (highlighted) one (i.e. the timing of each will be multipiled by the factor you specify).</para>
       <para>Double click start or end time to go to that subtitle. If video is loaded, you will be send 5 seconds before the beginning of the subtitle. </para>
       <para>Double click text to edit it inline. </para>
    </sect1>

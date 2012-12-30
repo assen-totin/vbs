@@ -16,10 +16,8 @@ for the current subtitle.
 currently selected one will be shifted with the specified offset (in 
 milliseconds). If a timing becomes negative, it will be set to zero.
 
-5. Added menu option "Edit -> Expand Timing from Current". All subtitles from 
-the curent one will be expanded with the specified offset (in milliseconds), 
-i.e. the first will be shifted with the offset, the second with twice the 
-offset etc. If a timing becomes negative, it will be set to zero. 
+5. Added menu option "Edit -> Expand Timing from Current". The start and end
+time for each subtitle will be multipiled by the factor specified.
 
 6. Added buttons to move the movie fwd or back 1 or 10 minutes ane also to
 jump to the beginning of it.

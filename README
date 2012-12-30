@@ -149,8 +149,8 @@ vbsm has a relatively simple interface:
    or of all subtitles, beginning from current one. 
    
    From the same menu you can shift all subtitles with a specified offset or
-   you can expand them (i.e. first will be shifted with the offset, next with 
-   twice the offset etc.).
+   you can expand them (i.e. the timing of each will be multipiled by the factor 
+   you specify).
 
    To load a video file, use the Video/Load menu.
 

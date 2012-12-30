@@ -11,32 +11,51 @@
 #include "../common/common.h"
 
 void shift_timing(GtkAction *action, gpointer param){
+	GtkWidget *dialog, *text;
 	GtkTreeIter iter, sibling;
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	bool flag = TRUE;
-	int from, to, time_shift = 0, counter = 1;
+	int from, to, time_shift = 0;
+	double factor;
 
-	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
-		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
-		GTK_MESSAGE_QUESTION,
-		GTK_BUTTONS_OK_CANCEL,
-		_("Enter offset in milliseconds:"));
-	gtk_window_set_title(GTK_WINDOW(dialog), _("Enter Offset"));
+	text = gtk_entry_new();
 
-	GtkWidget *text = gtk_entry_new();
-	gtk_entry_set_text(GTK_ENTRY(text), "0");
+	if (strstr(gtk_action_get_name(action), "EditShiftSame")) {
+		dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+			GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+			GTK_MESSAGE_QUESTION,
+			GTK_BUTTONS_OK_CANCEL,
+			_("Enter offset in milliseconds:"));
+		gtk_window_set_title(GTK_WINDOW(dialog), _("Enter Offset"));
+		gtk_entry_set_text(GTK_ENTRY(text), "0");
+	}
+	else if (strstr(gtk_action_get_name(action), "EditShiftExpand")) {
+                dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
+                        GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_QUESTION,
+                        GTK_BUTTONS_OK_CANCEL,
+                        _("Enter factor:"));
+                gtk_window_set_title(GTK_WINDOW(dialog), _("Enter Factor"));
+		gtk_entry_set_text(GTK_ENTRY(text), "1.0");
+	}
+
 	gtk_container_add(GTK_CONTAINER(gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog))), text);
 	gtk_widget_show(text);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		time_shift = atoi(gtk_entry_get_text(GTK_ENTRY(text)));
+		if (strstr(gtk_action_get_name(action), "EditShiftSame"))
+			time_shift = atoi(gtk_entry_get_text(GTK_ENTRY(text)));
+		else if (strstr(gtk_action_get_name(action), "EditShiftExpand")) 
+			factor = atof(gtk_entry_get_text(GTK_ENTRY(text)));
 	}
 
 	gtk_widget_destroy(dialog);
 
-	if (time_shift == 0)
+	if ((strstr(gtk_action_get_name(action), "EditShiftSame")) && (time_shift == 0))
 		return;
+	if ((strstr(gtk_action_get_name(action), "EditShiftExpand")) && (factor == 1.0))
+                return;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 
@@ -45,21 +64,27 @@ void shift_timing(GtkAction *action, gpointer param){
 		sibling = iter;
 		while (flag) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, -1);
-			from +=	counter * time_shift;
-			if (from < 0)
-				from = 0;
 
-			to += counter * time_shift;
-			if (to < 0)
-				to = 0;
+			if (strstr(gtk_action_get_name(action), "EditShiftSame")) {
+				from +=	time_shift;
+				if (from < 0)
+					from = 0;
+
+				to += time_shift;
+				if (to < 0)
+					to = 0;
+			}
+			else if (strstr(gtk_action_get_name(action), "EditShiftExpand")) {
+				from = (int) (from * factor);
+				to = (int) (to * factor);
+			}
+
 			gtk_list_store_set(config.vbsm.mplayer_store, &iter, COL_FROM, from, COL_TO, to, -1);
 			gtk_tree_selection_unselect_iter(selection, &iter);
 			flag = gtk_tree_model_iter_next(model, &iter);
 			if (flag) 
 				gtk_tree_selection_select_iter(selection, &iter);
 			
-			if (strstr(gtk_action_get_name(action), "EditShiftExpand"))
-				counter++;
 		}
 		gtk_tree_selection_select_iter(selection, &sibling);
 	}

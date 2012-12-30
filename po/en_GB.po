@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-27 21:05+0200\n"
+"POT-Creation-Date: 2012-12-30 19:12+0200\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English (British)\n"
@@ -16,6 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: vbsm/vbsm.c:161
+msgid "+1'"
+msgstr ""
+
+#: vbsm/vbsm.c:162
+msgid "+10'"
+msgstr ""
+
+#: vbsm/vbsm.c:163
+msgid "-1'"
+msgstr ""
+
+#: vbsm/vbsm.c:164
+msgid "-10'"
+msgstr ""
 
 #: common/menu.c:100
 msgid "Available Delimiters:"
@@ -46,19 +62,28 @@ msgstr "Current Server (FQDN):"
 msgid "DNS resolving failed."
 msgstr "DNS resolving failed."
 
-#: vbsm/menu.c:25
+#: vbsm/menu.c:39
+msgid "Enter Factor"
+msgstr "Enter Factor"
+
+#: vbsm/menu.c:30
 msgid "Enter Offset"
 msgstr "Enter Offset"
+
+#: vbsm/menu.c:38
+#, fuzzy
+msgid "Enter factor:"
+msgstr "Enter factor:"
 
 #: common/menu.c:245
 msgid "Enter magic key (up to 32 letters or digits):"
 msgstr "Enter magic key (up to 32 letters or digits):"
 
-#: vbsm/menu.c:24
+#: vbsm/menu.c:29
 msgid "Enter offset in milliseconds:"
 msgstr "Enter offset in milliseconds:"
 
-#: vbsm/menu.c:175 vbsm/gui.c:169 common/menu.c:187
+#: vbsm/menu.c:200 vbsm/gui.c:169 common/menu.c:187
 msgid "Error"
 msgstr "Error"
 
@@ -78,11 +103,11 @@ msgstr "Font Colour"
 msgid "Full-Screen mode:"
 msgstr "Full-Screen mode:"
 
-#: vbsm/menu.c:182 vbsm/menu.c:184
+#: vbsm/menu.c:207 vbsm/menu.c:209
 msgid "Help"
 msgstr "Help"
 
-#: vbsm/menu.c:174
+#: vbsm/menu.c:199
 msgid "Help file not found."
 msgstr "Help file not found."
 
@@ -102,7 +127,7 @@ msgstr ""
 "74, Otec Paisi Str.\n"
 "Assen Totin\n"
 
-#: vbsm/menu.c:214
+#: vbsm/menu.c:239
 msgid "Internal timer set to zero."
 msgstr "Internal timer set to zero."
 
@@ -134,7 +159,7 @@ msgstr "Press SPACE to start playback..."
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Quick brown fox jumps over the lazy dog..."
 
-#: vbsm/menu.c:227 vbsm/menu.c:229 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:252 vbsm/menu.c:254 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Really quit?"
 
@@ -167,7 +192,7 @@ msgstr "Select Newline Delimiter"
 msgid "Select network mode:"
 msgstr "Select network mode:"
 
-#: vbsm/menu.c:334
+#: vbsm/menu.c:359
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -175,7 +200,7 @@ msgstr ""
 "Select video backend:\n"
 "(requires restart)"
 
-#: vbsm/menu.c:377
+#: vbsm/menu.c:402
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -199,7 +224,7 @@ msgstr "Set Full-Screen"
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
-#: vbsm/menu.c:216
+#: vbsm/menu.c:241
 msgid "Set Start Time"
 msgstr "Set Start Time"
 
@@ -243,15 +268,15 @@ msgstr ""
 msgid "Use the menu to change default settings."
 msgstr "Use the menu to change default settings."
 
-#: vbsm/menu.c:335
+#: vbsm/menu.c:360
 msgid "Video Backend"
 msgstr "Video Backend"
 
-#: vbsm/menu.c:392
+#: vbsm/menu.c:417
 msgid "Video Output"
 msgstr "Video Output"
 
-#: vbsm/menu.c:382
+#: vbsm/menu.c:407
 msgid "Video output selection not available for current backend."
 msgstr "Video output selection not available for current backend."
 
