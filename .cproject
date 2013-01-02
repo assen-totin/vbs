@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="org.eclipse.cdt.msvc.exe.release.900030272">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.msvc.exe.release.900030272" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" description="" id="org.eclipse.cdt.msvc.exe.release.900030272" name="Release" parent="org.eclipse.cdt.msvc.exe.release">
+					<folderInfo id="org.eclipse.cdt.msvc.exe.release.900030272." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.msvc.toolchain.exe.release.1346626811" name="Microsoft Visual C++" superClass="org.eclipse.cdt.msvc.toolchain.exe.release">
+							<targetPlatform id="org.eclipse.cdt.msvc.targetPlatform.exe.release.898086824" superClass="org.eclipse.cdt.msvc.targetPlatform.exe.release"/>
+							<builder buildPath="${workspace_loc:/TEST C/Release}" id="org.eclipse.cdt.msvc.builder.768910838" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="org.eclipse.cdt.msvc.builder"/>
+							<tool id="org.eclipse.cdt.msvc.cl.c.exe.release.771868307" name="C Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.c.exe.release">
+								<option id="org.eclipse.cdt.msvc.cl.option.optimization.2025943471" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.71822147" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat"/>
+								<inputType id="org.eclipse.cdt.msvc.cl.inputType.c.245915639" superClass="org.eclipse.cdt.msvc.cl.inputType.c"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.cl.exe.release.2013357167" name="C++ Compiler (cl)" superClass="org.eclipse.cdt.msvc.cl.exe.release">
+								<option id="org.eclipse.cdt.msvc.cl.option.optimization.1236913108" name="Optimization" superClass="org.eclipse.cdt.msvc.cl.option.optimization"/>
+								<option id="org.eclipse.cdt.msvc.cl.option.debugFormat.1028791329" name="Debug Information Format" superClass="org.eclipse.cdt.msvc.cl.option.debugFormat"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.rc.exe.release.1982350347" name="Resource Compiler (rc)" superClass="org.eclipse.cdt.msvc.rc.exe.release">
+								<inputType id="org.eclipse.cdt.msvc.rc.inputType.1667885311" superClass="org.eclipse.cdt.msvc.rc.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.link.exe.release.234481755" name="Linker (link)" superClass="org.eclipse.cdt.msvc.link.exe.release">
+								<inputType id="org.eclipse.cdt.msvc.link.inputType.1305087579" superClass="org.eclipse.cdt.msvc.link.inputType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.msvc.lib.1805375354" name="Library Manager (lib)" superClass="org.eclipse.cdt.msvc.lib"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="TEST C.org.eclipse.cdt.msvc.projectType.exe.445371501" name="Executable" projectType="org.eclipse.cdt.msvc.projectType.exe"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+	</storageModule>
+</cproject>
