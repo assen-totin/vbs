@@ -19,11 +19,14 @@ milliseconds). If a timing becomes negative, it will be set to zero.
 5. Added menu option "Edit -> Expand Timing from Current". The start and end
 time for each subtitle will be multipiled by the factor specified.
 
-6. Added buttons to move the movie fwd or back 1 or 10 minutes ane also to
+6. Added buttons to move the movie forward or back 1 or 10 minutes and also to
 jump to the beginning of it.
 
 7. Added support for GStreamer 1.0. If GStreamer is enabled, first ver. 1.0 
-will be sought and if not found, ver. 0.10 will be attempted. 
+will be sought and if not found, ver. 0.10 will be attempted. GStreamer 1.0
+is only available in Linux.
+
+8. Added support for building 64-bit executables for MS Windows.
 
 Nov 14, 2012 - Version 3.0
 ==========================
