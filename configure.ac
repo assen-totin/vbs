@@ -189,13 +189,19 @@ if test $USE_GTK = "3" ; then
 	AC_DEFINE([HAVE_GTK3], [1], ["Define GTK3"])
 	AC_DEFINE([GETTEXT_PACKAGE], ["gtk30"], ["GTK gettext"])
 	RPM_REQUIRE_GTK="Requires: gtk3 >= 3.4.0"
+	NSIS_GTK_DLL="libgtk-3-0.dll"
+	NSIS_GTK_PATH="gtk-3.0"
 elif test $USE_GTK = "2" ; then
 	AC_DEFINE([HAVE_GTK2], [1], ["Define GTK2"])
 	AC_DEFINE([GETTEXT_PACKAGE], ["gtk20"], ["GTK gettext"])
 	RPM_REQUIRE_GTK="Requires: gtk2 >= 2.24.0"
+	NSIS_GTK_DLL="libgtk-win32-2.0-0.dll"
+	NSIS_GTK_PATH="gtk-2.0"
 fi
 
 AC_SUBST([RPM_REQUIRE_GTK])
+AC_SUBST([NSIS_GTK_DLL])
+AC_SUBST([NSIS_GTK_PATH])
 
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])

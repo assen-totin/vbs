@@ -126,7 +126,11 @@ void gstreamer_init(char file_name[1024]) {
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (config.vbsm.gstreamer_widget_player->window));
 	#endif
 #elif HAVE_GTK3
-		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID ((gtk_widget_get_window(config.vbsm.gstreamer_widget_player))));
+	#ifdef HAVE_POSIX
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
+	#elif HAVE_WINDOWS
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
+	#endif
 #endif
 	}
 

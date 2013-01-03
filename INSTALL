@@ -57,25 +57,30 @@ In regards to RPM, only the following "./configure" options have effect:
 BUILDING FOR MS WINDOWS
 =======================
 
-To build for MS Windows, run these commands:
+To build for MS Windows (32-bit) on 32-bit Linux, run these commands:
 
-    ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux --enable-gtk=2 \
+    ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux \
                 --enable-backend=gstreamer
     make
     make exe
 
+To build for MS Windows (64-bit) on 62-bit Linux, run ./configure like this:
+
+    ./configure --host=x86_64-w64-mingw32 --build=x86_64-redhat-linux \
+                --enable-backend=gstreamer
+
 Notes: 
 
 * Build was tested in MinGW, using cross-compilation under Linux with the 
-  Fedora 17-supplied packages of w64. NSIS installer is required to build the 
+  Fedora 18-supplied packages of w64. NSIS installer is required to build the 
   EXE file. 
 
-* Only GTK2 is supported as MinGW has no builds of GTK3 for the moment. 
-  Because under other OS GTK3 is default, here GTK2 has to be forced.
+* Both GTK2 and GTK3 are supported, you can force the one preferred. Otherwise
+  GTK3 will be attempted, if missing, GTK2 will be used.
   
-* MinGW only provides GStreamer 0.10 and not 1.0. If 1.0 is not found, the 
-  configure script will fall back to to 0.10. 
-
+* MinGW only provides GStreamer 0.10 and not 1.0. However, there is automatic
+  fallback from 1.0 to 0.10, so you don't have to force GStreamer version. 
+  
 * The EXE file will contain not only the VBS executables, bul all DLLs for
   GTK, GStreamer et al.
 
@@ -90,5 +95,4 @@ UNINSTALL
 =========
 
 make uninstall
-
 
