@@ -1,4 +1,4 @@
-Dec 31, 2012 - Version 3.1
+Jan 12, 2013 - Version 3.1
 ==========================
 
 1. Shortcut changes: removed Ctrl+V for "Load Video" to avoid conflict with 
@@ -27,6 +27,8 @@ will be sought and if not found, ver. 0.10 will be attempted. GStreamer 1.0
 is only available in Linux.
 
 8. Added support for building 64-bit executables for MS Windows.
+
+9. Added support for GTK-3 in MS Windows.
 
 Nov 14, 2012 - Version 3.0
 ==========================
