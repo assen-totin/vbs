@@ -64,7 +64,7 @@ void import_subtitles(char *filename, int file_format) {
 struct subtitle_srt *import_subtitles_text(char *filename, int *counter) {
 	int counter_array = 0;
 	char *line_utf8;
-	int bytes_written;
+	gsize bytes_written;
 
 	FILE *fp_in = fopen (filename, "r");
 	if (!fp_in)

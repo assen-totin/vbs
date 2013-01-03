@@ -89,7 +89,7 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 	long time_begin_val, time_end_val;
 	int counter_line = -1;
 	int counter_array = 0;
-	gint bytes_written;
+	gsize bytes_written;
 
 	FILE *fp_in = fopen (filename, "r");
 	if (!fp_in)
