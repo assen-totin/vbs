@@ -82,6 +82,8 @@ HAVE_GSTREAMER="0"
 FOUND_GSTREAMER="no"
 FOUND_GSTREAMER_INTERFACES="no"
 FOUND_GSTREAMER_PLUGINS_BASE="no"
+NSIS_GSTREAMER_DLL=" "
+NSIS_GSTREAMER_PATH=" "
 USE_MPLAYER="no"
 USE_GSTREAMER="no"
 RPM_REQUIRE_MPLAYER=" "
@@ -89,9 +91,15 @@ RPM_REQUIRE_GSTREAMER=" "
 AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
 
 AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
-PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10], [FOUND_GSTREAMER="yes"], [FOUND_GSTREAMER="no"])
-PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
-PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
+PKG_CHECK_MODULES([GSTREAMER], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],
+	PKG_CHECK_MODULES([GSTREAMER], [gstreamer-0.10], [FOUND_GSTREAMER="0.10"], [FOUND_GSTREAMER="no"])
+)
+PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-1.0], [FOUND_GSTREAMER_INTERFACES="1.0"],
+	PKG_CHECK_MODULES([GSTREAMER_INTERFACES], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+)
+PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],
+	PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
+)
 
 if test $FORCE_BACKEND = "mplayer" ; then
 	if test $FOUND_MPLAYER = "no" ; then
@@ -134,11 +142,22 @@ if test $USE_MPLAYER = "yes" ; then
 fi
 if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
-	ECHO_BACKEND_GSTREAMER="yes"
-	RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
-	# Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
-	GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+	ECHO_BACKEND_GSTREAMER="yes ($FOUND_GSTREAMER)"
+	if test $FOUND_GSTREAMER = "0.10" ; then 
+		RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
+		# Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
+		GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+		NSIS_GSTREAMER_DLL="libgstreamer-0.10-0.dll"
+		NSIS_GSTREAMER_PATH="gstreamer-0.10"
+	elif test  $FOUND_GSTREAMER = "1.0" ; then
+		RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
+		GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-interfaces-1.0`
+		NSIS_GSTREAMER_DLL="libgstreamer-1.0-0.dll"
+		NSIS_GSTREAMER_PATH="gstreamer-1.0"	
+	fi
 	AC_SUBST([GSTREAMER_DASH_LIBS])
+	AC_SUBST([NSIS_GSTREAMER_DLL])
+	AC_SUBST([NSIS_GSTREAMER_PATH])
 fi
 
 AM_CONDITIONAL(WITH_MPLAYER, [test $USE_MPLAYER = "yes"])
