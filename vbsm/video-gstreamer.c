@@ -12,16 +12,16 @@
 #include "video-gstreamer.h"
 #ifdef HAVE_POSIX
 	#include <gdk/gdkx.h>
+        #ifdef HAVE_GST_0_10
+                #include <gst/interfaces/xoverlay.h>
+        #elif HAVE_GST_1_0
+                #include <gst/video/videooverlay.h>
+        #endif
 #elif HAVE_WINDOWS
 	#include <gdk/gdkwin32.h>
 #endif
 
 static GstSeekFlags seek_flags = GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT;
-
-void gstreamer_seek (int value) {
-	gst_element_seek (config.vbsm.gstreamer_playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_CUR, value * GST_SECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
-}
-
 
 void gstreamer_seek_absolute (int value) {
 	gst_element_seek (config.vbsm.gstreamer_playbin2, 1.0, GST_FORMAT_TIME, seek_flags, GST_SEEK_TYPE_SET, value * GST_MSECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
@@ -32,7 +32,7 @@ int gstreamer_query_position() {
 	GstFormat format = GST_FORMAT_TIME;
 	gint64 cur;
 
-	gst_element_query_position (config.vbsm.gstreamer_playbin2, &format, &cur);
+	gst_element_query_position (config.vbsm.gstreamer_playbin2, (GstFormat) &format, &cur);
 	if (format != GST_FORMAT_TIME)
 		return -1;
 
@@ -43,7 +43,7 @@ int gstreamer_query_duration() {
 	GstFormat format = GST_FORMAT_TIME;
 	gint64 cur;
 
-	gst_element_query_duration (config.vbsm.gstreamer_playbin2, &format, &cur);
+	gst_element_query_duration (config.vbsm.gstreamer_playbin2, (GstFormat) &format, &cur);
 	if (format != GST_FORMAT_TIME)
 		return -1;
 
@@ -101,7 +101,11 @@ void gstreamer_init(char file_name[1024]) {
 
 	gst_bin_add_many (GST_BIN (pipeline), config.vbsm.gstreamer_textoverlay, timeoverlay, videosink, NULL);
 
+#ifdef HAVE_GST_0_10
 	GstPad *pad = gst_element_get_pad(config.vbsm.gstreamer_textoverlay, "video_sink");
+#elif HAVE_GST_1_0
+	GstPad *pad = gst_element_get_static_pad(config.vbsm.gstreamer_textoverlay, "video_sink");
+#endif
 	gst_element_add_pad(pipeline, gst_ghost_pad_new("sink", pad));
 
 	gst_element_link_many(config.vbsm.gstreamer_textoverlay, timeoverlay, videosink);
@@ -127,7 +131,11 @@ void gstreamer_init(char file_name[1024]) {
 	#endif
 #elif HAVE_GTK3
 	#ifdef HAVE_POSIX
+                #ifdef HAVE_GST_0_10
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
+		#elif HAVE_GST_1_0
+		gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY(videosink), GDK_WINDOW_XID(gtk_widget_get_window(config.vbsm.gstreamer_widget_player)) );
+		#endif
 	#elif HAVE_WINDOWS
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
 	#endif

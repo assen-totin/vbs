@@ -9,6 +9,7 @@
 # for details.
 
 GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
+GSTREAMER_CFLAGS = @GSTREAMER_DASH_CFLAGS@
 
 AM_CPPFLAGS = @GTK_CFLAGS@
 
@@ -18,7 +19,7 @@ bin_PROGRAMS = vbsm
 vbsm_SOURCES = gui.c keyboard.c mouse.c export.c import.c edit.c vbsm.c menu.c mouse.h keyboard.h export.h gui.h vbsm.h menu-def.h menu.h import.h edit.h
 
 if WITH_GSTREAMER
-AM_CPPFLAGS += `$(PKG_CONFIG) --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
+AM_CPPFLAGS += $(GSTREAMER_CFLAGS)
 LDADD += $(GSTREAMER_LIBS)
 vbsm_SOURCES += video-gstreamer.c video-gstreamer.h
 endif

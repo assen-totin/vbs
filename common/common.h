@@ -49,7 +49,11 @@
 
 #ifdef HAVE_GSTREAMER
 	#include <gst/gst.h>
-	#include <gst/interfaces/xoverlay.h>
+//	#ifdef HAVE_GST_0_10
+//		#include <gst/interfaces/xoverlay.h>
+//	#elif HAVE_GST_1_0
+//		#include <gst/video/videooverlay.h>
+//	#endif
 #endif
 
 #define _(String) gettext (String)

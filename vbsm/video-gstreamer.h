@@ -12,7 +12,6 @@ void gstreamer_load_video(char videoFile[1024]);
 int gstreamer_get_time_pos(int flag);
 void gstreamer_pause();
 void gstreamer_play();
-void gstreamer_seek (int);
 void gstreamer_seek_absolute (int);
 int gstreamer_query_position();
 int gstreamer_query_duration();

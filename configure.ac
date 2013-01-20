@@ -1,6 +1,8 @@
 AC_PREREQ([2.66])
 AC_INIT([vbs], [3.1], [assen.totin@gmail.com])
-AM_INIT_AUTOMAKE([-Wall -Werror])
+# Commenting out -Werror until somebody fixes m4 for Gtk
+#AM_INIT_AUTOMAKE([-Wall -Werror])
+AM_INIT_AUTOMAKE([-Wall])
 
 AC_PROG_RANLIB
 
@@ -97,12 +99,13 @@ AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
 PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],
 	[PKG_CHECK_MODULES([GSTREAMER_0_10], [gstreamer-0.10], [FOUND_GSTREAMER="0.10"], [FOUND_GSTREAMER="no"])]
 )
-PKG_CHECK_MODULES([GSTREAMER_INTERFACES_1_0], [gstreamer-interfaces-1.0], [FOUND_GSTREAMER_INTERFACES="1.0"],
-	[PKG_CHECK_MODULES([GSTREAMER_INTERFACES_0_10], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])]
-)
-PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],
-	[PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_0_10], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])]
-)
+if test $FOUND_GSTREAMER = "1.0"; then
+	PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
+	PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
+elif test $FOUND_GSTREAMER = "0.10"; then
+	PKG_CHECK_MODULES([GSTREAMER_INTERFACES_0_10], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+	PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_0_10], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
+fi
 
 if test $FORCE_BACKEND = "mplayer" ; then
 	if test $FOUND_MPLAYER = "no" ; then
@@ -113,25 +116,29 @@ if test $FORCE_BACKEND = "mplayer" ; then
 elif test $FORCE_BACKEND = "gstreamer" ; then
 	if test $FOUND_GSTREAMER = "no" ; then
 		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
-	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+        elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+                AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
+	elif test $FOUND_GSTREAMER_INTERFACES = "no" && test $FOUND_GSTREAMER = "0.10" ; then
 		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
-	elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
+	elif test $FOUND_GSTREAMER_VIDEO = "no" && test $FOUND_GSTREAMER = "1.0" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-video not found."])
 	else
 		USE_GSTREAMER="yes"
 	fi
 else
 	if test $FOUND_MPLAYER = "no" ; then
-		echo "*** MPlayer not found. vbsm Won't be able to use it."
+		echo "*** MPlayer not found. vbsm won't be able to use it."
 	else
 		USE_MPLAYER="yes"
 	fi
 	if test $FOUND_GSTREAMER = "no" ; then
-		echo "*** GStreamer not found. vbsm Won't be able to use it."
-	elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+		echo "*** GStreamer not found. vbsm won't be able to use it."
+        elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+                echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
+	elif test $FOUND_GSTREAMER_INTERFACES = "no" && test $FOUND_GSTREAMER = "0.10" ; then
 		echo "*** GStreamer found, but GStreamer-interfaces not found. Disabling GStreamer."
-	elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
-		echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
+	elif test $FOUND_GSTREAMER_VIDEO = "no" && test $FOUND_GSTREAMER = "1.0" ; then
+		echo "*** GStreamer found, but GStreamer-video not found. Disabling GStreamer."
 	else
 		USE_GSTREAMER="yes"
 	fi
@@ -150,15 +157,20 @@ if test $USE_GSTREAMER = "yes" ; then
 		RPM_REQUIRE_GSTREAMER="Requires: gstreamer-plugins-base >= 0.10"
 		# Automake is idiotic and treats --libs as linking argument, thus not allowing it in LDADD - and with Windows, linking order matters
 		GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-0.10 gstreamer-interfaces-0.10`
+		GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-0.10 gstreamer-interfaces-0.10`
 		NSIS_GSTREAMER_DLL="libgstreamer-0.10-0.dll"
 		NSIS_GSTREAMER_PATH="gstreamer-0.10"
+		AC_DEFINE([HAVE_GST_0_10], [1], [GStreamer 0.10])
 	elif test  $FOUND_GSTREAMER = "1.0" ; then
 		RPM_REQUIRE_GSTREAMER="Requires: gstreamer1-plugins-base >= 1.0"
-		GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-interfaces-1.0`
+		GSTREAMER_DASH_LIBS=`$PKG_CONFIG --libs gstreamer-1.0 gstreamer-video-1.0`
+		GSTREAMER_DASH_CFLAGS=`$PKG_CONFIG --cflags gstreamer-1.0 gstreamer-video-1.0`
 		NSIS_GSTREAMER_DLL="libgstreamer-1.0-0.dll"
-		NSIS_GSTREAMER_PATH="gstreamer-1.0"	
+		NSIS_GSTREAMER_PATH="gstreamer-1.0"
+		AC_DEFINE([HAVE_GST_1_0], [1], [GStreamer 1.0])
 	fi
 	AC_SUBST([GSTREAMER_DASH_LIBS])
+	AC_SUBST([GSTREAMER_DASH_CFLAGS])
 	AC_SUBST([NSIS_GSTREAMER_DLL])
 	AC_SUBST([NSIS_GSTREAMER_PATH])
 fi
