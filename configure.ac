@@ -129,7 +129,7 @@ if test $FORCE_GSTREAMER = "1.0" ; then
 	fi
 elif test $FORCE_GSTREAMER = "0.10" ; then
 	TEST_GST_0_10="yes"
-else
+elif test $FORCE_GSTREAMER = "undef" ; then
 	TEST_GST_0_10="yes";
 	if test $FOUND_POSIX = "yes" ; then
 		TEST_GST_1_0="yes"

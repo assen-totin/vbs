@@ -34,9 +34,9 @@ is only available in Linux.
 - removed "--enable-backed" (used to force a single backend, mplayer or
 gstreamer)
 - added "--enable-mplayer" (by default "yes" on POSIX and "no" on Windows)
-- added "--enable-gstreamer" (set to "1.0" or "0.10" to force particular version
-of GStreamer; by default, 1.0 is atempted and if not found, 0.10 is attempted
-next).
+- added "--enable-gstreamer" (set to "no" to disable, to "1.0" or "0.10" to 
+force particular version of GStreamer; by default, 1.0 is attempted and if not
+found, 0.10 is attempted next).
 
 Nov 14, 2012 - Version 3.0
 ==========================

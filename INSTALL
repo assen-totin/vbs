@@ -22,11 +22,12 @@ INSTALLATION
 
 1. ./configure
 
-     --enable-backend=mlayer,gstreamer - compile only MPlayer or GStreamer as 
-       back-end (by default, GStreamer will be compiled if available and 
-       MPlayer will always be compiled).
+     --enable-mlayer=yes|no (default: yes on POSIX and no on Windows)
 
-     --enable-gtk=2,3 - force GTK version to compile against. If both 2 and 3 
+     --enable-gstreamer=0.10|1.0|no (default: on POSIX, try 1.0, if not found, 
+     try 0.10; on Windows, try 0.10)
+
+     --enable-gtk=2|3 - force GTK version to compile against. If both 2 and 3 
        are available, 3 will be used by default.
 
 2. make
