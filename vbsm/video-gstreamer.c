@@ -122,22 +122,30 @@ void gstreamer_init(char file_name[1024]) {
 			NULL);
 
 	// Merge with existing widget
+#ifdef HAVE_GST_0_10
 	if (GST_IS_X_OVERLAY (videosink)) {
-#ifdef HAVE_GTK2
 	#ifdef HAVE_POSIX
+		#ifdef HAVE_GTK2
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XWINDOW (config.vbsm.gstreamer_widget_player->window));
-	#elif HAVE_WINDOWS
-		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (config.vbsm.gstreamer_widget_player->window));
-	#endif
-#elif HAVE_GTK3
-	#ifdef HAVE_POSIX
-                #ifdef HAVE_GST_0_10
+		#elif HAVE_GTK3
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
-		#elif HAVE_GST_1_0
-		gst_video_overlay_set_window_handle (GST_VIDEO_OVERLAY(videosink), GDK_WINDOW_XID(gtk_widget_get_window(config.vbsm.gstreamer_widget_player)) );
 		#endif
 	#elif HAVE_WINDOWS
+		#ifdef HAVE_GTK2
+		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (config.vbsm.gstreamer_widget_player->window));
+		#elif HAVE_GTK3
 		gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (videosink), (guintptr) GDK_WINDOW_HWND (gtk_widget_get_window(config.vbsm.gstreamer_widget_player)));
+		#endif
+	#endif
+#elif HAVE_GST_1_0
+	if (GST_IS_VIDEO_OVERLAY (videosink)) {
+	#ifdef HAVE_POSIX
+		#ifdef HAVE_GTK2
+		//gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(videosink), GDK_WINDOW_XWINDOW(config.vbsm.gstreamer_widget_player));
+		gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(videosink), GDK_WINDOW_XID(gtk_widget_get_window(config.vbsm.gstreamer_widget_player)) );
+		#elif HAVE_GTK3
+		gst_video_overlay_set_window_handle(GST_VIDEO_OVERLAY(videosink), GDK_WINDOW_XID(gtk_widget_get_window(config.vbsm.gstreamer_widget_player)) );
+		#endif
 	#endif
 #endif
 	}

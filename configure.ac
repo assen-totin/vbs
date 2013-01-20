@@ -78,78 +78,123 @@ if test $USE_NLS != "yes" ; then
 	echo "*** gettext not found. You're losing internationalization."
 fi
 
-# Check for video back-ends
+# Check for MPlayer 
 ECHO_BACKEND_MPLAYER="no"
+FORCE_MPLAYER="undef"
+FOUND_MPLAYER="no"
+RPM_REQUIRE_MPLAYER=" "
+AC_ARG_ENABLE([mplayer],[AS_HELP_STRING([--enable-mplayer],[compile with mplayer (default: yes on POSIX, no on Windows))])],[FORCE_MPLAYER=$enableval])
+if test $FOUND_POSIX = "yes" ; then
+	if test $FORCE_MPLAYER = "yes" || test $FORCE_MPLAYER = "undef" ; then
+		AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
+	fi
+	if test $FORCE_MPLAYER = "yes" && test $FOUND_MPLAYER = "no" ; then
+		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
+	elif test $FOUND_MPLAYER = "yes" ; then
+        	AC_DEFINE([HAVE_MPLAYER],[1],["Define if MPlayer was found"])
+        	ECHO_BACKEND_MPLAYER="yes"
+	        RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
+	else
+		echo "*** MPlayer not found, vbsm won't be able to use it."
+	fi
+else
+	if test $FORCE_MPLAYER = "yes" ; then
+		AC_MSG_ERROR(["*** MPlayer forced as backend, but not available on Windows."])
+	fi
+fi
+AM_CONDITIONAL(WITH_MPLAYER, [test $FOUND_MPLAYER = "yes"])
+AC_SUBST([RPM_REQUIRE_MPLAYER])
+
+# Check for GStreamer
 ECHO_BACKEND_GSTREAMER="no"
-FORCE_BACKEND="no"
-HAVE_MPLAYER="0"
+FORCE_GSTREAMER="undef"
+TEST_GST_0_10="no"
+TEST_GST_1_0="no"
 HAVE_GSTREAMER="0"
 FOUND_GSTREAMER="no"
 FOUND_GSTREAMER_INTERFACES="no"
 FOUND_GSTREAMER_PLUGINS_BASE="no"
+FOUND_GSTREAMER_VIDEO="no"
 NSIS_GSTREAMER_DLL=" "
 NSIS_GSTREAMER_PATH=" "
-USE_MPLAYER="no"
 USE_GSTREAMER="no"
-RPM_REQUIRE_MPLAYER=" "
 RPM_REQUIRE_GSTREAMER=" "
-AC_ARG_ENABLE([backend],[AS_HELP_STRING([--enable-backend],[compile only for the specified video backend: mplayer or gstreamer (default: compile for both))])],[FORCE_BACKEND=$enableval])
+AC_ARG_ENABLE([gstreamer],[AS_HELP_STRING([--enable-gstreamer],[compile GStreamer version (POSIX default: try 1.0, if missing, try 0.10; Windows default: try 0.10)])],[FORCE_GSTREAMER=$enableval])
 
-AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
-PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],
-	[PKG_CHECK_MODULES([GSTREAMER_0_10], [gstreamer-0.10], [FOUND_GSTREAMER="0.10"], [FOUND_GSTREAMER="no"])]
-)
-if test $FOUND_GSTREAMER = "1.0"; then
-	PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
-	PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
-elif test $FOUND_GSTREAMER = "0.10"; then
-	PKG_CHECK_MODULES([GSTREAMER_INTERFACES_0_10], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
-	PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_0_10], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
-fi
-
-if test $FORCE_BACKEND = "mplayer" ; then
-	if test $FOUND_MPLAYER = "no" ; then
-		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
-	else
-		USE_MPLAYER="yes"
+if test $FORCE_GSTREAMER = "1.0" ; then
+	if test $FOUND_POSIX = "yes" ; then
+		TEST_GST_1_0="yes"
+	else 
+		AC_MSG_ERROR(["*** GStreamer 1.0 forced as backend, but not available on Windows."])
 	fi
-elif test $FORCE_BACKEND = "gstreamer" ; then
-	if test $FOUND_GSTREAMER = "no" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
-        elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
-                AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
-	elif test $FOUND_GSTREAMER_INTERFACES = "no" && test $FOUND_GSTREAMER = "0.10" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
-	elif test $FOUND_GSTREAMER_VIDEO = "no" && test $FOUND_GSTREAMER = "1.0" ; then
-		AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-video not found."])
-	else
-		USE_GSTREAMER="yes"
-	fi
+elif test $FORCE_GSTREAMER = "0.10" ; then
+	TEST_GST_0_10="yes"
 else
-	if test $FOUND_MPLAYER = "no" ; then
-		echo "*** MPlayer not found. vbsm won't be able to use it."
-	else
-		USE_MPLAYER="yes"
-	fi
-	if test $FOUND_GSTREAMER = "no" ; then
-		echo "*** GStreamer not found. vbsm won't be able to use it."
-        elif test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
-                echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
-	elif test $FOUND_GSTREAMER_INTERFACES = "no" && test $FOUND_GSTREAMER = "0.10" ; then
-		echo "*** GStreamer found, but GStreamer-interfaces not found. Disabling GStreamer."
-	elif test $FOUND_GSTREAMER_VIDEO = "no" && test $FOUND_GSTREAMER = "1.0" ; then
-		echo "*** GStreamer found, but GStreamer-video not found. Disabling GStreamer."
-	else
-		USE_GSTREAMER="yes"
+	TEST_GST_0_10="yes";
+	if test $FOUND_POSIX = "yes" ; then
+		TEST_GST_1_0="yes"
 	fi
 fi
 
-if test $USE_MPLAYER = "yes" ; then
-	AC_DEFINE([HAVE_MPLAYER],[1],["Define if mplayer was found"])
-	HAVE_MPLAYER="1"
-	ECHO_BACKEND_MPLAYER="yes"
-	RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
+if test $TEST_GST_0_10 = "yes" ; then
+	PKG_CHECK_MODULES([GSTREAMER_0_10], [gstreamer-0.10], [FOUND_GSTREAMER="0.10"], [FOUND_GSTREAMER="no"])
+	if test $FOUND_GSTREAMER = "0.10" ; then
+		PKG_CHECK_MODULES([GSTREAMER_INTERFACES_0_10], [gstreamer-interfaces-0.10], [FOUND_GSTREAMER_INTERFACES="yes"], [FOUND_GSTREAMER_INTERFACES="no"])
+		PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_0_10], [gstreamer-plugins-base-0.10], [FOUND_GSTREAMER_PLUGINS_BASE="yes"], [FOUND_GSTREAMER_PLUGINS_BASE="no"])
+	fi
 fi
+if test $TEST_GST_1_0 = "yes" ; then
+        PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],[FOUND_GSTREAMER="no"])
+        if test $FOUND_GSTREAMER = "1.0" ; then
+                PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
+                PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
+        fi
+fi
+
+if test $FOUND_GSTREAMER = "no" ; then
+	if test $FORCE_GSTREAMER = "1.0" || test $FORCE_GSTREAMER = "0.10" ; then
+		AC_MSG_ERROR(["*** GStreamer forced as backend, but not found."])
+	else
+		echo "*** GStreamer not found. vbsm won't be able to use it."
+	fi
+elif test $FOUND_GSTREAMER = "0.10" ; then
+	if test $FORCE_GSTREAMER = "0.10" ; then
+		if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+			AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
+		elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+			AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-interfaces not found."])
+		else 
+			USE_GSTREAMER="yes"
+		fi
+	else
+		if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+			echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
+		elif test $FOUND_GSTREAMER_INTERFACES = "no" ; then
+	                echo "*** GStreamer found, but GStreamer-interfaces not found. Disabling GStreamer."
+		else
+			USE_GSTREAMER="yes"
+		fi
+	fi
+elif test $FOUND_GSTREAMER = "1.0" ; then
+	if test $FORCE_GSTREAMER = "1.0" ; then
+		if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+			AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-plugins-base not found."])
+		elif test $FOUND_GSTREAMER_VIDEO = "no" ; then
+			AC_MSG_ERROR(["*** GStreamer forced as backend, but GStreamer-video not found."])
+		else
+			USE_GSTREAMER="yes"
+		fi
+	else
+		if test $FOUND_GSTREAMER_PLUGINS_BASE = "no" ; then
+			echo "*** GStreamer found, but GStreamer-plugins-base not found. Disabling GStreamer."
+		elif test $FOUND_GSTREAMER_VIDEO = "no" ; then
+			echo "*** GStreamer found, but GStreamer-video not found. Disabling GStreamer."
+		else
+			USE_GSTREAMER="yes"
+		fi
+	fi
+fi
+
 if test $USE_GSTREAMER = "yes" ; then
 	AC_DEFINE([HAVE_GSTREAMER], [1], ["Define if GStreamer was found"])
 	ECHO_BACKEND_GSTREAMER="yes ($FOUND_GSTREAMER)"
@@ -175,10 +220,7 @@ if test $USE_GSTREAMER = "yes" ; then
 	AC_SUBST([NSIS_GSTREAMER_PATH])
 fi
 
-AM_CONDITIONAL(WITH_MPLAYER, [test $USE_MPLAYER = "yes"])
 AM_CONDITIONAL(WITH_GSTREAMER, [test $USE_GSTREAMER = "yes"])
-
-AC_SUBST([RPM_REQUIRE_MPLAYER])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
 
 # Check for GTK and determine version
