@@ -32,7 +32,11 @@ int gstreamer_query_position() {
 	GstFormat format = GST_FORMAT_TIME;
 	gint64 cur;
 
-	gst_element_query_position (config.vbsm.gstreamer_playbin2, (GstFormat) &format, &cur);
+#ifdef HAVE_GST_0_10
+	gst_element_query_position (config.vbsm.gstreamer_playbin2, &format, &cur);
+#elif HAVE_GST_1_0
+	gst_element_query_position (config.vbsm.gstreamer_playbin2, GST_FORMAT_TIME, &cur);
+#endif
 	if (format != GST_FORMAT_TIME)
 		return -1;
 
@@ -43,7 +47,11 @@ int gstreamer_query_duration() {
 	GstFormat format = GST_FORMAT_TIME;
 	gint64 cur;
 
+#ifdef HAVE_GST_0_10
+	gst_element_query_duration (config.vbsm.gstreamer_playbin2, &format, &cur);
+#elif HAVE_GST_1_0
 	gst_element_query_duration (config.vbsm.gstreamer_playbin2, (GstFormat) &format, &cur);
+#endif
 	if (format != GST_FORMAT_TIME)
 		return -1;
 
@@ -90,13 +98,19 @@ void gstreamer_init(char file_name[1024]) {
 #endif
 	GstElement *pipeline = gst_pipeline_new ("my-pipeline");
 
+#ifdef HAVE_GST_0_10
 	config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin2", "playbin2");
+#elif HAVE_GST_1_0
+	config.vbsm.gstreamer_playbin2 = gst_element_factory_make ("playbin", "playbin");
+#endif
+
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "uri", &uri[0], NULL);
 
 	GstElement *videosink = gst_element_factory_make (&config.vbsm.gstreamer_video_sink[0], "videosink");
 	// Preserve original size of video
 	g_object_set(G_OBJECT(videosink), "force-aspect-ratio", TRUE);
 	config.vbsm.gstreamer_textoverlay = gst_element_factory_make("textoverlay", "textoverlay");
+
 	GstElement *timeoverlay = gst_element_factory_make("timeoverlay", "timeoverlay");
 
 	gst_bin_add_many (GST_BIN (pipeline), config.vbsm.gstreamer_textoverlay, timeoverlay, videosink, NULL);
@@ -110,16 +124,13 @@ void gstreamer_init(char file_name[1024]) {
 
 	gst_element_link_many(config.vbsm.gstreamer_textoverlay, timeoverlay, videosink);
 
-	g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay),
-			"halign", "center",
-			"valign", "bottom",
-			"font-desc", "Sans Bold 14",
-			"text", " ",
-			NULL);
+#ifdef HAVE_GST_0_10
+	g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay), "halign", "center", "valign", "bottom", "font-desc", "Sans Bold 14", "text", " ", NULL);
+#elif HAVE_GST_1_0
+	g_object_set(G_OBJECT(config.vbsm.gstreamer_textoverlay), "font-desc", "Sans Bold 14", "text", " ", NULL);
+#endif
 
-	g_object_set(G_OBJECT(timeoverlay),
-			"font-desc", "Sans 12",
-			NULL);
+	g_object_set(G_OBJECT(timeoverlay), "font-desc", "Sans 12", NULL);
 
 	// Merge with existing widget
 #ifdef HAVE_GST_0_10
