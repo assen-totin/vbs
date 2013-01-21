@@ -1,20 +1,34 @@
 REQUIREMENTS
 ============
 
-1. GTK+ 2.2 or above. 
+1. GTK+ 2.32 or GTK+ 3.x. 
 
 2. pkg-config.  
 
 3. gcc. Any recent version whould be OK (tested: 4.1.1 on Fedora Core 5, 4.5.1 
-   on Fedora 14, i4.7.2 on FEdora 17). 
+   on Fedora 14, 4.7.2 on Fedora 17/18). 
 
 4. make from autoconf tools.
 
 5. GStreamer or MPlayer. 
-   - For GStreamer, the follwoing two packages are required: gstreamer-0.10 
+   - For GStreamer 0.10, the following packages are required: gstreamer-0.10
      and gstreamer-interfaces-0.10
+   - For Gstreamer 1.0, the following pakages are required: gstreamer-1.0
+     and gstreamer-video-1.0
    - For MPlayer, the binary of the non-gui version should be installed in 
      your path and should be  named "mplayer".
+
+Features availability matrix:
+
+OS/Feature       GTK2     GTK3     GStreamer-0.10     GStreamer-1.0     MPlayer
+-------------------------------------------------------------------------------
+POSIX x86          Y        Y           Y                 Y                Y
+POSIX x86_64       Y        Y           Y                 Y                Y
+Windows x86        Y        Y           Y                 -*               -**
+Windows x86_64     Y        Y           Y                 -*               -**
+
+* Expected in a future release
+** Not expected
 
 
 INSTALLATION
@@ -61,14 +75,14 @@ BUILDING FOR MS WINDOWS
 To build for MS Windows (32-bit) on 32-bit Linux, run these commands:
 
     ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux \
-                --enable-backend=gstreamer
+                --enable-gstreamer=0.10
     make
     make exe
 
-To build for MS Windows (64-bit) on 62-bit Linux, run ./configure like this:
+To build for MS Windows (64-bit) on 64-bit Linux, run ./configure like this:
 
     ./configure --host=x86_64-w64-mingw32 --build=x86_64-redhat-linux \
-                --enable-backend=gstreamer
+                --enable-gstreamer=0.10
 
 Notes: 
 
