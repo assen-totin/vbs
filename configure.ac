@@ -229,8 +229,8 @@ RPM_REQUIRE_GTK=" "
 USE_GTK="0"
 AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
-PKG_CHECK_MODULES([PKG_GTK2], [gtk-2.0], [FOUND_GTK2="1"], [FOUND_GTK2="0"])
-PKG_CHECK_MODULES([PKG_GTK3], [gtk-3.0], [FOUND_GTK3="1"], [FOUND_GTK3="0"])
+PKG_CHECK_MODULES([PKG_GTK2], [gtk+-2.0], [FOUND_GTK2="1"], [FOUND_GTK2="0"])
+PKG_CHECK_MODULES([PKG_GTK3], [gtk+-3.0], [FOUND_GTK3="1"], [FOUND_GTK3="0"])
 
 if test $FORCE_GTK = "3" ; then
 	if test $FOUND_GTK3 = "1" ; then
@@ -277,9 +277,9 @@ AC_SUBST([NSIS_GTK_PATH])
 
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
-PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
+#PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
 #GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
-AC_SUBST([GTHREAD_LIBS])
+#AC_SUBST([GTHREAD_LIBS])
 
 # systemd
 USE_SYSTEMD="0"
