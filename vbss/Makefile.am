@@ -9,15 +9,17 @@
 # for details.
 
 GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
+GSTREAMER_CFLAGS = @GSTREAMER_DASH_CFLAGS@
 
 AM_CPPFLAGS = @GTK_CFLAGS@
-LDADD = ../common/libvbscommon.a @GTK_LIBS@ @GTHREAD_LIBS@
+#LDADD = ../common/libvbscommon.a @GTK_LIBS@ @GTHREAD_LIBS@
+LDADD = ../common/libvbscommon.a @GTK_LIBS@
 
 bin_PROGRAMS = vbss
 vbss_SOURCES = vbss.c keyboard.c keyboard.h vbss.h 
 
 if WITH_GSTREAMER
-AM_CPPFLAGS += `$(PKG_CONFIG) --cflags gstreamer-0.10`
+AM_CPPFLAGS += $(GSTREAMER_CFLAGS)
 LDADD += $(GSTREAMER_LIBS)
 endif
 

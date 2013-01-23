@@ -144,7 +144,7 @@ if test $TEST_GST_0_10 = "yes" ; then
 	fi
 fi
 if test $TEST_GST_1_0 = "yes" ; then
-        PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],[FOUND_GSTREAMER="no"])
+        PKG_CHECK_MODULES([GSTREAMER_1_0], [gstreamer-1.0], [FOUND_GSTREAMER="1.0"],[EMPTY=""])
         if test $FOUND_GSTREAMER = "1.0" ; then
                 PKG_CHECK_MODULES([GSTREAMER_PLUGINS_BASE_1_0], [gstreamer-plugins-base-1.0], [FOUND_GSTREAMER_PLUGINS_BASE="yes"],[FOUND_GSTREAMER_PLUGINS_BASE="no"])
                 PKG_CHECK_MODULES([GSTREAMER_VIDEO_1_0], [gstreamer-video-1.0], [FOUND_GSTREAMER_VIDEO="yes"],[FOUND_GSTREAMER_VIDEO="no"])
@@ -229,14 +229,27 @@ RPM_REQUIRE_GTK=" "
 USE_GTK="0"
 AC_ARG_ENABLE([gtk],[AS_HELP_STRING([--enable-gtk],[compile only for the specified GTK version, 2 or 3 (default: check both, use GTK-3, if not found, use GTK-2))])],[FORCE_GTK=$enableval])
 
+PKG_CHECK_MODULES([PKG_GTK2], [gtk-2.0], [FOUND_GTK2="1"], [FOUND_GTK2="0"])
+PKG_CHECK_MODULES([PKG_GTK3], [gtk-3.0], [FOUND_GTK3="1"], [FOUND_GTK3="0"])
+
 if test $FORCE_GTK = "3" ; then
-	AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [AC_MSG_ERROR(["*** GTK3 forced, but not found."])])
+	if test $FOUND_GTK3 = "1" ; then
+		AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [AC_MSG_ERROR(["*** GTK3 forced, but not found."])])
+	else
+		AC_MSG_ERROR(["*** GTK3 forced, but not found."])
+	fi
 elif test $FORCE_GTK = "2" ; then
-	AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [AC_MSG_ERROR(["*** GTK2 forced, but not found."])])
+	if test $FOUND_GTK2 = "1" ; then
+		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [AC_MSG_ERROR(["*** GTK2 forced, but not found."])])
+	else
+		AC_MSG_ERROR(["*** GTK2 forced, but not found."])
+	fi
 else
-	AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [
-		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"])
-	])
+	if test $FOUND_GTK3 = "1" ; then
+		AM_PATH_GTK_3_0([3.0.0], [USE_GTK="3"], [USE_GTK="0"])
+	elif test $FOUND_GTK2 = "1" ; then
+		AM_PATH_GTK_2_0([2.24.0], [USE_GTK="2"], [USE_GTK="0"])
+	fi
 fi
 
 if test $USE_GTK = "3" ; then
@@ -253,6 +266,8 @@ elif test $USE_GTK = "2" ; then
 	NSIS_GDK_DLL="libgdk-win32-2.0-0.dll"
 	NSIS_GTK_DLL="libgtk-win32-2.0-0.dll"
 	NSIS_GTK_PATH="gtk-2.0"
+else
+	AC_MSG_ERROR(["*** GTK not found."])
 fi
 
 AC_SUBST([RPM_REQUIRE_GTK])
@@ -263,11 +278,12 @@ AC_SUBST([NSIS_GTK_PATH])
 # Check for GLib
 PKG_CHECK_MODULES([GLIB], [glib-2.0])
 PKG_CHECK_MODULES([GTHREAD], [gthread-2.0])
-GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
+#GTHREAD_LIBS=`$PKG_CONFIG --libs gthread-2.0`
 AC_SUBST([GTHREAD_LIBS])
 
 # systemd
 USE_SYSTEMD="0"
+FORCE_SYSTEMD="0"
 if test $FOUND_POSIX = "yes" ; then 
 	RPM_SYSTEMD_MKDIR=""
 	RPM_SYSTEMD_SCRIPT=""
