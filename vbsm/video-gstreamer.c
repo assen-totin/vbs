@@ -12,11 +12,6 @@
 #include "video-gstreamer.h"
 #ifdef HAVE_POSIX
 	#include <gdk/gdkx.h>
-        #ifdef HAVE_GST_0_10
-                #include <gst/interfaces/xoverlay.h>
-        #elif HAVE_GST_1_0
-                #include <gst/video/videooverlay.h>
-        #endif
 #elif HAVE_WINDOWS
 	#include <gdk/gdkwin32.h>
 #endif
