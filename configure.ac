@@ -79,18 +79,18 @@ if test $USE_NLS != "yes" ; then
 fi
 
 # Check for MPlayer 
-ECHO_BACKEND_MPLAYER="no"
 FORCE_MPLAYER="undef"
-FOUND_MPLAYER="no"
+HAVE_MPLAYER="no"
 RPM_REQUIRE_MPLAYER=" "
 AC_ARG_ENABLE([mplayer],[AS_HELP_STRING([--enable-mplayer],[compile with mplayer (default: yes on POSIX, no on Windows))])],[FORCE_MPLAYER=$enableval])
 if test $FOUND_POSIX = "yes" ; then
 	if test $FORCE_MPLAYER = "yes" || test $FORCE_MPLAYER = "undef" ; then
 		AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
+		HAVE_MPLAYER=$FOUND_MPLAYER
 	fi
-	if test $FORCE_MPLAYER = "yes" && test $FOUND_MPLAYER = "no" ; then
+	if test $FORCE_MPLAYER = "yes" && test $HAVE_MPLAYER = "no" ; then
 		AC_MSG_ERROR(["*** MPlayer forced as backend, but not found."])
-	elif test $FOUND_MPLAYER = "yes" ; then
+	elif test $HAVE_MPLAYER = "yes" ; then
         	AC_DEFINE([HAVE_MPLAYER],[1],["Define if MPlayer was found"])
         	ECHO_BACKEND_MPLAYER="yes"
 	        RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
@@ -102,7 +102,7 @@ else
 		AC_MSG_ERROR(["*** MPlayer forced as backend, but not available on Windows."])
 	fi
 fi
-AM_CONDITIONAL(WITH_MPLAYER, [test $FOUND_MPLAYER = "yes"])
+AM_CONDITIONAL(WITH_MPLAYER, [test $HAVE_MPLAYER = "yes"])
 AC_SUBST([RPM_REQUIRE_MPLAYER])
 
 # Check for GStreamer
@@ -355,7 +355,7 @@ AC_OUTPUT
 echo
 echo "Configuration complete."
 echo
-echo "* MPlayer: " $ECHO_BACKEND_MPLAYER
+echo "* MPlayer: " $HAVE_MPLAYER
 echo "* GStreamer: " $ECHO_BACKEND_GSTREAMER
 echo "* GTK version: " $USE_GTK
 echo
