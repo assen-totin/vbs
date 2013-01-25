@@ -1,42 +1,50 @@
-Jan 12, 2013 - Version 3.1
+Jan 12, 2013 - Version 4.0
 ==========================
 
-1. Shortcut changes: removed Ctrl+V for "Load Video" to avoid conflict with 
+1. Added support for VLC as video backend. Currently, it is only supported on
+Linux. 
+
+2. Added support for GStreamer 1.0. If GStreamer is enabled, first ver. 1.0 
+will be sought and if not found, ver. 0.10 will be attempted. GStreamer 1.0
+is only available in Linux. You can fore the desired version through
+./configure.
+
+3. Added support for building 64-bit executables for MS Windows.
+
+4. Added support for GTK-3 in MS Windows.
+
+5. Changes in ./configure options:
+- removed "--enable-backed" (used to force a single backend, mplayer or
+gstreamer)
+- added "--enable-mplayer" (by default, use if available on POSIX and "no"
+on Windows; set to "yes" or "no" to force)
+- added "--enable-gstreamer" (by default, try 1.0 and if not found, try 0.10
+next; to force, set to "0.10" or "1.0" for a particular version and to "no"
+to disable).
+- added "--enable-vlc" (by default, use if available on POSIX and "no" on
+Windows; set to "yes" or "no" to force).
+
+6. Added buttons to move the movie forward or back 1 or 10 minutes and also to
+jump to the beginning of it. Use only when playback is paused. 
+
+7. Added menu option "Edit -> Shift Timing from Current". All subtitles from
+currently selected one will be shifted with the specified offset (in 
+milliseconds). If a timing becomes negative, it will be set to zero.
+
+8. Added menu option "Edit -> Expand Timing from Current". The start and end
+time for each subtitle will be multipiled by the factor specified
+
+9. Shortcut changes: removed Ctrl+V for "Load Video" to avoid conflict with 
 system "paste" command; removed "Del" for "Delete current subtitle" to allow
 the "Del" key to be used when editing the text of a subtitle; moved "Ctrl+0"
 from "Zero timing for current" to "Zero timing from current" because the
 latter is more often used.
 
-2. Behaviour changes: "Zero timing from current" will now also zero the timing
+10. Behaviour changes: "Zero timing from current" will now also zero the timing
 for the current subtitle.
 
-3. Changed the GUI when using GStreamer to preserve the original video size.
+11. Changed the GUI when using GStreamer to preserve the original video size.
 
-4. Added menu option "Edit -> Shift Timing from Current". All subtitles from
-currently selected one will be shifted with the specified offset (in 
-milliseconds). If a timing becomes negative, it will be set to zero.
-
-5. Added menu option "Edit -> Expand Timing from Current". The start and end
-time for each subtitle will be multipiled by the factor specified.
-
-6. Added buttons to move the movie forward or back 1 or 10 minutes and also to
-jump to the beginning of it.
-
-7. Added support for GStreamer 1.0. If GStreamer is enabled, first ver. 1.0 
-will be sought and if not found, ver. 0.10 will be attempted. GStreamer 1.0
-is only available in Linux.
-
-8. Added support for building 64-bit executables for MS Windows.
-
-9. Added support for GTK-3 in MS Windows.
-
-10. Changes in ./configure options:
-- removed "--enable-backed" (used to force a single backend, mplayer or
-gstreamer)
-- added "--enable-mplayer" (by default "yes" on POSIX and "no" on Windows)
-- added "--enable-gstreamer" (set to "no" to disable, to "1.0" or "0.10" to 
-force particular version of GStreamer; by default, 1.0 is attempted and if not
-found, 0.10 is attempted next).
 
 Nov 14, 2012 - Version 3.0
 ==========================

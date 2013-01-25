@@ -82,7 +82,7 @@ fi
 FORCE_MPLAYER="undef"
 HAVE_MPLAYER="no"
 RPM_REQUIRE_MPLAYER=" "
-AC_ARG_ENABLE([mplayer],[AS_HELP_STRING([--enable-mplayer],[compile with mplayer (default: yes on POSIX, no on Windows))])],[FORCE_MPLAYER=$enableval])
+AC_ARG_ENABLE([mplayer],[AS_HELP_STRING([--enable-mplayer],[compile with mplayer (default: yes if found on POSIX, no on Windows; to force, set to "yes" or "no"))])],[FORCE_MPLAYER=$enableval])
 if test $FOUND_POSIX = "yes" ; then
 	if test $FORCE_MPLAYER = "yes" || test $FORCE_MPLAYER = "undef" ; then
 		AC_CHECK_PROG([FOUND_MPLAYER],[mplayer],[yes],[no])
@@ -94,6 +94,7 @@ if test $FOUND_POSIX = "yes" ; then
         	AC_DEFINE([HAVE_MPLAYER],[1],["Define if MPlayer was found"])
         	ECHO_BACKEND_MPLAYER="yes"
 	        RPM_REQUIRE_MPLAYER="Requires: mplayer >= 1.0"
+		AC_SUBST([RPM_REQUIRE_MPLAYER])
 	else
 		echo "*** MPlayer not found, vbsm won't be able to use it."
 	fi
@@ -103,7 +104,6 @@ else
 	fi
 fi
 AM_CONDITIONAL(WITH_MPLAYER, [test $HAVE_MPLAYER = "yes"])
-AC_SUBST([RPM_REQUIRE_MPLAYER])
 
 # Check for GStreamer
 ECHO_BACKEND_GSTREAMER="no"
@@ -119,7 +119,7 @@ NSIS_GSTREAMER_DLL=" "
 NSIS_GSTREAMER_PATH=" "
 USE_GSTREAMER="no"
 RPM_REQUIRE_GSTREAMER=" "
-AC_ARG_ENABLE([gstreamer],[AS_HELP_STRING([--enable-gstreamer],[compile GStreamer version (POSIX default: try 1.0, if missing, try 0.10; Windows default: try 0.10)])],[FORCE_GSTREAMER=$enableval])
+AC_ARG_ENABLE([gstreamer],[AS_HELP_STRING([--enable-gstreamer],[compile GStreamer version (POSIX default: try 1.0, if missing, try 0.10; Windows default: try 0.10; to force, set to "1.0", "0.10" or "no")])],[FORCE_GSTREAMER=$enableval])
 
 if test $FORCE_GSTREAMER = "1.0" ; then
 	if test $FOUND_POSIX = "yes" ; then
@@ -222,6 +222,37 @@ fi
 
 AM_CONDITIONAL(WITH_GSTREAMER, [test $USE_GSTREAMER = "yes"])
 AC_SUBST([RPM_REQUIRE_GSTREAMER])
+
+# Check VLC
+FORCE_VLC="undef"
+HAVE_VLC="no"
+RPM_REQUIRE_VLC=" "
+AC_ARG_ENABLE([vlc],[AS_HELP_STRING([--enable-vlc],[compile with VLC (default: yes if found on POSIX, no on Windows; to force, set to "yes" or "no"))])],[FORCE_VLC=$enableval])
+if test $FOUND_POSIX = "yes" ; then
+        if test $FORCE_VLC = "yes" || test $FORCE_VLC = "undef" ; then
+                PKG_CHECK_MODULES([PKG_LIBVLC],[libvlc],[FOUND_VLC=yes],[FOUND_VLC=no])
+                HAVE_VLC=$FOUND_VLC
+        fi
+        if test $FORCE_VLC = "yes" && test $HAVE_VLC = "no" ; then
+                AC_MSG_ERROR(["*** VLC forced as backend, but not found."])
+        elif test $HAVE_VLC = "yes" ; then
+                AC_DEFINE([HAVE_VLC],[1],["Define if VLC was found"])
+                ECHO_BACKEND_VLC="yes"
+                RPM_REQUIRE_VLC="Requires: vlc >= 1.1.0"
+                VLC_DASH_LIBS=`$PKG_CONFIG --libs libvlc`
+                VLC_DASH_CFLAGS=`$PKG_CONFIG --cflags libvlc`
+		AC_SUBSTITUTE([VLC_DASH_LIBS])
+		AC_SUBSTITUTE([VLC_DASH_CFLAGS])
+		AC_SUBST([RPM_REQUIRE_VLC])
+        else
+                echo "*** VLC not found, vbsm won't be able to use it."
+        fi
+else
+        if test $FORCE_VLC = "yes" ; then
+                AC_MSG_ERROR(["*** VLC forced as backend, but not available on Windows."])
+        fi
+fi
+AM_CONDITIONAL(WITH_MPLAYER, [test $HAVE_VLC = "yes"])
 
 # Check for GTK and determine version
 FORCE_GTK="no"

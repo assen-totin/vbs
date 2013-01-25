@@ -33,32 +33,19 @@ struct video_backend {
 	char name[255];
 	int num;
 	bool show_menu_output;
-	bool dflt;
 };
 
 static struct video_backend video_backends[] = {
 #ifdef HAVE_POSIX
-	#ifdef HAVE_GSTREAMER
 	#ifdef HAVE_MPLAYER
-	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true},
-	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, false}
+	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false},
 	#endif
+	#ifdef HAVE_VLC
+	{"VLC", VBSM_VIDEO_BACKEND_VLC, false},
 	#endif
-
-	#ifdef HAVE_GSTREAMER
-	#ifndef HAVE_MPLAYER
-	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true}
-	#endif
-	#endif
-
-	#ifdef HAVE_MPLAYER
-	#ifndef HAVE_GSTREAMER
-	{"MPlayer", VBSM_VIDEO_BACKEND_MPLAYER, false, false}
-	#endif
-	#endif
-#elif HAVE_WINDOWS
-	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true, true}
 #endif
+	{"GStreamer", VBSM_VIDEO_BACKEND_GSTREAMER, true},
+	{"Dummy", VBSM_VIDEO_BACKEND_DUMMY, false}
 };
 
 struct video_output {

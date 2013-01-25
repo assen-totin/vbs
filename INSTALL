@@ -20,15 +20,16 @@ REQUIREMENTS
 
 Features availability matrix:
 
-OS/Feature       GTK2     GTK3     GStreamer-0.10     GStreamer-1.0     MPlayer
--------------------------------------------------------------------------------
-POSIX x86          Y        Y           Y                 Y                Y
-POSIX x86_64       Y        Y           Y                 Y                Y
-Windows x86        Y        Y           Y                 -*               -**
-Windows x86_64     Y        Y           Y                 -*               -**
+OS/Feature       GTK2     GTK3    GST-0.10   GST-1.0    VLC    MPlayer
+---------------------------------------------------------------------------
+POSIX x86          Y        Y         Y         Y        Y         Y
+POSIX x86_64       Y        Y         Y         Y        Y         Y
+Windows x86        Y        Y         Y         *        *         -
+Windows x86_64     Y        Y         Y         *        *         -
 
-* Expected in a future release
-** Not expected
+Y: implemented
+*: missing, but expected in a future release
+-: missing, not expected to implement
 
 
 INSTALLATION
@@ -36,10 +37,12 @@ INSTALLATION
 
 1. ./configure
 
-     --enable-mlayer=yes|no (default: yes on POSIX and no on Windows)
+     --enable-mlayer=yes|no (default: try on POSIX, no on Windows)
 
      --enable-gstreamer=0.10|1.0|no (default: on POSIX, try 1.0, if not found, 
-     try 0.10; on Windows, try 0.10)
+       try 0.10; on Windows, try 0.10)
+
+     --enable-vlc=yes|no (default: try on POSIX, no on Windows)
 
      --enable-gtk=2|3 - force GTK version to compile against. If both 2 and 3 
        are available, 3 will be used by default.
@@ -75,14 +78,12 @@ BUILDING FOR MS WINDOWS
 To build for MS Windows (32-bit) on 32-bit Linux, run these commands:
 
     ./configure --host=i686-w64-mingw32 --build=i686-redhat-linux \
-                --enable-gstreamer=0.10
     make
     make exe
 
 To build for MS Windows (64-bit) on 64-bit Linux, run ./configure like this:
 
-    ./configure --host=x86_64-w64-mingw32 --build=x86_64-redhat-linux \
-                --enable-gstreamer=0.10
+    ./configure --host=x86_64-w64-mingw32 --build=x86_64-redhat-linux 
 
 Notes: 
 
@@ -102,12 +103,19 @@ Notes:
 * Because MS Windows is not POSIX compliant, vbsd will not be built. 
 
 * Because MS Windows is not POSIX compliant, MPLayer is not supported as 
-  backend. Because normally support for both will be built, here GStreamer 
-  has to be forced as a single backend. 
+  backend.
+
+* Because MinGW does not provide VLC bimaries, it is not (yet) available on 
+Windows. 
 
 
 UNINSTALL
 =========
 
-make uninstall
+On POSIX: 
+
+    make uninstall
+
+On Windows: use the "Uninstal" option from the menu. 
+
 

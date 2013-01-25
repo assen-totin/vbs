@@ -48,6 +48,17 @@ void on_pressed_b () {
 				}
 #endif
 			}
+                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+#ifdef HAVE_VLC
+                                if (config.vbsm.have_loaded_video)
+                                        new_from = vlc_query_position();
+
+                                if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
+                                        long curr_time_msec = get_time_msec();
+                                        new_from = curr_time_msec - config.common.init_timestamp_msec;
+                                }
+#endif
+                        }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
@@ -69,7 +80,7 @@ void on_pressed_b () {
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
-			// If using GStreamer, show the sub
+			// If using GStreamer or VLC, show the sub
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
 				if (config.vbsm.have_loaded_video) {
@@ -79,6 +90,16 @@ void on_pressed_b () {
 				}
 #endif
 			}
+                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+#ifdef HAVE_VLC
+                                if (config.vbsm.have_loaded_video) {
+                                        char line3[1024];
+                                        strcpy(&line3[0], line);
+                                        vlc_sub_set(line3);
+                                }
+#endif
+                        }
+
 
 			g_free(line);
 		}
@@ -120,6 +141,19 @@ void on_pressed_m () {
 					gstreamer_sub_clear();
 #endif
 			}
+                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+#ifdef HAVE_VLC
+                                if (config.vbsm.have_loaded_video)
+                                        new_to = vlc_query_position();
+
+                                if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
+                                        long curr_time_msec = get_time_msec();
+                                        new_to = curr_time_msec - config.common.init_timestamp_msec;
+                                }
+                                if (config.vbsm.have_loaded_video)
+                                        vlc_sub_clear();
+#endif
+                        }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
@@ -176,6 +210,12 @@ void on_pressed_space (GtkWidget *window) {
 				gstreamer_pause();
 #endif
 		}
+                else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+#ifdef HAVE_VLC
+                        if (config.vbsm.have_loaded_video)
+                                vlc_pause();
+#endif
+                }
 
 	}
 	else if (config.common.running == FALSE) {
@@ -197,6 +237,13 @@ void on_pressed_space (GtkWidget *window) {
 					gstreamer_play();
 #endif
 			}
+                        else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+#ifdef HAVE_VLC
+                                if (config.vbsm.have_loaded_video)
+                                        vlc_play();
+#endif
+                        }
+
 		}
 	}
 }

@@ -56,6 +56,10 @@
 	#endif
 #endif
 
+#ifdef HAVE_VLC
+	#include <vlc/vlc.h>
+#endif
+
 #define _(String) gettext (String)
 
 #ifndef MAX_PATH
@@ -80,8 +84,10 @@ enum {
 };
 
 enum {
-	VBSM_VIDEO_BACKEND_MPLAYER = 0,
-	VBSM_VIDEO_BACKEND_GSTREAMER
+	VBSM_VIDEO_BACKEND_DUMMY = 0,
+	VBSM_VIDEO_BACKEND_MPLAYER,
+	VBSM_VIDEO_BACKEND_GSTREAMER,
+	VBSM_VIDEO_BACKEND_VLC
 };
 
 enum {
@@ -112,7 +118,10 @@ struct struct_vbsm {
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
 #endif
-	GtkWidget *gstreamer_widget_player;
+#ifdef HAVE_VLC
+	libvlc_media_player_t vlc_player;
+#endif
+	GtkWidget *widget_player;
 	char gstreamer_video_sink[1024];
 };
 

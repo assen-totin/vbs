@@ -24,6 +24,12 @@ LDADD += $(GSTREAMER_LIBS)
 vbsm_SOURCES += video-gstreamer.c video-gstreamer.h
 endif
 
+if WITH_VLC
+AM_CPPFLAGS += $(VLC_CFLAGS)
+LDADD += $(VLC_LIBS)
+vbsm_SOURCES += video-vlc.c video-vlc.h
+endif
+
 if WITH_MPLAYER
 vbsm_SOURCES += video-mplayer.c video-mplayer.h
 endif

@@ -333,16 +333,18 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 		else if (strstr(gtk_action_get_name(action), "VideoImport")) {
 			// Load Video
 			config.vbsm.have_loaded_video = true;
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) 
 				mplayer_load_video(filename);
 #endif
-			}
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 #ifdef HAVE_GSTREAMER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) 
 				gstreamer_init(filename);
 #endif
-			}			
+#ifdef HAVE_VLC
+                        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)
+                                vlc_init(filename);
+#endif				
 		}
 
 		g_free (filename);
@@ -362,7 +364,7 @@ void set_video_backend (GtkWidget *widget, gpointer window) {
 	GtkWidget *combo = gtk_combo_box_text_new();
 	int n_video_backends = sizeof (video_backends) / sizeof (video_backends[0]);
 	int i;
-	for (i=0; i<n_video_backends; i++) {
+	for (i=0; i<(n_video_backends - 1); i++) {
 		gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT(combo), video_backends[i].name);
 		if (video_backends[i].num == config.vbsm.video_backend)
 			gtk_combo_box_set_active(GTK_COMBO_BOX(combo), i);
@@ -372,7 +374,7 @@ void set_video_backend (GtkWidget *widget, gpointer window) {
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		for (i=0; i<n_video_backends; i++) {
+		for (i=0; i < (n_video_backends -1); i++) {
 			if (strstr(&video_backends[i].name[0], (char *) gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)))) {
 				config.vbsm.video_backend = video_backends[i].num;
 				break;

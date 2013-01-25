@@ -87,8 +87,8 @@ int main (int argc, char **argv){
 
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 		// Video widget
-		config.vbsm.gstreamer_widget_player = gtk_drawing_area_new();
-		gtk_widget_set_size_request (config.vbsm.gstreamer_widget_player, 0x200, 0x100);
+		config.vbsm.widget_player = gtk_drawing_area_new();
+		gtk_widget_set_size_request (config.vbsm.widget_player, 0x200, 0x100);
 	}
 
 	config.common.inside_sub = FALSE;
@@ -187,7 +187,7 @@ int main (int argc, char **argv){
 	// Pack entry & scroll into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.widget_player, TRUE, TRUE, 0);
 	}
 	gtk_box_pack_start(GTK_BOX(vbox), hbox1, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);
