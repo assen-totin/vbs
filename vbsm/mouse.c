@@ -70,7 +70,6 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 			}
 		}
 #endif
-	}
 #ifdef HAVE_GSTREAMER
                 if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
                         curr_time = vlc_query_position();

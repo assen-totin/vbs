@@ -1,5 +1,5 @@
 AC_PREREQ([2.66])
-AC_INIT([vbs], [3.1], [assen.totin@gmail.com])
+AC_INIT([vbs], [4.0], [assen.totin@gmail.com])
 # Commenting out -Werror until somebody fixes m4 for Gtk
 #AM_INIT_AUTOMAKE([-Wall -Werror])
 AM_INIT_AUTOMAKE([-Wall])
@@ -230,7 +230,7 @@ RPM_REQUIRE_VLC=" "
 AC_ARG_ENABLE([vlc],[AS_HELP_STRING([--enable-vlc],[compile with VLC (default: yes if found on POSIX, no on Windows; to force, set to "yes" or "no"))])],[FORCE_VLC=$enableval])
 if test $FOUND_POSIX = "yes" ; then
         if test $FORCE_VLC = "yes" || test $FORCE_VLC = "undef" ; then
-                PKG_CHECK_MODULES([PKG_LIBVLC],[libvlc],[FOUND_VLC=yes],[FOUND_VLC=no])
+                PKG_CHECK_MODULES([CHECK_LIBVLC],[libvlc],[FOUND_VLC=yes],[FOUND_VLC=no])
                 HAVE_VLC=$FOUND_VLC
         fi
         if test $FORCE_VLC = "yes" && test $HAVE_VLC = "no" ; then
@@ -241,8 +241,8 @@ if test $FOUND_POSIX = "yes" ; then
                 RPM_REQUIRE_VLC="Requires: vlc >= 1.1.0"
                 VLC_DASH_LIBS=`$PKG_CONFIG --libs libvlc`
                 VLC_DASH_CFLAGS=`$PKG_CONFIG --cflags libvlc`
-		AC_SUBSTITUTE([VLC_DASH_LIBS])
-		AC_SUBSTITUTE([VLC_DASH_CFLAGS])
+		AC_SUBST([VLC_DASH_LIBS])
+		AC_SUBST([VLC_DASH_CFLAGS])
 		AC_SUBST([RPM_REQUIRE_VLC])
         else
                 echo "*** VLC not found, vbsm won't be able to use it."
@@ -252,7 +252,7 @@ else
                 AC_MSG_ERROR(["*** VLC forced as backend, but not available on Windows."])
         fi
 fi
-AM_CONDITIONAL(WITH_MPLAYER, [test $HAVE_VLC = "yes"])
+AM_CONDITIONAL(WITH_VLC, [test $HAVE_VLC = "yes"])
 
 # Check for GTK and determine version
 FORCE_GTK="no"
@@ -388,6 +388,7 @@ echo "Configuration complete."
 echo
 echo "* MPlayer: " $HAVE_MPLAYER
 echo "* GStreamer: " $ECHO_BACKEND_GSTREAMER
+echo "* VLC: " $HAVE_VLC
 echo "* GTK version: " $USE_GTK
 echo
 echo "Now, run make."

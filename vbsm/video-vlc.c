@@ -57,10 +57,10 @@ void vlc_sub_set(char sub[1024]) {
 
 void vlc_init(char file_name[1024]) {
 	// Boot args -r equried for subs
-	const char * const vlc_args[] = {"--sub-filter=marq"};
+	const char * const vlc_args[] = {"--sub-filter=marq", "--no-xlib"};
 
 	// New player instance
-	libvlc_instance_t *inst = libvlc_new (1, vlc_args);
+	libvlc_instance_t *inst = libvlc_new (2, vlc_args);
 
 	// Define media
 	char uri[2048];
@@ -70,6 +70,7 @@ void vlc_init(char file_name[1024]) {
         char _tmp[2048];
         win_filename_to_uri(&file_name[0], &_tmp[0]);
         sprintf(&uri[0], "file:///%s", &_tmp[0]);
+#endif
 	libvlc_media_t *media = libvlc_media_new_path (inst, &uri[0]);
 
 	// Create player
@@ -86,9 +87,9 @@ void vlc_init(char file_name[1024]) {
 	// Merge with existing widget
 #ifdef HAVE_POSIX
 	#ifdef HAVE_GTK2
-	libvlc_media_player_set_xdrawable (mp, GDK_WINDOW_XWINDOW (config.vbsm.widget_player->window));
+	libvlc_media_player_set_xwindow (mp, GDK_WINDOW_XWINDOW (config.vbsm.widget_player->window));
 	#elif HAVE_GTK3
-	libvlc_media_player_set_xdrawable (mp, GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.widget_player)));
+	libvlc_media_player_set_xwindow (mp, GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.widget_player)));
 	#endif
 #elif HAVE_WINDOWS
 	#ifdef HAVE_GTK2
@@ -105,8 +106,9 @@ void vlc_init(char file_name[1024]) {
         libvlc_media_player_set_time (mp, 100);
 
 	// Query duration - result in seconds
+	char err_msg[1024];
 	libvlc_time_t duration = libvlc_media_get_duration(media);
-	if (media > -1) {
+	if (duration > -1) {
 		config.vbsm.film_duration = (int) (duration/1000);
 		sprintf(&err_msg[0], "Film duration in seconds: %u for filename %s", config.vbsm.film_duration, &file_name[0]);
 	}

@@ -117,12 +117,12 @@ struct struct_vbsm {
 #ifdef HAVE_GSTREAMER
 	GstElement *gstreamer_playbin2;
 	GstElement *gstreamer_textoverlay;
+	char gstreamer_video_sink[1024];
 #endif
 #ifdef HAVE_VLC
-	libvlc_media_player_t vlc_player;
+	libvlc_media_player_t *vlc_player;
 #endif
 	GtkWidget *widget_player;
-	char gstreamer_video_sink[1024];
 };
 
 
@@ -225,6 +225,10 @@ struct cmdl cmdl_config;
 #ifdef HAVE_GSTREAMER
 	#include "../vbsm/video-gstreamer.h"
 #endif
+#ifdef HAVE_VLC
+        #include "../vbsm/video-vlc.h"
+#endif
+
 
 #include "../vbsc/vbsc.h"
 #include "../vbsc/menu.h"
