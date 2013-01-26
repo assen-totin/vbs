@@ -98,7 +98,6 @@ Section "VBS"
   @WIN_HELP_FILES@
   @WIN_LOCALE_FILES@
 
-  # GTK3 mandatory
   SetOutPath "$INSTDIR\share\glib-2.0\schemas"
   File /r "@MINGW_PREFIX@/share/glib-2.0/schemas/gschema.dtd"  
   File /r "@MINGW_PREFIX@/share/glib-2.0/schemas/gschemas.compiled"

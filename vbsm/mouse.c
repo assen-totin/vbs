@@ -37,7 +37,7 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
 				gstreamer_goto(new_time);
 #endif
-#ifdef HAVE_GSTREAMER
+#ifdef HAVE_VLC
                         if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)
                                 vlc_goto(new_time);
 #endif
@@ -70,7 +70,7 @@ void on_clicked_button (GtkButton *button, gpointer user_data) {
 			}
 		}
 #endif
-#ifdef HAVE_GSTREAMER
+#ifdef HAVE_VLC
                 if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
                         curr_time = vlc_query_position();
                         if (curr_time > 0) {
