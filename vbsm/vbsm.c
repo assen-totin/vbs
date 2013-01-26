@@ -85,10 +85,10 @@ int main (int argc, char **argv){
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (subtitles_scroll),  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
 	gtk_container_add (GTK_CONTAINER (subtitles_scroll), config.vbsm.subtitles_view);
 
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) || (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)) {
 		// Video widget
-		config.vbsm.gstreamer_widget_player = gtk_drawing_area_new();
-		gtk_widget_set_size_request (config.vbsm.gstreamer_widget_player, 0x200, 0x100);
+		config.vbsm.widget_player = gtk_drawing_area_new();
+		gtk_widget_set_size_request (config.vbsm.widget_player, 0x200, 0x100);
 	}
 
 	config.common.inside_sub = FALSE;
@@ -118,7 +118,7 @@ int main (int argc, char **argv){
 	get_icon(&vbs_icon[0]);
 	gtk_window_set_default_icon_from_file (&vbs_icon[0], NULL);
 
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) || (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)) {
 		GdkScreen *gdk_screen = gdk_screen_get_default();
 		if (gdk_screen) {
 			int screen_width = gdk_screen_get_width(gdk_screen);
@@ -186,8 +186,8 @@ int main (int argc, char **argv){
 
 	// Pack entry & scroll into vbox
 	gtk_box_pack_start(GTK_BOX(vbox), menu, FALSE, FALSE, 0);
-	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.gstreamer_widget_player, TRUE, TRUE, 0);
+	if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) || (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)) {
+		gtk_box_pack_start(GTK_BOX(vbox), config.vbsm.widget_player, TRUE, TRUE, 0);
 	}
 	gtk_box_pack_start(GTK_BOX(vbox), hbox1, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), subtitles_scroll, TRUE, TRUE, 0);

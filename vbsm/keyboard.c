@@ -22,32 +22,36 @@ void on_pressed_b () {
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gint new_from;
+	gint new_from = -1;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
-				if (mplayer_is_alive())
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+				if (mplayer_is_alive()) 
 					new_from = mplayer_get_time_pos(2);
-				else {
-					long curr_time_msec = get_time_msec();
-					new_from = curr_time_msec - config.common.init_timestamp_msec;
-				}
-#endif
+				
 			}
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#endif
 #ifdef HAVE_GSTREAMER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 				if (config.vbsm.have_loaded_video) 
 					new_from = gstreamer_query_position();
-
-				if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
-					long curr_time_msec = get_time_msec();
-					new_from = curr_time_msec - config.common.init_timestamp_msec;
-				}
-#endif
+				
 			}
+#endif
+#ifdef HAVE_VLC
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+                                if (config.vbsm.have_loaded_video) 
+                                        new_from = vlc_query_position();
+			}
+#endif
+
+			if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
+                        	long curr_time_msec = get_time_msec();
+                                new_from = curr_time_msec - config.common.init_timestamp_msec;
+                        }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
@@ -69,17 +73,19 @@ void on_pressed_b () {
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
-			// If using GStreamer, show the sub
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+			// If using GStreamer or VLC, show the sub
+			if (config.vbsm.have_loaded_video) {
+				char line3[1024];
+				strcpy(&line3[0], line);
 #ifdef HAVE_GSTREAMER
-				if (config.vbsm.have_loaded_video) {
-					char line3[1024];
-					strcpy(&line3[0], line);
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
 					gstreamer_sub_set(line3);
-				}
+#endif
+#ifdef HAVE_VLC
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
+					vlc_sub_set(line3);
 #endif
 			}
-
 			g_free(line);
 		}
 	}
@@ -90,36 +96,38 @@ void on_pressed_m () {
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
-	gint new_to;
+	gint new_to = -1;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 				if (mplayer_is_alive())
 					new_to = mplayer_get_time_pos(2);
-				else {
-					long curr_time_msec = get_time_msec();
-					new_to = curr_time_msec - config.common.init_timestamp_msec;
-				}
-#endif
 			}
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#endif
 #ifdef HAVE_GSTREAMER
-				if (config.vbsm.have_loaded_video)
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				if (config.vbsm.have_loaded_video) {
 					new_to = gstreamer_query_position();
-
-				if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
-					long curr_time_msec = get_time_msec();
-					new_to = curr_time_msec - config.common.init_timestamp_msec;
-				}
-
-				// Clear the sub
-				if (config.vbsm.have_loaded_video)
 					gstreamer_sub_clear();
-#endif
+				}
 			}
+#endif
+#ifdef HAVE_VLC
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+                                if (config.vbsm.have_loaded_video) {
+                                        new_to = vlc_query_position();
+					vlc_sub_clear();
+				}
+			}
+#endif
+
+                        if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
+                        	long curr_time_msec = get_time_msec();
+                                new_to = curr_time_msec - config.common.init_timestamp_msec;
+                        }
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
@@ -164,19 +172,24 @@ void on_pressed_space (GtkWidget *window) {
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: PAUSED");
 
 		// Pause the player
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 			if (mplayer_is_alive())
 				mplayer_pipe_write("pause");
-#endif
 		}
-		else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#endif
 #ifdef HAVE_GSTREAMER
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 			if (config.vbsm.have_loaded_video)
 				gstreamer_pause();
-#endif
 		}
-
+#endif
+#ifdef HAVE_VLC
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+                        if (config.vbsm.have_loaded_video)
+                                vlc_pause();
+		}
+#endif
 	}
 	else if (config.common.running == FALSE) {
 		if (have_loaded_text(window)) {
@@ -185,18 +198,24 @@ void on_pressed_space (GtkWidget *window) {
 	                gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: RUNNING");
 
 			// Start the player
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 				if (mplayer_is_alive())
 					mplayer_pipe_write("pause");
-#endif
 			}
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#endif
 #ifdef HAVE_GSTREAMER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 				if (config.vbsm.have_loaded_video)
 					gstreamer_play();
-#endif
 			}
+#endif
+#ifdef HAVE_VLC
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+                                if (config.vbsm.have_loaded_video)
+                                        vlc_play();
+			}
+#endif
 		}
 	}
 }
@@ -223,5 +242,4 @@ void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 			break;
 	}
 }
-
 

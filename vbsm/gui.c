@@ -84,57 +84,59 @@ int progress_bar_update() {
 				char line2[255];
 				sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, time_diff.quot);
 				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
+				gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 1);
 			}
 		}
 	}
-
-	GtkTreeSelection *selection;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	gint from, to, local;
-	gchar *line;
 
 	// If only playing the movie, move to next subtitle as it gets displayed - until a 'b' is pressed
 	// Because this section queries the player (which is an overhead, especially on MPlayer), limit it to once a second.
 	div_t msec = div(curr_time_msec, 1000);
 	if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE) && (msec.rem < config.vbsm.progress_update_msec)) {
-		selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
+        	GtkTreeModel *model;
+	        GtkTreeIter iter;
+        	gint from, to, local = -1;
+	        gchar *line;
+
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, COL_TO, &to, COL_LINE, &line, -1);
-
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 				if (mplayer_is_alive())
 					local = mplayer_get_time_pos(2);
-				else {
-					long curr_time_msec = get_time_msec();
-					local = curr_time_msec - config.common.init_timestamp_msec;
-				}
-#endif
 			}
-
-			else if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+#endif
 #ifdef HAVE_GSTREAMER
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 				if (config.vbsm.have_loaded_video)
 					local = gstreamer_query_position();
+			}
+#endif
+#ifdef HAVE_VLC
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
+                                if (config.vbsm.have_loaded_video)
+                                        local = vlc_query_position();
+			}
+#endif
+                        if ((!config.vbsm.have_loaded_video) || (local == -1)) {
+                        	long curr_time_msec = get_time_msec();
+                                local = curr_time_msec - config.common.init_timestamp_msec;
+                        }
 
-				if ((!config.vbsm.have_loaded_video) || (local == -1)) {
-					long curr_time_msec = get_time_msec();
-					local = curr_time_msec - config.common.init_timestamp_msec;
-				}
+			// If using GStreamer or VLC, show the sub while inside
+			if ((local > from) && (local < to) && (config.vbsm.have_loaded_video)) {
+				char line3[1024];
+				strcpy(&line3[0], line);
+#ifdef HAVE_GSTREAMER
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) 
+					gstreamer_sub_set(line3);
+#endif
+#ifdef HAVE_VLC
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
+                                        vlc_sub_set(line3);
 #endif
 			}
-
-			// If using GStreamer, show the sub while inside
-			if ((config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) && (local > from) && (local < to)) {
-#ifdef HAVE_GSTREAMER
-				if (config.vbsm.have_loaded_video) {
-					char line3[1024];
-					strcpy(&line3[0], line);
-					gstreamer_sub_set(line3);
-				}
-#endif
-			 }
 
 			// If out of the sub, move the list to next
 			if ((to > from) && (local > to)) {
@@ -147,10 +149,14 @@ int progress_bar_update() {
 					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, TRUE, 0.5, 0);
 
 				}
-				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
+				if (config.vbsm.have_loaded_video) {
 #ifdef HAVE_GSTREAMER
-					if (config.vbsm.have_loaded_video)
+					if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
 						gstreamer_sub_clear();
+#endif
+#ifdef HAVE_VLC
+					if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
+						vlc_sub_clear();
 #endif
 				}
 			}

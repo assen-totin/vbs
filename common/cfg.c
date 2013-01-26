@@ -55,6 +55,9 @@ void default_config() {
 #ifdef HAVE_MPLAYER
 	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_MPLAYER;
 #endif
+#ifdef HAVE_VLC
+        config.vbsm.video_backend = VBSM_VIDEO_BACKEND_VLC;
+#endif
 #ifdef HAVE_GSTREAMER
 	config.vbsm.video_backend = VBSM_VIDEO_BACKEND_GSTREAMER; 
 	strcpy(&config.vbsm.gstreamer_video_sink[0] , VBSM_DEFAULT_VIDEO_SINK);

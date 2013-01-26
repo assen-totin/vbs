@@ -9,6 +9,7 @@ BuildRoot: /var/tmp/%{name}-buildroot
 @RPM_REQUIRE_MPLAYER@
 @RPM_REQUIRE_GSTREAMER@
 @RPM_REQUIRE_GTK@
+@RPM_REQUIRE_VLC@
 BuildRequires: gettext
 
 %description
@@ -80,7 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Sun Jan 20 2013 Assen Totin <assen.totin@gmail.com>
-- Release 3.1
+- Release 4.0
 
 * Wed Nov 14 2012 Assen Totin <assen.totin@gmail.com>
 - Release 3.0

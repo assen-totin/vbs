@@ -9,6 +9,10 @@
 # for details.
 
 GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
+GSTREAMER_CFLAGS = @GSTREAMER_DASH_CFLAGS@
+
+VLC_LIBS = @VLC_DASH_LIBS@
+VLC_CFLAGS = @VLC_DASH_CFLAGS@
 
 AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = ../common/libvbscommon.a @GTK_LIBS@
@@ -17,8 +21,13 @@ bin_PROGRAMS = vbsc
 vbsc_SOURCES = vbsc.c menu.c vbsc.h menu-def.h menu.h
 
 if WITH_GSTREAMER
-AM_CPPFLAGS += `$(PKG_CONFIG) --cflags gstreamer-0.10`
+AM_CPPFLAGS += $(GSTREAMER_CFLAGS)
 LDADD += $(GSTREAMER_LIBS)
+endif
+
+if WITH_VLC
+AM_CPPFLAGS += $(VLC_CFLAGS)
+LDADD += $(VLC_LIBS)
 endif
 
 if WITH_WINDOWS

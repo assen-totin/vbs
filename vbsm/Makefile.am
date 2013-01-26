@@ -11,6 +11,9 @@
 GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
 GSTREAMER_CFLAGS = @GSTREAMER_DASH_CFLAGS@
 
+VLC_LIBS = @VLC_DASH_LIBS@
+VLC_CFLAGS = @VLC_DASH_CFLAGS@
+
 AM_CPPFLAGS = @GTK_CFLAGS@
 
 LDADD = ../common/libvbscommon.a @GTK_LIBS@
@@ -22,6 +25,12 @@ if WITH_GSTREAMER
 AM_CPPFLAGS += $(GSTREAMER_CFLAGS)
 LDADD += $(GSTREAMER_LIBS)
 vbsm_SOURCES += video-gstreamer.c video-gstreamer.h
+endif
+
+if WITH_VLC
+AM_CPPFLAGS += $(VLC_CFLAGS)
+LDADD += $(VLC_LIBS)
+vbsm_SOURCES += video-vlc.c video-vlc.h
 endif
 
 if WITH_MPLAYER
