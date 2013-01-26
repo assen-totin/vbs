@@ -17,7 +17,7 @@
 #endif
 
 void vlc_seek_absolute (int value) {
-	libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
+	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
 	libvlc_media_player_set_time (config.vbsm.vlc_player, value * 1000);
 	// Need this sleep to allow video to change time
 	//sleep(1);
@@ -29,19 +29,19 @@ int vlc_query_position() {
 }
 
 int vlc_query_duration(libvlc_media_t *m) {
-	// Unlike GStreamer, in VLC this method runs on the media object, not on the player
+	// This method runs on the media object, not on the player
 	// Also, the playback must have been started (+ sleep(1) to make sure everythign is loaded)
 	return libvlc_media_get_duration(m);
 }
 
 
 void vlc_pause() {
-	libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
+	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
 }
 
 
 void vlc_play() {
-	libvlc_media_player_set_pause(config.vbsm.vlc_player, 0);
+	libvlc_media_player_set_pause(config.vbsm.vlc_player, false);
 }
 
 
@@ -103,8 +103,9 @@ void vlc_init(char file_name[1024]) {
 	// To pause, activate the playback, then sleep for 1 second and rewind to the beginning
 	libvlc_media_player_play (config.vbsm.vlc_player);
 	sleep(1);
-	libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
-        libvlc_media_player_set_time (config.vbsm.vlc_player, 100);
+	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
+	//libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
+        //libvlc_media_player_set_time (config.vbsm.vlc_player, 100);
 
 	// Query duration - result in seconds
 	char err_msg[1024];

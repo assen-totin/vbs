@@ -8,6 +8,12 @@
 # See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
 # for details.
 
+GSTREAMER_LIBS = @GSTREAMER_DASH_LIBS@
+GSTREAMER_CFLAGS = @GSTREAMER_DASH_CFLAGS@
+
+VLC_LIBS = @VLC_DASH_LIBS@
+VLC_CFLAGS = @VLC_DASH_CFLAGS@
+
 AM_CPPFLAGS = @GTK_CFLAGS@
 LDADD = @GTK_LIBS@
 
@@ -16,7 +22,13 @@ vbsd_SOURCES = vbsd.c vbsd.h
 LDADD += ../common/libvbscommon.a -lm
 
 if WITH_GSTREAMER
-AM_CPPFLAGS += `pkg-config --cflags gstreamer-0.10`
+AM_CPPFLAGS += $(GSTREAMER_CFLAGS)
+LDADD += $(GSTREAMER_LIBS)
+endif
+
+if WITH_VLC
+AM_CPPFLAGS += $(VLC_CFLAGS)
+LDADD += $(VLC_LIBS)
 endif
 
 install-data-hook:
