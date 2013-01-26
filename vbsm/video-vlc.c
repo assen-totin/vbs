@@ -74,36 +74,37 @@ void vlc_init(char file_name[1024]) {
 	libvlc_media_t *media = libvlc_media_new_path (inst, &uri[0]);
 
 	// Create player
-	libvlc_media_player_t *mp = libvlc_media_player_new_from_media (media);
+	//libvlc_media_player_t *mp = libvlc_media_player_new_from_media (media);
+	config.vbsm.vlc_player = libvlc_media_player_new_from_media (media);
 
 	// Create marquee for subtitles
-	libvlc_video_set_marquee_int(mp, libvlc_marquee_Size, 20);
-	libvlc_video_set_marquee_int(mp, libvlc_marquee_Opacity, 255);
-	libvlc_video_set_marquee_int (mp, libvlc_marquee_Position, 8);
-	libvlc_video_set_marquee_int(mp, libvlc_marquee_Color, 0x00ffffff);
-	libvlc_video_set_marquee_int(mp, libvlc_marquee_Enable, 1);
-	libvlc_video_set_marquee_string (mp, libvlc_marquee_Text, " ");
+	libvlc_video_set_marquee_int(config.vbsm.vlc_player, libvlc_marquee_Size, 20);
+	libvlc_video_set_marquee_int(config.vbsm.vlc_player, libvlc_marquee_Opacity, 255);
+	libvlc_video_set_marquee_int (config.vbsm.vlc_player, libvlc_marquee_Position, 8);
+	libvlc_video_set_marquee_int(config.vbsm.vlc_player, libvlc_marquee_Color, 0x00ffffff);
+	libvlc_video_set_marquee_int(config.vbsm.vlc_player, libvlc_marquee_Enable, 1);
+	libvlc_video_set_marquee_string (config.vbsm.vlc_player, libvlc_marquee_Text, " ");
 
 	// Merge with existing widget
 #ifdef HAVE_POSIX
 	#ifdef HAVE_GTK2
-	libvlc_media_player_set_xwindow (mp, GDK_WINDOW_XWINDOW (config.vbsm.widget_player->window));
+	libvlc_media_player_set_xwindow (config.vbsm.vlc_player, GDK_WINDOW_XWINDOW (config.vbsm.widget_player->window));
 	#elif HAVE_GTK3
-	libvlc_media_player_set_xwindow (mp, GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.widget_player)));
+	libvlc_media_player_set_xwindow (config.vbsm.vlc_player, GDK_WINDOW_XID (gtk_widget_get_window(config.vbsm.widget_player)));
 	#endif
 #elif HAVE_WINDOWS
 	#ifdef HAVE_GTK2
-	libvlc_media_player_set_hwnd (mp, (guintptr) GDK_WINDOW_HWND (config.vbsm.widget_player->window));
+	libvlc_media_player_set_hwnd (config.vbsm.vlc_player, (guintptr) GDK_WINDOW_HWND (config.vbsm.widget_player->window));
 	#elif HAVE_GTK3
-	libvlc_media_player_set_hwnd (mp, (guintptr) GDK_WINDOW_HWND (gtk_widget_get_window(config.vbsm.widget_player)));
+	libvlc_media_player_set_hwnd (config.vbsm.vlc_player, (guintptr) GDK_WINDOW_HWND (gtk_widget_get_window(config.vbsm.widget_player)));
 	#endif
 #endif
 
 	// To pause, activate the playback, then sleep for 1 second and rewind to the beginning
-	libvlc_media_player_play (mp);
+	libvlc_media_player_play (config.vbsm.vlc_player);
 	sleep(1);
-	libvlc_media_player_set_pause(mp, 1);
-        libvlc_media_player_set_time (mp, 100);
+	libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
+        libvlc_media_player_set_time (config.vbsm.vlc_player, 100);
 
 	// Query duration - result in seconds
 	char err_msg[1024];
