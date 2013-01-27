@@ -18,9 +18,9 @@
 
 void vlc_seek_absolute (int value) {
 	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
-	libvlc_media_player_set_time (config.vbsm.vlc_player, value * 1000);
-	// Need this sleep to allow video to change time
-	//sleep(1);
+	//libvlc_media_player_set_time (config.vbsm.vlc_player, value * 1000);
+	double unf = (double) value/config.vbsm.film_duration;
+	libvlc_media_player_set_position(config.vbsm.vlc_player, unf);
 }
 
 
@@ -56,7 +56,7 @@ void vlc_sub_set(char sub[1024]) {
 }
 
 void vlc_init(char file_name[1024]) {
-	// Boot args -r equried for subs
+	// Boot args equried for subs
 	const char * const vlc_args[] = {"--sub-filter=marq", "--no-xlib"};
 
 	// New player instance
@@ -104,8 +104,6 @@ void vlc_init(char file_name[1024]) {
 	libvlc_media_player_play (config.vbsm.vlc_player);
 	sleep(1);
 	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
-	//libvlc_media_player_set_pause(config.vbsm.vlc_player, 1);
-        //libvlc_media_player_set_time (config.vbsm.vlc_player, 100);
 
 	// Query duration - result in seconds
 	char err_msg[1024];

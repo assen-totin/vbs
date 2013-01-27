@@ -37,7 +37,7 @@ void on_pressed_b () {
 			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
 			div_t q = div(strlen(line),20);
 			config.vbsm.progress_seconds = q.quot + 2;
-			sprintf(line2, _("Suggested Duration: %u seconds"), q.quot + 1);
+			sprintf(line2, _("Suggested Duration: %u seconds"), q.quot + 2);
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 
 			if (config.vbsm.have_loaded_video) {
@@ -159,24 +159,22 @@ void on_pressed_space (GtkWidget *window) {
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: PAUSED");
 
 		// Pause the player
+		if (config.vbsm.have_loaded_video) {
 #ifdef HAVE_MPLAYER
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-			if (mplayer_is_alive())
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+				if (mplayer_is_alive())
 				mplayer_pipe_write("pause");
-		}
+			}
 #endif
 #ifdef HAVE_GSTREAMER
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-			if (config.vbsm.have_loaded_video)
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) 
 				gstreamer_pause();
-		}
 #endif
 #ifdef HAVE_VLC
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
-                        if (config.vbsm.have_loaded_video)
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
                                 vlc_pause();
-		}
 #endif
+		}
 	}
 	else if (config.common.running == FALSE) {
 		if (have_loaded_text(window)) {
@@ -185,24 +183,22 @@ void on_pressed_space (GtkWidget *window) {
 	                gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: RUNNING");
 
 			// Start the player
+			if (config.vbsm.have_loaded_video) {
 #ifdef HAVE_MPLAYER
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-				if (mplayer_is_alive())
-					mplayer_pipe_write("pause");
-			}
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+					if (mplayer_is_alive())
+						mplayer_pipe_write("pause");
+				}
 #endif
 #ifdef HAVE_GSTREAMER
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-				if (config.vbsm.have_loaded_video)
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) 
 					gstreamer_play();
-			}
 #endif
 #ifdef HAVE_VLC
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
-                                if (config.vbsm.have_loaded_video)
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
                                         vlc_play();
-			}
 #endif
+			}
 		}
 	}
 }

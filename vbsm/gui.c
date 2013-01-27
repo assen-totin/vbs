@@ -74,7 +74,7 @@ int progress_bar_update() {
 
 	// Update progress bar
 	if (config.common.inside_sub == TRUE) {
-		gdouble frac = (gdouble) (curr_time_msec - config.common.timestamp_msec) / (gdouble) (1000 * (config.vbsm.progress_seconds - 1));
+		gdouble frac = (gdouble) (curr_time_msec - config.common.timestamp_msec) / (gdouble) (1000 * (config.vbsm.progress_seconds));
 		if (frac <= 1) {
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), frac);
 		}
@@ -82,7 +82,7 @@ int progress_bar_update() {
 			div_t time_diff = div(curr_time_msec - config.common.timestamp_msec, 1000);
 			if (time_diff.rem < config.vbsm.progress_update_msec) {
 				char line2[255];
-				sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds - 1, time_diff.quot);
+				sprintf(line2, _("Suggested Duration: %u seconds (So far: %u seconds)"), config.vbsm.progress_seconds, time_diff.quot);
 				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
 				gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 1);
 			}
