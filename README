@@ -28,6 +28,8 @@ vbsm keeps a log file named vbsLogFileXXXXXXXX.log (in the config directory,
 ~/.vbs in Linux and %HOME%\_vbs on Windows). Upon each run new log will be 
 generated;  VBS will keep the last 3 logs and delete the older ones.  
 
+For known issues and their workarounds, see BUGS.
+
 A. vbsm
 -------
 

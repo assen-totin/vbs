@@ -10,30 +10,43 @@ KNOWN ISSUES (and solutions):
 the reduced number of key frames. Re-encode your with with one key frame at 
 least each 12-15 frames.
 
-2. When you double-click and move to the last subtitle before current and then 
-start the playback, the subtitle is not shown by mplayer. This seems to be an 
-mplayer issue; the subtitles are actually reloaded. If you double-click 3-4 
-subtitles before current, you'll see them displayed properly.
+2. MPlayer: When you double-click and move to the last subtitle before current 
+and then start the playback, the subtitle is not shown by mplayer. This seems 
+to be an mplayer issue; the subtitles are actually reloaded. If you double-
+click 3-4 subtitles before current, you'll see them displayed properly.
 
-3. The SDL video output and the "Auto" video output for GStreamer will not 
-integrate with the main program window and open the video in a separate one 
-(like MPLayer). The first is a limitation of SDL, the second is a due to 
-GStreamer's internal design. Use different output if possible.  
+3. GStreamer: the SDL video output and the "Auto" video output for GStreamer 
+will not integrate with the main program window and open the video in a separate
+one (like MPLayer). The first is a limitation of SDL, the second is a due to 
+GStreamer's internal design. Use different output if possible.
 
-4. GTK-3 has a bug which prevents the application to change the main window's 
-background colour when the GTK theme uses umages for background. This means
-that vbss might not be able to set the baclground colour to black (which is 
-required to block the excessivle light when superimposing subtitles by 
+4. VLC: it will not show the timer in the upper left corner (as MPlayer and 
+GStreamer do). This is interbal limitation of VLC.
+
+5. VLC: it may not work properly if your video card only supports x11 output 
+(i.e. lacks at least xv). VLC auto-detects the video output, so there is 
+nothing to be done. If you can only do x11, switch to other backend. 
+
+6. VLC: it will try to automatically load subtitles from the same directory
+where you load video from. This seems a to be a 'feature', but to avoid it,
+put your video source file in a separate directory with nothing else inside.
+
+7. GTK3: it has a bug which prevents the application to change the main 
+window's background colour when the GTK theme uses umages for background. This 
+means that vbss might not be able to set the baclground colour to black (which 
+is required to block the excessivle light when superimposing subtitles by 
 projection). A work-around is implemented in the code. Other possible solutions: 
 - swich to a GTK theme which does not use images for window backgrounds
 - swich to a GTK theme which has black window backgrounds
 - use GTK-2. 
 
-5. On Windows Theora codec is missing.  This is an upstream bundling bug - the
-codec is missing the official GStreamer release. Either re-encode with other
-video codec or wait for the next release which will eventually fix it.
+8. Windows: the Theora codec is missing.  This is an upstream bundling bug - the
+codec is missing in the MinGW gstreamer-ffmpeg package. The package was built
+in 2011 for CentOS 6 and probably won'be rebuilt until CentOS 7 comes out. See
+www.lfarkas.org/packages/linux for details. Either re-encode your video with
+other video codec or wait until a next release eventually fixes this.
 
-6. On Windows the help files' TOC is displayed incorrectly for non-Latin 
+9. Windows: the help files' TOC is displayed incorrectly for non-Latin 
 charsets. This is a Windows Help viewer (hh.exe) limitation which only supports 
 ANSI characters. No workaround possible, complain to Miscrosoft.  
 
