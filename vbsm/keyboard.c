@@ -27,26 +27,40 @@ void on_pressed_b () {
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == FALSE)) {
+			gchar *line;
+			char line2[255];
+			char line3[1024];
+
+                        config.common.timestamp_msec = get_time_msec();
+                        config.common.inside_sub = TRUE;
+
+			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
+			div_t q = div(strlen(line),20);
+			config.vbsm.progress_seconds = q.quot + 2;
+			sprintf(line2, _("Suggested Duration: %u seconds"), q.quot + 1);
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
+
+			if (config.vbsm.have_loaded_video) {
+				strcpy(&line3[0], line);
 #ifdef HAVE_MPLAYER
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
-				if (mplayer_is_alive()) 
-					new_from = mplayer_get_time_pos(2);
-				
-			}
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
+					if (mplayer_is_alive()) 
+						new_from = mplayer_get_time_pos(2);
+				}
 #endif
 #ifdef HAVE_GSTREAMER
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
-				if (config.vbsm.have_loaded_video) 
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) {
 					new_from = gstreamer_query_position();
-				
-			}
+					gstreamer_sub_set(line3);
+				}				
 #endif
 #ifdef HAVE_VLC
-			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
-                                if (config.vbsm.have_loaded_video) 
+				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) {
                                         new_from = vlc_query_position();
-			}
+					vlc_sub_set(line3);
+				}
 #endif
+			}
 
 			if ((new_from == -1) || (!config.vbsm.have_loaded_video)) {
                         	long curr_time_msec = get_time_msec();
@@ -55,38 +69,11 @@ void on_pressed_b () {
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_FROM, new_from, -1);
 
-			config.common.timestamp_msec = get_time_msec();
-			config.common.inside_sub = TRUE;
-
-			gchar *line;
-			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
-
-			div_t q = div(strlen(line),20);
-			config.vbsm.progress_seconds = q.quot + 2;
-
-			char line2[255];
-			sprintf(line2, _("Suggested Duration: %u seconds"), q.quot + 1);
-
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), line2);
-
 			// If networking is enabled, send the line to server
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
-			// If using GStreamer or VLC, show the sub
-			if (config.vbsm.have_loaded_video) {
-				char line3[1024];
-				strcpy(&line3[0], line);
-#ifdef HAVE_GSTREAMER
-				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
-					gstreamer_sub_set(line3);
-#endif
-#ifdef HAVE_VLC
-				if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
-					vlc_sub_set(line3);
-#endif
-			}
-			g_free(line);
+			//g_free(line);
 		}
 	}
 }
@@ -94,8 +81,8 @@ void on_pressed_b () {
 
 void on_pressed_m () {
 	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
-	GtkTreeIter       iter;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	gint new_to = -1;
 
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
