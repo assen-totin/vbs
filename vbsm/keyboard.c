@@ -80,12 +80,11 @@ void on_pressed_b () {
 
 
 void on_pressed_m () {
-	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gint new_to = -1;
 
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 	if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
 		if ((config.common.running == TRUE) && (config.common.inside_sub == TRUE)) {
 #ifdef HAVE_MPLAYER
@@ -123,8 +122,12 @@ void on_pressed_m () {
 			if (gtk_tree_model_iter_next(model, &iter)) {
 				gtk_tree_selection_select_iter(selection, &iter);
 
-				// Scroll down
+				// Move the cursor to the first cell of the new line. We need this because pressing space to pause
+				// will emit 'row-activated', which will receive the path of the last cursor (and not of the last iter).
 				GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+				gtk_tree_view_set_cursor (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, FALSE);
+
+				// Scroll down
 				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, TRUE, 0.5, 0);
 			}
 

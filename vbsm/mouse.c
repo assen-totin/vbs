@@ -11,18 +11,16 @@
 #include "../common/common.h"
 
 void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata) {
-	GtkTreeModel *model;
 	GtkTreeIter iter;
 
 	if ((config.common.running == FALSE) && (have_loaded_text())) {
-		model = gtk_tree_view_get_model(view);
+		GtkTreeModel *model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
 
-			// This function will also get called when pausing the player with spacebar (likely because the row 
-			// is selected, but is not active - so it becomes active and 'on_row-activated' is emitted).
-			// However, we don;t wnt it executed on pause, so return if 'from' is 0.
+			// This function will also get called when pausing the player with spacebar (emitting 'row-activated'
+			// However, we don't want it executed on pause, so return if 'from' is 0.
 			if (from == 0)
 				return;
 

@@ -144,8 +144,12 @@ int progress_bar_update() {
 					// Move to next line
 					gtk_tree_selection_select_iter(selection, &iter);
 
-					// Scroll down
-					GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+	                                // Move the cursor to the first cell of the new line. We need this because pressing space to pause
+        	                        // will emit 'row-activated', which will receive the path of the last cursor (and not of the last iter).
+                	                GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+                        	        gtk_tree_view_set_cursor (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, FALSE);
+
+                                	// Scroll down
 					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, TRUE, 0.5, 0);
 
 				}

@@ -67,7 +67,7 @@ gboolean export_subtitles_srt(GtkTreeModel *model, GtkTreePath *path, GtkTreeIte
 		fprintf(export_sub->fp_mplayer, "%s%s%s", &line_fixed[0], &cr_lf[0], &cr_lf[0]);
 	}
 
-	//g_free(line);
+	g_free(line);
 	return FALSE;
 }
 
@@ -105,7 +105,7 @@ void export_subtitles() {
 		retval = fclose(fp_mplayer);
 
 	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-	//fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
+	fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
 }
 
 
