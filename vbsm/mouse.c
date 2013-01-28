@@ -20,14 +20,18 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 			gint from;
 			gtk_tree_model_get(model, &iter, COL_FROM, &from, -1);
 
-			// Move the player -  seeking actually needs some time to complete,
-			// that's why we seek 5 seconds earlier and leave 1 second timeout, then pause
-			// If seeking to first row, we might get a negative time (will crash mplayer) - be careful
+			// This function will also get called when pausing the player with spacebar (likely because the row 
+			// is selected, but is not active - so it becomes active and 'on_row-activated' is emitted).
+			// However, we don;t wnt it executed on pause, so return if 'from' is 0.
+			if (from == 0)
+				return;
+
+			// Move the player -  seeking actually needs some time to complete, so why we seek 5 seconds earlier.
+			// If seeking to first row, we might get a negative time (will crash mplayer) - be careful.
 			// new_time is in seconds!
 			int new_time = (int) from/1000 - 5;
 			if (new_time <= 0)
 				new_time = 1;
-
 #ifdef HAVE_MPLAYER
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
 				mplayer_goto(new_time, false);

@@ -140,10 +140,12 @@ void on_pressed_m () {
 			// Export subtitles
 			export_subtitles();
 		}
+/*
 		else { 
 			// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
 			int empty = 0;
 		}
+*/
 	}
 }
 
