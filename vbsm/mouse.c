@@ -13,9 +13,8 @@
 void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata) {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkWidget *window = userdata;
 
-	if ((config.common.running == FALSE) && (have_loaded_text(window))) {
+	if ((config.common.running == FALSE) && (have_loaded_text())) {
 		model = gtk_tree_view_get_model(view);
 		if (gtk_tree_model_get_iter(model, &iter, path)) {
 			gint from;

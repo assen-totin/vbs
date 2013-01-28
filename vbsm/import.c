@@ -10,7 +10,7 @@
 
 #include "../common/common.h"
 
-bool have_loaded_text(GtkWidget *window){
+bool have_loaded_text(){
 	if (config.vbsm.have_loaded_text) 
 		return true;
 	else {

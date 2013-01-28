@@ -14,5 +14,5 @@ struct subtitle_srt *import_subtitles_text(char *, int *);
 
 void import_subtitles(char *, int);
 
-bool have_loaded_text(GtkWidget *);
+bool have_loaded_text();
 

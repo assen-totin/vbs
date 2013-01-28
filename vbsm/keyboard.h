@@ -10,6 +10,6 @@
 
 void on_pressed_b();
 void on_pressed_m();
-void on_pressed_space (GtkWidget *window);
+void on_pressed_space ();
 void on_pressed_key(GtkTreeView *view, GdkEventKey *event, gpointer counter);
 

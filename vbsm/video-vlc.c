@@ -18,9 +18,9 @@
 
 void vlc_seek_absolute (int value) {
 	libvlc_media_player_set_pause(config.vbsm.vlc_player, true);
-	//libvlc_media_player_set_time (config.vbsm.vlc_player, value * 1000);
-	double unf = (double) value/config.vbsm.film_duration;
-	libvlc_media_player_set_position(config.vbsm.vlc_player, unf);
+	libvlc_media_player_set_time (config.vbsm.vlc_player, value * 1000);
+	//double unf = (double) value/config.vbsm.film_duration;
+	//libvlc_media_player_set_position(config.vbsm.vlc_player, unf);
 }
 
 

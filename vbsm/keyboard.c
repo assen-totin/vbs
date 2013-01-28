@@ -148,7 +148,7 @@ void on_pressed_m () {
 }
 
 
-void on_pressed_space (GtkWidget *window) {
+void on_pressed_space () {
 	GtkTreeSelection *selection;
 	GtkTreeModel     *model;
 	GtkTreeIter       iter;
@@ -177,7 +177,7 @@ void on_pressed_space (GtkWidget *window) {
 		}
 	}
 	else if (config.common.running == FALSE) {
-		if (have_loaded_text(window)) {
+		if (have_loaded_text()) {
 			config.common.running = TRUE;
 	                gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(config.vbsm.progress), 0);
 	                gtk_progress_bar_set_text(GTK_PROGRESS_BAR(config.vbsm.progress), "Status: RUNNING");
@@ -205,7 +205,6 @@ void on_pressed_space (GtkWidget *window) {
 
 
 void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
-	GtkWidget *window = userdata;
 	switch ( event->keyval ) {
 		case GDK_b:
 			on_pressed_b();
@@ -218,7 +217,7 @@ void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 			on_pressed_b();
 			break;
 		case GDK_space:
-			on_pressed_space(window);
+			on_pressed_space();
 			break;
 		case GDK_s:
 			export_subtitles();
