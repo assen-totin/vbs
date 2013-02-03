@@ -49,6 +49,10 @@ void shift_timing(GtkAction *action, gpointer param){
 		else if (strstr(gtk_action_get_name(action), "EditShiftExpand")) 
 			factor = atof(gtk_entry_get_text(GTK_ENTRY(text)));
 	}
+	else {
+		gtk_widget_destroy(dialog);
+		return;
+	}
 
 	gtk_widget_destroy(dialog);
 
