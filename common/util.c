@@ -83,7 +83,7 @@ void convert_time_to_srt(unsigned int the_time, char *res, int format) {
 }
 
 
-struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
+struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *import_error_flag) {
 	char *time_begin, *time_end;
 	char *line_utf8;
 	long time_begin_val, time_end_val;
@@ -107,6 +107,12 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter) {
 		error_handler("import_subtitles_srt", "malloc failed", 1);
 
 	while (fgets(line_in, config.common.line_size, fp_in)) {
+		// Check for wrong file
+		if (strlen(line_in) > (config.common.line_size - 4)) {
+			*import_error_flag = 1;
+			return sub_array;
+		}
+
 		// An empty line closes subtitle
 		if (strlen(line_in) < 3) {
 			if (counter_line > 0) {

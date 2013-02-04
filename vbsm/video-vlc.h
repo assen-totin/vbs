@@ -18,5 +18,5 @@ int vlc_query_duration(libvlc_media_t *m);
 void vlc_sub_clear();
 void vlc_set_clear(char sub[1024]);
 static gboolean bus_cb (GstBus *bus, GstMessage *msg, gpointer data);
-void vlc_init(char file_name[1024]);
+void vlc_init(char file_name[1024], int *);
 void vlc_goto (long new_time);

@@ -80,7 +80,7 @@ void gstreamer_sub_set(char sub[1024]) {
 			NULL);
 }
 
-void gstreamer_init(char file_name[1024]) {
+void gstreamer_init(char file_name[1024], int *import_error_flag) {
 	gst_init(0, NULL);
 
 	char uri[2048];
@@ -158,7 +158,9 @@ void gstreamer_init(char file_name[1024]) {
 
 	g_object_set (G_OBJECT (config.vbsm.gstreamer_playbin2), "video-sink", pipeline, NULL);
 
-	gst_element_set_state (config.vbsm.gstreamer_playbin2, GST_STATE_PAUSED);
+	GstStateChangeReturn ret = gst_element_set_state (config.vbsm.gstreamer_playbin2, GST_STATE_PAUSED);
+	if (ret == GST_STATE_CHANGE_FAILURE) 
+		*import_error_flag = 1;
 
 	sleep(1);
 
@@ -172,12 +174,11 @@ void gstreamer_init(char file_name[1024]) {
 		gint64 duration;
 		gst_query_parse_duration (query, NULL, &duration);
 		config.vbsm.film_duration = (int) (duration/1000000000);
-		sprintf(&err_msg[0], "Film duration in seconds: %u for filename %s", config.vbsm.film_duration, &file_name[0]);
 	}
 	else {
 		sprintf(&err_msg[0], "Failed to get duration for filename %s", &file_name[0]);
+		error_handler("gstreamer_init()", &err_msg[0], 0);
 	}
-	error_handler("gstreamer_init()", &err_msg[0], 0);
 	gst_query_unref (query);
 }
 

@@ -55,7 +55,7 @@ void vlc_sub_set(char sub[1024]) {
 	libvlc_video_set_marquee_string (config.vbsm.vlc_player, libvlc_marquee_Text, &sub[0]);
 }
 
-void vlc_init(char file_name[1024]) {
+void vlc_init(char file_name[1024], *import_error_flag) {
 	// Boot args equried for subs
 	const char * const vlc_args[] = {"--sub-filter=marq", "--no-xlib"};
 
@@ -74,8 +74,11 @@ void vlc_init(char file_name[1024]) {
 	libvlc_media_t *media = libvlc_media_new_path (inst, &uri[0]);
 
 	// Create player
-	//libvlc_media_player_t *mp = libvlc_media_player_new_from_media (media);
 	config.vbsm.vlc_player = libvlc_media_player_new_from_media (media);
+	if (!config.vbsm.vlc_player) {
+		*import_error_flag = 1;
+		return;
+	}
 
 	// Create marquee for subtitles
 	libvlc_video_set_marquee_int(config.vbsm.vlc_player, libvlc_marquee_Size, 20);

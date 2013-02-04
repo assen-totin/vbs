@@ -311,6 +311,7 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 	GtkWidget *fileDialogWidget;
 	char fileDialogTitle[64];
 	char fileDialogFile[256];
+	int import_error_flag = 0;
 
 	fileDialogWidget = gtk_file_chooser_dialog_new ("Chose File", GTK_WINDOW(config.vbsm.window),
 				      GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -322,33 +323,43 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fileDialogWidget), &fileDialogFile[0]);
 
 	if (gtk_dialog_run (GTK_DIALOG (fileDialogWidget)) == GTK_RESPONSE_ACCEPT) {
+		config.vbsm.have_loaded_video = false;
 		char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fileDialogWidget));
 
 		if (strstr(gtk_action_get_name(action), "TextImportPlain")) {
 			// Import Text-only
 			clear_store();
-			import_subtitles(filename, VBS_IMPORT_FILTER_TEXT);
+			import_subtitles(filename, VBS_IMPORT_FILTER_TEXT, &import_error_flag);
 		}
 		else if (strstr(gtk_action_get_name(action), "TextImportSubrip")) {
 			// Import SRT
 			clear_store();
-			import_subtitles(filename, VBS_IMPORT_FILTER_SRT);
+			import_subtitles(filename, VBS_IMPORT_FILTER_SRT, &import_error_flag);
 		}
 		else if (strstr(gtk_action_get_name(action), "VideoImport")) {
 			// Load Video
-			config.vbsm.have_loaded_video = true;
 #ifdef HAVE_MPLAYER
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) 
-				mplayer_load_video(filename);
+				mplayer_load_video(filename, &import_error_flag);
 #endif
 #ifdef HAVE_GSTREAMER
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER) 
-				gstreamer_init(filename);
+				gstreamer_init(filename, &import_error_flag);
 #endif
 #ifdef HAVE_VLC
                         if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)
-                                vlc_init(filename);
-#endif				
+                                vlc_init(filename, &import_error_flag);
+#endif
+			if (!import_error_flag)
+				config.vbsm.have_loaded_video = true;
+		}
+
+		// Error handling
+		if (import_error_flag) {
+			char error_message[1024];
+			sprintf(&error_message[0], "%s: %s", _("Unable to import file: check file format"), filename);
+			error_handler("import_subtitles", &error_message[0], 0);
+			show_warning_import(NULL, fileDialogWidget);
 		}
 
 		g_free (filename);
@@ -485,5 +496,18 @@ char *get_help_gtk() {
 	free(line);
 
 	return help_text;
+}
+
+
+void show_warning_import (GtkWidget *widget, gpointer window) {
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+                GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                GTK_MESSAGE_ERROR,
+                GTK_BUTTONS_OK,
+                _("Unable to import file: check file format"));
+        gtk_window_set_title(GTK_WINDOW(dialog), _("Error"));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        gtk_widget_destroy(window);
 }
 

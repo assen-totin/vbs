@@ -32,15 +32,20 @@ void clear_store() {
 }
 
 
-void import_subtitles(char *filename, int file_format) {
+void import_subtitles(char *filename, int file_format, int *imp_err_flag) {
 	struct subtitle_srt *sub_array;
 	GtkTreeIter iter;
-	int i, total_subs;
+	int i, total_subs, import_error_flag = 0;
 
 	if (file_format == VBS_IMPORT_FILTER_TEXT)
-		sub_array = import_subtitles_text(filename, &total_subs);
+		sub_array = import_subtitles_text(filename, &total_subs, &import_error_flag);
 	else if (file_format == VBS_IMPORT_FILTER_SRT)
-		sub_array = import_subtitles_srt(filename, &total_subs);
+		sub_array = import_subtitles_srt(filename, &total_subs, &import_error_flag);
+
+	if (import_error_flag) {
+		*imp_err_flag = 1;
+		return;
+	}
 
 	for (i=0; i<total_subs; i++) {
 		gtk_list_store_append (config.vbsm.mplayer_store, &iter);
@@ -61,7 +66,7 @@ void import_subtitles(char *filename, int file_format) {
 }
 
 
-struct subtitle_srt *import_subtitles_text(char *filename, int *counter) {
+struct subtitle_srt *import_subtitles_text(char *filename, int *counter, int *import_error_flag) {
 	int counter_array = 0;
 	char *line_utf8;
 	gsize bytes_written;
@@ -80,6 +85,12 @@ struct subtitle_srt *import_subtitles_text(char *filename, int *counter) {
 		error_handler("import_subtitles_srt", "malloc failed", 1);
 
 	while (fgets(line_in, config.common.line_size, fp_in)) {
+                // Check for wrong file
+                if (strlen(line_in) > (config.common.line_size - 4)) {
+                        *import_error_flag = 1;
+                        return sub_array;
+                }
+
 		// Kill newlines
 		if (strstr(line_in, "\r"))
 			strcpy(line_tmp, strtok(line_in, "\r"));

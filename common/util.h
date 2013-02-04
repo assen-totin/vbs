@@ -16,7 +16,7 @@ int convert_time_from_srt(char *, int);
 
 void convert_time_to_srt(unsigned int, char *, int);
 
-struct subtitle_srt *import_subtitles_srt(char *, int *);
+struct subtitle_srt *import_subtitles_srt(char *, int *, int *);
 
 void get_locale_prefix(char *res);
 

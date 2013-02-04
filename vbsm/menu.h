@@ -29,6 +29,8 @@ void set_video_backend (GtkWidget *widget, gpointer window);
 
 char *get_help_gtk();
 
+void show_warning_import (GtkWidget *widget, gpointer window);
+
 struct video_backend {
 	char name[255];
 	int num;

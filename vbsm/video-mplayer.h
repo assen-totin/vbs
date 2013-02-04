@@ -10,7 +10,7 @@
 
 bool mplayer_is_alive();
 
-void mplayer_load_video(char videoFile[1024]);
+void mplayer_load_video(char videoFile[1024], int *);
 
 void mplayer_pipe_write(char *command);
 

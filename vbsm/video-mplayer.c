@@ -102,7 +102,7 @@ int getSubNum() {
 */
 
 
-void mplayer_load_video(char fileName[1024]) {
+void mplayer_load_video(char fileName[1024], *import_error_flag) {
 	char popenCmd[2048];
 	memset(&popenCmd[0],'\0', sizeof(popenCmd));
 

@@ -91,6 +91,7 @@ int main (int argc, char *argv[]) {
 	GError *error = NULL;
 	PangoAttrList *attr_list;
 	PangoAttribute *attr_size, *attr_family, *attr_style, *attr_weight, *attr_colour_fg, *attr_colour_bg;
+	int import_error_flag = 0;
 
 	// i18n
 	char locale_path[MAX_PATH];
@@ -200,7 +201,9 @@ int main (int argc, char *argv[]) {
 		config.vbss.socketfd = get_socket(); 
 	}
 	else {
-		sub_array = import_subtitles_srt(&config.vbss.import_filename[0], &config.vbss.total_subtitles);
+		sub_array = import_subtitles_srt(&config.vbss.import_filename[0], &config.vbss.total_subtitles, &import_error_flag);
+		if (import_error_flag)
+			error_handler("main", _("Unable to import file: check file format"), 1);
 		config.common.timestamp_msec = get_time_msec();
 		config.common.init_timestamp_msec = config.common.timestamp_msec;
 		strcpy(&config.vbss.current_sub[0], _("Press SPACE to start playback..."));
