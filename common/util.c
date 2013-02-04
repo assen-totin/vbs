@@ -116,11 +116,14 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *imp
 		// An empty line closes subtitle
 		if (strlen(line_in) < 3) {
 			if (counter_line > 0) {
-				// UTF-8
-				if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
-					line_utf8 = g_convert(line_out, strlen(line_out), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
-				else
-					line_utf8 = line_out;
+				// UTF-8: always call even if input is UTF-8 in order to filter out improper files
+				line_utf8 = g_convert(line_out, strlen(line_out), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
+
+		                // Check valid
+                		if (!line_utf8) {
+		                        *import_error_flag = 1;
+                		        return sub_array;
+		                }
 
 				// Add new subtitle to the array
 				void *_tmp = realloc(sub_array, ((counter_array + 1) * sizeof(struct subtitle_srt)));
@@ -165,12 +168,10 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *imp
 		if (counter_line == 0) {
 			strcpy(line_out, line_in);
 			counter_line++;
-			continue;
 		}
 		else if (counter_line > 0) {
 			sprintf(line_out, "%s|%s", line_out, line_in);
 			counter_line++;
-			continue;
 		}
 	}
 

@@ -361,11 +361,11 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 			error_handler("import_subtitles", &error_message[0], 0);
 			show_warning_import(NULL, fileDialogWidget);
 		}
+		else
+			gtk_widget_destroy (fileDialogWidget);
 
 		g_free (filename);
 	}
-
-	gtk_widget_destroy (fileDialogWidget);
 }
 
 void set_video_backend (GtkWidget *widget, gpointer window) {

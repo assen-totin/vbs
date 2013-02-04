@@ -55,7 +55,7 @@ void vlc_sub_set(char sub[1024]) {
 	libvlc_video_set_marquee_string (config.vbsm.vlc_player, libvlc_marquee_Text, &sub[0]);
 }
 
-void vlc_init(char file_name[1024], *import_error_flag) {
+void vlc_init(char file_name[1024], int *import_error_flag) {
 	// Boot args equried for subs
 	const char * const vlc_args[] = {"--sub-filter=marq", "--no-xlib"};
 

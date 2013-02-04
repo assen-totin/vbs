@@ -91,6 +91,10 @@ struct subtitle_srt *import_subtitles_text(char *filename, int *counter, int *im
                         return sub_array;
                 }
 
+		// Ignore empty lines
+		if (strlen(line_in) < 3)
+			continue;
+
 		// Kill newlines
 		if (strstr(line_in, "\r"))
 			strcpy(line_tmp, strtok(line_in, "\r"));
@@ -101,11 +105,17 @@ struct subtitle_srt *import_subtitles_text(char *filename, int *counter, int *im
 		else
 			strcpy(line_in, line_tmp);
 
-		// UTF-8
-		if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0)
+		// UTF-8: disabled in order to filter out improper input files
+//		if (strcmp(&config.common.import_encoding[0], "UTF-8") != 0) 
 			line_utf8 = g_convert(line_in, strlen(line_in), "UTF-8", config.common.import_encoding, NULL, &bytes_written, NULL);
-		else
-			line_utf8 = line_in;
+//		else
+//			line_utf8 = line_in;
+
+		// Check valid
+		if (!line_utf8) {
+			*import_error_flag = 1;
+			return sub_array;
+		}
 
 		// Add subtitles to the array		
 		void *_tmp = realloc(sub_array, ((counter_array + 1) * sizeof(struct subtitle_srt)));
