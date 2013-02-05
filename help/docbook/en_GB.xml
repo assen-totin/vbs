@@ -53,17 +53,19 @@
       <title>LOADING VIDEO</title>
       <para>Use the Video menu to load video file.</para>
       <para>Supported formats: any format which your back-end (GStreamer or MPlayer) can play.</para>
-      <para>VBS supports two back-ends: </para>
+      <para>VBS supports three back-ends: </para>
       <para>* MPlayer (on Linux only)</para>
+      <para>* VLC (on Linux only)</para>
       <para>* Gstreamer (on Windows and Linux)</para>
-      <para>Support for either or both can be included. If both are included, GStreamer will be default and it can be changed in the Video menu.</para>
+      <para>Support for one or more can be included. If more than one is included, GStreamer will be default and it can be changed in the Video menu.</para>
       <para>In the same menu you can set the video output method:</para>
       <para>* For GStreamer:</para>
       <para>** On Linux chose between X11 (most conservative, CPU-intensive, but most compatible; default), Xv (less CPU intensive, works with all modern video adapters) SDL (will play the video in a separate window) and Auto (use only as fail-safe, will always play the video in a separate window)</para>
       <para>** On Windows chose between Direct Draw (most conservative, CPU-intensive, but most compatible; default), Direct Show (less CPU intensive, works with some modern video adapters), Direct 3D (latest, requires Vista or better) и Auto (use only as fail-safe, will always play the video in a separate window).</para>
       <para>* MPlayer video output cannot be changed in VBS; use it's own menu for this.</para>
-      <para>If the video dose not play back properly, verify that the player has proper codecs installed. On Linux, you should be able to play the video with the same player,  MPlayer or Gstreamer-based one (like Totem) outside VBS. On Windows GStreamer is supplied with the following plugin packs: base, good, bad, ugly. </para>
-      <para>When the video is paused, you can use the buttons to navigate through it (forward or backward, 1 or 10 minutes) or go back to the beginning. </para>
+      <para>* VLC video output cannot be changed in VBS; it will be auto-detected.</para>
+      <para>If the video dose not play back properly, verify that the player has proper codecs installed. On Linux, you should be able to play the video with the same player, VLC, MPlayer or Gstreamer-based one (like Totem) outside VBS. On Windows GStreamer is supplied with the following plugin packs: base, good, bad, ugly. </para>
+      <para>When the playback is paused, you can use the buttons below it to jump 1 or 10 minutes back or forth. The '0.0' button will take you to the beginning of the video.</para>
    </sect1>
    <sect1>
       <title>USING VBS WITHOUT VIDEO</title>
