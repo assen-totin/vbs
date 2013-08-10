@@ -64,6 +64,7 @@ Section "VBS"
   File "@MINGW_PREFIX@/bin/libxml2-2.dll"
   File "@MINGW_PREFIX@/bin/pango-querymodules.exe"
   File "@MINGW_PREFIX@/bin/zlib1.dll"
+  File "@MINGW_PREFIX@/bin/libgcc_s_sjlj-1.dll"
   # Gstreamer files, not found by wrapper
   File "@MINGW_PREFIX@/bin/libgst*"
   File "@MINGW_PREFIX@/bin/liborc*"

@@ -80,7 +80,7 @@ rm -rf $RPM_BUILD_ROOT
 @RPM_SYSTEMD_SCRIPT@
 
 %changelog
-* Sun Jan 20 2013 Assen Totin <assen.totin@gmail.com>
+* Sat Aug 10 2013 Assen Totin <assen.totin@gmail.com>
 - Release 4.0
 
 * Wed Nov 14 2012 Assen Totin <assen.totin@gmail.com>
