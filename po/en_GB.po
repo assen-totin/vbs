@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-30 19:12+0200\n"
+"POT-Creation-Date: 2013-08-10 18:57+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: English (British)\n"
@@ -19,19 +19,19 @@ msgstr ""
 
 #: vbsm/vbsm.c:161
 msgid "+1'"
-msgstr ""
+msgstr "+1'"
 
 #: vbsm/vbsm.c:162
 msgid "+10'"
-msgstr ""
+msgstr "+10'"
 
 #: vbsm/vbsm.c:163
 msgid "-1'"
-msgstr ""
+msgstr "-1'"
 
 #: vbsm/vbsm.c:164
 msgid "-10'"
-msgstr ""
+msgstr "-10'"
 
 #: common/menu.c:100
 msgid "Available Delimiters:"
@@ -83,11 +83,11 @@ msgstr "Enter magic key (up to 32 letters or digits):"
 msgid "Enter offset in milliseconds:"
 msgstr "Enter offset in milliseconds:"
 
-#: vbsm/menu.c:200 vbsm/gui.c:169 common/menu.c:187
+#: vbsm/menu.c:204 vbsm/menu.c:508 vbsm/gui.c:179 common/menu.c:187
 msgid "Error"
 msgstr "Error"
 
-#: vbss/vbss.c:199 vbss/vbss-threaded.c:222
+#: vbss/vbss.c:200 vbss/vbss-threaded.c:222
 msgid "Expecting network connection..."
 msgstr "Expecting network connection..."
 
@@ -103,11 +103,11 @@ msgstr "Font Colour"
 msgid "Full-Screen mode:"
 msgstr "Full-Screen mode:"
 
-#: vbsm/menu.c:207 vbsm/menu.c:209
+#: vbsm/menu.c:211 vbsm/menu.c:213
 msgid "Help"
 msgstr "Help"
 
-#: vbsm/menu.c:199
+#: vbsm/menu.c:203
 msgid "Help file not found."
 msgstr "Help file not found."
 
@@ -127,7 +127,7 @@ msgstr ""
 "74, Otec Paisi Str.\n"
 "Assen Totin\n"
 
-#: vbsm/menu.c:239
+#: vbsm/menu.c:243
 msgid "Internal timer set to zero."
 msgstr "Internal timer set to zero."
 
@@ -151,7 +151,7 @@ msgstr ""
 "Playback paused.\n"
 "Press SPACE to continue..."
 
-#: vbss/vbss.c:206 vbss/vbss-threaded.c:226
+#: vbss/vbss.c:209 vbss/vbss-threaded.c:226
 msgid "Press SPACE to start playback..."
 msgstr "Press SPACE to start playback..."
 
@@ -159,7 +159,7 @@ msgstr "Press SPACE to start playback..."
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Quick brown fox jumps over the lazy dog..."
 
-#: vbsm/menu.c:252 vbsm/menu.c:254 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:256 vbsm/menu.c:258 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Really quit?"
 
@@ -192,7 +192,7 @@ msgstr "Select Newline Delimiter"
 msgid "Select network mode:"
 msgstr "Select network mode:"
 
-#: vbsm/menu.c:359
+#: vbsm/menu.c:376
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -200,7 +200,7 @@ msgstr ""
 "Select video backend:\n"
 "(requires restart)"
 
-#: vbsm/menu.c:402
+#: vbsm/menu.c:419
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -224,7 +224,7 @@ msgstr "Set Full-Screen"
 msgid "Set Magic Key"
 msgstr "Set Magic Key"
 
-#: vbsm/menu.c:241
+#: vbsm/menu.c:245
 msgid "Set Start Time"
 msgstr "Set Start Time"
 
@@ -232,11 +232,11 @@ msgstr "Set Start Time"
 msgid "Set Text Justification"
 msgstr "Set Text Justification"
 
-#: vbsm/gui.c:168
+#: vbsm/gui.c:178
 msgid "Subtitles not loaded."
 msgstr "Subtitles not loaded."
 
-#: vbsm/keyboard.c:64
+#: vbsm/keyboard.c:40
 #, c-format
 msgid "Suggested Duration: %u seconds"
 msgstr "Suggested Duration: %u seconds"
@@ -264,19 +264,23 @@ msgstr ""
 "See the LICENSE file from the distribution or visit http://www.gnu.org/"
 "copyleft/gpl.html for details."
 
+#: vbsm/menu.c:360 vbsm/menu.c:507 vbss/vbss.c:206
+msgid "Unable to import file: check file format"
+msgstr "Unable to import file: check file format."
+
 #: vbsc/vbsc.c:60
 msgid "Use the menu to change default settings."
 msgstr "Use the menu to change default settings."
 
-#: vbsm/menu.c:360
+#: vbsm/menu.c:377
 msgid "Video Backend"
 msgstr "Video Backend"
 
-#: vbsm/menu.c:417
+#: vbsm/menu.c:434
 msgid "Video Output"
 msgstr "Video Output"
 
-#: vbsm/menu.c:407
+#: vbsm/menu.c:424
 msgid "Video output selection not available for current backend."
 msgstr "Video output selection not available for current backend."
 

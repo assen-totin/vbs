@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-30 19:12+0200\n"
+"POT-Creation-Date: 2013-08-10 18:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,11 +81,11 @@ msgstr ""
 msgid "Enter offset in milliseconds:"
 msgstr ""
 
-#: vbsm/menu.c:200 vbsm/gui.c:169 common/menu.c:187
+#: vbsm/menu.c:204 vbsm/menu.c:508 vbsm/gui.c:179 common/menu.c:187
 msgid "Error"
 msgstr ""
 
-#: vbss/vbss.c:199 vbss/vbss-threaded.c:222
+#: vbss/vbss.c:200 vbss/vbss-threaded.c:222
 msgid "Expecting network connection..."
 msgstr ""
 
@@ -101,11 +101,11 @@ msgstr ""
 msgid "Full-Screen mode:"
 msgstr ""
 
-#: vbsm/menu.c:207 vbsm/menu.c:209
+#: vbsm/menu.c:211 vbsm/menu.c:213
 msgid "Help"
 msgstr ""
 
-#: vbsm/menu.c:199
+#: vbsm/menu.c:203
 msgid "Help file not found."
 msgstr ""
 
@@ -119,7 +119,7 @@ msgid ""
 "Assen Totin\n"
 msgstr ""
 
-#: vbsm/menu.c:239
+#: vbsm/menu.c:243
 msgid "Internal timer set to zero."
 msgstr ""
 
@@ -141,7 +141,7 @@ msgid ""
 "Press SPACE to continue..."
 msgstr ""
 
-#: vbss/vbss.c:206 vbss/vbss-threaded.c:226
+#: vbss/vbss.c:209 vbss/vbss-threaded.c:226
 msgid "Press SPACE to start playback..."
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr ""
 
-#: vbsm/menu.c:252 vbsm/menu.c:254 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:256 vbsm/menu.c:258 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr ""
 
@@ -181,13 +181,13 @@ msgstr ""
 msgid "Select network mode:"
 msgstr ""
 
-#: vbsm/menu.c:359
+#: vbsm/menu.c:376
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
 msgstr ""
 
-#: vbsm/menu.c:402
+#: vbsm/menu.c:419
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -209,7 +209,7 @@ msgstr ""
 msgid "Set Magic Key"
 msgstr ""
 
-#: vbsm/menu.c:241
+#: vbsm/menu.c:245
 msgid "Set Start Time"
 msgstr ""
 
@@ -217,11 +217,11 @@ msgstr ""
 msgid "Set Text Justification"
 msgstr ""
 
-#: vbsm/gui.c:168
+#: vbsm/gui.c:178
 msgid "Subtitles not loaded."
 msgstr ""
 
-#: vbsm/keyboard.c:64
+#: vbsm/keyboard.c:40
 #, c-format
 msgid "Suggested Duration: %u seconds"
 msgstr ""
@@ -246,18 +246,22 @@ msgid ""
 "copyleft/gpl.html for details."
 msgstr ""
 
+#: vbsm/menu.c:360 vbsm/menu.c:507 vbss/vbss.c:206
+msgid "Unable to import file: check file format"
+msgstr ""
+
 #: vbsc/vbsc.c:60
 msgid "Use the menu to change default settings."
 msgstr ""
 
-#: vbsm/menu.c:360
+#: vbsm/menu.c:377
 msgid "Video Backend"
 msgstr ""
 
-#: vbsm/menu.c:417
+#: vbsm/menu.c:434
 msgid "Video Output"
 msgstr ""
 
-#: vbsm/menu.c:407
+#: vbsm/menu.c:424
 msgid "Video output selection not available for current backend."
 msgstr ""

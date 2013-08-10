@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VBS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-30 19:12+0200\n"
+"POT-Creation-Date: 2013-08-10 18:57+0300\n"
 "PO-Revision-Date: 2012-10-11 18:35+0300\n"
 "Last-Translator: root <assen.totin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -21,19 +21,19 @@ msgstr ""
 
 #: vbsm/vbsm.c:161
 msgid "+1'"
-msgstr ""
+msgstr "+1'"
 
 #: vbsm/vbsm.c:162
 msgid "+10'"
-msgstr ""
+msgstr "+10'"
 
 #: vbsm/vbsm.c:163
 msgid "-1'"
-msgstr ""
+msgstr "-1'"
 
 #: vbsm/vbsm.c:164
 msgid "-10'"
-msgstr ""
+msgstr "-10'"
 
 #: common/menu.c:100
 msgid "Available Delimiters:"
@@ -85,11 +85,11 @@ msgstr "Введите серверный ключ доступа (до 32 ла�
 msgid "Enter offset in milliseconds:"
 msgstr "Введите время в миллисекундах:"
 
-#: vbsm/menu.c:200 vbsm/gui.c:169 common/menu.c:187
+#: vbsm/menu.c:204 vbsm/menu.c:508 vbsm/gui.c:179 common/menu.c:187
 msgid "Error"
 msgstr "Ошибка"
 
-#: vbss/vbss.c:199 vbss/vbss-threaded.c:222
+#: vbss/vbss.c:200 vbss/vbss-threaded.c:222
 msgid "Expecting network connection..."
 msgstr "Ожидание связи по сети..."
 
@@ -105,11 +105,11 @@ msgstr "Цвет текста"
 msgid "Full-Screen mode:"
 msgstr "Полноэкранный режим:"
 
-#: vbsm/menu.c:207 vbsm/menu.c:209
+#: vbsm/menu.c:211 vbsm/menu.c:213
 msgid "Help"
 msgstr "Помощь"
 
-#: vbsm/menu.c:199
+#: vbsm/menu.c:203
 msgid "Help file not found."
 msgstr "Файл с указаниями не найден."
 
@@ -129,7 +129,7 @@ msgstr ""
 "ул. Отца Паисия, 74\n"
 "Асен Тотин\n"
 
-#: vbsm/menu.c:239
+#: vbsm/menu.c:243
 msgid "Internal timer set to zero."
 msgstr "Внутренний таймер обнулен."
 
@@ -153,7 +153,7 @@ msgstr ""
 "Режим паузы.\n"
 "Нажмите ПРОБЕЛ чтобы продолжить воспроизведение..."
 
-#: vbss/vbss.c:206 vbss/vbss-threaded.c:226
+#: vbss/vbss.c:209 vbss/vbss-threaded.c:226
 msgid "Press SPACE to start playback..."
 msgstr "Нажмите ПРОБЕЛ чтобы начать воспроизведение..."
 
@@ -161,7 +161,7 @@ msgstr "Нажмите ПРОБЕЛ чтобы начать воспроизве
 msgid "Quick brown fox jumps over the lazy dog..."
 msgstr "Съешь еще этих мягких французских булок да выпей же чаю..."
 
-#: vbsm/menu.c:252 vbsm/menu.c:254 vbsc/menu.c:19 vbsc/menu.c:21
+#: vbsm/menu.c:256 vbsm/menu.c:258 vbsc/menu.c:19 vbsc/menu.c:21
 msgid "Really quit?"
 msgstr "Закончить работу?"
 
@@ -194,7 +194,7 @@ msgstr "Знак окончания строки"
 msgid "Select network mode:"
 msgstr "Выберите режим работы сети:"
 
-#: vbsm/menu.c:359
+#: vbsm/menu.c:376
 msgid ""
 "Select video backend:\n"
 "(requires restart)"
@@ -202,7 +202,7 @@ msgstr ""
 "Выберите программу для видео:\n"
 "(перезапуск обязателен)"
 
-#: vbsm/menu.c:402
+#: vbsm/menu.c:419
 msgid ""
 "Select video output for GStreamer:\n"
 "(requires restart)"
@@ -226,7 +226,7 @@ msgstr "Полноэкранный режим"
 msgid "Set Magic Key"
 msgstr "Ключ сервера"
 
-#: vbsm/menu.c:241
+#: vbsm/menu.c:245
 msgid "Set Start Time"
 msgstr "Обнулить таймер"
 
@@ -234,11 +234,11 @@ msgstr "Обнулить таймер"
 msgid "Set Text Justification"
 msgstr "Равнение текста"
 
-#: vbsm/gui.c:168
+#: vbsm/gui.c:178
 msgid "Subtitles not loaded."
 msgstr "Субтитров нет."
 
-#: vbsm/keyboard.c:64
+#: vbsm/keyboard.c:40
 #, c-format
 msgid "Suggested Duration: %u seconds"
 msgstr "Рекомендуемая продолжительность: %u секунд"
@@ -266,19 +266,23 @@ msgstr ""
 "Прочитайте файл LICENSE или зайдите на http://www.gnu.org/copyleft/gpl.html "
 "для дополнительной информации."
 
+#: vbsm/menu.c:360 vbsm/menu.c:507 vbss/vbss.c:206
+msgid "Unable to import file: check file format"
+msgstr "Импорт файла был неуспешным."
+
 #: vbsc/vbsc.c:60
 msgid "Use the menu to change default settings."
 msgstr "Используйте меню дла изменения насроек."
 
-#: vbsm/menu.c:360
+#: vbsm/menu.c:377
 msgid "Video Backend"
 msgstr "Программа для видео"
 
-#: vbsm/menu.c:417
+#: vbsm/menu.c:434
 msgid "Video Output"
 msgstr "Выход видео"
 
-#: vbsm/menu.c:407
+#: vbsm/menu.c:424
 msgid "Video output selection not available for current backend."
 msgstr "Для текущей видео программы эта настройка отсутствует."
 
