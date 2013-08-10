@@ -4,7 +4,7 @@ Version: @PACKAGE_VERSION@
 Release: 1
 Group: Applications/Multimedia
 License: GPL
-Source: http://www.zavedil.com/wp-content/uploads/2012/11/vbs-@PACKAGE_VERSION@.tar.gz
+Source: http://www.zavedil.com/wp-content/uploads/2013/08/vbs-@PACKAGE_VERSION@.tar.gz
 BuildRoot: /var/tmp/%{name}-buildroot
 @RPM_REQUIRE_MPLAYER@
 @RPM_REQUIRE_GSTREAMER@
