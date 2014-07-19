@@ -1,15 +1,30 @@
-// This file is a part of Voody Blue Subtitler suit.
-// 
-// Author: Assen Totin <assen.totin@gmail.com>
-//
-// Home page: http://www.zavedil.com/software-desktop-vbs
-//
-// This software is released under GNU General Public License.
-// See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
-// for details.
+/**
+ * Common utility functions. 
+ * @author Assen Totin assen.totin@gmail.com
+ * 
+ * Created for the Voody Blue Subtitler suit, copyright (C) 2014 Assen Totin, assen.totin@gmail.com 
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #include "../common/common.h"
 
+/**
+ * Remove the EOL character from a line. 
+ * @param *buffer char Line with an EOL character.
+ */
 void fix_new_line(char *buffer) {
 	char *part_one, line_print[config.common.line_size];
 
@@ -30,14 +45,22 @@ void fix_new_line(char *buffer) {
 	strcpy(buffer, &line_print[0]);
 }
 
-
+/**
+ * Get current time as UNIX timestamp with milliseconds. 
+ * @returns long Current time as UNIX timestamp with milliseconds. 
+ */
 long get_time_msec() {
 	struct timeval curr_time;
 	gettimeofday(&curr_time, NULL);
 	return (long) (1000 * curr_time.tv_sec + (int) (curr_time.tv_usec / 1000));
 }
 
-
+/**
+ * Convert time from SRT format into UNIX timestamp with resolution of a second or a millisecond. 
+ * @param *in_time char Character buffer with the time in SRT format.
+ * @param format int Desired output resolution, seconds or milliseconds.
+ * @returns int The input parsed and converted to UNIX timestamp.
+ */
 int convert_time_from_srt(char *in_time, int format) {
 	char *str_h = strtok(in_time, ":");
 	int res_h = atoi(str_h);
@@ -57,7 +80,12 @@ int convert_time_from_srt(char *in_time, int format) {
 		return (res_h*3600000 + res_m*60000 + res_s*1000 + res_ms);
 }
 
-
+/**
+ * Convert time to SRT format from UNIX timestamp with resolution of a second or a millisecond. 
+ * @param the_time unsigned int The time as UNIX timestamp.
+ * @param *res char Pointer to write the result to.
+ * @param format int Desired output resolution, seconds or milliseconds.
+ */
 void convert_time_to_srt(unsigned int the_time, char *res, int format) {
 
 	div_t qH = div(the_time, 3600000);
@@ -82,7 +110,12 @@ void convert_time_to_srt(unsigned int the_time, char *res, int format) {
 		sprintf(res, "0%u:%s:%s", qH.quot, unfM, unfS);
 }
 
-
+/**
+ * Import subtitles in SRT format from file.
+ * @param *filename char The file to read from.
+ * @param *counter int Pointer to write the number of subtitles to.
+ * @param *import_error_flag int Pointer to write to in case import encounters an error.
+ */
 struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *import_error_flag) {
 	char *time_begin, *time_end;
 	char *line_utf8;
@@ -184,7 +217,10 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *imp
 	return sub_array;
 }
 
-
+/**
+ * Get the directory where locale files reside.
+ * @param *res char Pointer to write the prefix to.
+ */
 void get_locale_prefix(char *res) {
 #ifdef HAVE_POSIX
 	strcpy(res, LOCALEDIR);
@@ -195,7 +231,10 @@ void get_locale_prefix(char *res) {
 #endif
 }
 
-
+/**
+ * Get programme's icon file name.
+ * @param *res char Pointer to write the filename to.
+ */
 void get_icon(char *res) {
 #ifdef HAVE_POSIX
 	strcpy(res, VBS_ICON);
@@ -206,7 +245,10 @@ void get_icon(char *res) {
 #endif
 }
 
-
+/**
+ * Get the path for the file selector dialogue.
+ * @param *res char Pointer to write the path to.
+ */
 void get_file_selector_path(char *res) {
 #ifdef HAVE_POSIX
 	sprintf(res, "%s%s%s", g_get_home_dir(), SLASH, "Desktop");
@@ -216,12 +258,19 @@ void get_file_selector_path(char *res) {
 
 }
 
-
+/**
+ * Get programme's configuration directory path.
+ * @param *res char Pointer to write the directory path to.
+ */
 void get_config_dir(char *res) {
 	sprintf(res, "%s%s%s-%s%s", g_get_home_dir(), SLASH, VBS_LOCAL_CONFIG_DIR, PACKAGE_VERSION, SLASH);
 }
 
-
+/**
+ * Extract a directory name from the full path.
+ * @param *filename char The path to parse.
+ * @param *dir char Pointer to write the directory to.
+ */
 void get_dir_from_filename (char *filename, char *dir) {
 	char filename_in[MAX_PATH];
 	strcpy(&filename_in[0], filename);
@@ -256,6 +305,10 @@ void get_dir_from_filename (char *filename, char *dir) {
 			break;
 	}
 }
+
+/**
+ * Delete old log files.
+ */
 
 void del_old_logs() {
 	GStatBuf stat_buf;

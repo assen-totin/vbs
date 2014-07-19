@@ -1,15 +1,31 @@
-// This file is a part of Voody Blue Subtitler suit.
-// 
-// Author: Assen Totin <assen.totin@gmail.com>
-//
-// Home page: http://www.zavedil.com/software-desktop-vbs
-//
-// This software is released under GNU General Public License.
-// See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
-// for details.
+/**
+ * Common menu-related functions. 
+ * @author Assen Totin assen.totin@gmail.com
+ * 
+ * Created for the Voody Blue Subtitler suit, copyright (C) 2014 Assen Totin, assen.totin@gmail.com 
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #include "common.h"
 
+/**
+ * Help/About dialogue. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void help_about(GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_about_dialog_new();
 	gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), "VBS");
@@ -33,7 +49,11 @@ void help_about(GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set import character encoding. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_encoding_import (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -62,7 +82,11 @@ void set_encoding_import (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set export character encoding. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_encoding_export (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -91,7 +115,11 @@ void set_encoding_export (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set newline character when exporting.
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_newline (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -123,7 +151,11 @@ void set_newline (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set network TCP port number.
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_network_port (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -147,7 +179,11 @@ void set_network_port (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set remote server's IP address.
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_network_server (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -177,7 +213,11 @@ void set_network_server (GtkWidget *widget, gpointer window) {
 		gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Warning dialogue when hostname resolution fails. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void show_warning_network (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -190,7 +230,11 @@ void show_warning_network (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(window);
 }
 
-
+/**
+ * Dialogue to enable or disable network usage. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void use_network (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
@@ -236,7 +280,11 @@ void use_network (GtkWidget *widget, gpointer window) {
 	gtk_widget_destroy(dialog);
 }
 
-
+/**
+ * Dialogue to set network's pre-shared key. 
+ * @param *widget GtkWidget The widget which creates the dialogue.
+ * @param window gpointer The main programme window.
+ */
 void set_magic_key (GtkWidget *widget, gpointer window) {
 	GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(config.vbsm.window),
 		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,

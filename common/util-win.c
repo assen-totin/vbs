@@ -1,15 +1,32 @@
-// This file is a part of Voody Blue Subtitler suit.
-// 
-// Author: Assen Totin <assen.totin@gmail.com>
-//
-// Home page: http://www.zavedil.com/software-desktop-vbs
-//
-// This software is released under GNU General Public License.
-// See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
-// for details.
+/**
+ * MS Windows-specific utility functions. 
+ * @author Assen Totin assen.totin@gmail.com
+ * 
+ * Created for the Voody Blue Subtitler suit, copyright (C) 2014 Assen Totin, assen.totin@gmail.com 
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #include "../common/common.h"
 
+/**
+ * Read a directory path. 
+ * @param *win_path char Pointer to write the path to.
+ * @param size int Size of the buffer the pointer points to.
+ * @returns bool TRUE on success, FALSE on failure.
+ */
 bool win_get_path(char *win_path, int size) {
 	TCHAR szPath[MAX_PATH];
 
@@ -49,6 +66,10 @@ bool win_get_path(char *win_path, int size) {
 	return true;
 }
 
+/**
+ * Get current locale. 
+ * @param *locale char Pointer to write the locale name to.
+ */
 void win_get_locale(char *locale) {
 	char country_code[16];
 	GetLocaleInfo(GetUserDefaultLCID(),LOCALE_SISO3166CTRYNAME, &country_code[0], 16);
@@ -57,6 +78,11 @@ void win_get_locale(char *locale) {
 	sprintf(locale, "%s_%s", &lang_code[0], &country_code[0]);
 }
 
+/**
+ * Convert filename to URI.
+ * @param *filename char Filename to convert.
+ * @param *tmp_filename char Pointer to write the URI to.
+ */
 void win_filename_to_uri(char *filename, char *tmp_filename) {
 	char filename_in[2048];
 	strcpy(&filename_in[0], filename);

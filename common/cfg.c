@@ -1,15 +1,31 @@
-// This file is a part of Voody Blue Subtitler suit.
-// 
-// Author: Assen Totin <assen.totin@gmail.com>
-//
-// Home page: http://www.zavedil.com/software-desktop-vbs
-//
-// This software is released under GNU General Public License.
-// See the LICENSE file for details or visit http://www.gnu.org/copyleft/gpl.html 
-// for details.
+/**
+ * Configuration-related functions. 
+ * @author Assen Totin assen.totin@gmail.com
+ * 
+ * Created for the Voody Blue Subtitler suit, copyright (C) 2014 Assen Totin, assen.totin@gmail.com 
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 
 #include "common.h"
 
+/**
+ * Read config file. 
+ * @param argc int Number of arguments supplied.
+ * @param *argv[] char Arguments supplied. 
+ */
 void get_cmdl_config(int argc, char *argv[]) {
 	GError *error = NULL;
 	GOptionContext *cmdl_context;
@@ -22,7 +38,9 @@ void get_cmdl_config(int argc, char *argv[]) {
 		error_handler("option parsing", error->message, 1);
 }
 
-
+/**
+ * Create default configuration. 
+ */
 void default_config() {
 	char _tmp[MAX_PATH];
 	get_config_dir(&_tmp[0]);
@@ -65,6 +83,11 @@ void default_config() {
 	config.vbsm.progress_update_msec = VBSM_DEFAULT_PROGRESS_UPDATE;
 }
 
+/**
+ * Read config value as char. 
+ * @param *line char Line from the config file to parse.
+ * @param *param char Parameter to extract from the line. 
+ */
 void config_char(char *line, char *param) {
 	char *line_rest;
 	strtok(line, "=");
@@ -72,6 +95,10 @@ void config_char(char *line, char *param) {
 	sprintf(param, line_rest);
 }
 
+/**
+ * Read config value as int. 
+ * @param *line char Line from the config file to parse.
+ */
 int config_int(char *line) {
 	char *line_rest;
 	strtok(line, "=");
@@ -79,6 +106,9 @@ int config_int(char *line) {
 	return atoi(line_rest);
 }
 
+/**
+ * Write configuraton to file. 
+ */
 void write_config() {
 	FILE *fp_config = fopen(&config.common.config_file_name[0], "w");
 	if (!fp_config)
@@ -115,6 +145,10 @@ void write_config() {
 
 	fclose(fp_config);
 }
+
+/**
+ * Read configuration from file. 
+ */
 
 void read_config() {
 	FILE *fp_config = fopen(&config.common.config_file_name[0], "r");
@@ -183,6 +217,11 @@ void read_config() {
 	}
 	fclose(fp_config);
 }
+
+/**
+ * Check if configuration file exists.
+ * @param mode int 0 to read local configuration from home directory, 1 to read global configuration from sysconfdir.
+ */
 
 void check_config(int mode) {
 	struct passwd *passwd_entry;
