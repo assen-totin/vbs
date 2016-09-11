@@ -1,5 +1,5 @@
 AC_PREREQ([2.66])
-AC_INIT([vbs], [4.0], [assen.totin@gmail.com])
+AC_INIT([vbs], [4.1], [assen.totin@gmail.com])
 # Commenting out -Werror until somebody fixes m4 for Gtk
 #AM_INIT_AUTOMAKE([-Wall -Werror])
 AM_INIT_AUTOMAKE([-Wall])

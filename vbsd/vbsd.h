@@ -10,7 +10,7 @@
 
 #define QUEUE_SIZE 64
 
-int check_magic_key(unsigned char buffer[config.common.line_size]);
+int check_magic_key(unsigned char *buffer);
 
 void signal_handler(int sig);
 

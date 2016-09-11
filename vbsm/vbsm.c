@@ -134,7 +134,7 @@ int main (int argc, char **argv){
 	g_signal_connect(config.vbsm.subtitles_view, "row-activated", (GCallback) on_clicked_row, config.vbsm.window);
 
 	// Key events
-	g_signal_connect(config.vbsm.subtitles_view, "key_press_event", (GCallback) on_pressed_key, config.vbsm.window);
+	g_signal_connect(config.vbsm.subtitles_view, "key-press-event", (GCallback) on_pressed_key, config.vbsm.window);
 
 	// Menu
 	config.common.can_recv_from_net = false;
@@ -201,6 +201,10 @@ int main (int argc, char **argv){
 	g_timeout_add(config.vbsm.progress_update_msec, progress_bar_update, NULL);
 
 	gtk_main();
+
+	// Clean up widgets
+	gtk_widget_destroy(config.vbsm.subtitles_view);
+	gtk_widget_destroy(vbox);
 
 	return 0;
 }

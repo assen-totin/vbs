@@ -168,6 +168,8 @@ struct subtitle_srt *import_subtitles_srt(char *filename, int *counter, int *imp
 				strcpy(&sub_array[counter_array].sub[0], line_utf8);
 				counter_array++;
 				counter_line = -1;
+
+				g_free(line_utf8);
 			}
 			continue;
 		}
@@ -316,6 +318,8 @@ void del_old_logs() {
 	const gchar *filename;
 	int i, j, file_counter = 0;
 
+	bzero (&stat_buf, sizeof(stat_buf));
+
 	struct vbs_stat_struct *file_array = malloc(sizeof(struct vbs_stat_struct));
 	if (!file_array)
 		error_handler("del_old_logs", "malloc failed", 1);
@@ -359,6 +363,7 @@ void del_old_logs() {
 	}
 
 	g_dir_close(dir);
+	free(file_array);
 }
 
 

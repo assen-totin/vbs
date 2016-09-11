@@ -31,8 +31,8 @@ void on_pressed_b () {
 			char line2[255];
 			char line3[1024];
 
-                        config.common.timestamp_msec = get_time_msec();
-                        config.common.inside_sub = TRUE;
+			config.common.timestamp_msec = get_time_msec();
+			config.common.inside_sub = TRUE;
 
 			gtk_tree_model_get(model, &iter, COL_LINE, &line, -1);
 			div_t q = div(strlen(line),20);
@@ -73,7 +73,7 @@ void on_pressed_b () {
 			if (config.common.network_mode == 1)
 				put_subtitle(line);
 
-			//g_free(line);
+			g_free(line);
 		}
 	}
 }
@@ -110,10 +110,10 @@ void on_pressed_m () {
 			}
 #endif
 
-                        if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
-                        	long curr_time_msec = get_time_msec();
-                                new_to = curr_time_msec - config.common.init_timestamp_msec;
-                        }
+			if ((!config.vbsm.have_loaded_video) || (new_to == -1) ){
+				long curr_time_msec = get_time_msec();
+				new_to = curr_time_msec - config.common.init_timestamp_msec;
+			}
 
 			gtk_list_store_set(GTK_LIST_STORE(model), &iter, COL_TO, new_to, -1);
 
@@ -129,6 +129,8 @@ void on_pressed_m () {
 
 				// Scroll down
 				gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, TRUE, 0.5, 0);
+
+				gtk_tree_path_free(path);
 			}
 
 			config.common.inside_sub = FALSE;
@@ -143,12 +145,6 @@ void on_pressed_m () {
 			// Export subtitles
 			export_subtitles();
 		}
-/*
-		else { 
-			// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-			int empty = 0;
-		}
-*/
 	}
 }
 
@@ -177,7 +173,7 @@ void on_pressed_space () {
 #endif
 #ifdef HAVE_VLC
 			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC) 
-                                vlc_pause();
+				vlc_pause();
 #endif
 		}
 	}
@@ -209,7 +205,7 @@ void on_pressed_space () {
 }
 
 
-void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
+gboolean on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 	switch ( event->keyval ) {
 		case GDK_b:
 			on_pressed_b();
@@ -228,5 +224,7 @@ void on_pressed_key (GtkTreeView *view, GdkEventKey *event, gpointer userdata) {
 			export_subtitles();
 			break;
 	}
+
+	return true;
 }
 

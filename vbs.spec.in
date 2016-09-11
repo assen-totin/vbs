@@ -80,6 +80,9 @@ rm -rf $RPM_BUILD_ROOT
 @RPM_SYSTEMD_SCRIPT@
 
 %changelog
+* Sun Sep 11 2016 Assen Totin <assen.totin@gmail.com>
+- Release 4.1
+
 * Sat Aug 10 2013 Assen Totin <assen.totin@gmail.com>
 - Release 4.0
 

@@ -62,13 +62,13 @@ void import_subtitles(char *filename, int file_format, int *imp_err_flag) {
 
 	free(sub_array);
 
-        gtk_widget_grab_focus(config.vbsm.subtitles_view);
+	gtk_widget_grab_focus(config.vbsm.subtitles_view);
 }
 
 
 struct subtitle_srt *import_subtitles_text(char *filename, int *counter, int *import_error_flag) {
 	int counter_array = 0;
-	char *line_utf8;
+	char *line_utf8 = NULL;
 	gsize bytes_written;
 
 	FILE *fp_in = fopen (filename, "r");
@@ -126,6 +126,9 @@ struct subtitle_srt *import_subtitles_text(char *filename, int *counter, int *im
 		sub_array[counter_array].time_to = 0;
 		strcpy(&sub_array[counter_array].sub[0], line_utf8);
 		counter_array++;
+
+		if (line_utf8)
+			g_free(line_utf8);
 	}
 
 	free(line_in);

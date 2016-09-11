@@ -36,6 +36,8 @@ void get_cmdl_config(int argc, char *argv[]) {
 
 	if (!g_option_context_parse (cmdl_context, &argc, &argv, &error))
 		error_handler("option parsing", error->message, 1);
+
+	g_option_context_free(cmdl_context);
 }
 
 /**
@@ -216,6 +218,7 @@ void read_config() {
 		}
 	}
 	fclose(fp_config);
+	free(line);
 }
 
 /**

@@ -32,16 +32,20 @@ int show_subtitle(GtkWidget *subtitle) {
 // Fetch a subtitle and process it
 int proc_subtitle_net() {
 	char buffer_new[config.common.line_size + 2];
-	int n;
+	int n = -1;
 
 	char request[config.common.line_size];
 	strcpy(&request[0], "42");
 
-	n = send(config.vbss.socketfd, &request[0], strlen(&request[0]), 0);
+	if (config.vbss.socketfd >= -1)
+		n = send(config.vbss.socketfd, &request[0], strlen(&request[0]), 0);
+
 	if (n < 0) {
 		error_handler("proc_subtitle_net", "Could not write to socket", 0);
-		close(config.vbss.socketfd);
+		if (config.vbss.socketfd >= -1)
+			close(config.vbss.socketfd);
 		config.vbss.socketfd = get_socket();
+		return 0;
 	}
 
 	memset(&buffer_new[0], '\0', config.common.line_size + 2);
@@ -51,9 +55,10 @@ int proc_subtitle_net() {
 		error_handler("proc_subtitle_net", "Could not read from socket", 0);
 		close(config.vbss.socketfd);
 		config.vbss.socketfd = get_socket();
+		return 0;
 	}
 
-	strcpy(&config.vbss.current_sub[0], &buffer_new[0]);
+	strncpy(&config.vbss.current_sub[0], &buffer_new[0], 1024);
 
 	return 1;
 }
@@ -247,9 +252,7 @@ int main (int argc, char *argv[]) {
 	gtk_main();
 
 	// Cleanup
-	//pango_attribute_destroy(attr_size);
-	//pango_attribute_destroy(attr_colour);
-	//pango_attr_list_unref(attr_list);
+	pango_attr_list_unref(attr_list);
 
 	return 0;
 }

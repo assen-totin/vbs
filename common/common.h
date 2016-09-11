@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <locale.h>
 #include <math.h>
 #include <signal.h>
 #include <stdbool.h>
@@ -35,9 +36,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <sys/ipc.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/timeb.h>
 #include <sys/types.h>
+#include <sys/shm.h>
 #include <time.h>
 #include <unistd.h>
 #include <libintl.h>

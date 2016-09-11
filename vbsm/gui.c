@@ -35,6 +35,7 @@ void *create_view_and_model (void){
 	GtkTreeViewColumn *column;
 
 	config.vbsm.subtitles_view = gtk_tree_view_new();
+	gtk_widget_set_can_focus(config.vbsm.subtitles_view, TRUE);
 
 	config.vbsm.mplayer_store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT);
 
@@ -96,7 +97,7 @@ int progress_bar_update() {
         	GtkTreeModel *model;
 	        GtkTreeIter iter;
         	gint from, to, local = -1;
-	        gchar *line;
+	        gchar *line = NULL;
 
 		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(config.vbsm.subtitles_view));
 		if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
@@ -144,15 +145,17 @@ int progress_bar_update() {
 					// Move to next line
 					gtk_tree_selection_select_iter(selection, &iter);
 
-	                                // Move the cursor to the first cell of the new line. We need this because pressing space to pause
-        	                        // will emit 'row-activated', which will receive the path of the last cursor (and not of the last iter).
-                	                GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
-                        	        gtk_tree_view_set_cursor (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, FALSE);
+					// Move the cursor to the first cell of the new line. We need this because pressing space to pause
+					// will emit 'row-activated', which will receive the path of the last cursor (and not of the last iter).
+					GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+					gtk_tree_view_set_cursor (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, FALSE);
 
-                                	// Scroll down
+					// Scroll down
 					gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(config.vbsm.subtitles_view), path, NULL, TRUE, 0.5, 0);
 
+					gtk_tree_path_free(path);
 				}
+
 				if (config.vbsm.have_loaded_video) {
 #ifdef HAVE_GSTREAMER
 					if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_GSTREAMER)
@@ -165,6 +168,9 @@ int progress_bar_update() {
 				}
 			}
 		}
+
+		if (line)
+			g_free(line);
 	}
 
 	return 1;

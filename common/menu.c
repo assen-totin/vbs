@@ -75,8 +75,10 @@ void set_encoding_import (GtkWidget *widget, gpointer window) {
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		sprintf(&config.common.import_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)));
+		gchar *combo_txt = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
+		sprintf(&config.common.import_encoding[0], "%s", combo_txt);
 		write_config();
+		g_free(combo_txt);
 	}
 
 	gtk_widget_destroy(dialog);
@@ -108,8 +110,10 @@ void set_encoding_export (GtkWidget *widget, gpointer window) {
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		sprintf(&config.common.export_encoding[0], "%s", gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)));
+		gchar *combo_txt = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
+		sprintf(&config.common.export_encoding[0], "%s", combo_txt);
 		write_config();
+		g_free(combo_txt);
 	}
 
 	gtk_widget_destroy(dialog);
@@ -139,13 +143,15 @@ void set_newline (GtkWidget *widget, gpointer window) {
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"CR/LF"))
+		gchar *combo_txt = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
+		if (strstr(combo_txt,"CR/LF"))
 			config.common.export_cr = 1;
-		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"LF"))
+		else if (strstr(combo_txt,"LF"))
 			config.common.export_cr = 0;
 		else config.common.export_cr = 2;
 
 		write_config();
+		g_free(combo_txt);
 	}
 
 	gtk_widget_destroy(dialog);
@@ -259,9 +265,10 @@ void use_network (GtkWidget *widget, gpointer window) {
 	gtk_widget_show(combo);
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK) {
-		if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"OFF"))
+		gchar *combo_txt = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo));
+		if (strstr(combo_txt, "OFF"))
 			config.common.network_mode = 0;
-		else if (strstr(gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(combo)),"SEND")) {
+		else if (strstr(combo_txt, "SEND")) {
 			if (get_host_by_name(&config.common.server_name[0]) == 0) 
 				show_warning_network(NULL, dialog);
 			else 
@@ -275,6 +282,7 @@ void use_network (GtkWidget *widget, gpointer window) {
 		}
 
 		write_config();
+		g_free(combo_txt);
 	}
 
 	gtk_widget_destroy(dialog);

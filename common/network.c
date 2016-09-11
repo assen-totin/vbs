@@ -41,7 +41,8 @@ int get_host_by_name(char *server_name) {
 		return 0;
 	}
 	else {
-		strcpy(&config.common.server_name[0], server_name);
+		if (server_name != &config.common.server_name[0])
+			strcpy(&config.common.server_name[0], server_name);
 		config.common.host_entry = host_entry;
 		return 1;
 	}
@@ -56,8 +57,10 @@ int get_socket() {
 	struct sockaddr_in serv_addr;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0) 
-		error_handler("get_socket", "Could not open socket", 1);
+	if (sockfd < 0) {
+		error_handler("get_socket", "Could not open socket", 0);
+		return -1;
+	}
 
 	memset((char *) &serv_addr, '\0' , sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
@@ -66,7 +69,8 @@ int get_socket() {
 
 	if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
 		close(sockfd);
-		error_handler("get_socket", "Could not connect to server", 1);
+		error_handler("get_socket", "Could not connect to server", 0);
+		return -1;
 	}
 
 	return sockfd;
@@ -83,6 +87,8 @@ int put_subtitle(char *buffer) {
 	char buffer2[config.common.line_size + strlen(&config.common.magic_key[0])];
 
 	sockfd = get_socket();
+	if ( sockfd < 0)
+		return 0;
 
 	strcpy(&request[0], buffer);
 	fix_new_line(&request[0]);

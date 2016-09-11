@@ -1,3 +1,12 @@
+Sep 11, 2016 - Version 4.1
+==========================
+
+1. Code cleanup; fix compiler warnings, make sure we compile cleanly with
+recent GCC.
+
+2. Fix old issue of keypresses sometimes being propagated outside the widget.
+
+
 Aug 10, 2013 - Version 4.0
 ==========================
 

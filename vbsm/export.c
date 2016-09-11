@@ -103,9 +103,5 @@ void export_subtitles() {
 
 	if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER)
 		retval = fclose(fp_mplayer);
-
-	// Do nothing; if this is not present, the GTK widget will pop-up a small window and move the focus to it. WTF?
-	fprintf(config.vbsm.log_file_fp, "Wrote exported subtitles - closing file desriptor returned %u\n", retval);
 }
-
 

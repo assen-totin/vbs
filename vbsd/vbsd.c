@@ -11,15 +11,15 @@
 #include "../common/common.h"
 
 // Check magic key
-int check_magic_key(unsigned char buffer[config.common.line_size]) {
-	if (strstr(&buffer[0], &config.common.magic_key[0]))
+int check_magic_key(unsigned char *buffer) {
+	if (strstr(buffer, &config.common.magic_key[0]))
 		return 1;
 
 	return 0;
 }
 
-void extract_sub(unsigned char buffer[config.common.line_size], char *new_sub) {
-	char *cp1 = strstr(&buffer[0], &config.common.magic_key[0]);
+void extract_sub(unsigned char *buffer, char *new_sub) {
+	char *cp1 = strstr(buffer, &config.common.magic_key[0]);
 	cp1 += strlen(&config.common.magic_key[0]);
 	strcpy(new_sub, cp1);
 }
@@ -31,7 +31,8 @@ void signal_handler(int sig) {
 		case SIGTERM:
 			// Detach and destroy shared memory
 			shmdt(shm_at);
-			shmctl(unix_time, IPC_RMID);
+			shmctl(unix_time, IPC_RMID, 0);
+
 			// Close original FD
 			close(sockfd);
 			exit(0);
@@ -55,12 +56,18 @@ int main() {
 		syslog(LOG_CRIT, "Failed to fork!");
 		exit(1);
 	}
-	if (pid > 0) {exit(0);}
+	if (pid > 0) 
+		exit(0);
+
 	setsid();
+
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+
 	signal(SIGHUP, signal_handler);
+	signal(SIGTERM, signal_handler);
+
 	umask(0);
 	chdir("/");
 
@@ -90,10 +97,11 @@ int main() {
 	shm_at = (char *)shmat(shm_id, 0, 0);
 	strcpy(shm_at, "Initial server message");
 
-	syslog(LOG_CRIT, "Started OK");
+	syslog(LOG_NOTICE, "Started OK");
 
 	while(1) {
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
+
 		if (newsockfd >= 0) {
 			pid = fork();
 			if (pid == 0) {
@@ -105,9 +113,9 @@ int main() {
 				shm_at = (char *)shmat(shm_id, 0, 0);
 
 				while (1) {
-					memset(buffer, '\0', sizeof(buffer));
+					bzero(&buffer[0], config.common.line_size);
 
-					n = recv(newsockfd, buffer, sizeof(buffer)-1, 0);
+					n = recv(newsockfd, &buffer[0], config.common.line_size - 1, 0);
 
 					if (n < 0) {
 						syslog(LOG_CRIT, "Error reading from socket!");
@@ -118,9 +126,9 @@ int main() {
 						break;
 
 					else if (n > 0) {
-						if (check_magic_key(buffer) == 1) {
+						if (check_magic_key(&buffer[0]) == 1) {
 							char new_sub[config.common.line_size];
-							extract_sub(buffer, &new_sub[0]);
+							extract_sub(&buffer[0], &new_sub[0]);
 							strcpy(shm_at, &new_sub[0]);
 						}
 						n = send(newsockfd, shm_at, config.common.line_size, 0);
@@ -138,13 +146,14 @@ int main() {
 				// Close new FD
 				sleep(5);
 				close(newsockfd);
-				close(sockfd);
 
 				exit(0);
 			}
 		}
 
+		// Close new socket, the forked child now has a copy of it
 		close(newsockfd);
+
 		// Collect dead bones
 		retPID = 1;
 		while(retPID) {
@@ -154,12 +163,6 @@ int main() {
 
 	}
 
-	// Detach and destroy shared memory
-	shmdt(shm_at);
-	shmctl(unix_time, IPC_RMID);
-
-	// Close original FD
-	close(sockfd);
-
+	// NOTREACH
 	return 0; 
 }

@@ -258,16 +258,16 @@ void quitDialog(GtkWidget *widget, gpointer window) {
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Really quit?"));
 
 	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK) {
-		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 #ifdef HAVE_MPLAYER
+		if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_MPLAYER) {
 			if (mplayer_is_alive()) {
 				mplayer_pipe_write("quit");
 				int status;
 				waitpid(-1, &status, 0);
 			}
 			unlink(config.vbsm.sub_file_name);
-#endif
 		}
+#endif
 		fclose(config.vbsm.log_file_fp);
 
 		gtk_widget_destroy(dialog);
@@ -347,8 +347,8 @@ void fileDialogOpen(GtkAction *action, gpointer param) {
 				gstreamer_init(filename, &import_error_flag);
 #endif
 #ifdef HAVE_VLC
-                        if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)
-                                vlc_init(filename, &import_error_flag);
+			if (config.vbsm.video_backend == VBSM_VIDEO_BACKEND_VLC)
+				vlc_init(filename, &import_error_flag);
 #endif
 			if (!import_error_flag)
 				config.vbsm.have_loaded_video = true;
