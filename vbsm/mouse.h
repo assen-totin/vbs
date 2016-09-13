@@ -9,5 +9,7 @@
 // for details.
 
 void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *col, gpointer userdata);
-void on_clicked_button (GtkButton *button, gpointer user_data);
+void on_clicked_button_video (GtkButton *button, gpointer user_data);
+void on_clicked_button_sub (GtkButton *button, gpointer user_data);
+void on_clicked_button_play (GtkButton *button, gpointer user_data);
 int calc_new_time(long curr_time, int offset);

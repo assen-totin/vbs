@@ -156,6 +156,20 @@ int main (int argc, char **argv){
 	hbox1 = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
 #endif
 
+	// Subtitles buttons
+	GtkWidget *butt_play_pause = gtk_button_new_with_label("||>");
+	GtkWidget *butt_sub_in = gtk_button_new_with_label(_("->"));
+	GtkWidget *butt_sub_next = gtk_button_new_with_label(_("<->"));
+	GtkWidget *butt_sub_out = gtk_button_new_with_label(_("<-"));
+
+	g_signal_connect(butt_play_pause, "clicked", (GCallback) on_clicked_button_play, NULL);
+	int const_butt_in = 1;
+	g_signal_connect(butt_sub_in, "clicked", (GCallback) on_clicked_button_sub, (gpointer) &const_butt_in);
+	int const_butt_next = 2;
+	g_signal_connect(butt_sub_next, "clicked", (GCallback) on_clicked_button_sub, (gpointer) &const_butt_next);
+	int const_butt_out = 3;
+	g_signal_connect(butt_sub_out, "clicked", (GCallback) on_clicked_button_sub, (gpointer) &const_butt_out);
+
 	// Video buttons
 	butt_video_beginning = gtk_button_new_with_label("0.0");
 	butt_video_fwd1min = gtk_button_new_with_label(_("+1'"));
@@ -163,13 +177,22 @@ int main (int argc, char **argv){
 	butt_video_rew1min = gtk_button_new_with_label(_("-1'"));
 	butt_video_rew10min = gtk_button_new_with_label(_("-10'"));
 
-	g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_clicked_button, (gpointer) 0);
-	g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_clicked_button, (gpointer) 60);
-	g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_clicked_button, (gpointer) 600);
-	g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_clicked_button, (gpointer) -60);
-	g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_clicked_button, (gpointer) -600);
+	int const_zero = 0;
+	g_signal_connect(butt_video_beginning, "clicked", (GCallback) on_clicked_button_video, (gpointer) &const_zero);
+	int const_plus_sixty = 60;
+	g_signal_connect(butt_video_fwd1min, "clicked", (GCallback) on_clicked_button_video, (gpointer) &const_plus_sixty);
+	int const_plus_six_hundred = 600;
+	g_signal_connect(butt_video_fwd10min, "clicked", (GCallback) on_clicked_button_video, (gpointer) &const_plus_six_hundred);
+	int const_munis_sixty = -60;
+	g_signal_connect(butt_video_rew1min, "clicked", (GCallback) on_clicked_button_video, (gpointer) &const_munis_sixty);
+	int const_minus_six_hundred = -600;
+	g_signal_connect(butt_video_rew10min, "clicked", (GCallback) on_clicked_button_video, (gpointer) &const_minus_six_hundred);
 
 	// Pack hbox1
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_play_pause, FALSE, FALSE, 1);	
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_sub_in, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_sub_next, FALSE, FALSE, 1);
+	gtk_box_pack_start(GTK_BOX(hbox1), butt_sub_out, FALSE, FALSE, 1);
 	gtk_box_pack_start(GTK_BOX(hbox1), progress, TRUE, TRUE, 1);
 	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew10min, FALSE, FALSE, 1);
 	gtk_box_pack_start(GTK_BOX(hbox1), butt_video_rew1min, FALSE, FALSE, 1);

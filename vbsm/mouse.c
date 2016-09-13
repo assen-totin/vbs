@@ -47,8 +47,8 @@ void on_clicked_row (GtkTreeView *view, GtkTreePath *path, GtkTreeViewColumn *co
 }
 
 
-void on_clicked_button (GtkButton *button, gpointer user_data) {
-	long offset = (int) user_data;
+void on_clicked_button_video (GtkButton *button, gpointer user_data) {
+	int offset = (int) user_data;
 	long curr_time;
 	int new_time;
 
@@ -103,3 +103,31 @@ int calc_new_time(long curr_time, int offset) {
 
 	return new_time;
 }
+
+void on_clicked_button_sub (GtkButton *button, gpointer user_data) {
+	int mode = (int) user_data;
+
+	switch(mode) {
+		case 0:
+			// Subtitle in
+			on_pressed_b();
+			break;
+		case 1:
+			// Subtitle next
+			on_pressed_b();
+			on_pressed_m();
+			break;
+		case 2:
+			// Subtitle out
+			on_pressed_m();
+			break;		
+	}
+
+	// Restore focus to subtitles widget
+	gtk_widget_grab_focus(config.vbsm.subtitles_view);
+}
+
+void on_clicked_button_play (GtkButton *button, gpointer user_data) {
+	on_pressed_space();
+}
+
